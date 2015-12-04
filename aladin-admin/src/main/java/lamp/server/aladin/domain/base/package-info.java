@@ -1,0 +1,1 @@
+package lamp.server.aladin.domain.base;
