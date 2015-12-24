@@ -10,6 +10,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -125,21 +128,21 @@ public class SmartAssembler implements ApplicationContextAware {
 		}
 	}
 
-//	public <F, T> Page<T> assemble(Pageable pageable, Page<F> fromList, Class<T> toClass) {
-//		if (fromList == null) {
-//			return null;
-//		}
-//		List<T> content = assemble(fromList.getContent(), toClass);
-//		return new PageImpl<>(content, pageable, fromList.getTotalElements());
-//	}
-//
-//	public <F, T> Page<T> assemble(Pageable pageable, Page<F> fromList, Class<F> fromClass, Class<T> toClass) {
-//		if (fromList == null) {
-//			return null;
-//		}
-//		List<T> content = assemble(fromList.getContent(), fromClass, toClass);
-//		return new PageImpl<>(content, pageable, fromList.getTotalElements());
-//	}
+	public <F, T> Page<T> assemble(Pageable pageable, Page<F> fromList, Class<T> toClass) {
+		if (fromList == null) {
+			return null;
+		}
+		List<T> content = assemble(fromList.getContent(), toClass);
+		return new PageImpl<>(content, pageable, fromList.getTotalElements());
+	}
+
+	public <F, T> Page<T> assemble(Pageable pageable, Page<F> fromList, Class<F> fromClass, Class<T> toClass) {
+		if (fromList == null) {
+			return null;
+		}
+		List<T> content = assemble(fromList.getContent(), fromClass, toClass);
+		return new PageImpl<>(content, pageable, fromList.getTotalElements());
+	}
 
 
 }

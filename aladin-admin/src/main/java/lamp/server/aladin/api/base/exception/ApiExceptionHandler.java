@@ -1,6 +1,6 @@
 package lamp.server.aladin.api.base.exception;
 
-import lamp.server.aladin.domain.base.DomainErrorCode;
+import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.common.exception.MessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ public class ApiExceptionHandler {
 	public ApiError handleException(Exception ex) {
 		log.warn("handleException", ex);
 		ApiError error = new ApiError();
-		error.setCode(DomainErrorCode.INTERNAL.name());
-		error.setMessage(DomainErrorCode.INTERNAL.getDefaultMessage());
+		error.setCode(AdminErrorCode.INTERNAL.name());
+		error.setMessage(AdminErrorCode.INTERNAL.getDefaultMessage());
 		return error;
 	}
 
