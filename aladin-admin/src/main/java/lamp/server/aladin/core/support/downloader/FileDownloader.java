@@ -1,6 +1,4 @@
-package lamp.server.aladin.core.service.downloader;
-
-import lamp.server.aladin.core.DownloadableFile;
+package lamp.server.aladin.core.support.downloader;
 
 import java.io.File;
 

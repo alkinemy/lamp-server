@@ -1,4 +1,4 @@
-package lamp.server.aladin.core.service.ssh;
+package lamp.server.aladin.core.support.ssh;
 
 import com.jcraft.jsch.*;
 import lamp.server.aladin.utils.FileUtils;

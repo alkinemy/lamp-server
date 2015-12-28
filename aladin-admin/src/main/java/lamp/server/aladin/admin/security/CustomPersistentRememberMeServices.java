@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -89,7 +90,7 @@ public class CustomPersistentRememberMeServices extends AbstractRememberMeServic
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
         log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
-        token.setTokenDate(DateTime.now());
+        token.setTokenDate(LocalDateTime.now());
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
@@ -115,7 +116,7 @@ public class CustomPersistentRememberMeServices extends AbstractRememberMeServic
             t.setSeries(generateSeriesData());
             t.setUser(u);
             t.setTokenValue(generateTokenData());
-            t.setTokenDate(DateTime.now());
+            t.setTokenDate(LocalDateTime.now());
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
@@ -178,7 +179,7 @@ public class CustomPersistentRememberMeServices extends AbstractRememberMeServic
                 "cookie theft attack.");
         }
 
-        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(DateTime.now())) {
+        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDateTime.now())) {
             persistentTokenRepository.delete(token);
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }

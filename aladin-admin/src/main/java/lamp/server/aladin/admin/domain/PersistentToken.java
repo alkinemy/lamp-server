@@ -3,12 +3,12 @@ package lamp.server.aladin.admin.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,7 +29,7 @@ public class PersistentToken implements Serializable {
 
 	@JsonIgnore
 	@Column(name = "token_date")
-	private DateTime tokenDate;
+	private LocalDateTime tokenDate;
 
 	//an IPV6 address max length is 39 characters
 	@Size(min = 0, max = 39)

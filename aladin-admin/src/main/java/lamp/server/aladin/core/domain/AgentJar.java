@@ -1,6 +1,6 @@
 package lamp.server.aladin.core.domain;
 
-import lamp.server.aladin.core.DownloadableFile;
+import lamp.server.aladin.core.support.downloader.DownloadableFile;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package lamp.server.aladin.core.service.command;
+package lamp.server.aladin.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class LampClientCreateCommand {
+public class AgentForm {
 
 	@NotEmpty
 	private String id;

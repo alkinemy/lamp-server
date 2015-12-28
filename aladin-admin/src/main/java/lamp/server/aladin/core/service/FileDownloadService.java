@@ -1,7 +1,6 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.core.DownloadableFile;
-import lamp.server.aladin.core.domain.AgentJar;
+import lamp.server.aladin.core.support.downloader.DownloadableFile;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

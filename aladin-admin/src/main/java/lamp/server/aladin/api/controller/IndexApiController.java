@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class ApiIndexController {
+public class IndexApiController {
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String index(@AuthenticationPrincipal User user) {

@@ -14,6 +14,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -35,7 +36,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
 	@NotNull
 	@Column(name = "created_date", nullable = false)
 	@JsonIgnore
-	private Date createdDate;
+	private LocalDateTime createdDate;
 
 	@LastModifiedBy
 	@Column(name = "last_modified_by", length = 50)
@@ -45,6 +46,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 	@LastModifiedDate
 	@Column(name = "last_modified_date")
 	@JsonIgnore
-	private Date lastModifiedDate;
+	private LocalDateTime lastModifiedDate;
 
 }

@@ -30,7 +30,4 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new Http403ForbiddenEntryPoint();
 	}
 
-
-
-
 }

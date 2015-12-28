@@ -1,13 +1,13 @@
 package lamp.server.aladin.core.service;
 
 import lamp.server.aladin.utils.assembler.SmartAssembler;
-import lamp.server.aladin.core.controller.TargetServerCreateForm;
-import lamp.server.aladin.core.controller.TargetServerDto;
+import lamp.server.aladin.core.dto.TargetServerCreateForm;
+import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.domain.AgentJar;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.exception.EntityNotFoundException;
 import lamp.server.aladin.core.repository.TargetServerRepository;
-import lamp.server.aladin.core.service.ssh.SshClient;
+import lamp.server.aladin.core.support.ssh.SshClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
