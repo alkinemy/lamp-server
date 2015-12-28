@@ -1,7 +1,7 @@
 package lamp.server.aladin.api.base.exception;
 
 import lamp.server.aladin.admin.AdminErrorCode;
-import lamp.server.aladin.common.exception.MessageException;
+import lamp.server.aladin.core.exception.MessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

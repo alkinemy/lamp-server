@@ -1,4 +1,4 @@
-package lamp.server.aladin.common.exception;
+package lamp.server.aladin.core.exception;
 
 import lombok.extern.slf4j.Slf4j;
 

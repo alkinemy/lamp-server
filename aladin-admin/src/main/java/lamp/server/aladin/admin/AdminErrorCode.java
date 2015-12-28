@@ -1,7 +1,7 @@
 package lamp.server.aladin.admin;
 
-import lamp.server.aladin.common.exception.ErrorCode;
-import lamp.server.aladin.common.exception.MessageException;
+import lamp.server.aladin.core.exception.ErrorCode;
+import lamp.server.aladin.core.exception.MessageException;
 
 public enum AdminErrorCode implements ErrorCode {
 	INTERNAL("에러가 발생하였습니다."),

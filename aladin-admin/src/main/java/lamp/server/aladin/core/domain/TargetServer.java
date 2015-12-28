@@ -1,6 +1,5 @@
 package lamp.server.aladin.core.domain;
 
-import lamp.server.aladin.common.domain.AbstractAuditingEntity;
 import lombok.Getter;
 import lombok.Setter;
 

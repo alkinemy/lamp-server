@@ -1,4 +1,4 @@
-package lamp.server.aladin.common.assembler;
+package lamp.server.aladin.utils.assembler;
 
 public interface Assembler<F, T> {
 

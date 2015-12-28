@@ -1,4 +1,4 @@
-package lamp.server.aladin.common.utils;
+package lamp.server.aladin.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public abstract class VariableReplaceUtils {
 
 	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
-	private static final String EMPTY = lamp.server.aladin.common.utils.StringUtils.EMPTY;
+	private static final String EMPTY = StringUtils.EMPTY;
 
 	public static String replaceVariables(String template, Object variables) {
 		if (template == null) {

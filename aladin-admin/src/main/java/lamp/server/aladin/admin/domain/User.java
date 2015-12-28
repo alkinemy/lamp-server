@@ -1,7 +1,7 @@
 package lamp.server.aladin.admin.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lamp.server.aladin.common.domain.AbstractAuditingEntity;
+import lamp.server.aladin.core.domain.AbstractAuditingEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;

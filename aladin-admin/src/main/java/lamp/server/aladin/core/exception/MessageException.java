@@ -1,4 +1,4 @@
-package lamp.server.aladin.common.exception;
+package lamp.server.aladin.core.exception;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package lamp.server.aladin.admin.web;
+package lamp.server.aladin.admin.controller;
 
 
 import org.hibernate.validator.constraints.Email;
@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * A DTO representing a user, with his authorities.

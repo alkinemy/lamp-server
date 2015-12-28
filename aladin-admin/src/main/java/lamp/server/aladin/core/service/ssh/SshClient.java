@@ -1,12 +1,11 @@
 package lamp.server.aladin.core.service.ssh;
 
 import com.jcraft.jsch.*;
-import lamp.server.aladin.common.utils.FileUtils;
-import lamp.server.aladin.common.utils.StringUtils;
+import lamp.server.aladin.utils.FileUtils;
+import lamp.server.aladin.utils.StringUtils;
 import lamp.server.aladin.core.exception.SshException;
 
 import java.io.*;
-import java.nio.file.Paths;
 
 public class SshClient {
 

@@ -1,4 +1,4 @@
-package lamp.server.aladin.common.utils;
+package lamp.server.aladin.utils;
 
 import java.util.Collection;
 

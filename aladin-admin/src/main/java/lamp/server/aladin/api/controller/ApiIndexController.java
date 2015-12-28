@@ -1,4 +1,4 @@
-package lamp.server.aladin.admin.web;
+package lamp.server.aladin.api.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

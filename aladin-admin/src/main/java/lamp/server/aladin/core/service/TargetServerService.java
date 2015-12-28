@@ -1,6 +1,6 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.common.assembler.SmartAssembler;
+import lamp.server.aladin.utils.assembler.SmartAssembler;
 import lamp.server.aladin.core.controller.TargetServerCreateForm;
 import lamp.server.aladin.core.controller.TargetServerDto;
 import lamp.server.aladin.core.domain.AgentJar;

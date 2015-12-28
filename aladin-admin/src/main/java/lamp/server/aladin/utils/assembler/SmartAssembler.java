@@ -1,6 +1,6 @@
-package lamp.server.aladin.common.assembler;
+package lamp.server.aladin.utils.assembler;
 
-import lamp.server.aladin.common.utils.ArrayUtils;
+import lamp.server.aladin.utils.ArrayUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +22,8 @@ import java.util.Map;
 @Slf4j
 public class SmartAssembler implements ApplicationContextAware {
 
-	private Map<Pair<Class, Class>, lamp.server.aladin.common.assembler.Assembler> assemblerMap = new HashMap<>();
-	private Map<Pair<Class, Class>, lamp.server.aladin.common.assembler.ListAssembler> listAssemblerMap = new HashMap<>();
+	private Map<Pair<Class, Class>, Assembler> assemblerMap = new HashMap<>();
+	private Map<Pair<Class, Class>, ListAssembler> listAssemblerMap = new HashMap<>();
 
 	private DefaultAssembler defaultAssembler = new DefaultAssembler();
 
@@ -41,19 +41,19 @@ public class SmartAssembler implements ApplicationContextAware {
 	}
 
 	@Override public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		String[] assemblerNames = applicationContext.getBeanNamesForType(lamp.server.aladin.common.assembler.Assembler.class);
+		String[] assemblerNames = applicationContext.getBeanNamesForType(Assembler.class);
 		for (String name : assemblerNames) {
-			lamp.server.aladin.common.assembler.Assembler assembler = (lamp.server.aladin.common.assembler.Assembler) applicationContext.getBean(name);
-			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(assembler.getClass(), lamp.server.aladin.common.assembler.Assembler.class);
+			Assembler assembler = (Assembler) applicationContext.getBean(name);
+			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(assembler.getClass(), Assembler.class);
 			Pair<Class, Class> pair = key(classes[0], classes[1]);
 			assemblerMap.put(pair, assembler);
 			log.info("Assembler {} registered ({}, {})", assembler, classes[0], classes[1]);
 		}
 
-		String[] listAssemblerNames = applicationContext.getBeanNamesForType(lamp.server.aladin.common.assembler.ListAssembler.class);
+		String[] listAssemblerNames = applicationContext.getBeanNamesForType(ListAssembler.class);
 		for (String name : listAssemblerNames) {
-			lamp.server.aladin.common.assembler.ListAssembler assembler = (lamp.server.aladin.common.assembler.ListAssembler) applicationContext.getBean(name);
-			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(assembler.getClass(), lamp.server.aladin.common.assembler.ListAssembler.class);
+			ListAssembler assembler = (ListAssembler) applicationContext.getBean(name);
+			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(assembler.getClass(), ListAssembler.class);
 			Pair<Class, Class> pair = key(classes[0], classes[1]);
 			listAssemblerMap.put(pair, assembler);
 			log.info("ListAssembler {} registered ({}, {})", assembler, classes[0], classes[1]);
@@ -88,7 +88,7 @@ public class SmartAssembler implements ApplicationContextAware {
 		if (from == null) {
 			return null;
 		}
-		lamp.server.aladin.common.assembler.Assembler assembler = assemblerMap.get(key(fromClass, toClass));
+		Assembler assembler = assemblerMap.get(key(fromClass, toClass));
 		if (assembler != null) {
 			return (T) assembler.assemble(from);
 		} else if (parentSmartAssembler != null) {

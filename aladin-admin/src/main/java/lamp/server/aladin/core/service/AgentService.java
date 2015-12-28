@@ -1,6 +1,6 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.common.assembler.SmartAssembler;
+import lamp.server.aladin.utils.assembler.SmartAssembler;
 import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.repository.AgentRepository;
 import lamp.server.aladin.core.service.command.LampClientCreateCommand;

@@ -1,7 +1,7 @@
 package lamp.server.aladin.admin.config;
 
 
-import lamp.server.aladin.common.assembler.SmartAssembler;
+import lamp.server.aladin.utils.assembler.SmartAssembler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

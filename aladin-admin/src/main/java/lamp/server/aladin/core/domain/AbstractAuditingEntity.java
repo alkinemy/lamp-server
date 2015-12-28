@@ -1,4 +1,4 @@
-package lamp.server.aladin.common.domain;
+package lamp.server.aladin.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
