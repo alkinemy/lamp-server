@@ -1,4 +1,4 @@
-package lamp.server.aladin.core.controller;
+package lamp.server.aladin.admin.controller;
 
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;

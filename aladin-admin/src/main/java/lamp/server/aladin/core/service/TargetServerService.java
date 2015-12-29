@@ -1,5 +1,7 @@
 package lamp.server.aladin.core.service;
 
+import lamp.server.aladin.core.exception.Exceptions;
+import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
@@ -34,14 +36,23 @@ public class TargetServerService {
 	private SmartAssembler smartAssembler;
 
 	public Optional<TargetServer> getTargetServer(Long id) {
-		TargetServer targetServer = targetServerRepository.getOne(id);
+		TargetServer targetServer = targetServerRepository.findOne(id);
 		return Optional.ofNullable(targetServer);
 	}
 
+	public Optional<TargetServer> getTargetServerByHostname(String hostname) {
+		return targetServerRepository.findOneByHostname(hostname);
+	}
+
 	@Transactional
-	public void insertTargetServer(TargetServerCreateForm editForm) {
+	public TargetServer insertTargetServer(TargetServerCreateForm editForm) {
 		TargetServer targetServer = smartAssembler.assemble(editForm, TargetServer.class);
-		targetServerRepository.save(targetServer);
+		return targetServerRepository.save(targetServer);
+	}
+
+	@Transactional
+	public TargetServer insertTargetServer(TargetServer targetServer) {
+		return targetServerRepository.save(targetServer);
 	}
 
 	public void installAgent(Long targetServerId, Long agentJarId) {
@@ -49,13 +60,13 @@ public class TargetServerService {
 		targetServer.orElseThrow(EntityNotFoundException::new);
 
 		Optional<AgentJar> agentJar = agentJarService.getAgentJar(agentJarId);
-		agentJar.orElseThrow(EntityNotFoundException::new);
+		agentJar.orElseThrow(() -> Exceptions.newException(LampErrorCode.ENTITY_NOT_FOUND));
 
 		File file = fileDownloadService.download(agentJar.get());
 
 		// passwordless SSH
 		SshClient sshClient = null;
-		String agentPath = targetServer.get().getAgentPath();
+		String agentPath = targetServer.get().getAgentInstallPath();
 		sshClient.mkdir(agentPath);
 
 		String remoteFilename = Paths.get(agentPath, file.getName()).toString();
@@ -69,5 +80,6 @@ public class TargetServerService {
 		Page<TargetServer> page = targetServerRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, TargetServerDto.class);
 	}
+
 
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class AgentForm {
+public class AgentDto {
 
 	@NotEmpty
 	private String id;
@@ -26,8 +26,6 @@ public class AgentForm {
 	private String hostname;
 	private String address;
 	private int port = -1;
-
-	private String homeDirectory;
 
 	private String secretKey;
 

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -30,11 +31,14 @@ public class Agent extends AbstractAuditingEntity {
 	private String address;
 	private int port = -1;
 
+	@Column(name = "home_directory")
+	private String homeDirectory;
+
 	@Column(name = "secret_key")
 	private String secretKey;
 
 	@Column(name = "agent_time", nullable = true)
-	private Date time;
+	private LocalDateTime time;
 
 	@Column(name = "health_path")
 	private String healthPath;

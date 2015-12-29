@@ -1,4 +1,4 @@
-package lamp.server.aladin.api.base.exception;
+package lamp.server.aladin.api.exception;
 
 import lombok.Getter;
 import lombok.Setter;

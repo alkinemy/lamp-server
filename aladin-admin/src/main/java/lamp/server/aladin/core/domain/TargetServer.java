@@ -39,14 +39,14 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(name = "agent_installed", columnDefinition = "TINYINT")
 	private Boolean agentInstalled;
 
+	@Column(name = "agent_install_path")
+	private String agentInstallPath;
+
 	@Column(name = "monitor", columnDefinition = "TINYINT")
 	private Boolean monitor;
 
 	@Column(name = "monitor_interval")
 	private Long monitorInterval;
-
-	@Column(name = "agent_path")
-	private String agentPath;
 
 	@OneToOne(mappedBy = "targetServer", fetch = FetchType.LAZY)
 	private Agent agent;

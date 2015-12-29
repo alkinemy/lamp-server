@@ -13,7 +13,7 @@ CREATE TABLE `lamp_target_server` (
   `username` varchar(100) DEFAULT NULL,
   `encrypted_password` varchar(100) DEFAULT NULL,
   `agent_installed` tinyint(1) NOT NULL,
-  `agent_path` varchar(100) NOT NULL,
+  `agent_install_path` varchar(100) NOT NULL,
   `monitor` tinyint(1) NOT NULL,
   `monitor_interval` bigint(20) DEFAULT '0',
   `created_by` varchar(50) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `lamp_target_server` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_agent` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` varchar(100) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   `version` varchar(50) DEFAULT NULL,
@@ -34,10 +34,11 @@ CREATE TABLE `lamp_agent` (
   `hostname` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,
   `port` int NOT NULL,
+  `home_directory` varchar(255) NULL,
   `secret_key` varchar(100) DEFAULT NULL,
   `agent_time` datetime DEFAULT NULL,
-  `health_path` varchar(100) NOT NULL,
-  `metrics_path` varchar(100) NOT NULL,
+  `health_path` varchar(100) DEFAULT NULL,
+  `metrics_path` varchar(100) DEFAULT NULL,
   `created_by` varchar(50) NOT NULL,
   `created_date` datetime NOT NULL,
   `last_modified_by` varchar(50) DEFAULT NULL,
