@@ -2,7 +2,7 @@ package lamp.server.aladin.api.controller;
 
 import lamp.server.aladin.LampServer;
 import lamp.server.aladin.api.dto.AgentDto;
-import lamp.server.aladin.api.dto.AgentForm;
+import lamp.server.aladin.api.dto.AgentRegisterForm;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class AgentApiControllerIntegrationTests {
 
 	@Test
 	public void testRegister() throws Exception {
-		AgentForm agentForm = new AgentForm();
+		AgentRegisterForm agentForm = new AgentRegisterForm();
 		agentForm.setId("test-1");
 		agentForm.setName("test");
 		agentForm.setType("type");

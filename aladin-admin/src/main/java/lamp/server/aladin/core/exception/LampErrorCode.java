@@ -4,6 +4,7 @@ public enum LampErrorCode implements ErrorCode {
 	INTERNAL("에러가 발생하였습니다.")
 	, ENTITY_NOT_FOUND("대상을 찾을 수가 없습니다.", EntityNotFoundException.class)
 	, DUPLICATED_HOSTNAME("이미 등록되어 있는 호스트네임 입니다.", DuplicatedException.class)
+	, DUPLICATED_AGENT_ID("이미 등록되어 있는 에이전트 아이디 입니다.", DuplicatedException.class)
 	,
 	APP_NOT_FOUND("애플리케이션이 존재하지 않습니다."),
 	INVALID_MOUNT_POINT_NAME("잘못된 마운트 포인트 이름입니다."),

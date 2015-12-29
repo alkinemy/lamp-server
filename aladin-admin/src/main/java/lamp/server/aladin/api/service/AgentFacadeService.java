@@ -1,7 +1,7 @@
 package lamp.server.aladin.api.service;
 
 import lamp.server.aladin.api.dto.AgentDto;
-import lamp.server.aladin.api.dto.AgentForm;
+import lamp.server.aladin.api.dto.AgentRegisterForm;
 import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.service.AgentService;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
@@ -19,8 +19,8 @@ public class AgentFacadeService {
 	private SmartAssembler smartAssembler;
 
 	@Transactional
-	public AgentDto insert(AgentForm form) {
-		Agent saved = agentService.insert(form);
+	public AgentDto insert(AgentRegisterForm form) {
+		Agent saved = agentService.register(form);
 		return smartAssembler.assemble(saved, AgentDto.class);
 	}
 

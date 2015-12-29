@@ -22,7 +22,7 @@ public class Agent extends AbstractAuditingEntity {
 	private String type;
 	private String version;
 
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.REMOVE})
 	@JoinColumn(name = "target_server_id")
 	private TargetServer targetServer;
 

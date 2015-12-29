@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AgentRepository extends JpaRepository<Agent, Long> {
+public interface AgentRepository extends JpaRepository<Agent, String> {
 
 	Optional<Agent> findOneByHostname(String hostname);
 }
