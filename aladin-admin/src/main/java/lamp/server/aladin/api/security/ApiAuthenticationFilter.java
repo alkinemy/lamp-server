@@ -1,13 +1,17 @@
 package lamp.server.aladin.api.security;
 
+import lamp.server.aladin.api.support.jwt.JwtObject;
+import lamp.server.aladin.api.support.jwt.JwtParser;
+import lamp.server.aladin.api.support.jwt.JwtPayload;
+import lamp.server.aladin.api.support.jwt.JwtVerifier;
+import lamp.server.aladin.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,13 +26,28 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	private JwtParser jwtParser = new JwtParser();
+	private JwtVerifier jwtVerifier = new JwtVerifier();
+
 	@Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
 
 		log.info("AuthenticationManager = {}, {}", request.getRequestURI(), authenticationManager);
 
-		SecurityContext securityContext = SecurityContextHolder.getContext();
-		securityContext.setAuthentication(new ApiAuthenticationToken(AuthorityUtils.createAuthorityList("ROLE_API")));
+		String token = request.getHeader("Authorization");
+		if (token.startsWith("Bearer ")) {
+			token = StringUtils.substringAfter(token, "Bearer ");
+		}
+
+		if (StringUtils.isNoneBlank(token)) {
+			JwtObject jwtObject = jwtParser.parse(token);
+			if (jwtVerifier.verify(jwtObject)) {
+				JwtPayload payload = jwtObject.getPayload();
+				User user = new User(payload.getIssuer(), "", AuthorityUtils.createAuthorityList("ROLE_API"));
+				SecurityContext securityContext = SecurityContextHolder.getContext();
+				securityContext.setAuthentication(new ApiAuthenticationToken(user, null, user.getAuthorities()));
+			}
+		}
 
 		filterChain.doFilter(request, response);
 	}

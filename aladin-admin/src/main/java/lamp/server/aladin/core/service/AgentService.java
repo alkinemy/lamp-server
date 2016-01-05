@@ -1,20 +1,23 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.api.dto.AgentDeregisterForm;
 import lamp.server.aladin.api.dto.AgentRegisterForm;
+import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
+import lamp.server.aladin.core.repository.AgentRepository;
+import lamp.server.aladin.utils.BooleanUtils;
 import lamp.server.aladin.utils.StringUtils;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
-import lamp.server.aladin.core.domain.Agent;
-import lamp.server.aladin.core.repository.AgentRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AgentService {
 
@@ -31,24 +34,6 @@ public class AgentService {
 	}
 
 	@Transactional
-	public Agent insert(Agent agent) {
-		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
-
-		TargetServer targetServer = targetServerFromDb.orElseGet(
-				() -> targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class)));
-		agent.setTargetServer(targetServer);
-
-		return agentRepository.save(agent);
-	}
-
-	@Transactional
-	public void delete(Agent agent) {
-		TargetServer targetServer = agent.getTargetServer();
-		targetServer.setAgentInstalled(false);
-		agentRepository.delete(agent);
-	}
-
-	@Transactional
 	public Agent register(AgentRegisterForm form) {
 		String id = form.getId();
 		Optional<Agent> agentFromDb = getAgent(id);
@@ -58,20 +43,53 @@ public class AgentService {
 				.isPresent();
 		Exceptions.throwsException(duplicated, LampErrorCode.DUPLICATED_AGENT_ID, form.getId());
 
-		agentFromDb.ifPresent(this::delete);
+		if (agentFromDb.isPresent()) {
+			return update(form, agentFromDb.get());
+		} else {
+			return insert(form);
+		}
+	}
 
+
+	@Transactional
+	public Agent insert(AgentRegisterForm form) {
 		Agent agent = smartAssembler.assemble(form, Agent.class);
-		return insert(agent);
+
+		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
+		TargetServer targetServer = targetServerFromDb.orElseGet(
+				() -> targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class)));
+		agent.setTargetServer(targetServer);
+
+		return agentRepository.save(agent);
+	}
+
+
+	@Transactional
+	public Agent update(AgentRegisterForm form, Agent agent) {
+		BeanUtils.copyProperties(form, agent, "id", "secretKey");
+
+		if (!agent.getTargetServer().getHostname().equals(agent.getHostname())) {
+			Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
+			TargetServer targetServer = targetServerFromDb.orElseGet(
+					() -> targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class)));
+			agent.setTargetServer(targetServer);
+		}
+		return agent;
 	}
 
 	@Transactional
-	public void deregister(AgentDeregisterForm form) {
-		String id = form.getId();
+	public void deregister(String id) {
 		Optional<Agent> agentFromDb = getAgent(id);
-
-		agentFromDb
-				.filter(a -> StringUtils.equals(a.getSecretKey(), form.getSecretKey()))
-				.ifPresent(this::delete);
+		agentFromDb.ifPresent(this::delete);
 	}
+
+	@Transactional
+	public void delete(Agent agent) {
+		agentRepository.delete(agent);
+	}
+
+
+
+
 
 }

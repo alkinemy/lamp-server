@@ -5,10 +5,9 @@ import lamp.server.aladin.api.dto.AgentRegisterForm;
 import lamp.server.aladin.api.service.AgentFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,7 +21,14 @@ public class AgentApiController {
 
 	@RequestMapping(path = "", method = RequestMethod.POST)
 	public AgentDto register(@Valid @RequestBody AgentRegisterForm form) {
-		return agentFacadeService.insert(form);
+		return agentFacadeService.register(form);
 	}
+
+	@RequestMapping(path = "/{id:.+}", method = RequestMethod.DELETE)
+	public void deregister(@PathVariable("id") String id, @AuthenticationPrincipal User user) {
+		log.info("user = {}", user);
+		agentFacadeService.deregister(id);
+	}
+
 
 }
