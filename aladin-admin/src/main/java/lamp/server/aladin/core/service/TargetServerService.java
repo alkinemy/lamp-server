@@ -1,11 +1,11 @@
 package lamp.server.aladin.core.service;
 
+import lamp.server.aladin.core.domain.AppFile;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
-import lamp.server.aladin.core.domain.AgentJar;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.exception.EntityNotFoundException;
 import lamp.server.aladin.core.repository.TargetServerRepository;
@@ -27,10 +27,10 @@ public class TargetServerService {
 	private TargetServerRepository targetServerRepository;
 
 	@Autowired
-	private AgentJarService agentJarService;
+	private AppFileService appFileService;
 
 	@Autowired
-	private FileDownloadService fileDownloadService;
+	private AppFileDownloadService appFileDownloadService;
 
 	@Autowired
 	private SmartAssembler smartAssembler;
@@ -55,24 +55,27 @@ public class TargetServerService {
 		return targetServerRepository.save(targetServer);
 	}
 
-	public void installAgent(Long targetServerId, Long agentJarId) {
-		Optional<TargetServer> targetServer = getTargetServer(targetServerId);
-		targetServer.orElseThrow(EntityNotFoundException::new);
+	public void installAgent(Long targetServerId, Long appFileId) {
+		Optional<TargetServer> targetServerFromDb = getTargetServer(targetServerId);
+		targetServerFromDb.orElseThrow(EntityNotFoundException::new);
 
-		Optional<AgentJar> agentJar = agentJarService.getAgentJar(agentJarId);
-		agentJar.orElseThrow(() -> Exceptions.newException(LampErrorCode.ENTITY_NOT_FOUND));
+		Optional<AppFile> agentAppFile = appFileService.getAppFile(appFileId);
+		agentAppFile.orElseThrow(() -> Exceptions.newException(LampErrorCode.ENTITY_NOT_FOUND));
 
-		File file = fileDownloadService.download(agentJar.get());
+		File file = appFileDownloadService.download(agentAppFile.get());
 
+		TargetServer targetServer = targetServerFromDb.get();
 		// passwordless SSH
-		SshClient sshClient = null;
-		String agentPath = targetServer.get().getAgentInstallPath();
+		String host = targetServer.getAddress();
+		int port = targetServer.getSshPort();
+		SshClient sshClient = new SshClient(host, port);
+		String agentPath = targetServer.getAgentInstallPath();
 		sshClient.mkdir(agentPath);
 
 		String remoteFilename = Paths.get(agentPath, file.getName()).toString();
 		sshClient.scpTo(file, remoteFilename);
 
-		String agentStartCmd = agentJar.get().getStartCmd();
+		String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1 > nohup.out 2 > %1 &";
 		sshClient.exec(agentPath, agentStartCmd);
 	}
 

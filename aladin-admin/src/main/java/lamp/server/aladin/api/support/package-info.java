@@ -1,1 +1,0 @@
-package lamp.server.aladin.api.support;

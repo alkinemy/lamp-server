@@ -27,6 +27,9 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(length = 100, nullable = false)
 	private String address;
 
+	@Column(name = "ssh_port")
+	private int sshPort = 22;
+
 	@Column(name = "auth_type", length = 100, nullable = false)
 	private String authType;
 

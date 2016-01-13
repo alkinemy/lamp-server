@@ -1,17 +1,20 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.api.dto.AgentRegisterForm;
+import lamp.server.aladin.agent.dto.AgentRegisterForm;
 import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.domain.TargetServer;
+import lamp.server.aladin.core.dto.AgentDto;
+import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.repository.AgentRepository;
-import lamp.server.aladin.utils.BooleanUtils;
 import lamp.server.aladin.utils.StringUtils;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,11 @@ public class AgentService {
 
 	public Optional<Agent> getAgent(String id) {
 		return Optional.ofNullable(agentRepository.findOne(id));
+	}
+
+	public Page<AgentDto> getAgentList(Pageable pageable) {
+		Page<Agent> page = agentRepository.findAll(pageable);
+		return smartAssembler.assemble(pageable, page, AgentDto.class);
 	}
 
 	@Transactional
@@ -87,9 +95,5 @@ public class AgentService {
 	public void delete(Agent agent) {
 		agentRepository.delete(agent);
 	}
-
-
-
-
 
 }
