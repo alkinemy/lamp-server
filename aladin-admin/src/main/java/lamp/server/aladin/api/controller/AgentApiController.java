@@ -1,6 +1,7 @@
 package lamp.server.aladin.api.controller;
 
 import lamp.server.aladin.api.dto.AgentDto;
+import lamp.server.aladin.api.dto.AgentEventForm;
 import lamp.server.aladin.api.dto.AgentRegisterForm;
 import lamp.server.aladin.api.service.AgentFacadeService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,5 +31,10 @@ public class AgentApiController {
 		agentFacadeService.deregister(id);
 	}
 
+	@RequestMapping(path = "/{id}/event", method = RequestMethod.POST)
+	public void event(@Valid @RequestBody AgentEventForm form) {
+		// TODO 구현바람
+		log.info("event = {}", form);
+	}
 
 }
