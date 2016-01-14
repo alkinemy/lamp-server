@@ -44,7 +44,7 @@ public class AgentApiControllerIntegrationTests {
 		agentForm.setAddress("localhost");
 		agentForm.setPort(1);
 		agentForm.setProtocol("http");
-		agentForm.setHomeDirectory("/lamp/agent");
+		agentForm.setAppDirectory("/lamp/agent");
 
 		AgentDto saved = template.postForObject(getBaseUrl() + "/api/agent", agentForm, AgentDto.class);
 

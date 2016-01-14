@@ -1,5 +1,7 @@
 package lamp.server.aladin.admin.controller;
 
+import lamp.server.aladin.admin.MenuConstants;
+import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.service.TargetServerService;
@@ -16,8 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
-@RequestMapping("/target-server")
+@MenuMapping(MenuConstants.TARGET_SERVER)
 @Controller
+@RequestMapping("/target-server")
 public class TargetServerController {
 
 	@Autowired

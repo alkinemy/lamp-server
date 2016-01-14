@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "app_repository")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "repository_type", discriminatorType = DiscriminatorType.STRING)
-public class AppRepo extends AbstractAuditingEntity {
+public abstract class AppRepo extends AbstractAuditingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,5 +20,11 @@ public class AppRepo extends AbstractAuditingEntity {
 	private String name;
 
 	private String description;
+
+	@Column(name = "repository_type", insertable = false, updatable = false)
+	private String repositoryType;
+
+	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
+	private Boolean deleted;
 
 }

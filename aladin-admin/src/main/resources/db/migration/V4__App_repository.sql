@@ -24,10 +24,6 @@ CREATE TABLE `app_local_repository` (
   `repository_path` varchar(100) DEFAULT NULL,
   `file_limit_size` bigint(20) NULL,
   `file_expiration_date` datetime DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -38,10 +34,6 @@ CREATE TABLE `app_maven_repository` (
   `repository_username` varchar(200) DEFAULT NULL,
   `repository_password` varchar(200) DEFAULT NULL,
   `proxy` varchar(255) DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -52,9 +44,5 @@ CREATE TABLE `app_url_repository` (
   `repository_username` varchar(200) DEFAULT NULL,
   `repository_password` varchar(200) DEFAULT NULL,
   `base_url` varchar(1000) DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

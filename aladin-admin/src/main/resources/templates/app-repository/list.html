@@ -9,12 +9,12 @@
 					<div class="portlet-title">
 						<div class="caption">
 							<i class="icon-bubble font-dark"></i>
-							<span class="caption-subject font-dark bold uppercase" th:text="${SELECTED_MENU_ITEM.title}">Menu Title</span>
+							<span class="caption-subject font-dark bold uppercase">App Repository</span>
 						</div>
 						<div class="actions">
 							<div class="btn-group btn-group-devided">
-								<a th:href="@{/target-server/create}" class="btn btn-sm default">등록</a>
-								<a th:href="@{/target-server/create}" class="btn btn-sm default">등록</a>
+								<a th:href="@{/app-repository/create?repositoryType=LOCAL}" class="btn btn-sm default">등록</a>
+								<a th:href="@{/app-repository/create?repositoryType=MAVEN}" class="btn btn-sm default">등록</a>
 							</div>
 						</div>
 					</div>
@@ -24,25 +24,19 @@
 								<thead>
 								<tr>
 									<th> # </th>
+									<th> Type </th>
 									<th> Name </th>
-									<th> Hostname </th>
-									<th> Address </th>
-									<th> Installed </th>
-									<th> Monitor </th>
-									<th> Status </th>
+									<th> Description </th>
+									<th> Action </th>
 								</tr>
 								</thead>
 								<tbody>
-								<tr th:each="targetServer : ${page}">
-									<td th:text="${targetServer.id}"> 2 </td>
-									<td th:text="${targetServer.name}"> Larry </td>
-									<td th:text="${targetServer.hostname}"> Cooper </td>
-									<td th:text="${targetServer.address}"> lar </td>
-									<td th:text="${targetServer.agentInstalled}"> lar </td>
-									<td th:text="${targetServer.monitor}"> lar </td>
-									<td>
-										<span class="label label-sm label-warning"> Suspended </span>
-									</td>
+								<tr th:each="repository : ${page}">
+									<td th:text="${repository.id}"> 2 </td>
+									<td th:text="${repository.repositoryType}"> Joke </td>
+									<td th:text="${repository.name}"> Joke </td>
+									<td th:text="${repository.description}"> Joke </td>
+									<td><a th:href="@{/app-template/create(repositoryId=${repository.id})}">Template 등록</a> </td>
 								</tr>
 								</tbody>
 							</table>
@@ -52,6 +46,7 @@
 				<!-- END BORDERED TABLE PORTLET-->
 			</div>
 		</div>
+
 
 </body>
 </html>

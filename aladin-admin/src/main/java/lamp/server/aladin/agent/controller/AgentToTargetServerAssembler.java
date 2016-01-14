@@ -15,7 +15,7 @@ public class AgentToTargetServerAssembler extends AbstractListAssembler<Agent, T
 		targetServer.setAddress(agent.getAddress());
 		targetServer.setMonitor(false);
 		targetServer.setAgentInstalled(true);
-		targetServer.setAgentInstallPath(agent.getHomeDirectory());
+		targetServer.setAgentInstallPath(agent.getAppDirectory());
 		return targetServer;
 	}
 

@@ -104,11 +104,11 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:class="${#fields.hasErrors('agentPath')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Agent Path</label>
+								<div class="form-group" th:class="${#fields.hasErrors('agentInstallPath')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Agent Install Path</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{agentPath}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('agentPath')}" th:errors="*{agentPath}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{agentInstallPath}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('agentInstallPath')}" th:errors="*{agentInstallPath}"> A block of help text. </span>
 									</div>
 								</div>
 

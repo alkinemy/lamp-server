@@ -28,10 +28,6 @@ CREATE TABLE `app_local_file` (
   `filename` varchar(200) DEFAULT NULL,
   `file_size` bigint(20) NULL,
   `file_date` datetime DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -40,19 +36,11 @@ CREATE TABLE `app_maven_file` (
   `group_id` varchar(200) NOT NULL,
   `artficat_id` varchar(200) NOT NULL,
   `version` varchar(200) DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `app_url_file` (
   `id` bigint(20) NOT NULL,
   `file_url` varchar(1000) NOT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

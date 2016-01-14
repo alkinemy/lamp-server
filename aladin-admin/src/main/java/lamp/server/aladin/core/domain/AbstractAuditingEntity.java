@@ -1,6 +1,5 @@
 package lamp.server.aladin.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -15,8 +14,6 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -28,24 +25,20 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
 	@CreatedBy
 	@NotNull
-	@Column(name = "created_by", nullable = false, length = 50, updatable = false)
-	@JsonIgnore
+	@Column(name = "created_by", nullable = false, length = 100, updatable = false)
 	private String createdBy;
 
 	@CreatedDate
 	@NotNull
 	@Column(name = "created_date", nullable = false, updatable = false)
-	@JsonIgnore
 	private LocalDateTime createdDate;
 
 	@LastModifiedBy
-	@Column(name = "last_modified_by", length = 50)
-	@JsonIgnore
+	@Column(name = "last_modified_by", length = 100)
 	private String lastModifiedBy;
 
 	@LastModifiedDate
 	@Column(name = "last_modified_date")
-	@JsonIgnore
 	private LocalDateTime lastModifiedDate;
 
 }

@@ -29,7 +29,9 @@ public enum AdminErrorCode implements ErrorCode {
 	AGENT_PID_FILE_READ_FAILED("에이전트 PID 정보를 가져오는 중 에러가 발생하였습니다."),
 	SERVICE_PROPERTIES_WRITE_FAILED("서비스 프로퍼티즈 파일을 생성하는 중 에러가 발생하였습니다."),
 	AGENT_SYSTEM_LOG_FILE_NOT_FOUND("에이전트 시스템 로그 파일을 찾을 수 없습니다.")
-	, SECRET_KEY_GENERATION_FAILED("비밀키 생성을 실패하였습니다."), APP_DEPLOY_FAILED("애클리케이션을 디플로이 하는 중 문제가 발생하였습니다.");
+	, SECRET_KEY_GENERATION_FAILED("비밀키 생성을 실패하였습니다.")
+	, APP_DEPLOY_FAILED("애클리케이션을 디플로이 하는 중 문제가 발생하였습니다.")
+	, INVALID_APP_REPOSITORY_TYPE("잘못된 AppRepositoryType입니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

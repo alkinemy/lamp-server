@@ -36,11 +36,9 @@ CREATE TABLE `app_template` (
 CREATE TABLE `app_local_template` (
   `id` bigint(20) NOT NULL,
   `repository_id` bigint(20) NOT NULL,
-  `group_id` varchar(200) DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
+  `group_id` varchar(200) NOT NULL,
+  `artifact_id` varchar(200) NOT NULL,
+  `version` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -48,12 +46,8 @@ CREATE TABLE `app_maven_template` (
   `id` bigint(20) NOT NULL,
   `repository_id` bigint(20) NOT NULL,
   `group_id` varchar(200) NOT NULL,
-  `artficat_id` varchar(200) NOT NULL,
+  `artifact_id` varchar(200) NOT NULL,
   `version` varchar(200) DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -61,10 +55,8 @@ CREATE TABLE `app_url_template` (
   `id` bigint(20) NOT NULL,
   `repository_id` bigint(20) NOT NULL,
   `group_id` varchar(200) NOT NULL,
+  `artifact_id` varchar(200) NOT NULL,
+  `version` varchar(200) DEFAULT NULL,
   `file_url` varchar(1000) NOT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

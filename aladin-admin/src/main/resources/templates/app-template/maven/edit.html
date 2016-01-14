@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">Server Form</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided" data-toggle="buttons">
+								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm active">
+									<input type="radio" name="options" class="toggle" id="option1" />Actions</label>
+								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm">
+									<input type="radio" name="options" class="toggle" id="option2" />Settings</label>
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="@{/app-repository/{action}(action=${action})}" th:object="${editForm}" method="post">
+							<input type="hidden" th:field="*{repositoryType}" />
+							<div class="form-body">
+								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Name</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Description</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{description}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('url')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Url</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{url}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Username</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('password')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Password</label>
+									<div class="col-md-9">
+										<input type="password" class="form-control" th:field="*{password}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('proxy')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Proxy</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{proxy}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('proxy')}" th:errors="*{proxy}"> A block of help text. </span>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>

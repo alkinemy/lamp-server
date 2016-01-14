@@ -31,8 +31,8 @@ public class Agent extends AbstractAuditingEntity {
 	private String address;
 	private int port = -1;
 
-	@Column(name = "home_directory")
-	private String homeDirectory;
+	@Column(name = "app_directory")
+	private String appDirectory;
 
 	@Column(name = "secret_key")
 	private String secretKey;

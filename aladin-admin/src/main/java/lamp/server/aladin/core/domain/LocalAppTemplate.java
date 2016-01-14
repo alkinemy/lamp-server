@@ -18,4 +18,10 @@ public class LocalAppTemplate extends AppTemplate {
 	@Column(name = "group_id")
 	private String groupId;
 
+	@Column(name = "artifact_id")
+	private String artifactId;
+
+	@Column(name = "version")
+	private String version;
+
 }

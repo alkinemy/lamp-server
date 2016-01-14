@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+<body>
+
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light portlet-fit bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-bubble font-dark"></i>
+					<span class="caption-subject font-dark bold uppercase">App Repository</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group btn-group-devided">
+						<a th:href="@{/app-template/create?templateType=LOCAL}" class="btn btn-sm default">등록</a>
+						<a th:href="@{/app-template/create?templateType=MAVEN}" class="btn btn-sm default">등록</a>
+					</div>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table-scrollable">
+					<table class="table table-bordered table-hover">
+						<thead>
+						<tr>
+							<th> # </th>
+							<th> Type </th>
+							<th> Name </th>
+							<th> Description </th>
+							<th> App Name </th>
+							<th> Action </th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="template : ${page}">
+							<td th:text="${template.id}"> 2 </td>
+							<td th:text="${template.templateType}"> Joke </td>
+							<td th:text="${template.name}"> Joke </td>
+							<td th:text="${template.description}"> Joke </td>
+							<td th:text="${template.appName}"> Joke </td>
+							<td> </td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
+
+
+</body>
+</html>

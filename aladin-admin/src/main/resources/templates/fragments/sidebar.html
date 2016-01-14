@@ -41,37 +41,29 @@
 				</form>
 				<!-- END RESPONSIVE QUICK SEARCH FORM -->
 			</li>
-			<li class="nav-item start active open">
+
+			<li class="heading">
+				<h3 class="uppercase">Lamp</h3>
+			</li>
+			<li th:each="menuItem : ${MENU_ITEMS}" th:class="${menuItem.isSubMenuItemId(SELECTED_MENU_ITEM_ID)} ? 'nav-item active open' : 'nav-item'">
 				<a href="javascript:;" class="nav-link nav-toggle">
-					<i class="icon-home"></i>
-					<span class="title">Dashboard</span>
-					<span class="selected"></span>
-					<span class="arrow open"></span>
+					<i class="icon-layers"></i>
+					<span class="title" th:text="${menuItem.title}">Agent</span>
+					<span th:if="${menuItem.isSubMenuItemId(SELECTED_MENU_ITEM_ID)}" class="selected"></span>
+					<span th:class="${menuItem.isSubMenuItemId(SELECTED_MENU_ITEM_ID)} ? 'arrow open' : 'arrow'" class="arrow"></span>
 				</a>
-				<ul class="sub-menu">
-					<li class="nav-item start active open">
-						<a href="index.html" class="nav-link ">
-							<i class="icon-bar-chart"></i>
-							<span class="title">Dashboard 1</span>
-							<span class="selected"></span>
-						</a>
-					</li>
-					<li class="nav-item start ">
-						<a href="dashboard_2.html" class="nav-link ">
-							<i class="icon-bulb"></i>
-							<span class="title">Dashboard 2</span>
-							<span class="badge badge-success">1</span>
-						</a>
-					</li>
-					<li class="nav-item start ">
-						<a href="dashboard_3.html" class="nav-link ">
-							<i class="icon-graph"></i>
-							<span class="title">Dashboard 3</span>
-							<span class="badge badge-danger">5</span>
+				<ul th:if="${not #lists.isEmpty(menuItem.subMenuItems)}" class="sub-menu" >
+					<li th:each="subMenuItem : ${menuItem.subMenuItems}" th:class="${subMenuItem.isSelected(SELECTED_MENU_ITEM_ID)} ? 'nav-item active open' : 'nav-item'">
+						<a th:href="@{${subMenuItem.href}}" class="nav-link ">
+							<i th:if="${!#strings.isEmpty(subMenuItem.icon)}" th:class="${subMenuItem.icon}" class="icon-bulb"></i>
+							<span class="title" th:text="${subMenuItem.title}">Server</span>
+							<span th:if="${subMenuItem.isSelected(SELECTED_MENU_ITEM_ID)}" class="selected"></span>
 						</a>
 					</li>
 				</ul>
 			</li>
+
+
 			<li class="heading">
 				<h3 class="uppercase">Lamp</h3>
 			</li>

@@ -27,7 +27,7 @@ public class AgentRegisterForm {
 	private String address;
 	private int port = -1;
 
-	private String homeDirectory;
+	private String appDirectory;
 
 	private String secretKey;
 

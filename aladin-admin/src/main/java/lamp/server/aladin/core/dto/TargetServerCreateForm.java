@@ -26,7 +26,7 @@ public class TargetServerCreateForm {
 
 	private Boolean agentInstalled;
 	@NotEmpty
-	private String agentPath;
+	private String agentInstallPath;
 
 	private Boolean monitor;
 	private Long monitorInterval;
