@@ -9,5 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "lamp.server")
 public class ServerProperties {
 
+	private String localAppRepository;
+	private String mavenAppRepository;
 
 }

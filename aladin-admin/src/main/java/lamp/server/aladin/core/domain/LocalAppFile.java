@@ -8,16 +8,24 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue(value = AppFileType.Values.LOCAL)
 @Table(name = "app_local_file")
 @PrimaryKeyJoinColumn(name = "id")
-public class LocalAppFile extends AppFile {
+public class LocalAppFile extends AbstractAuditingEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
 	@Column(name = "group_id")
 	private String groupId;
 
-	private String pathname;
+	@Column(name = "artifact_id")
+	private String artifactId;
 
+	@Column(name = "version")
+	private String version;
+
+	private String pathname;
 	private String filename;
 
 }

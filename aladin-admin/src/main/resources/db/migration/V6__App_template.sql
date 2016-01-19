@@ -1,24 +1,25 @@
 USE `lamp`;
 
 DROP TABLE IF EXISTS `app_template`;
-DROP TABLE IF EXISTS `app_local_template`;
-DROP TABLE IF EXISTS `app_maven_template`;
-DROP TABLE IF EXISTS `app_url_template`;
 
 CREATE TABLE `app_template` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `template_type` varchar(200) NOT NULL,
-  `group_id` varchar(200) DEFAULT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+
   `repository_id` bigint(20) NOT NULL,
-  `app_name` varchar(200) NOT NULL,
+  `group_id` varchar(200) DEFAULT NULL,
+  `app_id` varchar(200) DEFAULT NULL,
+  `app_name` varchar(200) DEFAULT NULL,
   `app_version` varchar(200) DEFAULT NULL,
+  `app_url` varchar(1000) DEFAULT NULL,
+
   `process_type` varchar(200) NOT NULL,
   `pid_file` varchar(200) DEFAULT NULL,
   `start_command_line` varchar(1000) DEFAULT NULL,
   `stop_command_line` varchar(1000) DEFAULT NULL,
-  `preInstalled` tinyint(1) NOT NULL,
+  `pre_installed` tinyint(1) NOT NULL,
   `app_filename` varchar(200) DEFAULT NULL,
   `monitor` tinyint(1) NOT NULL,
 
@@ -31,32 +32,4 @@ CREATE TABLE `app_template` (
   `last_modified_date` datetime,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_repository_uk_01` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `app_local_template` (
-  `id` bigint(20) NOT NULL,
-  `repository_id` bigint(20) NOT NULL,
-  `group_id` varchar(200) NOT NULL,
-  `artifact_id` varchar(200) NOT NULL,
-  `version` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `app_maven_template` (
-  `id` bigint(20) NOT NULL,
-  `repository_id` bigint(20) NOT NULL,
-  `group_id` varchar(200) NOT NULL,
-  `artifact_id` varchar(200) NOT NULL,
-  `version` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `app_url_template` (
-  `id` bigint(20) NOT NULL,
-  `repository_id` bigint(20) NOT NULL,
-  `group_id` varchar(200) NOT NULL,
-  `artifact_id` varchar(200) NOT NULL,
-  `version` varchar(200) DEFAULT NULL,
-  `file_url` varchar(1000) NOT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

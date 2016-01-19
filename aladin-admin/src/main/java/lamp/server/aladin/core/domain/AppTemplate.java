@@ -9,9 +9,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "app_template")
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "template_type", discriminatorType = DiscriminatorType.STRING)
-public abstract class AppTemplate extends AbstractAuditingEntity {
+public class AppTemplate extends AbstractAuditingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,12 +19,26 @@ public abstract class AppTemplate extends AbstractAuditingEntity {
 
 	private String description;
 
+	@Column(name = "template_type")
+	@Enumerated(EnumType.STRING)
+	private AppResourceType templateType;
+
+	@ManyToOne
+	@JoinColumn(name = "repository_id", nullable = false)
+	private AppRepo appRepository;
+	@Column(name = "group_id")
+	private String groupId;
+	@Column(name = "app_id")
+	private String appId;
 	@Column(name = "app_name")
 	private String appName;
 	@Column(name = "app_version")
 	private String appVersion;
+	@Column(name = "app_url")
+	private String appUrl;
 
 	@Column(name = "process_type")
+	@Enumerated(EnumType.STRING)
 	private AppProcessType processType;
 
 	@Column(name = "pid_file")
@@ -34,7 +46,7 @@ public abstract class AppTemplate extends AbstractAuditingEntity {
 
 	@Column(name = "start_command_line")
 	private String startCommandLine;
-	@Column(name = "stop_command_ine")
+	@Column(name = "stop_command_line")
 	private String stopCommandLine;
 
 	@Column(name = "pre_installed")
@@ -46,7 +58,8 @@ public abstract class AppTemplate extends AbstractAuditingEntity {
 
 	private String commands;
 
-	@Column(name = "template_type", insertable = false, updatable = false)
-	private AppFileType templateType;
+	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
+	private Boolean deleted;
+
 
 }

@@ -7,4 +7,7 @@ public abstract class LampConstants {
 	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
 	public static final String SYSTEM_ACCOUNT = "system";
+
+	public static final String ACTION_CREATE = "create";
+	public static final String ACTION_UPDATE = "update";
 }

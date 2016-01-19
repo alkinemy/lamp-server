@@ -1,6 +1,6 @@
 package lamp.server.aladin.core.dto;
 
-import lamp.server.aladin.core.domain.AppFileType;
+import lamp.server.aladin.core.domain.AppResourceType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +16,6 @@ public class AppRepoCreateForm {
 
 	private String description;
 
-	private AppFileType repositoryType;
+	private AppResourceType repositoryType;
 
 }

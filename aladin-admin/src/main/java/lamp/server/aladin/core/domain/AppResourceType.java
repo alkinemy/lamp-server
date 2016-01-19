@@ -1,6 +1,6 @@
 package lamp.server.aladin.core.domain;
 
-public enum AppFileType {
+public enum AppResourceType {
 
 	LOCAL(Values.LOCAL),
 	MAVEN(Values.MAVEN),
@@ -8,7 +8,7 @@ public enum AppFileType {
 
 	private String typeName;
 
-	AppFileType(String typeName) {
+	AppResourceType(String typeName) {
 		this.typeName = typeName;
 	}
 

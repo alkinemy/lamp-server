@@ -13,8 +13,7 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
-						<a th:href="@{/app-template/create?templateType=LOCAL}" class="btn btn-sm default">등록</a>
-						<a th:href="@{/app-template/create?templateType=MAVEN}" class="btn btn-sm default">등록</a>
+						<a th:href="@{/agent/__${agent.id}__/app/create}" class="btn btn-sm default">등록</a>
 					</div>
 				</div>
 			</div>
@@ -27,23 +26,24 @@
 							<th> Type </th>
 							<th> Name </th>
 							<th> Description </th>
+							<th> Process Type </th>
 							<th> Group Id </th>
 							<th> App Id </th>
-							<th> Process Type </th>
+							<th> App Version </th>
 							<th> Monitor </th>
 							<th> Action </th>
 						</tr>
 						</thead>
 						<tbody>
-						<tr th:each="template : ${page}">
-							<td th:text="${template.id}"> 2 </td>
-							<td th:text="${template.templateType}"> Joke </td>
-							<td th:text="${template.name}"> Joke </td>
-							<td th:text="${template.description}"> Joke </td>
-							<td th:text="${template.groupId}"> Joke </td>
-							<td th:text="${template.appId}"> Joke </td>
-							<td th:text="${template.processType}"> Joke </td>
-							<td th:text="${template.monitor}"> Joke </td>
+						<tr th:each="app : ${appList}">
+							<td th:text="${app.id}"> 2 </td>
+							<td th:text="${app.name}"> Joke </td>
+							<td th:text="${app.description}"> Joke </td>
+							<td th:text="${app.processType}"> Joke </td>
+							<td th:text="${app.groupId}"> Joke </td>
+							<td th:text="${app.appId}"> Joke </td>
+							<td th:text="${app.appVeresion}"> Joke </td>
+							<td th:text="${app.monitor}"> Joke </td>
 							<td> </td>
 						</tr>
 						</tbody>

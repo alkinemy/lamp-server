@@ -22,7 +22,8 @@ public abstract class AppRepo extends AbstractAuditingEntity {
 	private String description;
 
 	@Column(name = "repository_type", insertable = false, updatable = false)
-	private String repositoryType;
+	@Enumerated(EnumType.STRING)
+	private AppResourceType repositoryType;
 
 	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;

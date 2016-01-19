@@ -46,3 +46,6 @@ CREATE TABLE `app_url_repository` (
   `base_url` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+

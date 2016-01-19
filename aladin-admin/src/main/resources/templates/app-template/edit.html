@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">App Template Form</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided" data-toggle="buttons">
+								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm active">
+									<input type="radio" name="options" class="toggle" id="option1" />Actions</label>
+								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm">
+									<input type="radio" name="options" class="toggle" id="option2" />Settings</label>
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="@{/app-template/{action}(action=${action})}" th:object="${editForm}" method="post">
+							<input type="hidden" th:field="*{templateType}" />
+							<div class="form-body">
+								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Name</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Description</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{description}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('repositoryId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Repository</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{repositoryId}">
+											<option th:each="appRepo : ${appRepositoryList}"
+													th:value="${appRepo.id}" th:text="${appRepo.name}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('repositoryId')}" th:errors="*{repositoryId}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('groupId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Group Id</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{groupId}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('appId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Artifact Id</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{appId}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('appId')}" th:errors="*{appId}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('appVersion')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Version</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{appVersion}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('appVersion')}" th:errors="*{appVersion}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('processType')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Process Type</label>
+									<div class="col-md-9">
+										<div class="radio-list">
+											<label class="radio-inline">
+												<div class="radio" id="uniform-optionsRadios4">
+													<input type="radio" name="optionsRadios" th:field="*{processType}" value="DEFAULT" checked="checked" />
+												</div> DEFAULT
+											</label>
+											<label class="radio-inline">
+												<div class="radio" id="uniform-optionsRadios5">
+													<input type="radio" name="optionsRadios" th:field="*{processType}" value="DAEMON" />
+												</div> DAEMON
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('pidFile')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">PID file</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{pidFile}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('pidFile')}" th:errors="*{pidFile}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('startCommandLine')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Start Command Line</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{startCommandLine}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('startCommandLine')}" th:errors="*{startCommandLine}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('stopCommandLine')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Stop Command Line</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{stopCommandLine}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('stopCommandLine')}" th:errors="*{stopCommandLine}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Pre Installed</label>
+									<div class="col-md-9">
+										<div class="checkbox-list">
+											<label class="checkbox-inline">
+												<span class=""><input type="checkbox" th:field="*{preInstalled}" /></span>
+												Installed </label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Install filename</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{appFilename}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('appFilename')}" th:errors="*{appFilename}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Monitor</label>
+									<div class="col-md-9">
+										<div class="checkbox-list">
+											<label class="checkbox-inline">
+												<span class=""><input type="checkbox" th:field="*{monitor}" /></span>
+												Enable </label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Commands</label>
+									<div class="col-md-9">
+										<textarea class="form-control" name="commands" rows="3"></textarea>
+									</div>
+								</div>
+
+
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>

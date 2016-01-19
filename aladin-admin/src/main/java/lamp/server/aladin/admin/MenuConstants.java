@@ -6,7 +6,6 @@ public abstract class MenuConstants {
 	public static final String AGENT = "AGENT";
 
 	public static final String APP_REPO = "APP_REPO";
+	public static final String APP_TEMPLATE = "APP_TEMPLATE";
 	public static final String APP_FILE = "APP_FILE";
-
-
 }

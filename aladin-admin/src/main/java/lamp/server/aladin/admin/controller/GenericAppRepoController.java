@@ -35,7 +35,7 @@ public abstract class GenericAppRepoController<CF extends AppRepoCreateForm> {
 		if (bindingResult.hasErrors()) {
 			return createForm(editForm, model);
 		}
-		appRepoService.insertAppRepo(editForm);
+		appRepoService.insertAppRepository(editForm);
 		redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
 
 

@@ -36,6 +36,15 @@ public class AgentService {
 		return Optional.ofNullable(agentRepository.findOne(id));
 	}
 
+	public AgentDto getAgentDto(String id) {
+		Optional<Agent> agentFromDb = getAgent(id);
+		if (agentFromDb.isPresent()) {
+			return smartAssembler.assemble(agentFromDb.get(), AgentDto.class);
+		} else {
+			throw Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, id);
+		}
+	}
+
 	public Page<AgentDto> getAgentList(Pageable pageable) {
 		Page<Agent> page = agentRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, AgentDto.class);

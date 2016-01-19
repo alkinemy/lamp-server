@@ -1,16 +1,17 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.core.domain.AppFile;
-import lamp.server.aladin.core.exception.Exceptions;
-import lamp.server.aladin.core.exception.LampErrorCode;
-import lamp.server.aladin.utils.assembler.SmartAssembler;
+import lamp.server.aladin.core.domain.AppTemplate;
+import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
-import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.exception.EntityNotFoundException;
+import lamp.server.aladin.core.exception.Exceptions;
+import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.repository.TargetServerRepository;
 import lamp.server.aladin.core.support.ssh.SshClient;
+import lamp.server.aladin.utils.assembler.SmartAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,7 @@ public class TargetServerService {
 	private TargetServerRepository targetServerRepository;
 
 	@Autowired
-	private AppFileService appFileService;
-
-	@Autowired
-	private AppFileDownloadService appFileDownloadService;
+	private AppResourceService appResourceService;
 
 	@Autowired
 	private SmartAssembler smartAssembler;
@@ -55,28 +53,34 @@ public class TargetServerService {
 		return targetServerRepository.save(targetServer);
 	}
 
-	public void installAgent(Long targetServerId, Long appFileId) {
+	public void installAgent(Long targetServerId, AppTemplate appTemplate, String version) {
 		Optional<TargetServer> targetServerFromDb = getTargetServer(targetServerId);
-		targetServerFromDb.orElseThrow(EntityNotFoundException::new);
+		TargetServer targetServer = targetServerFromDb.orElseThrow(EntityNotFoundException::new);
 
-		Optional<AppFile> agentAppFile = appFileService.getAppFile(appFileId);
-		agentAppFile.orElseThrow(() -> Exceptions.newException(LampErrorCode.ENTITY_NOT_FOUND));
+		Resource resource = appResourceService.getResource(appTemplate, version);
 
-		File file = appFileDownloadService.download(agentAppFile.get());
+		try {
+			// TODO : file로 가져올 수 없을 때의 처리 필요
 
-		TargetServer targetServer = targetServerFromDb.get();
-		// passwordless SSH
-		String host = targetServer.getAddress();
-		int port = targetServer.getSshPort();
-		SshClient sshClient = new SshClient(host, port);
-		String agentPath = targetServer.getAgentInstallPath();
-		sshClient.mkdir(agentPath);
+			File file = resource.getFile();
 
-		String remoteFilename = Paths.get(agentPath, file.getName()).toString();
-		sshClient.scpTo(file, remoteFilename);
+			// passwordless SSH
+			String host = targetServer.getAddress();
+			int port = targetServer.getSshPort();
+			SshClient sshClient = new SshClient(host, port);
+			String agentPath = targetServer.getAgentInstallPath();
+			sshClient.mkdir(agentPath);
 
-		String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1 > nohup.out 2 > %1 &";
-		sshClient.exec(agentPath, agentStartCmd);
+			String remoteFilename = Paths.get(agentPath, file.getName()).toString();
+			sshClient.scpTo(file, remoteFilename);
+
+			String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1 > nohup.out 2 > %1 &";
+			sshClient.exec(agentPath, agentStartCmd);
+		} catch (Exception e) {
+			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);
+		}
+
+
 	}
 
 	public Page<TargetServerDto> getTargetServerList(Pageable pageable) {

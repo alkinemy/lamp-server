@@ -12,12 +12,12 @@ public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRe
 
 	@Override protected AppRepo doAssemble(AppRepoCreateForm appRepoCreateForm) {
 		AppRepo appRepo;
-		AppFileType repository = appRepoCreateForm.getRepositoryType();
-		if (AppFileType.LOCAL.equals(repository)) {
+		AppResourceType repository = appRepoCreateForm.getRepositoryType();
+		if (AppResourceType.LOCAL.equals(repository)) {
 			appRepo = new LocalAppRepo();
-		} else if (AppFileType.MAVEN.equals(repository)) {
+		} else if (AppResourceType.MAVEN.equals(repository)) {
 			appRepo = new MavenAppRepo();
-		} else if (AppFileType.URL.equals(repository)) {
+		} else if (AppResourceType.URL.equals(repository)) {
 			appRepo = new UrlAppRepo();
 		} else {
 			throw Exceptions.newException(AdminErrorCode.INVALID_APP_REPOSITORY_TYPE, repository);
