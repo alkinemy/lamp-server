@@ -1,11 +1,17 @@
 package lamp.server.aladin.core.support.agent;
 
 import lamp.server.aladin.core.domain.Agent;
+import lamp.server.aladin.core.dto.AppDto;
+import lamp.server.aladin.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Slf4j
 public class AgentClient {
@@ -16,18 +22,31 @@ public class AgentClient {
 		this.restTemplate = restTemplate;
 	}
 
+
+	public List<AppDto> getAppList(Agent agent) {
+		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+		ResponseEntity<List<AppDto>> responseEntity = restTemplate.exchange(baseUrl + "/api/app", HttpMethod.GET, null, new ParameterizedTypeReference<List<AppDto>>() {});
+
+		return responseEntity.getBody();
+	}
+
+
 	public void register(Agent agent, AgentAppRegisterForm form) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+
 			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
 
 			parts.add("id", form.getId());
-			parts.add("name", form.getName());
+			parts.add("name", StringUtils.utf8ToIso88591(form.getName()));
+			parts.add("description", StringUtils.utf8ToIso88591(form.getDescription()));
 			parts.add("appId", form.getAppId());
-			parts.add("appName", form.getAppName());
+			parts.add("appName", StringUtils.utf8ToIso88591(form.getAppName()));
 			parts.add("appVersion", form.getAppVersion());
 			parts.add("processType", form.getProcessType().name());
+			parts.add("appDirectory", form.getAppDirectory());
+			parts.add("workDirectory", form.getWorkDirectory());
 			parts.add("pidFile", form.getPidFile());
 			parts.add("startCommandLine", form.getStartCommandLine());
 			parts.add("stopCommandLine", form.getStopCommandLine());
@@ -45,7 +64,15 @@ public class AgentClient {
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
+	}
 
+	public void start(Agent agent, String appId) {
+		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/start", Void.class);
+	}
 
+	public void stop(Agent agent, String appId) {
+		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/stop", Void.class);
 	}
 }

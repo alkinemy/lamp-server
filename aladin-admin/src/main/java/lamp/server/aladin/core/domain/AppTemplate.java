@@ -19,15 +19,16 @@ public class AppTemplate extends AbstractAuditingEntity {
 
 	private String description;
 
-	@Column(name = "template_type")
+	@Column(name = "resource_type")
 	@Enumerated(EnumType.STRING)
-	private AppResourceType templateType;
+	private AppResourceType resourceType;
 
 	@ManyToOne
 	@JoinColumn(name = "repository_id", nullable = false)
 	private AppRepo appRepository;
-	@Column(name = "group_id")
-	private String groupId;
+
+	@Column(name = "app_group_id")
+	private String appGroupId;
 	@Column(name = "app_id")
 	private String appId;
 	@Column(name = "app_name")
@@ -40,6 +41,11 @@ public class AppTemplate extends AbstractAuditingEntity {
 	@Column(name = "process_type")
 	@Enumerated(EnumType.STRING)
 	private AppProcessType processType;
+
+	@Column(name = "app_directory")
+	private String appDirectory;
+	@Column(name = "work_directory")
+	private String workDirectory;
 
 	@Column(name = "pid_file")
 	private String pidFile;

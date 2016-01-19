@@ -18,22 +18,23 @@ public class AppTemplateCreateForm {
 	private String description;
 
 	@NotNull
-	private AppResourceType templateType;
+	private AppResourceType resourceType = AppResourceType.NONE;
 
 	private Long repositoryId;
-	private String groupId;
+	private String appGroupId;
 	private String appId;
 	private String appName;
 	private String appVersion;
 	private String appUrl;
 
 	private AppProcessType processType = AppProcessType.DEFAULT;
+	private String appDirectory;
+	private String workDirectory;
 	private String pidFile;
 
 	private String startCommandLine;
 	private String stopCommandLine;
 
-	private boolean preInstalled;
 	private String appFilename;
 
 	private boolean monitor;

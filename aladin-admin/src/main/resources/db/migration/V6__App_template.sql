@@ -4,18 +4,20 @@ DROP TABLE IF EXISTS `app_template`;
 
 CREATE TABLE `app_template` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `template_type` varchar(200) NOT NULL,
+  `resource_type` varchar(200) NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
 
-  `repository_id` bigint(20) NOT NULL,
-  `group_id` varchar(200) DEFAULT NULL,
+  `repository_id` bigint(20) DEFAULT NULL,
+  `app_group_id` varchar(200) DEFAULT NULL,
   `app_id` varchar(200) DEFAULT NULL,
   `app_name` varchar(200) DEFAULT NULL,
   `app_version` varchar(200) DEFAULT NULL,
   `app_url` varchar(1000) DEFAULT NULL,
 
   `process_type` varchar(200) NOT NULL,
+  `app_directory` varchar(1000) DEFAULT NULL,
+  `work_directory` varchar(1000) DEFAULT NULL,
   `pid_file` varchar(200) DEFAULT NULL,
   `start_command_line` varchar(1000) DEFAULT NULL,
   `stop_command_line` varchar(1000) DEFAULT NULL,

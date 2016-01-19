@@ -1,5 +1,6 @@
 package lamp.server.aladin.core.service;
 
+import com.google.common.collect.Lists;
 import lamp.server.aladin.core.domain.AppResourceType;
 import lamp.server.aladin.core.domain.AppRepo;
 import lamp.server.aladin.core.dto.AppRepoCreateForm;
@@ -28,8 +29,9 @@ public class AppRepoService {
 		return smartAssembler.assemble(pageable, page, AppRepoDto.class);
 	}
 
-	public List<AppRepo> getAppRepositoryListByType(AppResourceType repositoryType) {
-		return appRepoRepository.findAllByRepositoryType(repositoryType);
+	public List<AppRepoDto> getAppRepositoryListByType(AppResourceType repositoryType) {
+		List<AppRepo> list = appRepoRepository.findAllByRepositoryType(repositoryType);
+		return smartAssembler.assemble(list, AppRepoDto.class);
 	}
 
 	@Transactional

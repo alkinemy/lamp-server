@@ -41,7 +41,7 @@ public class AppController {
 	private AppTemplateService appTemplateService;
 
 	@RequestMapping(path = "/app", method = RequestMethod.GET)
-	public String list(@PathVariable("agentId") String agentId, Model model, Pageable pageable) {
+	public String list(@PathVariable("agentId") String agentId, Model model) {
 		List<AppDto> appList = appService.getAppList(agentId);
 		model.addAttribute("appList", appList);
 		return "agent/app/list";
@@ -68,6 +68,22 @@ public class AppController {
 		appService.registerApp(agentId, editForm);
 
 		redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
+
+		return "redirect:/agent/{agentId}/app";
+	}
+
+	@RequestMapping(path = "/app/{appId}/start", method = RequestMethod.GET)
+	public String start(@PathVariable("agentId") String agentId,
+			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
+		appService.startApp(agentId, appId);
+
+		return "redirect:/agent/{agentId}/app";
+	}
+
+	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.GET)
+	public String stop(@PathVariable("agentId") String agentId,
+			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
+		appService.stopApp(agentId, appId);
 
 		return "redirect:/agent/{agentId}/app";
 	}

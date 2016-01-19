@@ -29,6 +29,7 @@
 									<th> Hostname </th>
 									<th> Address </th>
 									<th> Port </th>
+									<th> Action </th>
 								</tr>
 								</thead>
 								<tbody>
@@ -41,6 +42,10 @@
 									<td th:text="${agent.hostname}"> lar </td>
 									<td th:text="${agent.address}"> lar </td>
 									<td th:text="${agent.port}"> lar </td>
+									<td>
+										<a th:href="@{/agent/__${agent.id}__}">View</a> |
+										<a th:href="@{/agent/__${agent.id}__/app}">App</a>
+									</td>
 								</tr>
 								</tbody>
 							</table>

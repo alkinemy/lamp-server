@@ -13,8 +13,8 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
-						<a th:href="@{/app-template/create?templateType=LOCAL}" class="btn btn-sm default">등록</a>
-						<a th:href="@{/app-template/create?templateType=MAVEN}" class="btn btn-sm default">등록</a>
+						<a th:href="@{/app-template/create?resourceType=LOCAL}" class="btn btn-sm default">등록</a>
+						<a th:href="@{/app-template/create?resourceType=MAVEN}" class="btn btn-sm default">등록</a>
 					</div>
 				</div>
 			</div>
@@ -24,11 +24,12 @@
 						<thead>
 						<tr>
 							<th> # </th>
-							<th> Type </th>
 							<th> Name </th>
 							<th> Description </th>
+							<th> Resource Type </th>
 							<th> Group Id </th>
 							<th> App Id </th>
+							<th> Version </th>
 							<th> Process Type </th>
 							<th> Monitor </th>
 							<th> Action </th>
@@ -37,11 +38,12 @@
 						<tbody>
 						<tr th:each="template : ${page}">
 							<td th:text="${template.id}"> 2 </td>
-							<td th:text="${template.templateType}"> Joke </td>
 							<td th:text="${template.name}"> Joke </td>
 							<td th:text="${template.description}"> Joke </td>
-							<td th:text="${template.groupId}"> Joke </td>
+							<td th:text="${template.resourceType}"> Joke </td>
+							<td th:text="${template.appGroupId}"> Joke </td>
 							<td th:text="${template.appId}"> Joke </td>
+							<td th:text="${template.appVersion}"> Joke </td>
 							<td th:text="${template.processType}"> Joke </td>
 							<td th:text="${template.monitor}"> Joke </td>
 							<td> </td>

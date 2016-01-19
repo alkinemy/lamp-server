@@ -2,6 +2,8 @@ package lamp.server.aladin.core.domain;
 
 public enum AppResourceType {
 
+	NONE(Values.NONE),
+
 	LOCAL(Values.LOCAL),
 	MAVEN(Values.MAVEN),
 	URL(Values.URL);
@@ -17,6 +19,7 @@ public enum AppResourceType {
 	}
 
 	public static final class Values {
+		public static final String NONE = "NONE";
 		public static final String LOCAL = "LOCAL";
 		public static final String MAVEN = "MAVEN";
 		public static final String URL = "URL";

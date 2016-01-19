@@ -18,18 +18,18 @@ public class AppResourceService {
 	private MavenAppResourceLoader mavenAppResourceLoader;
 
 	public Resource getResource(AppTemplate appTemplate, String version) {
-		return getResource(appTemplate, appTemplate.getGroupId(), appTemplate.getAppId(), StringUtils.defaultIfBlank(version, appTemplate.getAppVersion()));
+		return getResource(appTemplate, appTemplate.getAppGroupId(), appTemplate.getAppId(), StringUtils.defaultIfBlank(version, appTemplate.getAppVersion()));
 	}
 
 	public Resource getResource(AppTemplate appTemplate, String groupId, String artifactId, String version) {
-		if (AppResourceType.LOCAL.equals(appTemplate.getTemplateType())) {
+		if (AppResourceType.LOCAL.equals(appTemplate.getResourceType())) {
 			return localAppResourceLoader.getResource((LocalAppRepo) appTemplate.getAppRepository(), groupId, artifactId, version);
-		} else if (AppResourceType.MAVEN.equals(appTemplate.getTemplateType())) {
+		} else if (AppResourceType.MAVEN.equals(appTemplate.getResourceType())) {
 			return mavenAppResourceLoader.getResource((MavenAppRepo) appTemplate.getAppRepository(), groupId, artifactId, version);
-		} else if (AppResourceType.URL.equals(appTemplate.getTemplateType())) {
+		} else if (AppResourceType.URL.equals(appTemplate.getResourceType())) {
 
 		}
-		throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_TEMPLATE_TYPE, appTemplate.getTemplateType());
+		throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_TEMPLATE_TYPE, appTemplate.getResourceType());
 	}
 
 

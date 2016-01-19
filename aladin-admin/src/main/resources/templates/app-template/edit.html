@@ -22,7 +22,7 @@
 					</div>
 					<div class="portlet-body form">
 						<form class="form-horizontal" role="form"  th:action="@{/app-template/{action}(action=${action})}" th:object="${editForm}" method="post">
-							<input type="hidden" th:field="*{templateType}" />
+							<input type="hidden" th:field="*{resourceType}" />
 							<div class="form-body">
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Name</label>
@@ -50,11 +50,11 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:class="${#fields.hasErrors('groupId')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group" th:class="${#fields.hasErrors('appGroupId')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Group Id</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{groupId}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{appGroupId}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('appGroupId')}" th:errors="*{appGroupId}"> A block of help text. </span>
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('appId')} ? 'form-group has-error' : 'form-group'">
@@ -89,6 +89,20 @@
 										</div>
 									</div>
 								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('appDirectory')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Version</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{getAppDirectory}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('appDirectory')}" th:errors="*{getAppDirectory}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('workDirectory')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Version</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{workDirectory}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('workDirectory')}" th:errors="*{workDirectory}"> A block of help text. </span>
+									</div>
+								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('pidFile')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">PID file</label>
 									<div class="col-md-9">
@@ -112,16 +126,6 @@
 									</div>
 								</div>
 
-								<div class="form-group">
-									<label class="col-md-3 control-label">Pre Installed</label>
-									<div class="col-md-9">
-										<div class="checkbox-list">
-											<label class="checkbox-inline">
-												<span class=""><input type="checkbox" th:field="*{preInstalled}" /></span>
-												Installed </label>
-										</div>
-									</div>
-								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Install filename</label>
 									<div class="col-md-9">

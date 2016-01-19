@@ -1,10 +1,12 @@
 package lamp.server.aladin.admin.controller;
 
+import com.google.common.collect.Lists;
 import lamp.server.aladin.LampConstants;
 import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.domain.AppResourceType;
 import lamp.server.aladin.core.domain.AppRepo;
+import lamp.server.aladin.core.dto.AppRepoDto;
 import lamp.server.aladin.core.dto.AppTemplateCreateForm;
 import lamp.server.aladin.core.dto.AppTemplateDto;
 import lamp.server.aladin.core.service.AppRepoService;
@@ -52,8 +54,13 @@ public class AppTemplateController {
 			model.addAttribute("appRepository", appRepo);
 		}
 
-		AppResourceType templateType = editForm.getTemplateType();
-		List<AppRepo> appRepoList = appRepoService.getAppRepositoryListByType(templateType);
+		AppResourceType templateType = editForm.getResourceType();
+		List<AppRepoDto> appRepoList;
+		if (AppResourceType.NONE.equals(templateType)) {
+			appRepoList = Lists.newArrayList(AppRepoDto.of(null, "사용안함", null, AppResourceType.NONE.name()));
+		} else {
+			appRepoList = appRepoService.getAppRepositoryListByType(templateType);
+		}
 		model.addAttribute("appRepositoryList", appRepoList);
 
 		return "app-template/edit";

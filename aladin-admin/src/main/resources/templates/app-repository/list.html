@@ -36,7 +36,7 @@
 									<td th:text="${repository.repositoryType}"> Joke </td>
 									<td th:text="${repository.name}"> Joke </td>
 									<td th:text="${repository.description}"> Joke </td>
-									<td><a th:href="@{/app-template/create(repositoryId=${repository.id},templateType=${repository.repositoryType})}">Template 등록</a> </td>
+									<td><a th:href="@{/app-template/create(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">Template 등록</a> </td>
 								</tr>
 								</tbody>
 							</table>

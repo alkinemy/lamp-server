@@ -1,10 +1,12 @@
 package lamp.server.aladin.core.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
 public class AppRepoDto {
 
 	private Long id;

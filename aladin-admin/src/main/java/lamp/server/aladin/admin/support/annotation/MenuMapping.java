@@ -10,4 +10,6 @@ public @interface MenuMapping {
 
 	String value() default "";
 
+	String title() default "";
+
 }
