@@ -50,6 +50,8 @@ public class AppTemplate extends AbstractAuditingEntity {
 	@Column(name = "pid_file")
 	private String pidFile;
 
+	@Column(name = "command_shell")
+	private String commandShell;
 	@Column(name = "start_command_line")
 	private String startCommandLine;
 	@Column(name = "stop_command_line")

@@ -19,6 +19,8 @@ CREATE TABLE `app_template` (
   `app_directory` varchar(1000) DEFAULT NULL,
   `work_directory` varchar(1000) DEFAULT NULL,
   `pid_file` varchar(200) DEFAULT NULL,
+
+  `command_shell` varchar(255) DEFAULT NULL,
   `start_command_line` varchar(1000) DEFAULT NULL,
   `stop_command_line` varchar(1000) DEFAULT NULL,
   `pre_installed` tinyint(1) NOT NULL,

@@ -111,6 +111,13 @@
 									</div>
 								</div>
 
+								<div class="form-group" th:class="${#fields.hasErrors('commandShell')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Command Shell</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{commandShell}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('commandShell')}" th:errors="*{commandShell}"> A block of help text. </span>
+									</div>
+								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('startCommandLine')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Start Command Line</label>
 									<div class="col-md-9">
