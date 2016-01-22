@@ -12,7 +12,6 @@ import lamp.server.aladin.core.service.AppService;
 import lamp.server.aladin.core.service.AppTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +25,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-@MenuMapping(MenuConstants.AGENT)
+@MenuMapping(MenuConstants.AVAILABLE_AGENT)
 @Controller
 @RequestMapping("/agent/{agentId}")
 public class AppController {

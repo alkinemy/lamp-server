@@ -2,6 +2,7 @@ package lamp.server.aladin.admin.config;
 
 
 import lamp.server.aladin.admin.support.MenuItemInterceptor;
+import lamp.server.aladin.admin.support.error.LampErrorAttributes;
 import lamp.server.aladin.core.service.MavenAppResourceLoader;
 import lamp.server.aladin.core.support.agent.AgentClient;
 import lamp.server.aladin.core.support.agent.AgentHttpRequestInterceptor;
@@ -36,6 +37,11 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public MavenAppResourceLoader mavenAppResourceLoader(ServerProperties serverProperties) {
 		return new MavenAppResourceLoader(serverProperties.getMavenAppRepository());
+	}
+
+	@Bean
+	public LampErrorAttributes errorAttributes() {
+		return new LampErrorAttributes();
 	}
 
 	@Override

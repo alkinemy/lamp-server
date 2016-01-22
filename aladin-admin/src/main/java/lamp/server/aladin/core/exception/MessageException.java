@@ -1,7 +1,11 @@
 package lamp.server.aladin.core.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import java.util.Objects;
 
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class MessageException extends RuntimeException {
 
 	private String code;

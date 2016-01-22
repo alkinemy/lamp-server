@@ -68,13 +68,15 @@ public class TargetServerService {
 			String host = targetServer.getAddress();
 			int port = targetServer.getSshPort();
 			SshClient sshClient = new SshClient(host, port);
+			sshClient.connect(targetServer.getUsername(), targetServer.getPassword());
+
 			String agentPath = targetServer.getAgentInstallPath();
 			sshClient.mkdir(agentPath);
 
 			String remoteFilename = Paths.get(agentPath, file.getName()).toString();
 			sshClient.scpTo(file, remoteFilename);
 
-			String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1 > nohup.out 2 > %1 &";
+			String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1>nohup.out 2>&1 &";
 			sshClient.exec(agentPath, agentStartCmd);
 		} catch (Exception e) {
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);

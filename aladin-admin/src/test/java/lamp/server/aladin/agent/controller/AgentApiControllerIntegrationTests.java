@@ -2,7 +2,7 @@ package lamp.server.aladin.agent.controller;
 
 import lamp.server.aladin.LampServer;
 import lamp.server.aladin.core.dto.AgentDto;
-import lamp.server.aladin.agent.dto.AgentRegisterForm;
+import lamp.server.aladin.api.dto.AgentRegisterForm;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

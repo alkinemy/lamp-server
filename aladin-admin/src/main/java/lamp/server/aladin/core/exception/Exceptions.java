@@ -73,7 +73,4 @@ public abstract class Exceptions {
 		return constructor.newInstance(errorCode.getDefaultMessage(), errorCode.name(), args);
 	}
 
-	public static <X extends Throwable> X newException() {
-		return null;
-	}
 }

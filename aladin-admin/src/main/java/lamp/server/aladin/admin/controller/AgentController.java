@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@MenuMapping(MenuConstants.AGENT)
+@MenuMapping(MenuConstants.AVAILABLE_AGENT)
 @Controller
 @RequestMapping("/agent")
 public class AgentController {

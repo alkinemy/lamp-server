@@ -1,10 +1,9 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.agent.dto.AgentRegisterForm;
+import lamp.server.aladin.api.dto.AgentRegisterForm;
 import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.dto.AgentDto;
-import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.repository.AgentRepository;

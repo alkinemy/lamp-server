@@ -25,7 +25,7 @@ public class MenuItemInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		List<MenuItem> menuItemList = menuItemService.getMenuItemList();
 		request.setAttribute("MENU_ITEMS", menuItemList);
-		log.info("MENU_ITEMS = {}", menuItemList);
+		log.debug("MENU_ITEMS = {}", menuItemList);
 
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;

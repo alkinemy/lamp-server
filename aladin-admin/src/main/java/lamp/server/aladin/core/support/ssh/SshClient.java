@@ -1,21 +1,35 @@
 package lamp.server.aladin.core.support.ssh;
 
 import com.jcraft.jsch.*;
+import lamp.server.aladin.utils.BooleanUtils;
 import lamp.server.aladin.utils.FileUtils;
 import lamp.server.aladin.utils.StringUtils;
 import lamp.server.aladin.core.exception.SshException;
+import lombok.Getter;
 
 import java.io.*;
 
 public class SshClient {
 
 	public static final int DEFAULT_PORT = 22;
+	public static final int DEFAULT_FORWARDING_LOCAL_PORT = 2233;
 
 	private String host;
 	private int port = DEFAULT_PORT;
 
+	@Getter
 	private JSch jsch;
+	@Getter
 	private Session session;
+
+	private boolean strictHostKeyChecking = false;
+	private boolean useGateway = false;
+	private String gatewayHost;
+	private int gatewayPort = DEFAULT_PORT;
+	private String localhost = "localhost";
+	private int gatewayForwardingPort = DEFAULT_FORWARDING_LOCAL_PORT;
+	private String gatewayUsername;
+	private String gatewayPassword;
 
 	public SshClient(String host) {
 		this(host, DEFAULT_PORT);
@@ -29,14 +43,52 @@ public class SshClient {
 
 	public void connect(String username, String password) {
 		try {
-			session = jsch.getSession(username, host, port);
-			if (StringUtils.isNotBlank(password)) {
-				session.setUserInfo(new UserPasswordInfo(password));
+			if (useGateway) {
+				Session gatewaySession = jsch.getSession(gatewayUsername, gatewayHost, gatewayPort);
+				if (StringUtils.isNotBlank(gatewayPassword)) {
+					gatewaySession.setUserInfo(new UserPasswordInfo(gatewayPassword));
+				}
+				gatewaySession.setConfig("StrictHostKeyChecking", BooleanUtils.toString(strictHostKeyChecking, "yes", "no"));
+				gatewaySession.setPortForwardingL(gatewayForwardingPort, host, port);
+				gatewaySession.connect();
+				gatewaySession.openChannel("direct-tcpip");
+
+				session = jsch.getSession(username, localhost, gatewayForwardingPort);
+				if (StringUtils.isNotBlank(gatewayPassword)) {
+					session.setUserInfo(new UserPasswordInfo(gatewayPassword));
+				}
+				session.setConfig("StrictHostKeyChecking", BooleanUtils.toString(strictHostKeyChecking, "yes", "no"));
+
+				session.connect();
+			} else {
+				session = jsch.getSession(username, host, port);
+				if (StringUtils.isNotBlank(password)) {
+					session.setUserInfo(new UserPasswordInfo(password));
+				}
+				session.connect();
 			}
-			session.connect();
+
 		} catch (JSchException e) {
 			throw new SshException("ssh connection failed", e);
 		}
+	}
+
+	public void setGateway(String host, String username, String password) {
+		setGateway(host, DEFAULT_PORT, DEFAULT_FORWARDING_LOCAL_PORT, username, password);
+	}
+
+	public void setGateway(String host, int port, String username, String password) {
+		setGateway(host, port, DEFAULT_FORWARDING_LOCAL_PORT, username, password);
+	}
+
+	public void setGateway(String host, int port, int forwardingLocalport, String username, String password) {
+		this.useGateway = true;
+
+		this.gatewayHost = host;
+		this.gatewayPort = port;
+		this.gatewayForwardingPort = forwardingLocalport;
+		this.gatewayUsername = username;
+		this.gatewayPassword = password;
 	}
 
 	public void disconnect() {
@@ -51,11 +103,11 @@ public class SshClient {
 
 	public boolean scpTo(File localFile, String remoteFilename) {
 		boolean ptimestamp = true;
-
+		String command = "scp " + (ptimestamp ? "-p" :"") +" -t "+ remoteFilename;
+		Channel channel = null;
 		try {
 			// exec 'scp -t remotefile' remotely
-			String command = "scp " + (ptimestamp ? "-p" :"") +" -t "+ remoteFilename;
-			Channel channel = session.openChannel("exec");
+			channel = session.openChannel("exec");
 			((ChannelExec)channel).setCommand(command);
 
 			// get I/O streams for remote scp
@@ -100,9 +152,12 @@ public class SshClient {
 			}
 			out.close();
 
-			channel.disconnect();
 		} catch (Exception e) {
 			throw new SshException("scp copy failed", e);
+		} finally {
+			if (channel != null) {
+				channel.disconnect();
+			}
 		}
 
 		return true;

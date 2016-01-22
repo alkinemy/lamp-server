@@ -1,18 +1,16 @@
 package lamp.server.aladin.core.support.agent;
 
 
-import lamp.server.aladin.agent.support.jwt.JwtBuilder;
+import lamp.server.aladin.api.support.jwt.JwtBuilder;
 import lamp.server.aladin.utils.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
 
 public class AgentHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
