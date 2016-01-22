@@ -10,6 +10,7 @@ import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.repository.TargetServerRepository;
 import lamp.server.aladin.core.support.ssh.SshClient;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class TargetServerService {
 
@@ -67,6 +69,7 @@ public class TargetServerService {
 			// passwordless SSH
 			String host = targetServer.getAddress();
 			int port = targetServer.getSshPort();
+
 			SshClient sshClient = new SshClient(host, port);
 			sshClient.connect(targetServer.getUsername(), targetServer.getPassword());
 
@@ -76,8 +79,9 @@ public class TargetServerService {
 			String remoteFilename = Paths.get(agentPath, file.getName()).toString();
 			sshClient.scpTo(file, remoteFilename);
 
-			String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1>nohup.out 2>&1 &";
-			sshClient.exec(agentPath, agentStartCmd);
+			String agentStartCmd = "nohup java -jar " + file.getName() + " --server.port=8080 1>agent.out 2>&1 &";
+			String output = sshClient.exec(agentPath, agentStartCmd, 10 * 1000);
+			log.info("exec : {}", output);
 		} catch (Exception e) {
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);
 		}

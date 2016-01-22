@@ -18,10 +18,11 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Expect implements Closeable {
 
-	private static final long DEFAULT_TIMEOUT = 60 * 1000;
+	private static final long DEFAULT_TIMEOUT = 10 * 1000;
 	private Selector selector;
 
 	private Pipe.SourceChannel inputChannel;
+	private InputStream input;
 	private OutputStream output;
 
 	private boolean pumping = true;
@@ -33,20 +34,38 @@ public class Expect implements Closeable {
 	@Setter
 	private boolean resetTimeoutOnReceive = false;
 
+	private PrintStream printStream;
+
 	public Expect(InputStream input, OutputStream output) throws IOException {
+		this(input, output, null);
+	}
+
+	public Expect(InputStream input, OutputStream output, PrintStream printStream) throws IOException {
 		this.selector = Selector.open();
 		this.inputChannel = inputStreamToSelectableChannel(input);
 		this.inputChannel.register(selector, SelectionKey.OP_READ);
 
+		this.input = input;
 		this.output = output;
+		this.printStream = printStream;
 	}
 
 	@Override
 	public void close() throws IOException {
+		close(true, true);
+	}
+
+	public void close(boolean closeInput, boolean closeOutput) throws IOException {
 		this.pumping = false;
 
 		IOUtils.closeQuietly(selector);
 		IOUtils.closeQuietly(inputChannel);
+		if (closeInput) {
+			IOUtils.closeQuietly(input);
+		}
+		if (closeOutput) {
+			IOUtils.closeQuietly(output);
+		}
 	}
 
 	private Pipe.SourceChannel inputStreamToSelectableChannel(
@@ -61,7 +80,10 @@ public class Expect implements Closeable {
 				while ( pumping && (read = input.read(buffer)) != -1) {
 					out.write(buffer, 0, read);
 //					log.info("[Pumping] {}", new String(buffer, 0, read));
-					System.out.print(new String(buffer, 0, read));
+					if (printStream != null) {
+						printStream.print(new String(buffer, 0, read));
+					}
+
 				}
 				log.debug("EOF from InputStream");
 			} catch (IOException e) {
@@ -120,7 +142,6 @@ public class Expect implements Closeable {
 					throw new ExpectTimeoutException(timeout);
 				}
 				selector.select(waitTime);
-
 				Iterator<SelectionKey> it = selector.selectedKeys().iterator();
 
 				while (it.hasNext()) {

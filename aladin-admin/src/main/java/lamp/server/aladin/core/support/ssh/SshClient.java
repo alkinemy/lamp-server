@@ -1,14 +1,16 @@
 package lamp.server.aladin.core.support.ssh;
 
 import com.jcraft.jsch.*;
+import lamp.server.aladin.core.exception.SshException;
 import lamp.server.aladin.utils.BooleanUtils;
 import lamp.server.aladin.utils.FileUtils;
 import lamp.server.aladin.utils.StringUtils;
-import lamp.server.aladin.core.exception.SshException;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
+@Slf4j
 public class SshClient {
 
 	public static final int DEFAULT_PORT = 22;
@@ -23,6 +25,9 @@ public class SshClient {
 	private Session session;
 
 	private boolean strictHostKeyChecking = false;
+
+	@Getter
+	private Session gatewaySession;
 	private boolean useGateway = false;
 	private String gatewayHost;
 	private int gatewayPort = DEFAULT_PORT;
@@ -39,6 +44,35 @@ public class SshClient {
 		jsch = new JSch();
 		this.host = host;
 		this.port = port;
+	}
+
+	static int checkAck(InputStream in) throws IOException {
+		int b = in.read();
+		// b may be 0 for success,
+		//          1 for error,
+		//          2 for fatal error,
+		//          -1
+		if (b == 0)
+			return b;
+		if (b == -1)
+			return b;
+
+		if (b == 1 || b == 2) {
+			StringBuilder sb = new StringBuilder();
+			int c;
+			do {
+				c = in.read();
+				sb.append((char) c);
+			}
+			while (c != '\n');
+			if (b == 1) { // error
+				log.warn("checkAck Error : {}", sb.toString());
+			}
+			if (b == 2) { // fatal error
+				log.warn("checkAck Fatal Error : {}", sb.toString());
+			}
+		}
+		return b;
 	}
 
 	public void connect(String username, String password) {
@@ -95,6 +129,9 @@ public class SshClient {
 		if (session != null) {
 			session.disconnect();
 		}
+		if (gatewaySession != null) {
+			gatewaySession.disconnect();
+		}
 	}
 
 	public void mkdir(String path) {
@@ -103,12 +140,12 @@ public class SshClient {
 
 	public boolean scpTo(File localFile, String remoteFilename) {
 		boolean ptimestamp = true;
-		String command = "scp " + (ptimestamp ? "-p" :"") +" -t "+ remoteFilename;
+		String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + remoteFilename;
 		Channel channel = null;
 		try {
 			// exec 'scp -t remotefile' remotely
 			channel = session.openChannel("exec");
-			((ChannelExec)channel).setCommand(command);
+			((ChannelExec) channel).setCommand(command);
 
 			// get I/O streams for remote scp
 			OutputStream out = channel.getOutputStream();
@@ -116,15 +153,15 @@ public class SshClient {
 
 			channel.connect();
 
-			if(checkAck(in) != 0){
+			if (checkAck(in) != 0) {
 				return false;
 			}
 
-			if(ptimestamp){
-				command = "T "+ (localFile.lastModified()/1000) + " 0";
+			if (ptimestamp) {
+				command = "T " + (localFile.lastModified() / 1000) + " 0";
 				// The access time should be sent here,
 				// but it is not accessible with JavaAPI ;-<
-				command += (" "+ (localFile.lastModified()/1000) + " 0\n");
+				command += (" " + (localFile.lastModified() / 1000) + " 0\n");
 				out.write(command.getBytes());
 				out.flush();
 				if (checkAck(in) != 0) {
@@ -135,7 +172,8 @@ public class SshClient {
 			// send "C0644 filesize filename", where filename should not include '/'
 			long filesize = localFile.length();
 			command = "C0644 " + filesize + " " + localFile.getName() + "\n";
-			out.write(command.getBytes()); out.flush();
+			out.write(command.getBytes());
+			out.flush();
 			if (checkAck(in) != 0) {
 				return false;
 			}
@@ -144,9 +182,9 @@ public class SshClient {
 			FileUtils.copyFile(localFile, out);
 
 			// send '\0'
-			out.write('\0'); 
+			out.write('\0');
 			out.flush();
-			
+
 			if (checkAck(in) != 0) {
 				return false;
 			}
@@ -163,14 +201,33 @@ public class SshClient {
 		return true;
 	}
 
-	public void exec(String path, String command) {
+	public String exec(String path, String command, long timeout) {
+		Channel channel = null;
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream printStream = new PrintStream(baos)) {
+			channel = getSession().openChannel("shell");
+			try (Expect expect = new Expect(channel.getInputStream(), channel.getOutputStream(), printStream)) {
+				channel.connect();
 
+				expect.send("cd " + path + "\n");
+				expect.send(command + "\n");
+				expect.expectEOF(timeout);
+			}
+			String output = baos.toString("UTF-8");
+			return output;
+		} catch (Exception e) {
+			throw new SshException("exec failed (path={}, command={}, timeout={})", e);
+		} finally {
+			if (channel != null) {
+				channel.disconnect();
+			}
+		}
 	}
 
 	public void exec(String command) {
 		try {
 			Channel channel = session.openChannel("exec");
-			((ChannelExec)channel).setCommand(command);
+			((ChannelExec) channel).setCommand(command);
 
 			// X Forwarding
 			// channel.setXForwarding(true);
@@ -182,25 +239,30 @@ public class SshClient {
 
 			//FileOutputStream fos=new FileOutputStream("/tmp/stderr");
 			//((ChannelExec)channel).setErrStream(fos);
-			((ChannelExec)channel).setErrStream(System.err);
+			((ChannelExec) channel).setErrStream(System.err);
 
 			InputStream in = channel.getInputStream();
 
 			channel.connect();
 
-			byte[] tmp=new byte[1024];
-			while(true){
-				while(in.available()>0){
-					int i=in.read(tmp, 0, 1024);
-					if(i<0)break;
-					System.out.print(new String(tmp, 0, i));
+			byte[] tmp = new byte[1024];
+			while (true) {
+				while (in.available() > 0) {
+					int i = in.read(tmp, 0, 1024);
+					if (i < 0)
+						break;
+					log.debug("exec : {},", new String(tmp, 0, i));
 				}
-				if(channel.isClosed()){
-					if(in.available()>0) continue;
-					System.out.println("exit-status: "+channel.getExitStatus());
+				if (channel.isClosed()) {
+					if (in.available() > 0)
+						continue;
+					log.debug("exit-status : {}", channel.getExitStatus());
 					break;
 				}
-				try{Thread.sleep(1000);}catch(Exception ee){}
+				try {
+					Thread.sleep(1000);
+				} catch (Exception ee) {
+				}
 			}
 			channel.disconnect();
 		} catch (Exception e) {
@@ -208,34 +270,6 @@ public class SshClient {
 		}
 
 	}
-
-	static int checkAck(InputStream in) throws IOException {
-		int b=in.read();
-		// b may be 0 for success,
-		//          1 for error,
-		//          2 for fatal error,
-		//          -1
-		if(b==0) return b;
-		if(b==-1) return b;
-
-		if(b==1 || b==2){
-			StringBuffer sb=new StringBuffer();
-			int c;
-			do {
-				c=in.read();
-				sb.append((char)c);
-			}
-			while(c!='\n');
-			if(b==1){ // error
-				System.out.print(sb.toString());
-			}
-			if(b==2){ // fatal error
-				System.out.print(sb.toString());
-			}
-		}
-		return b;
-	}
-
 
 	public static class UserPasswordInfo implements UserInfo {
 
@@ -247,33 +281,32 @@ public class SshClient {
 		}
 
 		@Override public String getPassphrase() {
-			System.out.println("getPassphrase()");
+			log.debug("getPassphrase()");
 			return null;
 		}
 
 		@Override public String getPassword() {
-			System.out.println("getPassword()");
+			log.debug("getPassword()");
 			return password;
 		}
 
 		@Override public boolean promptPassword(String message) {
-			System.out.println("promptPassword : " + promptPasswordCount + "\n" + message);
+			log.debug("promptPassword({}) = {}", promptPasswordCount, message);
 			return promptPasswordCount++ == 0;
 		}
 
 		@Override public boolean promptPassphrase(String message) {
-			System.out.println("promptPassphrase : " + message);
+			log.debug("promptPassphrase = {}", message);
 			return true;
 		}
 
-
 		@Override public boolean promptYesNo(String message) {
-			System.out.println("promptYesNo : " + message);
+			log.debug("promptYesNo = {}", message);
 			return true;
 		}
 
 		@Override public void showMessage(String message) {
-			System.out.println("showMessage : " + message);
+			log.debug("showMessage = {}l", message);
 		}
 	}
 }
