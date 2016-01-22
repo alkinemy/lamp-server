@@ -82,7 +82,7 @@ public class SshClient {
 				if (StringUtils.isNotBlank(gatewayPassword)) {
 					gatewaySession.setUserInfo(new UserPasswordInfo(gatewayPassword));
 				}
-				gatewaySession.setConfig("StrictHostKeyChecking", BooleanUtils.toString(strictHostKeyChecking, "yes", "no"));
+				gatewaySession.setConfig("StrictHostKeyChecking", "no");
 				gatewaySession.setPortForwardingL(gatewayForwardingPort, host, port);
 				gatewaySession.connect();
 				gatewaySession.openChannel("direct-tcpip");
@@ -91,14 +91,19 @@ public class SshClient {
 				if (StringUtils.isNotBlank(gatewayPassword)) {
 					session.setUserInfo(new UserPasswordInfo(gatewayPassword));
 				}
-				session.setConfig("StrictHostKeyChecking", BooleanUtils.toString(strictHostKeyChecking, "yes", "no"));
+				session.setConfig("StrictHostKeyChecking", "no");
 
 				session.connect();
 			} else {
 				session = jsch.getSession(username, host, port);
-				if (StringUtils.isNotBlank(password)) {
-					session.setUserInfo(new UserPasswordInfo(password));
-				}
+
+				session.setConfig("StrictHostKeyChecking", "no");
+				session.setPassword(password);
+//				if (StringUtils.isNotBlank(password)) {
+//
+//					session.setUserInfo(new UserPasswordInfo(password));
+//				}
+
 				session.connect();
 			}
 
@@ -158,7 +163,7 @@ public class SshClient {
 			}
 
 			if (ptimestamp) {
-				command = "T " + (localFile.lastModified() / 1000) + " 0";
+				command = "T" + (localFile.lastModified() / 1000) + " 0";
 				// The access time should be sent here,
 				// but it is not accessible with JavaAPI ;-<
 				command += (" " + (localFile.lastModified() / 1000) + " 0\n");

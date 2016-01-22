@@ -94,6 +94,8 @@ public class TargetServerService {
 			if (StringUtils.isBlank(startCommand)) {
 				startCommand = "nohup java -jar " + file.getName() + " --server.port=8080 1>agent.out 2>&1 &";
 			}
+			// TODO 수정 바람
+			startCommand = "nohup java -jar " + file.getName() + " --server.port=18080 1>agent.out 2>&1 &";
 
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					PrintStream printStream = new PrintStream(baos)) {
@@ -103,6 +105,7 @@ public class TargetServerService {
 			}
 
 		} catch (Exception e) {
+			log.error("에이전트 설치 실패", e);
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);
 		}
 

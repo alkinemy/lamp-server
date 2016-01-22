@@ -36,7 +36,10 @@
 									<td th:text="${repository.repositoryType}"> Joke </td>
 									<td th:text="${repository.name}"> Joke </td>
 									<td th:text="${repository.description}"> Joke </td>
-									<td><a th:href="@{/app-template/create(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">Template 등록</a> </td>
+									<td>
+										<a th:href="@{/app-template/create(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">Template 등록</a>
+										<a th:if="${repository.repositoryType == 'LOCAL'}" th:href="@{/app-repository/{resourceType}/{repositoryId}/file(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">File</a>
+									</td>
 								</tr>
 								</tbody>
 							</table>
