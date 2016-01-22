@@ -191,7 +191,7 @@ public class SshClient {
 			out.close();
 
 		} catch (Exception e) {
-			throw new SshException("scp copy failed", e);
+			throw new SshException("scp failed", e);
 		} finally {
 			if (channel != null) {
 				channel.disconnect();
@@ -201,10 +201,9 @@ public class SshClient {
 		return true;
 	}
 
-	public String exec(String path, String command, long timeout) {
+	public void exec(String path, String command, PrintStream printStream, long timeout) {
 		Channel channel = null;
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream printStream = new PrintStream(baos)) {
+		try {
 			channel = getSession().openChannel("shell");
 			try (Expect expect = new Expect(channel.getInputStream(), channel.getOutputStream(), printStream)) {
 				channel.connect();
@@ -213,8 +212,6 @@ public class SshClient {
 				expect.send(command + "\n");
 				expect.expectEOF(timeout);
 			}
-			String output = baos.toString("UTF-8");
-			return output;
 		} catch (Exception e) {
 			throw new SshException("exec failed (path={}, command={}, timeout={})", e);
 		} finally {

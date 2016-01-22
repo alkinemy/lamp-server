@@ -21,7 +21,7 @@
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form"  th:action="@{/app-repository/{action}(action=${action})}" th:object="${editForm}" method="post">
+						<form class="form-horizontal" role="form"  th:action="@{/app-repository/LOCAL/{action}(action=${action})}" th:object="${editForm}" method="post">
 							<input type="hidden" th:field="*{repositoryType}" />
 							<div class="form-body">
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">

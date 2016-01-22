@@ -4,9 +4,10 @@ DROP TABLE IF EXISTS `app_local_file`;
 
 
 CREATE TABLE `app_local_file` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `repository_id` bigint(20) NOT NULL,
   `group_id` varchar(200) DEFAULT NULL,
   `artifact_id` varchar(200) DEFAULT NULL,
   `version` varchar(200) DEFAULT NULL,

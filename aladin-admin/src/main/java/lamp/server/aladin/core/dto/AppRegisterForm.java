@@ -9,7 +9,6 @@ import lombok.ToString;
 @ToString
 public class AppRegisterForm {
 
-
 	private String id;
 	private String name;
 	private String description;

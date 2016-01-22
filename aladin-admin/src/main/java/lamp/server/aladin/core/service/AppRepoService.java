@@ -1,8 +1,7 @@
 package lamp.server.aladin.core.service;
 
-import com.google.common.collect.Lists;
-import lamp.server.aladin.core.domain.AppResourceType;
 import lamp.server.aladin.core.domain.AppRepo;
+import lamp.server.aladin.core.domain.AppResourceType;
 import lamp.server.aladin.core.dto.AppRepoCreateForm;
 import lamp.server.aladin.core.dto.AppRepoDto;
 import lamp.server.aladin.core.repository.AppRepoRepository;

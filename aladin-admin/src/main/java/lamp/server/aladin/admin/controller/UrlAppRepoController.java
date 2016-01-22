@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @MenuMapping(MenuConstants.APP_REPO)
 @Controller
-@RequestMapping(value = "/app-repository", params = "repositoryType=URL")
+@RequestMapping(value = "/app-repository/URL")
 public class UrlAppRepoController extends GenericAppRepoController<UrlAppRepoCreateForm> {
 
 	@Override protected String getCreateViewName() {

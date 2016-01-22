@@ -9,12 +9,11 @@
 					<div class="portlet-title">
 						<div class="caption">
 							<i class="icon-bubble font-dark"></i>
-							<span class="caption-subject font-dark bold uppercase">App Repository</span>
+							<span class="caption-subject font-dark bold uppercase">Local App File</span>
 						</div>
 						<div class="actions">
 							<div class="btn-group btn-group-devided">
-								<a th:href="@{/app-repository/LOCAL/create}" class="btn btn-sm default">등록</a>
-								<a th:href="@{/app-repository/MAVEN/create}" class="btn btn-sm default">등록</a>
+								<a th:href="@{/app-repository/LOCAL/__${appRepository.id}__/file/create}" class="btn btn-sm default">등록</a>
 							</div>
 						</div>
 					</div>
@@ -24,19 +23,21 @@
 								<thead>
 								<tr>
 									<th> # </th>
-									<th> Type </th>
-									<th> Name </th>
-									<th> Description </th>
+									<th> GroupId </th>
+									<th> ArtifactId </th>
+									<th> Version </th>
 									<th> Action </th>
 								</tr>
 								</thead>
 								<tbody>
-								<tr th:each="repository : ${page}">
-									<td th:text="${repository.id}"> 2 </td>
-									<td th:text="${repository.repositoryType}"> Joke </td>
-									<td th:text="${repository.name}"> Joke </td>
-									<td th:text="${repository.description}"> Joke </td>
-									<td><a th:href="@{/app-template/create(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">Template 등록</a> </td>
+								<tr th:each="appFile : ${page}">
+									<td th:text="${appFile.id}"> 2 </td>
+									<td th:text="${appFile.groupId}"> Joke </td>
+									<td th:text="${appFile.artifactId}"> Joke </td>
+									<td th:text="${appFile.version}"> Joke </td>
+									<td>
+										삭제
+									</td>
 								</tr>
 								</tbody>
 							</table>

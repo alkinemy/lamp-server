@@ -32,6 +32,7 @@ public class AppTemplateCreateForm {
 	private String workDirectory;
 	private String pidFile;
 
+	private String commandShell;
 	private String startCommandLine;
 	private String stopCommandLine;
 

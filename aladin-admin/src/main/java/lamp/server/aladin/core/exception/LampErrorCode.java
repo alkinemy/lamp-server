@@ -35,7 +35,8 @@ public enum LampErrorCode implements ErrorCode {
 	, AGENT_NOT_FOUND("에이전트가 존재하지 않습니다.")
 	, APP_TEMPLATE_NOT_FOUND("앱 템플릿이 존재하지 않습니다.")
 	, APP_RESOURCE_NOT_FOUND("앱 리소스를 찾을 수 없습니다.")
-	, UNSUPPORTED_APP_TEMPLATE_TYPE("지원하지 않는 앱 템플릿 타입입니다."), AGENT_INSTALL_FAILED("에이전트 설치를 실패하였습니다.");
+	, UNSUPPORTED_APP_TEMPLATE_TYPE("지원하지 않는 앱 템플릿 타입입니다."), AGENT_INSTALL_FAILED("에이전트 설치를 실패하였습니다.")
+	, APP_REPOSITORY_NOT_FOUND("앱 저장소를 찾을 수 없습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

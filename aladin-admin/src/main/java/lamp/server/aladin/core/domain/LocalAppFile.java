@@ -16,6 +16,13 @@ public class LocalAppFile extends AbstractAuditingEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	private String name;
+
+	private String description;
+
+	@Column(name = "repository_id")
+	private Long repositoryId;
+
 	@Column(name = "group_id")
 	private String groupId;
 
@@ -27,5 +34,8 @@ public class LocalAppFile extends AbstractAuditingEntity {
 
 	private String pathname;
 	private String filename;
+
+	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
+	private Boolean deleted;
 
 }

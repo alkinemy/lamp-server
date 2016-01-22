@@ -9,7 +9,7 @@
 					<div class="portlet-title">
 						<div class="caption">
 							<i class="icon-settings font-dark"></i>
-							<span class="caption-subject font-dark sbold uppercase">Server Form</span>
+							<span class="caption-subject font-dark sbold uppercase">File Upload</span>
 						</div>
 						<div class="actions">
 							<div class="btn-group btn-group-devided" data-toggle="buttons">
@@ -21,8 +21,7 @@
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form"  th:action="@{/app-repository/MAVEN/{action}(action=${action})}" th:object="${editForm}" method="post">
-							<input type="hidden" th:field="*{repositoryType}" />
+						<form class="form-horizontal" role="form"  th:action="@{/app-repository/LOCAL/{id}/file/{action}(id=${appRepository.id},action=${action})}" th:object="${editForm}" method="post" enctype="multipart/form-data">
 							<div class="form-body">
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Name</label>
@@ -38,33 +37,32 @@
 										<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
 									</div>
 								</div>
-
-								<div class="form-group" th:class="${#fields.hasErrors('url')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Url</label>
+								<div class="form-group" th:class="${#fields.hasErrors('groupId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">GroupId</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{url}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{groupId}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Username</label>
+								<div class="form-group" th:class="${#fields.hasErrors('artifactId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">ArtifactId</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{artifactId}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('artifactId')}" th:errors="*{artifactId}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:class="${#fields.hasErrors('password')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Password</label>
+								<div class="form-group" th:class="${#fields.hasErrors('version')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Version</label>
 									<div class="col-md-9">
-										<input type="password" class="form-control" th:field="*{password}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{version}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('version')}" th:errors="*{version}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:class="${#fields.hasErrors('proxy')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Proxy</label>
+								<div class="form-group" th:class="${#fields.hasErrors('uploadFile')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Upload File</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{proxy}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('proxy')}" th:errors="*{proxy}"> A block of help text. </span>
+										<input type="file" class="form-control" th:field="*{uploadFile}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('uploadFile')}" th:errors="*{uploadFile}"> A block of help text. </span>
 									</div>
 								</div>
 							</div>

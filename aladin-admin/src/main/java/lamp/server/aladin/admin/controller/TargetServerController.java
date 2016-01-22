@@ -2,6 +2,7 @@ package lamp.server.aladin.admin.controller;
 
 import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
+import lamp.server.aladin.core.dto.AgentInstallForm;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.service.TargetServerService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -62,6 +64,13 @@ public class TargetServerController {
 	@RequestMapping(path = "/update", method = RequestMethod.POST)
 	public String update(@ModelAttribute("editForm") TargetServerCreateForm editForm) {
 
+		return "target-server/edit";
+	}
+
+	@RequestMapping(path = "/{id}/agent/install", method = RequestMethod.POST)
+	public String agentInstall(@PathVariable("id") Long id,
+			@ModelAttribute("editForm") AgentInstallForm editForm) {
+		targetServerService.installAgent(id, editForm);
 		return "target-server/edit";
 	}
 
