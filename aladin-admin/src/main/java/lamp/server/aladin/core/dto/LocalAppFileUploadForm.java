@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class LocalAppFileUploadForm {
 
+	@NotEmpty
 	private String name;
 	private String description;
 

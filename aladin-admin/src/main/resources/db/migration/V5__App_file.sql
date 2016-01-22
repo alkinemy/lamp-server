@@ -14,6 +14,7 @@ CREATE TABLE `app_local_file` (
   `pathname` varchar(500) DEFAULT NULL,
   `filename` varchar(200) DEFAULT NULL,
   `file_size` bigint(20) NULL,
+  `content_type` varchar(200) NULL,
   `file_date` datetime DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL,
   `created_by` varchar(100) NOT NULL,

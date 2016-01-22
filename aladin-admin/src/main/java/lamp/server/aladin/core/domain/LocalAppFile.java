@@ -35,6 +35,11 @@ public class LocalAppFile extends AbstractAuditingEntity {
 	private String pathname;
 	private String filename;
 
+	@Column(name = "file_size")
+	private Long fileSize;
+	@Column(name = "content_type")
+	private String contentType;
+
 	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -53,6 +54,12 @@ public class LocalAppRepoFileController {
 			@Valid @ModelAttribute("editForm") LocalAppFileUploadForm editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {
+
+		MultipartFile uploadFile = editForm.getUploadFile();
+		if (uploadFile == null || uploadFile.getSize() == 0) {
+			bindingResult.rejectValue("uploadFile", "LocalAppFileUploadForm.uploadFile", "업로드할 파일을 선택해주세요.");
+		}
+
 		if (bindingResult.hasErrors()) {
 			return editForm(id, editForm, model);
 		}

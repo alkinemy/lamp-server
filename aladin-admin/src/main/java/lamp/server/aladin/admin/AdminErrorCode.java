@@ -32,7 +32,8 @@ public enum AdminErrorCode implements ErrorCode {
 	, SECRET_KEY_GENERATION_FAILED("비밀키 생성을 실패하였습니다.")
 	, APP_DEPLOY_FAILED("애클리케이션을 디플로이 하는 중 문제가 발생하였습니다.")
 	, INVALID_APP_REPOSITORY_TYPE("잘못된 AppRepositoryType입니다.")
-	, INVALID_APP_TEMPLATE_TYPE("잘못된 AppTemplateType입니다.");
+	, INVALID_APP_TEMPLATE_TYPE("잘못된 AppTemplateType입니다.")
+	, LOCA_APP_FILE_UPLOAD_FAILED("파일 업로드를 실패하였습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;
