@@ -90,14 +90,14 @@
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('appDirectory')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Version</label>
+									<label class="col-md-3 control-label">App Directory</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{appDirectory}" placeholder="Enter text" />
 										<span class="help-block" th:if="${#fields.hasErrors('appDirectory')}" th:errors="*{appDirectory}"> A block of help text. </span>
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('workDirectory')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Version</label>
+									<label class="col-md-3 control-label">Working Directory</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{workDirectory}" placeholder="Enter text" />
 										<span class="help-block" th:if="${#fields.hasErrors('workDirectory')}" th:errors="*{workDirectory}"> A block of help text. </span>
