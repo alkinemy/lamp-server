@@ -11,6 +11,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.Pipe;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +20,9 @@ import java.util.regex.Pattern;
 public class Expect implements Closeable {
 
 	private static final long DEFAULT_TIMEOUT = 10 * 1000;
+
+	private Charset charset = Charset.forName("UTF-8");
+
 	private Selector selector;
 
 	private Pipe.SourceChannel inputChannel;

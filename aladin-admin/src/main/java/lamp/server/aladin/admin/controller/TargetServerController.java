@@ -1,6 +1,5 @@
 package lamp.server.aladin.admin.controller;
 
-import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.domain.TargetServer;
@@ -9,6 +8,7 @@ import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
+import lamp.server.aladin.core.service.AgentManagementService;
 import lamp.server.aladin.core.service.TargetServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +32,9 @@ public class TargetServerController {
 
 	@Autowired
 	private TargetServerService targetServerService;
+
+	@Autowired
+	private AgentManagementService agentManagementService;
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String list(Model model, Pageable pageable) {
@@ -93,7 +96,7 @@ public class TargetServerController {
 			if (bindingResult.hasErrors()) {
 				return agentInstallForm(id, editForm, model);
 			}
-			targetServerService.installAgent(id, editForm);
+			agentManagementService.installAgent(id, editForm);
 
 			redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
 
