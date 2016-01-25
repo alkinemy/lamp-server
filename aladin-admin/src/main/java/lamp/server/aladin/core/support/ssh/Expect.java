@@ -19,9 +19,10 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Expect implements Closeable {
 
+	public static final int RETURN_TIMEOUT= -1;
+	public static final int RETURN_EOF = -2;
+	public static final int RETURN_EXCEPTION = -9;
 	private static final long DEFAULT_TIMEOUT = 10 * 1000;
-
-	private Charset charset = Charset.forName("UTF-8");
 
 	private Selector selector;
 
@@ -112,27 +113,68 @@ public class Expect implements Closeable {
 		output.flush();
 	}
 
-	public void expect(Pattern... patterns) {
-		expect(timeout, patterns);
+	public int expect(Pattern... patterns) {
+		return expect(timeout, patterns);
 	}
 
-	public void expect(String... patterns) {
-		expect(timeout, patterns);
+	public int expect(String... patterns) {
+		return expect(timeout, patterns);
 	}
 
-	public void expect(long timeout, Pattern... patterns) {
-		expect(timeout, Arrays.asList(patterns));
+	public int expect(long timeout, Pattern... patterns) {
+		return expect(timeout, Arrays.asList(patterns));
 	}
 
-	public void expect(long timeout, String... patterns) {
+	public int expect(long timeout, String... patterns) {
 		List<Pattern> list = new ArrayList<>();
 		for (String pattern : patterns) {
 			list.add(Pattern.compile(Pattern.quote(pattern)));
 		}
-		expect(timeout, list);
+		return expect(timeout, list);
 	}
 
-	public void expect(long timeout, List<Pattern> patterns) {
+	public int expect(long timeout, List<Pattern> patterns) {
+		try {
+			expectOrThrow(timeout, patterns);
+			return 0;
+		} catch(ExpectTimeoutException e) {
+			return RETURN_TIMEOUT;
+		} catch(ExpectEOFException e) {
+			return RETURN_EOF;
+		} catch (Exception e) {
+			return RETURN_EXCEPTION;
+		}
+	}
+
+	public int expectEOF() {
+		return expectEOF(timeout);
+	}
+
+	public int expectEOF(long timeout) {
+		return expect(timeout, Collections.emptyList());
+	}
+
+	public void expectOrThrow(Pattern... patterns) {
+		expectOrThrow(timeout, patterns);
+	}
+
+	public void expectOrThrow(String... patterns) {
+		expectOrThrow(timeout, patterns);
+	}
+
+	public void expectOrThrow(long timeout, Pattern... patterns) {
+		expectOrThrow(timeout, Arrays.asList(patterns));
+	}
+
+	public void expectOrThrow(long timeout, String... patterns) {
+		List<Pattern> list = new ArrayList<>();
+		for (String pattern : patterns) {
+			list.add(Pattern.compile(Pattern.quote(pattern)));
+		}
+		expectOrThrow(timeout, list);
+	}
+
+	public void expectOrThrow(long timeout, List<Pattern> patterns) {
 		log.debug("Expecting " + patterns);
 
 		try {
@@ -159,7 +201,7 @@ public class Expect implements Closeable {
 						Pipe.SourceChannel channel = (Pipe.SourceChannel) key.channel();
 						int read = channel.read(buffer);
 						if (read == -1) {
-							throw  new ExpectEOFException();
+							throw new ExpectEOFException();
 						}
 						buffer.flip();
 
@@ -187,17 +229,13 @@ public class Expect implements Closeable {
 		}
 	}
 
-	public void expectEOF() {
-		try {
-			expect(timeout, Collections.emptyList());
-		} catch (ExpectEOFException e) {
-			// igrnore
-		}
+	public void expectEOFOrThrow() {
+		expectEOFOrThrow(timeout);
 	}
 
-	public void expectEOF(long timeout) {
+	public void expectEOFOrThrow(long timeout) {
 		try {
-			expect(timeout, Collections.emptyList());
+			expectOrThrow(timeout, Collections.emptyList());
 		} catch (ExpectEOFException e) {
 			// igrnore
 		}

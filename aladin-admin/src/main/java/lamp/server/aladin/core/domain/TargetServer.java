@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -40,10 +41,25 @@ public class TargetServer extends AbstractAuditingEntity {
 	private String password;
 
 	@Column(name = "agent_installed", columnDefinition = "TINYINT")
-	private Boolean agentInstalled;
+	private Boolean agentInstalled = Boolean.FALSE;
+
+	@Column(name = "agent_installed_by")
+	private String agentInstalledBy;
+
+	@Column(name = "agent_installed_date")
+	private LocalDateTime agentInstalledDate;
 
 	@Column(name = "agent_install_path")
 	private String agentInstallPath;
+
+	@Column(name = "agent_install_filename")
+	private String agentInstallFilename;
+
+	@Column(name = "agent_start_command_line")
+	private String agentStartCommandLine;
+
+	@Column(name = "agent_stop_command_line")
+	private String agentStopCommandLine;
 
 	@Column(name = "monitor", columnDefinition = "TINYINT")
 	private Boolean monitor;

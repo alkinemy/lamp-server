@@ -6,6 +6,7 @@ import lamp.server.aladin.core.domain.LocalAppFile;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.repository.LocalAppFileRepository;
+import lamp.server.aladin.core.support.resource.FileResource;
 import lamp.server.aladin.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -31,7 +32,7 @@ public class LocalAppResourceLoader {
 
 		LocalAppFile localAppFile = localAppResourceFromDb.orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_RESOURCE_NOT_FOUND));
 		File file = new File(localAppFile.getPathname());
-		return new FileSystemResource(file);
+		return new FileResource(file, localAppFile.getFilename());
 	}
 
 	protected String getLastVersion(String groupId, String artifactId) {

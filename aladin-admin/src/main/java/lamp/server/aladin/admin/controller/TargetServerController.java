@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Optional;
 
 @MenuMapping(MenuConstants.TARGET_SERVER)
@@ -101,6 +104,19 @@ public class TargetServerController {
 			redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
 
 		return "redirect:/target-server";
+	}
+
+	@RequestMapping(path = "/{id}/agent/start", method = RequestMethod.GET)
+	public String agentStart(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) throws IOException {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream printStream = new PrintStream(baos)) {
+			agentManagementService.startAgent(id, printStream);
+			String output = baos.toString("UTF-8");
+
+			redirectAttributes.addFlashAttribute("flashMessage", output);
+
+			return "redirect:/target-server";
+		}
 	}
 
 }
