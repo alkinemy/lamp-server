@@ -123,6 +123,6 @@ public class AgentService {
 	}
 
 	public Agent getAgentByTargetServerId(Long id) {
-		return agentRepository.findOneByTargetSErverId(id);
+		return agentRepository.findOneByTargetServerId(id);
 	}
 }

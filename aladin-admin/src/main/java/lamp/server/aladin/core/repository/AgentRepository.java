@@ -11,5 +11,5 @@ public interface AgentRepository extends JpaRepository<Agent, String> {
 
 	Optional<Agent> findOneByHostname(String hostname);
 
-	Agent findOneByTargetSErverId(Long id);
+	Agent findOneByTargetServerId(Long id);
 }
