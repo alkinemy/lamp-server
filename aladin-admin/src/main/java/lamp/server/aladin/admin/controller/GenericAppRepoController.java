@@ -1,5 +1,8 @@
 package lamp.server.aladin.admin.controller;
 
+import lamp.server.aladin.LampConstants;
+import lamp.server.aladin.admin.AdminErrorCode;
+import lamp.server.aladin.admin.support.FlashMessage;
 import lamp.server.aladin.core.dto.AppRepoCreateForm;
 import lamp.server.aladin.core.service.AppRepoService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +39,7 @@ public abstract class GenericAppRepoController<CF extends AppRepoCreateForm> {
 			return createForm(editForm, model);
 		}
 		appRepoService.insertAppRepository(editForm);
-		redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 
 		return "redirect:/app-repository";

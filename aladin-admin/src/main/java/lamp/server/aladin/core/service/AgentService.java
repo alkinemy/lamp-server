@@ -35,6 +35,7 @@ public class AgentService {
 		return Optional.ofNullable(agentRepository.findOne(id));
 	}
 
+
 	public AgentDto getAgentDto(String id) {
 		Optional<Agent> agentFromDb = getAgent(id);
 		if (agentFromDb.isPresent()) {
@@ -72,8 +73,7 @@ public class AgentService {
 		Agent agent = smartAssembler.assemble(form, Agent.class);
 
 		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
-		TargetServer targetServer = targetServerFromDb.orElseGet(
-				() -> targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class)));
+		TargetServer targetServer = upsertTargetServer(agent, targetServerFromDb);
 		agent.setTargetServer(targetServer);
 
 		return agentRepository.save(agent);
@@ -86,11 +86,24 @@ public class AgentService {
 
 		if (!agent.getTargetServer().getHostname().equals(agent.getHostname())) {
 			Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
-			TargetServer targetServer = targetServerFromDb.orElseGet(
-					() -> targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class)));
+			TargetServer targetServer = upsertTargetServer(agent, targetServerFromDb);
 			agent.setTargetServer(targetServer);
 		}
 		return agent;
+	}
+
+	private TargetServer upsertTargetServer(Agent agent, Optional<TargetServer> targetServerFromDb) {
+		TargetServer targetServer;
+		if (targetServerFromDb.isPresent()) {
+			targetServer = targetServerFromDb.get();
+			targetServer.setAddress(agent.getAddress());
+			targetServer.setAgentInstalled(true);
+			targetServer.setAgentInstallPath(agent.getAppDirectory());
+			targetServer.setAgentHealthUrl(agent.getProtocol(), agent.getAddress(), agent.getPort(), agent.getHealthPath());
+		} else {
+			targetServer = targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class));
+		}
+		return targetServer;
 	}
 
 	@Transactional
@@ -103,5 +116,6 @@ public class AgentService {
 	public void delete(Agent agent) {
 		agentRepository.delete(agent);
 	}
+
 
 }

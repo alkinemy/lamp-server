@@ -22,7 +22,7 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(length = 200)
 	private String description;
 
-	@Column(length = 100, unique = true, nullable = false)
+	@Column(length = 100, unique = true, nullable = false, updatable = false)
 	private String hostname;
 
 	@Column(length = 100, nullable = false)
@@ -61,13 +61,23 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(name = "agent_stop_command_line")
 	private String agentStopCommandLine;
 
-	@Column(name = "monitor", columnDefinition = "TINYINT")
-	private Boolean monitor;
+	@Column(name = "agent_health_url")
+	private String agentHealthUrl;
 
-	@Column(name = "monitor_interval")
-	private Long monitorInterval;
+	@Column(name = "agent_monitor", columnDefinition = "TINYINT")
+	private Boolean agentMonitor;
+
+	@Column(name = "agent_monitor_interval")
+	private Long agentMonitorInterval;
 
 	@OneToOne(mappedBy = "targetServer", fetch = FetchType.LAZY)
 	private Agent agent;
 
+	public void setAgentHealthUrl(String protocol, String address, int port, String healthPath) {
+		StringBuilder agentHealthUrl = new StringBuilder();
+		agentHealthUrl.append(protocol).append("://");
+		agentHealthUrl.append(address).append(":").append(port);
+		agentHealthUrl.append(healthPath);
+		setAgentHealthUrl(agentHealthUrl.toString());
+	}
 }

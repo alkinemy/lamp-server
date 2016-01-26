@@ -1,6 +1,9 @@
 package lamp.server.aladin.admin.controller;
 
+import lamp.server.aladin.LampConstants;
+import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
+import lamp.server.aladin.admin.support.FlashMessage;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.domain.AppRepo;
 import lamp.server.aladin.core.dto.LocalAppFileDto;
@@ -65,8 +68,7 @@ public class LocalAppRepoFileController {
 		}
 
 		localAppFileService.uploadLocalAppFile(id, editForm);
-
-		redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 		return "redirect:/app-repository/LOCAL/{id}/file ";
 	}

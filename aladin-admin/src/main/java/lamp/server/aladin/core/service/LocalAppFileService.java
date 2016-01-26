@@ -1,15 +1,12 @@
 package lamp.server.aladin.core.service;
 
 import lamp.server.aladin.admin.AdminErrorCode;
-import lamp.server.aladin.core.domain.AppRepo;
 import lamp.server.aladin.core.domain.LocalAppFile;
 import lamp.server.aladin.core.domain.LocalAppRepo;
 import lamp.server.aladin.core.dto.LocalAppFileDto;
 import lamp.server.aladin.core.dto.LocalAppFileUploadForm;
 import lamp.server.aladin.core.exception.Exceptions;
-import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.exception.MessageException;
-import lamp.server.aladin.core.repository.AppRepoRepository;
 import lamp.server.aladin.core.repository.LocalAppFileRepository;
 import org.codehaus.plexus.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 @Service
 public class LocalAppFileService {
@@ -70,7 +65,7 @@ public class LocalAppFileService {
 			localAppFile.setContentType(uploadFile.getContentType());
 			return localAppFileRepository.save(localAppFile);
 		} catch (Exception e) {
-			throw Exceptions.newException(AdminErrorCode.LOCA_APP_FILE_UPLOAD_FAILED, e);
+			throw Exceptions.newException(AdminErrorCode.LOCAL_APP_FILE_UPLOAD_FAILED, e);
 		}
 	}
 

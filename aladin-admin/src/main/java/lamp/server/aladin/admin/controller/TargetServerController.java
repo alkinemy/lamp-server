@@ -1,15 +1,18 @@
 package lamp.server.aladin.admin.controller;
 
+import lamp.server.aladin.LampConstants;
+import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
+import lamp.server.aladin.admin.config.AgentProperties;
+import lamp.server.aladin.admin.support.FlashMessage;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
-import lamp.server.aladin.core.domain.TargetServer;
-import lamp.server.aladin.core.dto.AgentInstallForm;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
-import lamp.server.aladin.core.exception.Exceptions;
-import lamp.server.aladin.core.exception.LampErrorCode;
-import lamp.server.aladin.core.service.AgentManagementService;
+import lamp.server.aladin.core.dto.TargetServerUpdateForm;
+import lamp.server.aladin.core.exception.FlashMessageException;
 import lamp.server.aladin.core.service.TargetServerService;
+import lamp.server.aladin.utils.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +20,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Optional;
 
 @MenuMapping(MenuConstants.TARGET_SERVER)
 @Controller
@@ -34,10 +33,11 @@ import java.util.Optional;
 public class TargetServerController {
 
 	@Autowired
-	private TargetServerService targetServerService;
+	private AgentProperties agentProperties;
 
 	@Autowired
-	private AgentManagementService agentManagementService;
+	private TargetServerService targetServerService;
+
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String list(Model model, Pageable pageable) {
@@ -49,6 +49,12 @@ public class TargetServerController {
 	@RequestMapping(path = "/create", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute("editForm") TargetServerCreateForm editForm, Model model) {
 		model.addAttribute("action", "create");
+		if (StringUtils.isBlank(editForm.getAgentInstallPath())) {
+			editForm.setAgentInstallPath(agentProperties.getInstallPath());
+		}
+		if (StringUtils.isBlank(editForm.getAgentStartCommandLine())) {
+			editForm.setAgentStartCommandLine(agentProperties.getStartCommandLine());
+		}
 		return "target-server/edit";
 	}
 
@@ -60,63 +66,55 @@ public class TargetServerController {
 			return createForm(editForm, model);
 		}
 		targetServerService.insertTargetServer(editForm);
-		redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 
 		return "redirect:/target-server";
 	}
 
 	@RequestMapping(path = "/update", method = RequestMethod.GET)
-	public String updateForm(@ModelAttribute("editForm") TargetServerCreateForm editForm, Model model) {
+	public String update(@ModelAttribute("editForm") TargetServerUpdateForm editForm, Model model) {
+		TargetServerUpdateForm updateForm = targetServerService.getTargetServerUpdateForm(editForm.getId());
+		BeanUtils.copyProperties(updateForm, editForm);
+
+		return updateForm(editForm, model);
+	}
+
+	protected String updateForm(TargetServerUpdateForm editForm, Model model) {
 		model.addAttribute("action", "update");
 		return "target-server/edit";
 	}
 
 	@RequestMapping(path = "/update", method = RequestMethod.POST)
-	public String update(@ModelAttribute("editForm") TargetServerCreateForm editForm) {
+	public String update(@ModelAttribute("editForm") TargetServerUpdateForm editForm,
+			BindingResult bindingResult, Model model,
+			RedirectAttributes redirectAttributes) {
 
-		return "target-server/edit";
-	}
+		if (bindingResult.hasErrors()) {
+			return updateForm(editForm, model);
+		}
 
-	@RequestMapping(path = "/{id}/agent/install", method = RequestMethod.GET)
-	public String agentInstallForm(@PathVariable("id") Long id,
-			@ModelAttribute("editForm") AgentInstallForm editForm, Model model) {
-
-		Optional<TargetServer> targetServerOptional = targetServerService.getTargetServer(id);
-		TargetServer targetServer = targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
-
-		model.addAttribute("targetServer", targetServer);
-
-
-		return "target-server/agent/edit";
-	}
-
-	@RequestMapping(path = "/{id}/agent/install", method = RequestMethod.POST)
-	public String agentInstall(@PathVariable("id") Long id,
-			@Valid @ModelAttribute("editForm") AgentInstallForm editForm,
-				BindingResult bindingResult, Model model,
-				RedirectAttributes redirectAttributes) {
-			if (bindingResult.hasErrors()) {
-				return agentInstallForm(id, editForm, model);
-			}
-			agentManagementService.installAgent(id, editForm);
-
-			redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
+		targetServerService.updateTargetServer(editForm);
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
 
 		return "redirect:/target-server";
 	}
 
-	@RequestMapping(path = "/{id}/agent/start", method = RequestMethod.GET)
-	public String agentStart(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) throws IOException {
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream printStream = new PrintStream(baos)) {
-			agentManagementService.startAgent(id, printStream);
-			String output = baos.toString("UTF-8");
+	@RequestMapping(path = "/delete", method = RequestMethod.GET)
+	public String delete(@RequestParam("id") Long id
+			, RedirectAttributes redirectAttributes) {
 
-			redirectAttributes.addFlashAttribute("flashMessage", output);
-
-			return "redirect:/target-server";
+		FlashMessage flashMessage;
+		try {
+			targetServerService.deleteTargetServer(id);
+			flashMessage = FlashMessage.ofSuccess(AdminErrorCode.DELETE_SUCCESS);
+		} catch (FlashMessageException e) {
+			flashMessage = FlashMessage.ofError(e.getMessage(), e.getCode(), e.getArgs());
 		}
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, flashMessage);
+
+		return "redirect:/target-server";
 	}
+
 
 }

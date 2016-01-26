@@ -7,6 +7,7 @@ import lamp.server.aladin.core.dto.AgentInstallForm;
 import lamp.server.aladin.core.exception.EntityNotFoundException;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
+import lamp.server.aladin.core.support.ExpressionParser;
 import lamp.server.aladin.core.support.ssh.SshClient;
 import lamp.server.aladin.utils.FileUtils;
 import lamp.server.aladin.utils.FilenameUtils;
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -37,13 +40,15 @@ public class AgentManagementService {
 	@Autowired
 	private AppTemplateService appTemplateService;
 
+	private ExpressionParser expressionParser;
+
 	@Transactional
 	public void installAgent(Long targetServerId, AgentInstallForm installForm) {
 		Optional<AppTemplate> appTemplateFromDb = appTemplateService.getAppTemplate(installForm.getTemplateId());
 		AppTemplate appTemplate = appTemplateFromDb.orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, installForm.getTemplateId()));
 		String version = installForm.getVersion();
 
-		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServer(targetServerId);
+		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(targetServerId);
 		TargetServer targetServer = targetServerFromDb.orElseThrow(EntityNotFoundException::new);
 
 		Resource resource = appResourceService.getResource(appTemplate, version);
@@ -73,6 +78,10 @@ public class AgentManagementService {
 			sshClient.connect(targetServer.getUsername(), targetServer.getPassword());
 
 			String agentPath = targetServer.getAgentInstallPath();
+			if (StringUtils.isBlank(agentPath)) {
+				agentPath = appTemplate.getAppDirectory();
+				targetServer.setAgentInstallPath(agentPath);
+			}
 			sshClient.mkdir(agentPath);
 
 			String remoteFilename = Paths.get(agentPath, filename).toString();
@@ -93,16 +102,17 @@ public class AgentManagementService {
 	}
 
 	public void startAgent(Long targetServerId, PrintStream printStream) {
-		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServer(targetServerId);
+		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(targetServerId);
 		TargetServer targetServer = targetServerFromDb.orElseThrow(EntityNotFoundException::new);
 
 		String agentPath = targetServer.getAgentInstallPath();
 		String filename = targetServer.getAgentInstallFilename();
 
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("filename", filename);
+
 		String startCommand = targetServer.getAgentStartCommandLine();
-		if (StringUtils.isBlank(startCommand)) {
-			startCommand = "nohup java -jar " + filename + " --server.port=9090 1>agent.out 2>&1 &";
-		}
+		startCommand = expressionParser.getValue(startCommand, parameters);
 		log.debug("[TargetServer:{}] Agent startCommandLine = {}", targetServerId, startCommand);
 
 		String host = targetServer.getAddress();

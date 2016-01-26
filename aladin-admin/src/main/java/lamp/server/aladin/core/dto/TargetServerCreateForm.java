@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString
 public class TargetServerCreateForm {
 
-	private Long id;
 	@NotEmpty
 	private String name;
 	private String description;
@@ -27,6 +26,8 @@ public class TargetServerCreateForm {
 	private Boolean agentInstalled;
 	@NotEmpty
 	private String agentInstallPath;
+
+	private String agentStartCommandLine;
 
 	private Boolean monitor;
 	private Long monitorInterval;

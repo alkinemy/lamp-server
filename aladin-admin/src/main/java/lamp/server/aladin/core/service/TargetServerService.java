@@ -1,17 +1,23 @@
 package lamp.server.aladin.core.service;
 
+import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
+import lamp.server.aladin.core.dto.TargetServerUpdateForm;
+import lamp.server.aladin.core.exception.Exceptions;
+import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.repository.TargetServerRepository;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.Oneway;
 import java.util.Optional;
 
 @Slf4j
@@ -24,7 +30,17 @@ public class TargetServerService {
 	@Autowired
 	private SmartAssembler smartAssembler;
 
-	public Optional<TargetServer> getTargetServer(Long id) {
+	public Page<TargetServerDto> getTargetServerList(Pageable pageable) {
+		Page<TargetServer> page = targetServerRepository.findAll(pageable);
+		return smartAssembler.assemble(pageable, page, TargetServerDto.class);
+	}
+
+	public TargetServer getTargetServer(Long id) {
+		Optional<TargetServer> targetServerOptional = getTargetServerOptional(id);
+		return targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
+	}
+
+	public Optional<TargetServer> getTargetServerOptional(Long id) {
 		TargetServer targetServer = targetServerRepository.findOne(id);
 		return Optional.ofNullable(targetServer);
 	}
@@ -44,10 +60,23 @@ public class TargetServerService {
 		return targetServerRepository.save(targetServer);
 	}
 
-	public Page<TargetServerDto> getTargetServerList(Pageable pageable) {
-		Page<TargetServer> page = targetServerRepository.findAll(pageable);
-		return smartAssembler.assemble(pageable, page, TargetServerDto.class);
+	public TargetServerUpdateForm getTargetServerUpdateForm(Long id) {
+		TargetServer targetServer = getTargetServer(id);
+		return smartAssembler.assemble(targetServer, TargetServerUpdateForm.class);
 	}
 
+	@Transactional
+	public TargetServer updateTargetServer(TargetServerUpdateForm editForm) {
+		TargetServer targetServer = getTargetServer(editForm.getId());
+		BeanUtils.copyProperties(editForm, targetServer);
+		return targetServerRepository.save(targetServer);
+	}
 
+	@Transactional
+	public void deleteTargetServer(Long id) {
+		TargetServer targetServer = getTargetServer(id);
+		Agent agent = targetServer.getAgent();
+		Exceptions.throwsException(agent != null, LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);
+		targetServerRepository.delete(targetServer);
+	}
 }

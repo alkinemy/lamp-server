@@ -12,6 +12,7 @@ public class TargetServerAssembler extends AbstractAssembler<TargetServerCreateF
 		TargetServer targetServer = new TargetServer();
 		BeanUtils.copyProperties(targetServerCreateForm, targetServer);
 		// TODO Password Encypt
+
 		return targetServer;
 	}
 

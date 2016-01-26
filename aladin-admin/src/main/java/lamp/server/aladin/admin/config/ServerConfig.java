@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@EnableConfigurationProperties({ ServerProperties.class })
+@EnableConfigurationProperties({ ServerProperties.class, AgentProperties.class })
 public class ServerConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired

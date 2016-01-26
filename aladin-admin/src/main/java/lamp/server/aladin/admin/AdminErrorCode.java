@@ -1,6 +1,7 @@
 package lamp.server.aladin.admin;
 
 import lamp.server.aladin.core.exception.ErrorCode;
+import lamp.server.aladin.core.exception.FlashMessageException;
 import lamp.server.aladin.core.exception.MessageException;
 
 public enum AdminErrorCode implements ErrorCode {
@@ -33,7 +34,11 @@ public enum AdminErrorCode implements ErrorCode {
 	, APP_DEPLOY_FAILED("애클리케이션을 디플로이 하는 중 문제가 발생하였습니다.")
 	, INVALID_APP_REPOSITORY_TYPE("잘못된 AppRepositoryType입니다.")
 	, INVALID_APP_TEMPLATE_TYPE("잘못된 AppTemplateType입니다.")
-	, LOCA_APP_FILE_UPLOAD_FAILED("파일 업로드를 실패하였습니다.");
+	, LOCAL_APP_FILE_UPLOAD_FAILED("파일 업로드를 실패하였습니다.")
+	, INSERT_SUCCESS("성공적으로 등록하였습니다.", FlashMessageException.class)
+	, UPDATE_SUCCESS("성공적으로 수정하였습니다.", FlashMessageException.class)
+	, DELETE_SUCCESS("성공적으로 삭제하였습니다.", FlashMessageException.class)
+	;
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

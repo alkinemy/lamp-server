@@ -2,7 +2,9 @@ package lamp.server.aladin.admin.controller;
 
 import com.google.common.collect.Lists;
 import lamp.server.aladin.LampConstants;
+import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
+import lamp.server.aladin.admin.support.FlashMessage;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.domain.AppResourceType;
 import lamp.server.aladin.core.domain.AppRepo;
@@ -74,7 +76,8 @@ public class AppTemplateController {
 			return createForm(editForm, model);
 		}
 		appTemplateService.insertAppTemplate(editForm);
-		redirectAttributes.addFlashAttribute("flashMessage", "성공적으로 등록하였습니다.");
+
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 
 		return "redirect:/app-template";

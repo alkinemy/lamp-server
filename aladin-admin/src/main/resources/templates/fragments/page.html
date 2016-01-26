@@ -17,9 +17,9 @@
 </div>
 
 <div class="page-flashMessage" th:fragment="flashMessage">
-	<div class="alert alert-success alert-dismissable" th:if="${!#strings.isEmpty(flashMessage)}">
+	<div class="alert alert-success alert-dismissable" th:if="${flashMessage != null}" th:class="'alert ' + ${flashMessage.level.cssClass} + ' alert-dismissable'">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-		<span th:text="${flashMessage}"></span>
+		<span th:text="${flashMessage.message}"></span>
 	</div>
 </div>
 
