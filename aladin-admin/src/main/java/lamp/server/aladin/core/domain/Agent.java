@@ -22,7 +22,7 @@ public class Agent extends AbstractAuditingEntity {
 	private String type;
 	private String version;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "target_server_id")
 	private TargetServer targetServer;
 
@@ -45,4 +45,22 @@ public class Agent extends AbstractAuditingEntity {
 	@Column(name = "metrics_path")
 	private String metricsPath;
 
+
+	@Transient
+	public String getHealthUrl() {
+		StringBuilder url = new StringBuilder();
+		url.append(getProtocol()).append("://");
+		url.append(getAddress()).append(":").append(getPort());
+		url.append(getHealthPath());
+		return url.toString();
+	}
+
+	@Transient
+	public String getMetricsUrl() {
+		StringBuilder url = new StringBuilder();
+		url.append(getProtocol()).append("://");
+		url.append(getAddress()).append(":").append(getPort());
+		url.append(getMetricsPath());
+		return url.toString();
+	}
 }

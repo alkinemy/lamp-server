@@ -22,7 +22,7 @@ public class AgentController {
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String list(Model model, Pageable pageable) {
-		Page<AgentDto> page = agentService.getAgentList(pageable);
+		Page<AgentDto> page = agentService.getAgentDtoList(pageable);
 		model.addAttribute("page", page);
 		return "agent/list";
 	}

@@ -41,7 +41,7 @@ public class TargetServerController {
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String list(Model model, Pageable pageable) {
-		Page<TargetServerDto> page = targetServerService.getTargetServerList(pageable);
+		Page<TargetServerDto> page = targetServerService.getTargetServerDtoList(pageable);
 		model.addAttribute("page", page);
 		return "target-server/list";
 	}

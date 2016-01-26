@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "lamp_target_server")
+@SecondaryTable(name="lamp_target_server_status",
+		pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
 public class TargetServer extends AbstractAuditingEntity {
 
 	@Id
@@ -70,14 +72,10 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(name = "agent_monitor_interval")
 	private Long agentMonitorInterval;
 
-	@OneToOne(mappedBy = "targetServer", fetch = FetchType.LAZY)
-	private Agent agent;
+	@Column(name = "agent_status", table = "lamp_target_server_status")
+	private String agentStatus = AgentStatus.UNKNOWN.name();
 
-	public void setAgentHealthUrl(String protocol, String address, int port, String healthPath) {
-		StringBuilder agentHealthUrl = new StringBuilder();
-		agentHealthUrl.append(protocol).append("://");
-		agentHealthUrl.append(address).append(":").append(port);
-		agentHealthUrl.append(healthPath);
-		setAgentHealthUrl(agentHealthUrl.toString());
-	}
+	@Column(name = "agent_status_date", table = "lamp_target_server_status")
+	private LocalDateTime agentStatusDate;
+
 }

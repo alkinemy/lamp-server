@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.jws.Oneway;
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -28,16 +29,22 @@ public class TargetServerService {
 	private TargetServerRepository targetServerRepository;
 
 	@Autowired
+	private AgentService agentService;
+
+	@Autowired
 	private SmartAssembler smartAssembler;
 
-	public Page<TargetServerDto> getTargetServerList(Pageable pageable) {
+	public Page<TargetServerDto> getTargetServerDtoList(Pageable pageable) {
 		Page<TargetServer> page = targetServerRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, TargetServerDto.class);
 	}
 
+	public Collection<TargetServer> getTargetServerList() {
+		return targetServerRepository.findAll();
+	}
+
 	public TargetServer getTargetServer(Long id) {
-		Optional<TargetServer> targetServerOptional = getTargetServerOptional(id);
-		return targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
+		return getTargetServerOptional(id).orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
 	}
 
 	public Optional<TargetServer> getTargetServerOptional(Long id) {
@@ -75,7 +82,7 @@ public class TargetServerService {
 	@Transactional
 	public void deleteTargetServer(Long id) {
 		TargetServer targetServer = getTargetServer(id);
-		Agent agent = targetServer.getAgent();
+		Agent agent = agentService.getAgentByTargetServerId(targetServer.getId());
 		Exceptions.throwsException(agent != null, LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);
 		targetServerRepository.delete(targetServer);
 	}

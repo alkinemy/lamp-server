@@ -1,6 +1,7 @@
 USE `lamp`;
 
 DROP TABLE IF EXISTS `lamp_target_server`;
+DROP TABLE IF EXISTS `lamp_target_server_status`;
 DROP TABLE IF EXISTS `lamp_agent`;
 
 CREATE TABLE `lamp_target_server` (
@@ -36,6 +37,14 @@ CREATE TABLE `lamp_target_server` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `lamp_target_server_uk_01` (`hostname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `lamp_target_server_status` (
+  `id` bigint(20) NOT NULL,
+  `agent_status` varchar(200) DEFAULT NULL,
+  `agent_status_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `lamp_agent` (
   `id` varchar(100) NOT NULL,

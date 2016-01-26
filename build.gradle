@@ -2,6 +2,7 @@ ext {
     lombokVersion = '1.16.6'
 
     springBootVersion = "1.3.0.RELEASE"
+    igniteVersion = "1.5.0.final"
 }
 
 

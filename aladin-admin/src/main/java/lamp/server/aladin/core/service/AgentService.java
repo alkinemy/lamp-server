@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -45,9 +46,13 @@ public class AgentService {
 		}
 	}
 
-	public Page<AgentDto> getAgentList(Pageable pageable) {
+	public Page<AgentDto> getAgentDtoList(Pageable pageable) {
 		Page<Agent> page = agentRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, AgentDto.class);
+	}
+
+	public Collection<Agent> getAgentList() {
+		return agentRepository.findAll();
 	}
 
 	@Transactional
@@ -99,7 +104,7 @@ public class AgentService {
 			targetServer.setAddress(agent.getAddress());
 			targetServer.setAgentInstalled(true);
 			targetServer.setAgentInstallPath(agent.getAppDirectory());
-			targetServer.setAgentHealthUrl(agent.getProtocol(), agent.getAddress(), agent.getPort(), agent.getHealthPath());
+			targetServer.setAgentHealthUrl(agent.getHealthUrl());
 		} else {
 			targetServer = targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class));
 		}
@@ -117,5 +122,7 @@ public class AgentService {
 		agentRepository.delete(agent);
 	}
 
-
+	public Agent getAgentByTargetServerId(Long id) {
+		return agentRepository.findOneByTargetSErverId(id);
+	}
 }

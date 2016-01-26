@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface AgentRepository extends JpaRepository<Agent, String> {
 
 	Optional<Agent> findOneByHostname(String hostname);
+
+	Agent findOneByTargetSErverId(Long id);
 }
