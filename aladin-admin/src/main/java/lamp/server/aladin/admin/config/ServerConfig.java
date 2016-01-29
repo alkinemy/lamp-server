@@ -1,6 +1,7 @@
 package lamp.server.aladin.admin.config;
 
 
+import lamp.server.aladin.admin.security.MetricsToKairosdbService;
 import lamp.server.aladin.admin.support.MenuItemInterceptor;
 import lamp.server.aladin.admin.support.error.LampErrorAttributes;
 import lamp.server.aladin.core.service.MavenAppResourceLoader;
@@ -8,6 +9,7 @@ import lamp.server.aladin.core.support.agent.AgentClient;
 import lamp.server.aladin.core.support.agent.AgentHttpRequestInterceptor;
 import lamp.server.aladin.utils.assembler.SmartAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@EnableConfigurationProperties({ ServerProperties.class, AgentProperties.class })
+@EnableConfigurationProperties({ ServerProperties.class, AgentProperties.class, KairosdbProperties.class })
 public class ServerConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
@@ -32,6 +34,12 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getInterceptors().add(new AgentHttpRequestInterceptor());
 		return new AgentClient(restTemplate);
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "kairosdb.url")
+	public MetricsToKairosdbService metricsToKairosdbService() {
+		return new MetricsToKairosdbService();
 	}
 
 	@Bean

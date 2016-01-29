@@ -12,4 +12,11 @@ public class ServerProperties {
 	private String localAppRepository;
 	private String mavenAppRepository;
 
+	private Long healthCheckPeriod;
+	private Long metricsCheckPeriod;
+
+	private Integer asyncThreadPoolCorePoolSize = 5;
+	private Integer asyncThreadPoolMaxPoolSize = 10;
+
+
 }

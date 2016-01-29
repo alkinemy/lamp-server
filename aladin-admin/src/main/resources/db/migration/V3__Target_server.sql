@@ -41,6 +41,7 @@ CREATE TABLE `lamp_target_server` (
 CREATE TABLE `lamp_target_server_status` (
   `id` bigint(20) NOT NULL,
   `agent_status` varchar(200) DEFAULT NULL,
+  `agent_status_description` varchar(1000) DEFAULT NULL,
   `agent_status_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

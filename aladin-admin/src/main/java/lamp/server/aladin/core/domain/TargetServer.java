@@ -73,7 +73,7 @@ public class TargetServer extends AbstractAuditingEntity {
 	private Long agentMonitorInterval;
 
 	@Column(name = "agent_status", table = "lamp_target_server_status")
-	private String agentStatus = AgentStatus.UNKNOWN.name();
+	private String agentStatus = HealthStatusCode.UNKNOWN.name();
 
 	@Column(name = "agent_status_date", table = "lamp_target_server_status")
 	private LocalDateTime agentStatusDate;

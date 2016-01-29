@@ -15,7 +15,7 @@ import java.util.Collection;
 
 @Slf4j
 @Service
-public class AgentHealthCheckScheduleService {
+public class AgentScheduledCheckService {
 
 	@Autowired
 	private TargetServerService targetServerService;
@@ -29,7 +29,6 @@ public class AgentHealthCheckScheduleService {
 	@Autowired
 	private AgentMetricCollectService agentMetricCollectService;
 
-	@Scheduled(cron = "0/5 * * * * *")
 	public void checkHealth() {
 		Collection<TargetServer> targetServers = targetServerService.getTargetServerList();
 		for (TargetServer targetServer : targetServers) {
@@ -37,7 +36,6 @@ public class AgentHealthCheckScheduleService {
 		}
 	}
 
-//	@Scheduled(cron = "0/10 * * * * *")
 	public void collectMetrics() {
 		Collection<Agent> agents = agentService.getAgentList();
 		for (Agent agent : agents) {

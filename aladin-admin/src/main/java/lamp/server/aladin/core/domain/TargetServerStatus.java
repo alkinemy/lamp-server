@@ -14,8 +14,13 @@ public class TargetServerStatus {
 
 	@Id
 	private Long id;
-	@Column(name = "agent_status")
-	private String agentStatus;
+
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "code", column = @Column(name = "agent_status")),
+			@AttributeOverride(name = "description", column = @Column(name = "agent_status_description"))
+	})
+	private HealthStatus agentStatus;
 
 	@Column(name = "agent_status_date")
 	private LocalDateTime agentStatusDate;

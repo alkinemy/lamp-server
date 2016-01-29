@@ -13,7 +13,7 @@ apply plugin: 'spring-boot'
 
 
 jar {
-    baseName = 'lamp-admin'
+    baseName = 'lamp-watch'
     version =  '0.0.1-SNAPSHOT'
 
     manifest {
@@ -38,27 +38,9 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-configuration-processor")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.1.RELEASE")
-    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-devtools")
-
-    compile('org.jadira.usertype:usertype.extended:4.0.0.GA')
-    compile("com.mysema.querydsl:querydsl-jpa:3.6.3")
-    compile("com.mysema.querydsl:querydsl-apt:3.6.3:jpa")
-    compile("mysql:mysql-connector-java:5.1.31")
-    compile("org.flywaydb:flyway-core:3.2.1")
-
-    compile("org.eclipse.aether:aether-impl:1.0.2.v20150114")
-    compile("org.eclipse.aether:aether-connector-basic:1.0.2.v20150114")
-    compile("org.eclipse.aether:aether-transport-file:1.0.2.v20150114")
-    compile("org.eclipse.aether:aether-transport-http:1.0.2.v20150114")
-    compile("org.apache.maven:maven-aether-provider:3.3.3")
-
-    compile("com.jcraft:jsch:0.1.53")
 
     compile("org.kairosdb:client:2.1.0")
 
