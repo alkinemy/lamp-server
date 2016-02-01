@@ -66,6 +66,11 @@ public class AgentClient {
 		}
 	}
 
+	public void deregister(Agent agent, String appId) {
+		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+		restTemplate.delete(baseUrl + "/api/app/" + appId);
+	}
+
 	public void start(Agent agent, String appId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
 		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/start", Void.class);
@@ -75,4 +80,6 @@ public class AgentClient {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
 		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/stop", Void.class);
 	}
+
+
 }

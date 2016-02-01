@@ -40,21 +40,18 @@ public class MenuItem {
 	}
 
 	public boolean isSelected(String selectedMenuItemId) {
-		return Objects.equals(id, selectedMenuItemId);
-	}
-
-	public boolean isSubMenuItemId(String selectedMenuItemId) {
 		if (StringUtils.isBlank(selectedMenuItemId)) {
 			return false;
 		}
+
 		if (selectedMenuItemId.equals(id)) {
 			return true;
 		}
-		if (subMenuItems == null) {
+		if (isLeaf()) {
 			return false;
 		}
 		for (MenuItem subMenuItem : subMenuItems) {
-			if (subMenuItem.isSubMenuItemId(selectedMenuItemId)) {
+			if (subMenuItem.isSelected(selectedMenuItemId)) {
 				return true;
 			}
 		}
@@ -62,7 +59,7 @@ public class MenuItem {
 	}
 
 	public static MenuItem of(String id, String title, String href) {
-		return of(id, null, title, href);
+		return of(id, title, href, (String) null);
 	}
 
 	public static MenuItem of(String id, String title, String href, String icon) {
@@ -80,12 +77,16 @@ public class MenuItem {
 		menuItem.setTitle(title);
 		menuItem.setIcon(icon);
 		menuItem.setSubMenuItems(subMenuItems);
-		if (CollectionUtils.isNotEmpty(subMenuItems)) {
+		return menuItem;
+	}
+
+	public void setSubMenuItems(List<MenuItem> subMenuItems) {
+		this.subMenuItems = subMenuItems;
+		if (CollectionUtils.isNotEmpty(this.subMenuItems)) {
 			for (MenuItem subMenuItem : subMenuItems) {
-				subMenuItem.setParentMenuItem(menuItem);
+				subMenuItem.setParentMenuItem(this);
 			}
 		}
-		return menuItem;
 	}
 
 }

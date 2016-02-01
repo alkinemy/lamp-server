@@ -43,5 +43,4 @@ public class AppTemplateCreateForm {
 	private String commands;
 
 
-
 }

@@ -1,5 +1,6 @@
 package lamp.server.aladin.admin.service;
 
+import com.google.common.collect.Lists;
 import lamp.server.aladin.admin.domain.MenuItem;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,15 @@ public class MenuItemService {
 		{
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
-				subMenuItems.add(MenuItem.of(TARGET_SERVER, "Server", "/target-server", "icon-bulb"));
-				subMenuItems.add(MenuItem.of(AVAILABLE_AGENT, "Available Agent", "/agent", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(TARGET_SERVER, "Target Server", "/target-server", "icon-bulb"));
+				{
+
+					MenuItem agentAppMenuItem  = MenuItem.of(AGENT_APP, "Agent App", null);
+					MenuItem availableAgentMenuItem = MenuItem.of(AVAILABLE_AGENT, "Available Agent", "/agent", "icon-bulb");
+					availableAgentMenuItem.setSubMenuItems(Lists.newArrayList(agentAppMenuItem));
+					subMenuItems.add(availableAgentMenuItem);
+
+				}
 
 				menuItems.add(MenuItem.of("AGENT_TOP", "Agent", "icon-layers", subMenuItems));
 			}

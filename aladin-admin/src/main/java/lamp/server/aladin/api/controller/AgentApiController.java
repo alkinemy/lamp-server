@@ -4,6 +4,7 @@ import lamp.server.aladin.core.dto.AgentDto;
 import lamp.server.aladin.api.dto.AgentEventForm;
 import lamp.server.aladin.api.dto.AgentRegisterForm;
 import lamp.server.aladin.api.service.AgentFacadeService;
+import lamp.server.aladin.core.service.AgentEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,9 @@ public class AgentApiController {
 	@Autowired
 	private AgentFacadeService agentFacadeService;
 
+	@Autowired
+	private AgentEventService agentEventService;
+
 	@RequestMapping(path = "", method = RequestMethod.POST)
 	public AgentDto register(@Valid @RequestBody AgentRegisterForm form) {
 		return agentFacadeService.register(form);
@@ -32,9 +36,10 @@ public class AgentApiController {
 	}
 
 	@RequestMapping(path = "/{id}/event", method = RequestMethod.POST)
-	public void event(@Valid @RequestBody AgentEventForm form) {
+	public void event(@PathVariable("id") String id, @Valid @RequestBody AgentEventForm form) {
 		// TODO 구현바람
 		log.info("event = {}", form);
+		agentEventService.insertAgentEvent(id, form);
 	}
 
 }

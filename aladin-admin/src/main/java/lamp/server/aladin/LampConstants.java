@@ -9,6 +9,8 @@ public abstract class LampConstants {
 	public static final String SYSTEM_ACCOUNT = "system";
 
 	public static final String FLASH_MESSAGE_KEY = "flashMessage";
+
+	public static final String ACTION_KEY = "action";
 	public static final String ACTION_CREATE = "create";
 	public static final String ACTION_UPDATE = "update";
 }

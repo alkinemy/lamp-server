@@ -28,10 +28,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-@MenuMapping(MenuConstants.AVAILABLE_AGENT)
+@MenuMapping(MenuConstants.AGENT_APP)
 @Controller
 @RequestMapping("/agent/{agentId}")
-public class AppController {
+public class AgentAppController {
 
 	@Autowired
 	private AgentService agentService;
@@ -86,6 +86,14 @@ public class AppController {
 	public String stop(@PathVariable("agentId") String agentId,
 			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
 		appService.stopApp(agentId, appId);
+
+		return "redirect:/agent/{agentId}/app";
+	}
+
+	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
+	public String delete(@PathVariable("agentId") String agentId,
+			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
+		appService.deleteApp(agentId, appId);
 
 		return "redirect:/agent/{agentId}/app";
 	}

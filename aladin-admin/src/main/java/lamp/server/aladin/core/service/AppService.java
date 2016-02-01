@@ -84,6 +84,8 @@ public class AppService {
 
 	public void deleteApp(String agentId, String appId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
+
+		agentClient.deregister(agent, appId);
 	}
 
 

@@ -17,6 +17,8 @@ public class AgentEventForm {
 
 	private Date eventTime;
 
+	private Long eventSequence;
+
 	private String appId;
 
 	private String message;

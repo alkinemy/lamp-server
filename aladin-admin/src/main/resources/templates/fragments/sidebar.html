@@ -45,12 +45,12 @@
 			<li class="heading">
 				<h3 class="uppercase">Lamp</h3>
 			</li>
-			<li th:each="menuItem : ${MENU_ITEMS}" th:class="${menuItem.isSubMenuItemId(SELECTED_MENU_ITEM_ID)} ? 'nav-item active open' : 'nav-item'">
+			<li th:each="menuItem : ${MENU_ITEMS}" th:class="${menuItem.isSelected(SELECTED_MENU_ITEM_ID)} ? 'nav-item active open' : 'nav-item'">
 				<a href="javascript:;" class="nav-link nav-toggle">
 					<i class="icon-layers"></i>
 					<span class="title" th:text="${menuItem.title}">Agent</span>
-					<span th:if="${menuItem.isSubMenuItemId(SELECTED_MENU_ITEM_ID)}" class="selected"></span>
-					<span th:class="${menuItem.isSubMenuItemId(SELECTED_MENU_ITEM_ID)} ? 'arrow open' : 'arrow'" class="arrow"></span>
+					<span th:if="${menuItem.isSelected(SELECTED_MENU_ITEM_ID)}" class="selected"></span>
+					<span th:class="${menuItem.isSelected(SELECTED_MENU_ITEM_ID)} ? 'arrow open' : 'arrow'" class="arrow"></span>
 				</a>
 				<ul th:if="${not #lists.isEmpty(menuItem.subMenuItems)}" class="sub-menu" >
 					<li th:each="subMenuItem : ${menuItem.subMenuItems}" th:class="${subMenuItem.isSelected(SELECTED_MENU_ITEM_ID)} ? 'nav-item active open' : 'nav-item'">

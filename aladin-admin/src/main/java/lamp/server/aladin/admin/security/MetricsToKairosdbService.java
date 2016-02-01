@@ -41,10 +41,10 @@ public class MetricsToKairosdbService implements MetricsExportService {
 				metricBuilder.addMetric(key).addDataPoint(timestamp, value)
 						.addTag("host", agent.getHostname()).addTag("agent", agent.getId());
 			}
-
 			client.pushMetrics(metricBuilder);
 		} catch (Exception e) {
 			log.warn("Export Metrics failed", e);
 		}
 	}
+
 }
