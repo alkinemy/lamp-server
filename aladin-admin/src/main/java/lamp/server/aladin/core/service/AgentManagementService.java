@@ -40,7 +40,7 @@ public class AgentManagementService {
 	@Autowired
 	private AppTemplateService appTemplateService;
 
-	private ExpressionParser expressionParser;
+	private ExpressionParser expressionParser = new ExpressionParser();
 
 	@Transactional
 	public void installAgent(Long targetServerId, AgentInstallForm installForm) {

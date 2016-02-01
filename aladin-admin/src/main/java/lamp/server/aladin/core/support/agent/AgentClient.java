@@ -3,6 +3,7 @@ package lamp.server.aladin.core.support.agent;
 import lamp.server.aladin.core.domain.Agent;
 import lamp.server.aladin.core.dto.AppDto;
 import lamp.server.aladin.utils.StringUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ import java.util.List;
 @Slf4j
 public class AgentClient {
 
+	@Getter
 	private RestTemplate restTemplate;
 
 	public AgentClient(RestTemplate restTemplate) {

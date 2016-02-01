@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+apply plugin: 'idea'
+
+jar {
+    baseName = 'lamp-utils'
+    version =  '0.0.1-SNAPSHOT'
+
+    manifest {
+        attributes(
+                "Implementation-Title": project.name,
+                "Implementation-Version": version);
+    }
+}
+
+dependencies {
+    compile('com.google.code.findbugs:jsr305:3.0.0')
+    compile('com.google.guava:guava:18.0')
+
+    compile('org.apache.commons:commons-lang3:3.4')
+    compile('org.apache.commons:commons-collections4:4.1')
+    compile('commons-beanutils:commons-beanutils:1.9.2')
+    compile('commons-io:commons-io:2.4')
+
+    compile('org.modelmapper:modelmapper:0.7.4')
+
+    providedCompile('org.springframework:spring-context:4.2.4.RELEASE')
+    providedCompile('org.springframework.data:spring-data-commons:1.11.2.RELEASE')
+
+}

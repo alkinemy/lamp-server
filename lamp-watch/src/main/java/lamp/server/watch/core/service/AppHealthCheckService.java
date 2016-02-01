@@ -1,14 +1,14 @@
-package lamp.server.aladin.core.service;
+package lamp.server.watch.core.service;
 
-import lamp.server.aladin.core.domain.HealthStatus;
-import lamp.server.aladin.core.domain.HealthStatusCode;
-import lamp.server.aladin.core.domain.TargetServer;
-import lamp.server.aladin.core.support.agent.AgentClient;
 import lamp.server.aladin.utils.StringUtils;
+import lamp.server.watch.core.domain.WatchedApp;
+import lamp.server.watch.core.domain.HealthStatus;
+import lamp.server.watch.core.domain.HealthStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -16,36 +16,34 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class AgentHealthCheckService {
+public class AppHealthCheckService {
 
 	private static final String CODE = "status";
 	private static final String DESCRIPTION = "description";
 
-	@Autowired
-	private AgentClient agentClient;
+	private RestTemplate restTemplate = new RestTemplate();
 
 	@Autowired
-	private TargetServerStatusService targetServerStatusService;
+	private AppStatusService appStatusService;
 
 	@Async
-	public void checkHealth(TargetServer targetServer) {
-		String url = targetServer.getAgentHealthUrl();
-		log.debug("targetServer = {}, url = {}", targetServer.getHostname(), url);
+	public void checkHealth(WatchedApp watchedApp) {
+		String url = watchedApp.getHealthUrl();
+		log.debug("app = {}, url = {}", watchedApp.getId(), url);
 		if (StringUtils.isNotBlank(url)) {
 			Map<String, Object> health = getHealth(url);
+			log.debug("health = {}", health);
+
 			String code = (String) health.get(CODE);
 			String description = (String) health.get(DESCRIPTION);
-			HealthStatus healthStatus = HealthStatus.of(code, description);
-			LocalDateTime healthStatusDate = LocalDateTime.now();
-			log.debug("health = {}", health);
-			targetServerStatusService.updateStatus(targetServer, healthStatus, healthStatusDate);
+			appStatusService.updateStatus(watchedApp, HealthStatus.of(code, description), LocalDateTime.now());
 		}
 	}
 
 	protected Map<String, Object> getHealth(String url) {
 		Map<String, Object> health;
 		try {
-			health = agentClient.getRestTemplate().getForObject(url, Map.class);
+			health = restTemplate.getForObject(url, Map.class);
 		} catch (Exception e) {
 			log.warn("health failed", e);
 			health = new HashMap<>();

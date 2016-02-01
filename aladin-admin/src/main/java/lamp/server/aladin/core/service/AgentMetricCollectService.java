@@ -1,6 +1,8 @@
 package lamp.server.aladin.core.service;
 
 import lamp.server.aladin.core.domain.Agent;
+import lamp.server.aladin.core.support.agent.AgentClient;
+import lamp.server.aladin.utils.NameUtils;
 import lamp.server.aladin.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,15 @@ import java.util.Optional;
 @Service
 public class AgentMetricCollectService {
 
-	private RestTemplate restTemplate = new RestTemplate();
 
 	private String[] memoryMetricNames = {"mem", "mem.free",
 			"heap.committed", "heap.init", "heap.used", "heap",
 			"nonheap.committed", "nonheap.init", "nonheap.used", "nonheap"};
 	private String serverMetricsPrefix = "server.";
+	private String lampAgentMetricsPrefix = "lamp.agent.";
 
+	@Autowired
+	private AgentClient agentClient;
 
 	@Autowired(required = false)
 	private List<MetricsExportService> metricsExportServices;
@@ -33,7 +37,7 @@ public class AgentMetricCollectService {
 		String url = agent.getMetricsUrl();
 		log.debug("agent = {}, url = {}", agent.getId(), url);
 		if (StringUtils.isNotBlank(url)) {
-			Map<String, Object> metrics = restTemplate.getForObject(url, LinkedHashMap.class);
+			Map<String, Object> metrics = agentClient.getRestTemplate().getForObject(url, LinkedHashMap.class);
 
 			for (String memoryMetricName : memoryMetricNames) {
 				metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
@@ -44,7 +48,7 @@ public class AgentMetricCollectService {
 			for (Map.Entry<String, Object> entry : metrics.entrySet()) {
 				String name = entry.getKey();
 				if (!name.startsWith(serverMetricsPrefix)) {
-					name = "lamp.agent." + name;
+					name = NameUtils.name(lampAgentMetricsPrefix, name);
 				}
 				metricsWithName.put(name, entry.getValue());
 			}

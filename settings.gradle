@@ -1,5 +1,7 @@
 rootProject.name = 'lamp-server'
 
+include 'lamp-utils'
 include 'aladin-admin'
 include 'lamp-watch'
+
 
