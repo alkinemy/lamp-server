@@ -2,14 +2,16 @@ package lamp.server.watch.core.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 @Entity
-@Table(name = "lamp_watch_app_event")
+@Table(name = "llamp_watched_app_event")
 public class AppEvent {
 
 	@Id

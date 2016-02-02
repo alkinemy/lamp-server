@@ -12,6 +12,10 @@ public class ServerProperties {
 	private String localAppRepository;
 	private String mavenAppRepository;
 
+	private int connectTimeout = 3 * 1000;
+	private int connectionRequestTimeout = 3 * 1000;
+	private int readTimeout = 3 * 1000;
+
 	private Long healthCheckPeriod;
 	private Long metricsCheckPeriod;
 

@@ -4,9 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 @Getter
 @Setter
 @ToString
+@Entity
+@Table(name = "lamp_watched_app")
 public class WatchedApp {
 
 	private String id;
@@ -19,6 +24,5 @@ public class WatchedApp {
 	private String healthUrl;
 	private String metricsType;
 	private String metricsUrl;
-
 
 }

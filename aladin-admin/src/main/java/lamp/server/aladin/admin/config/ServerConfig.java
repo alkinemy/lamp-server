@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -30,8 +31,13 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public AgentClient agentClient() {
-		RestTemplate restTemplate = new RestTemplate();
+	public AgentClient agentClient(ServerProperties serverProperties) {
+		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		clientHttpRequestFactory.setConnectTimeout(serverProperties.getConnectTimeout());
+		clientHttpRequestFactory.setConnectionRequestTimeout(serverProperties.getConnectionRequestTimeout());
+		clientHttpRequestFactory.setReadTimeout(serverProperties.getReadTimeout());
+
+		RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
 		restTemplate.getInterceptors().add(new AgentHttpRequestInterceptor());
 		return new AgentClient(restTemplate);
 	}
