@@ -14,7 +14,7 @@ public class AppRegisterForm {
 	private String description;
 
 	private Long templateId;
-	private String appVersion;
+	private String version;
 	private String appUrl;
 
 	private Boolean monitor;

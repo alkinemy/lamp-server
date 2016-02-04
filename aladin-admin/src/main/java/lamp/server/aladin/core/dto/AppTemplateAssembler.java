@@ -4,12 +4,13 @@ import lamp.server.aladin.core.domain.AppResourceType;
 import lamp.server.aladin.core.domain.AppTemplate;
 import lamp.server.aladin.core.service.AppRepoService;
 import lamp.server.aladin.utils.assembler.AbstractAssembler;
+import lamp.server.aladin.utils.assembler.Populater;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppTemplateAssembler extends AbstractAssembler<AppTemplateCreateForm, AppTemplate> {
+public class AppTemplateAssembler extends AbstractAssembler<AppTemplateCreateForm, AppTemplate> implements Populater<AppTemplateUpdateForm, AppTemplate> {
 
 	@Autowired
 	private AppRepoService appRepoService;
@@ -20,7 +21,7 @@ public class AppTemplateAssembler extends AbstractAssembler<AppTemplateCreateFor
 		AppTemplate appTemplate = new AppTemplate();
 		BeanUtils.copyProperties(appTemplateCreateForm, appTemplate);
 		if (repositoryId != null) {
-			appTemplate.setAppRepository(appRepoService.getAppRepository(repositoryId));
+			appTemplate.setAppRepository(appRepoService.getAppRepo(repositoryId));
 		}
 
 		AppResourceType resourceType = appTemplateCreateForm.getResourceType();
@@ -32,5 +33,9 @@ public class AppTemplateAssembler extends AbstractAssembler<AppTemplateCreateFor
 
 		appTemplate.setDeleted(false);
 		return appTemplate;
+	}
+
+	@Override public void populate(AppTemplateUpdateForm source, AppTemplate target) {
+		BeanUtils.copyProperties(source, target);
 	}
 }

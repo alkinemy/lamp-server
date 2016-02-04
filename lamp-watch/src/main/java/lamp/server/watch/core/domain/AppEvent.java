@@ -25,7 +25,7 @@ public class AppEvent {
 	private String agentId;
 
 	@Column(nullable = false)
-	private String appId;
+	private String artifactId;
 
 	private String eventName;
 	private String eventLevel;

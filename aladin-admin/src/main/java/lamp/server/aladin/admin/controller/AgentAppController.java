@@ -74,26 +74,26 @@ public class AgentAppController {
 		return "redirect:/agent/{agentId}/app";
 	}
 
-	@RequestMapping(path = "/app/{appId}/start", method = RequestMethod.GET)
+	@RequestMapping(path = "/app/{artifactId}/start", method = RequestMethod.GET)
 	public String start(@PathVariable("agentId") String agentId,
-			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
-		appService.startApp(agentId, appId);
+			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
+		appService.startApp(agentId, artifactId);
 
 		return "redirect:/agent/{agentId}/app";
 	}
 
-	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.GET)
+	@RequestMapping(path = "/app/{artifactId}/stop", method = RequestMethod.GET)
 	public String stop(@PathVariable("agentId") String agentId,
-			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
-		appService.stopApp(agentId, appId);
+			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
+		appService.stopApp(agentId, artifactId);
 
 		return "redirect:/agent/{agentId}/app";
 	}
 
-	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
+	@RequestMapping(path = "/app/{artifactId}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("agentId") String agentId,
-			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
-		appService.deleteApp(agentId, appId);
+			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
+		appService.deleteApp(agentId, artifactId);
 
 		return "redirect:/agent/{agentId}/app";
 	}

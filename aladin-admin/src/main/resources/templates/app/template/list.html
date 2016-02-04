@@ -13,9 +13,9 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
-						<a th:href="@{/app-template/create?resourceType=NONE}" class="btn btn-sm default">No Repository Template 등록</a>
-						<a th:href="@{/app-template/create?resourceType=LOCAL}" class="btn btn-sm default">Local Repository Template 등록</a>
-						<a th:href="@{/app-template/create?resourceType=MAVEN}" class="btn btn-sm default">Maven Repository Template 등록</a>
+						<a th:href="@{/app/template/create?resourceType=NONE}" class="btn btn-sm default">No Repository Template 등록</a>
+						<a th:href="@{/app/template/create?resourceType=LOCAL}" class="btn btn-sm default">Local Repository Template 등록</a>
+						<a th:href="@{/app/template/create?resourceType=MAVEN}" class="btn btn-sm default">Maven Repository Template 등록</a>
 					</div>
 				</div>
 			</div>
@@ -42,12 +42,15 @@
 							<td th:text="${template.name}"> Joke </td>
 							<td th:text="${template.description}"> Joke </td>
 							<td th:text="${template.resourceType}"> Joke </td>
-							<td th:text="${template.appGroupId}"> Joke </td>
-							<td th:text="${template.appId}"> Joke </td>
-							<td th:text="${template.appVersion}"> Joke </td>
+							<td th:text="${template.groupId}"> Joke </td>
+							<td th:text="${template.artifactId}"> Joke </td>
+							<td th:text="${template.version}"> Joke </td>
 							<td th:text="${template.processType}"> Joke </td>
 							<td th:text="${template.monitor}"> Joke </td>
-							<td> </td>
+							<td>
+								<a th:href="@{/app/template/update(id=${template.id})}" class="btn btn-sm default">Edit</a>
+								<a th:href="@{/app/template/delete(id=${template.id})}" class="btn btn-sm default">Delete</a>
+							</td>
 						</tr>
 						</tbody>
 					</table>

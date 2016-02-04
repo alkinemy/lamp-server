@@ -14,7 +14,6 @@
 						<div class="actions">
 							<div class="btn-group btn-group-devided">
 								<a th:href="@{/target-server/create}" class="btn btn-sm default">등록</a>
-								<a th:href="@{/target-server/create}" class="btn btn-sm default">등록</a>
 							</div>
 						</div>
 					</div>
@@ -27,9 +26,9 @@
 									<th> Name </th>
 									<th> Hostname </th>
 									<th> Address </th>
-									<th> Installed </th>
-									<th> Monitor </th>
-									<th> Status </th>
+									<th> Agent Installed </th>
+									<th> Agent Monitor </th>
+									<th> Agent Status </th>
 									<th> Action </th>
 								</tr>
 								</thead>
@@ -40,7 +39,7 @@
 									<td th:text="${targetServer.hostname}"> Joke </td>
 									<td th:text="${targetServer.address}"> Joke </td>
 									<td th:text="${targetServer.agentInstalled}"> Joke </td>
-									<td th:text="${targetServer.monitor}"> Joke </td>
+									<td th:text="${targetServer.agentMonitor}"> Joke </td>
 									<td><span th:text="${targetServer?.agentStatus}" class="label label-sm label-warning"> Suspended </span></td>
 									<td>
                                         <a th:href="@{/target-server/update(id=${targetServer.id})}" class="btn yellow btn-outline">Update</a>

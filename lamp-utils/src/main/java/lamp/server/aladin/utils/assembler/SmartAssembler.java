@@ -24,8 +24,10 @@ public class SmartAssembler implements ApplicationContextAware {
 
 	private Map<Pair<Class, Class>, Assembler> assemblerMap = new HashMap<>();
 	private Map<Pair<Class, Class>, ListAssembler> listAssemblerMap = new HashMap<>();
+	private Map<Pair<Class, Class>, Populater> populaterMap = new HashMap<>();
 
 	private DefaultAssembler defaultAssembler = new DefaultAssembler();
+	private DefaultPopulater defaultPopulator = new DefaultPopulater();
 
 	@Getter
 	@Setter
@@ -48,6 +50,15 @@ public class SmartAssembler implements ApplicationContextAware {
 			Pair<Class, Class> pair = key(classes[0], classes[1]);
 			assemblerMap.put(pair, assembler);
 			log.info("Assembler {} registered ({}, {})", assembler, classes[0], classes[1]);
+		}
+
+		String[] populaterNames = applicationContext.getBeanNamesForType(Populater.class);
+		for (String name : populaterNames) {
+			Populater populater = (Populater) applicationContext.getBean(name);
+			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(populater.getClass(), Assembler.class);
+			Pair<Class, Class> pair = key(classes[0], classes[1]);
+			populaterMap.put(pair, populater);
+			log.info("Populater {} registered ({}, {})", populater, classes[0], classes[1]);
 		}
 
 		String[] listAssemblerNames = applicationContext.getBeanNamesForType(ListAssembler.class);
@@ -144,5 +155,34 @@ public class SmartAssembler implements ApplicationContextAware {
 		return new PageImpl<>(content, pageable, fromList.getTotalElements());
 	}
 
+	public <S, T> void populate(S source, T target) {
+		if (source == null || target == null) {
+			return;
+		}
+
+		populate(source, target, (Class<S>) source.getClass(), (Class<T>) target.getClass());
+	}
+
+	public <S, T> void populate(S source, T target, Class<T> tagetClass) {
+		if (source == null || target == null) {
+			return;
+		}
+
+		populate(source, target, (Class<S>) source.getClass(), tagetClass);
+	}
+
+	public <S, T> void populate(S source, T target, Class<S> sourceClass, Class<T> targetClass) {
+		if (source == null || target == null) {
+			return;
+		}
+		Populater<S, T> populater = populaterMap.get(key(sourceClass, targetClass));
+		if (populater != null) {
+			populater.populate(source, target);
+		} else if (parentSmartAssembler != null) {
+			parentSmartAssembler.populate(source, target, sourceClass, targetClass);
+		} else {
+			defaultPopulator.populate(source, target);
+		}
+	}
 
 }

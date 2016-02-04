@@ -1,13 +1,18 @@
 package lamp.server.aladin.core.service;
 
+import com.mysema.query.types.Predicate;
 import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.core.domain.LocalAppFile;
 import lamp.server.aladin.core.domain.LocalAppRepo;
 import lamp.server.aladin.core.dto.LocalAppFileDto;
+import lamp.server.aladin.core.dto.LocalAppFileSearchParams;
 import lamp.server.aladin.core.dto.LocalAppFileUploadForm;
 import lamp.server.aladin.core.exception.Exceptions;
+import lamp.server.aladin.core.exception.LampErrorCode;
 import lamp.server.aladin.core.exception.MessageException;
 import lamp.server.aladin.core.repository.LocalAppFileRepository;
+import lamp.server.aladin.utils.StringUtils;
+import lamp.server.aladin.utils.assembler.SmartAssembler;
 import org.codehaus.plexus.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 public class LocalAppFileService {
@@ -29,13 +35,24 @@ public class LocalAppFileService {
 	@Autowired
 	private AppRepoService appRepoService;
 
+	@Autowired
+	private SmartAssembler smartAssembler;
+
+	public Page<LocalAppFileDto> getLocalAppFileList(LocalAppFileSearchParams searchParams, Pageable pageable) {
+		Predicate predicate = searchParams.buildPredicate();
+		Page<LocalAppFile> page = localAppFileRepository.findAll(predicate, pageable);
+		return smartAssembler.assemble(pageable, page, LocalAppFileDto.class);
+	}
+
 	public Page<LocalAppFileDto> getLocalAppFileList(Long repositoryId, Pageable pageable) {
-		return localAppFileRepository.findAllByRepositoryId(repositoryId, pageable);
+		LocalAppFileSearchParams searchParams = new LocalAppFileSearchParams();
+		searchParams.setRepositoryId(repositoryId);
+		return getLocalAppFileList(searchParams, pageable);
 	}
 
 	@Transactional
 	public LocalAppFile uploadLocalAppFile(Long repositoryId, LocalAppFileUploadForm editForm) throws MessageException {
-		LocalAppRepo appRepo = appRepoService.getAppRepository(repositoryId);
+		LocalAppRepo appRepo = appRepoService.getAppRepo(repositoryId);
 
 		LocalAppFile localAppFile = new LocalAppFile();
 		localAppFile.setName(editForm.getName());
@@ -43,8 +60,15 @@ public class LocalAppFileService {
 		localAppFile.setRepositoryId(appRepo.getId());
 		localAppFile.setGroupId(editForm.getGroupId());
 		localAppFile.setArtifactId(editForm.getArtifactId());
-		localAppFile.setVersion(editForm.getVersion());
+		localAppFile.setBaseVersion(editForm.getVersion());
+		localAppFile.setVersion(localAppFile.getBaseVersion() + "." + System.currentTimeMillis());
 		localAppFile.setDeleted(false);
+
+		Optional<LocalAppFile> localAppFileFromDbOptional = localAppFileRepository.findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(repositoryId, localAppFile.getGroupId(), localAppFile.getArtifactId(), localAppFile.getBaseVersion());
+		if (localAppFileFromDbOptional.isPresent()) {
+			LocalAppFile localAppFileFromDb = localAppFileFromDbOptional.get();
+			Exceptions.throwsException(!localAppFileFromDb.isSnapshot(), LampErrorCode.DUPLICATED_LOCAL_APP_FILE);
+		}
 
 		try {
 			MultipartFile uploadFile = editForm.getUploadFile();
@@ -56,7 +80,7 @@ public class LocalAppFileService {
 				dir.mkdirs();
 			}
 			String ext = FileUtils.getExtension(originalFilename);
-			File destFile = new File(dir, localAppFile.getArtifactId() + localAppFile.getVersion() + "-" + System.currentTimeMillis() + "." + ext);
+			File destFile = new File(dir, localAppFile.getArtifactId() + localAppFile.getBaseVersion() + "-" + System.currentTimeMillis() + "." + ext);
 			uploadFile.transferTo(destFile);
 			localAppFile.setPathname(destFile.getAbsolutePath());
 			localAppFile.setFilename(originalFilename);

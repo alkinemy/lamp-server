@@ -4,11 +4,12 @@ import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.core.domain.*;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.utils.assembler.AbstractAssembler;
+import lamp.server.aladin.utils.assembler.Populater;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRepo> {
+public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRepo> implements Populater<AppRepoUpdateForm, AppRepo> {
 
 	@Override protected AppRepo doAssemble(AppRepoCreateForm appRepoCreateForm) {
 		AppRepo appRepo;
@@ -25,5 +26,9 @@ public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRe
 		BeanUtils.copyProperties(appRepoCreateForm, appRepo);
 		appRepo.setDeleted(false);
 		return appRepo;
+	}
+
+	@Override public void populate(AppRepoUpdateForm source, AppRepo target) {
+		BeanUtils.copyProperties(source, target);
 	}
 }

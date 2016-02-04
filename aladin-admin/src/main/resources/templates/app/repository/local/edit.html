@@ -13,13 +13,14 @@
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form"  th:action="@{/app-repository/LOCAL/{action}(action=${action})}" th:object="${editForm}" method="post">
+						<form class="form-horizontal" role="form"  th:action="@{/app/repository/LOCAL/{action}(action=${action})}" th:object="${editForm}" method="post">
 							<input type="hidden" th:field="*{repositoryType}" />
+							<input th:if="${action == T(lamp.server.aladin.LampConstants).ACTION_UPDATE}" type="hidden" th:field="*{id}" />
 							<div class="form-body">
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Name</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" th:readonly="${action == T(lamp.server.aladin.LampConstants).ACTION_UPDATE}" />
 										<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
 									</div>
 								</div>

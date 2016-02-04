@@ -15,15 +15,18 @@ public class AppTemplateDto {
 
 	private AppResourceType resourceType;
 
-	private String appGroupId;
-	private String appId;
-	private String appName;
-	private String appVersion;
+	private String groupId;
+	private String artifactId;
+	private String artifactName;
+	private String version;
 
 	private AppProcessType processType;
 	private String homeDirectory;
 	private String workDirectory;
 	private String pidFile;
+
+	private String logFile;
+	private String errorLogFile;
 
 	private String startCommandLine;
 	private String stopCommandLine;

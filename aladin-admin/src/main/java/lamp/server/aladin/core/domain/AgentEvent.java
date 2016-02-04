@@ -14,15 +14,18 @@ public class AgentEvent extends AbstractAuditingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	private Long id;
 
-	@Column(name = "agent_id", nullable = false)
+	@Column(nullable = false)
 	private String agentId;
-
+	private Long agentInstanceId;
+	private Long agentInstanceEventSequence;
+	@Column(nullable = false)
 	private String eventName;
+	@Column(nullable = false)
 	private String eventLevel;
 	private LocalDateTime eventTime;
-	private Long eventSequence;
+
 	private String appId;
 	private String message;
 

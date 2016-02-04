@@ -15,10 +15,10 @@ public class AgentAppRegisterForm {
 	private String name;
 	private String description;
 
-	private String appGroupId;
-	private String appId;
-	private String appName;
-	private String appVersion;
+	private String groupId;
+	private String artifactId;
+	private String artifactName;
+	private String version;
 	private AppProcessType processType;
 	private String appDirectory;
 	private String workDirectory;

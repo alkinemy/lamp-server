@@ -5,11 +5,14 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
 public class TargetServerUpdateForm {
 
+	@NotNull
 	private Long id;
 	@NotEmpty
 	private String name;
@@ -32,7 +35,7 @@ public class TargetServerUpdateForm {
 
 	private String agentStartCommandLine;
 
-	private Boolean monitor;
-	private Long monitorInterval;
+	private Boolean agentMonitor;
+	private Long agentMonitorInterval;
 
 }

@@ -4,6 +4,7 @@ import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.dto.LocalAppRepoCreateForm;
 import lamp.server.aladin.core.dto.MavenAppRepoCreateForm;
+import lamp.server.aladin.core.dto.MavenAppRepoUpdateForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @MenuMapping(MenuConstants.APP_REPO)
 @Controller
-@RequestMapping(value = "/app-repository/MAVEN")
-public class MavenAppRepoController extends GenericAppRepoController<MavenAppRepoCreateForm> {
+@RequestMapping(value = "/app/repository/MAVEN")
+public class MavenAppRepoController extends GenericAppRepoController<MavenAppRepoCreateForm, MavenAppRepoUpdateForm> {
 
 	@Override protected String getCreateViewName() {
-		return "app-repository/maven/edit";
+		return "app/repository/maven/edit";
 	}
 
 }

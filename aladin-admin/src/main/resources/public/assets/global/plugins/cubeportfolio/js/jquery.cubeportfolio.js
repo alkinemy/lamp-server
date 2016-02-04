@@ -3199,22 +3199,22 @@ jQuery.fn.cubeportfolio.options = {
          */
         browserInfo: function() {
             var t = CubePortfolio.Private,
-                appVersion = navigator.appVersion,
+                version = navigator.version,
                 transition, animation, perspective;
 
-            if (appVersion.indexOf('MSIE 8.') !== -1) { // ie8
+            if (version.indexOf('MSIE 8.') !== -1) { // ie8
                 t.browser = 'ie8';
-            } else if (appVersion.indexOf('MSIE 9.') !== -1) { // ie9
+            } else if (version.indexOf('MSIE 9.') !== -1) { // ie9
                 t.browser = 'ie9';
-            } else if (appVersion.indexOf('MSIE 10.') !== -1) { // ie10
+            } else if (version.indexOf('MSIE 10.') !== -1) { // ie10
                 t.browser = 'ie10';
             } else if (window.ActiveXObject || 'ActiveXObject' in window) { // ie11
                 t.browser = 'ie11';
-            } else if ((/android/gi).test(appVersion)) { // android
+            } else if ((/android/gi).test(version)) { // android
                 t.browser = 'android';
-            } else if ((/iphone|ipad|ipod/gi).test(appVersion)) { // ios
+            } else if ((/iphone|ipad|ipod/gi).test(version)) { // ios
                 t.browser = 'ios';
-            } else if ((/chrome/gi).test(appVersion)) {
+            } else if ((/chrome/gi).test(version)) {
                 t.browser = 'chrome';
             } else {
                 t.browser = '';

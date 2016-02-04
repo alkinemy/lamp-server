@@ -11,6 +11,11 @@ buildscript {
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
+idea {
+    module {
+        sourceDirs += file('generated/')
+    }
+}
 
 jar {
     baseName = 'lamp-admin'
@@ -22,6 +27,7 @@ jar {
                 "Implementation-Version": version);
     }
 }
+
 
 dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")

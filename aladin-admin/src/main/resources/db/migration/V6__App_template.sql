@@ -9,16 +9,20 @@ CREATE TABLE `app_template` (
   `description` varchar(255) DEFAULT NULL,
 
   `repository_id` bigint(20) DEFAULT NULL,
-  `app_group_id` varchar(200) DEFAULT NULL,
-  `app_id` varchar(200) DEFAULT NULL,
-  `app_name` varchar(200) DEFAULT NULL,
-  `app_version` varchar(200) DEFAULT NULL,
-  `app_url` varchar(1000) DEFAULT NULL,
+  `group_id` varchar(200) DEFAULT NULL,
+  `artifact_id` varchar(200) DEFAULT NULL,
+  `artifact_name` varchar(200) DEFAULT NULL,
+  `version` varchar(200) DEFAULT NULL,
+
+  `resource_url` varchar(1000) DEFAULT NULL,
 
   `process_type` varchar(200) NOT NULL,
   `app_directory` varchar(1000) DEFAULT NULL,
   `work_directory` varchar(1000) DEFAULT NULL,
-  `pid_file` varchar(200) DEFAULT NULL,
+  `pid_file` varchar(500) DEFAULT NULL,
+
+  `log_file` varchar(500) DEFAULT NULL,
+  `error_log_file` varchar(500) DEFAULT NULL,
 
   `command_shell` varchar(255) DEFAULT NULL,
   `start_command_line` varchar(1000) DEFAULT NULL,

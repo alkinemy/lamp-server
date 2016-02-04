@@ -17,11 +17,11 @@ public class AppResourceService {
 	@Autowired
 	private MavenAppResourceLoader mavenAppResourceLoader;
 
-	public Resource getResource(AppTemplate appTemplate, String version) {
-		return getResource(appTemplate, appTemplate.getAppGroupId(), appTemplate.getAppId(), StringUtils.defaultIfBlank(version, appTemplate.getAppVersion()));
+	public AppResource getResource(AppTemplate appTemplate, String version) {
+		return getResource(appTemplate, appTemplate.getGroupId(), appTemplate.getArtifactId(), StringUtils.defaultIfBlank(version, appTemplate.getVersion()));
 	}
 
-	public Resource getResource(AppTemplate appTemplate, String groupId, String artifactId, String version) {
+	public AppResource getResource(AppTemplate appTemplate, String groupId, String artifactId, String version) {
 		if (AppResourceType.LOCAL.equals(appTemplate.getResourceType())) {
 			return localAppResourceLoader.getResource((LocalAppRepo) appTemplate.getAppRepository(), groupId, artifactId, version);
 		} else if (AppResourceType.MAVEN.equals(appTemplate.getResourceType())) {

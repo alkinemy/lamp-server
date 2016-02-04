@@ -31,15 +31,14 @@ public class AgentApiController {
 
 	@RequestMapping(path = "/{id:.+}", method = RequestMethod.DELETE)
 	public void deregister(@PathVariable("id") String id, @AuthenticationPrincipal User user) {
-		log.info("user = {}", user);
 		agentFacadeService.deregister(id);
 	}
 
 	@RequestMapping(path = "/{id}/event", method = RequestMethod.POST)
 	public void event(@PathVariable("id") String id, @Valid @RequestBody AgentEventForm form) {
-		// TODO 구현바람
-		log.info("event = {}", form);
 		agentEventService.insertAgentEvent(id, form);
+
+		// TODO Event Push 구현바람
 	}
 
 }

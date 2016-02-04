@@ -12,4 +12,5 @@ public interface AppRepoRepository extends JpaRepository<AppRepo, Long> {
 
 	List<AppRepo> findAllByRepositoryType(AppResourceType repositoryType);
 
+	AppRepo findOneByName(String name);
 }

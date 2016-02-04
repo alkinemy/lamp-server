@@ -13,6 +13,9 @@ public class ExpressionParser {
 	private org.springframework.expression.ExpressionParser parser = new SpelExpressionParser();
 
 	public String getValue(String value, Map<String, Object> parameters) {
+		if (value == null) {
+			return null;
+		}
 		Expression expression = parser.parseExpression(value, new TemplateParserContext("${", "}"));
 		StandardEvaluationContext evaluationContext = new StandardEvaluationContext(parameters);
 		evaluationContext.addPropertyAccessor(new MapAccessor());

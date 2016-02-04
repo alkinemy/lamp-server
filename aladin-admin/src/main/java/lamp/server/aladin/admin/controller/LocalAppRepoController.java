@@ -5,6 +5,7 @@ import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.dto.LocalAppFileDto;
 import lamp.server.aladin.core.dto.LocalAppFileUploadForm;
 import lamp.server.aladin.core.dto.LocalAppRepoCreateForm;
+import lamp.server.aladin.core.dto.LocalAppRepoUpdateForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,11 @@ import javax.validation.Valid;
 @Slf4j
 @MenuMapping(MenuConstants.APP_REPO)
 @Controller
-@RequestMapping(value = "/app-repository/LOCAL")
-public class LocalAppRepoController extends GenericAppRepoController<LocalAppRepoCreateForm> {
+@RequestMapping(value = "/app/repository/LOCAL")
+public class LocalAppRepoController extends GenericAppRepoController<LocalAppRepoCreateForm, LocalAppRepoUpdateForm> {
 
 	@Override protected String getCreateViewName() {
-		return "app-repository/local/edit";
+		return "app/repository/local/edit";
 	}
 
 }

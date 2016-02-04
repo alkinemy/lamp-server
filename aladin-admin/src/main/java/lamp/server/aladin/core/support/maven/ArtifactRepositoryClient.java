@@ -57,7 +57,7 @@ public class ArtifactRepositoryClient {
 
 	public Artifact getArtifact(String groupId, String artifactId, String version) {
 		if (StringUtils.isBlank(version)) {
-			VersionRangeResult versionRangeResult = getVersionRangeResult(groupId, artifactId);
+			VersionRangeResult versionRangeResult = getVersionRangeResult(groupId, groupId);
 			Version highestVersion = versionRangeResult.getHighestVersion();
 			Exceptions.throwsException(highestVersion == null, LampErrorCode.ARTIFACT_VERSION_RESOLVE_FAILED);
 			version = highestVersion.toString();
@@ -88,7 +88,7 @@ public class ArtifactRepositoryClient {
 			RepositorySystem repositorySystem = serviceLocator.getService(RepositorySystem.class);
 			return repositorySystem.resolveVersionRange(session, request);
 		} catch (Exception e) {
-			throw Exceptions.newException(LampErrorCode.ARTIFACT_VERSION_RESOLVE_FAILED, e, groupId, artifactId);
+			throw Exceptions.newException(LampErrorCode.ARTIFACT_VERSION_RESOLVE_FAILED, e, groupId, groupId);
 		}
 	}
 

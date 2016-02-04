@@ -23,8 +23,8 @@ public class TargetServerDto {
 	private Boolean agentInstalled;
 	private String agentPath;
 
-	private Boolean monitor;
-	private Long monitorInterval;
+	private Boolean agentMonitor;
+	private Long agentMonitorInterval;
 
 	private String agentStatus;
 }

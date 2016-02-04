@@ -170,7 +170,7 @@
    */
   var agent = {
     /** @property {Boolean} [isMac=false] true if this agent is Mac  */
-    isMac: navigator.appVersion.indexOf('Mac') > -1,
+    isMac: navigator.version.indexOf('Mac') > -1,
     /** @property {Boolean} [isMSIE=false] true if this agent is a Internet Explorer  */
     isMSIE: isMSIE,
     /** @property {Boolean} [isFF=false] true if this agent is a Firefox  */

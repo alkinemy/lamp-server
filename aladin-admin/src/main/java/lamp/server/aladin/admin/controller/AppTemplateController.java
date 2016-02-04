@@ -1,6 +1,5 @@
 package lamp.server.aladin.admin.controller;
 
-import com.google.common.collect.Lists;
 import lamp.server.aladin.LampConstants;
 import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
@@ -12,9 +11,11 @@ import lamp.server.aladin.core.domain.CommandShell;
 import lamp.server.aladin.core.dto.AppRepoDto;
 import lamp.server.aladin.core.dto.AppTemplateCreateForm;
 import lamp.server.aladin.core.dto.AppTemplateDto;
+import lamp.server.aladin.core.dto.AppTemplateUpdateForm;
 import lamp.server.aladin.core.service.AppRepoService;
 import lamp.server.aladin.core.service.AppTemplateService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -33,7 +35,7 @@ import java.util.List;
 @Slf4j
 @MenuMapping(MenuConstants.APP_TEMPLATE)
 @Controller
-@RequestMapping("/app-template")
+@RequestMapping("/app/template")
 public class AppTemplateController {
 
 	@Autowired
@@ -46,13 +48,16 @@ public class AppTemplateController {
 	public String list(Model model, Pageable pageable) {
 		Page<AppTemplateDto> page = appTemplateService.getAppTemplatesitoryList(pageable);
 		model.addAttribute("page", page);
-		return "app-template/list";
+		return "app/template/list";
 	}
 
 	@RequestMapping(path = "/create", method = RequestMethod.GET)
 	public String create(@ModelAttribute("editForm") AppTemplateCreateForm editForm, Model model) {
 
-		editForm.setPidFile("${workDirectory}/${appId}.pid");
+		editForm.setWorkDirectory("${appDirectory}");
+		editForm.setPidFile("${workDirectory}/${artifactId}.pid");
+		editForm.setStartCommandLine("./${artifactId}.sh start");
+		editForm.setStopCommandLine("./${artifactId}.sh stop");
 
 		return createForm(editForm, model);
 	}
@@ -61,23 +66,22 @@ public class AppTemplateController {
 		model.addAttribute(LampConstants.ACTION_KEY, LampConstants.ACTION_CREATE);
 
 		if (editForm.getRepositoryId() != null) {
-			AppRepo appRepo = appRepoService.getAppRepository(editForm.getRepositoryId());
+			AppRepo appRepo = appRepoService.getAppRepo(editForm.getRepositoryId());
 			model.addAttribute("appRepository", appRepo);
 		}
 
 		AppResourceType templateType = editForm.getResourceType();
-		List<AppRepoDto> appRepoList;
-		if (AppResourceType.NONE.equals(templateType)) {
-			appRepoList = Lists.newArrayList(AppRepoDto.of(null, "사용안함", null, AppResourceType.NONE.name()));
-		} else {
-			appRepoList = appRepoService.getAppRepositoryListByType(templateType);
+
+		if (!AppResourceType.NONE.equals(templateType)) {
+			List<AppRepoDto> appRepoList = appRepoService.getAppRepoListByType(templateType);
+			model.addAttribute("appRepositoryList", appRepoList);
 		}
-		model.addAttribute("appRepositoryList", appRepoList);
+
 
 		EnumSet<CommandShell> commandShellList = EnumSet.allOf(CommandShell.class);
 		model.addAttribute("commandShellList", commandShellList);
 
-		return "app-template/edit";
+		return "app/template/edit";
 	}
 
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
@@ -92,7 +96,60 @@ public class AppTemplateController {
 		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 
-		return "redirect:/app-template";
+		return "redirect:/app/template";
 	}
 
+
+	@RequestMapping(path = "/update", method = RequestMethod.GET)
+	public String update(@ModelAttribute("editForm") AppTemplateUpdateForm editForm, Model model) {
+
+		AppTemplateUpdateForm updateForm = appTemplateService.getAppTemplateUpdateForm(editForm.getId());
+		BeanUtils.copyProperties(updateForm, editForm);
+
+		return updateForm(editForm, model);
+	}
+
+	protected String updateForm(@ModelAttribute("editForm") AppTemplateUpdateForm editForm, Model model) {
+		model.addAttribute(LampConstants.ACTION_KEY, LampConstants.ACTION_UPDATE);
+
+		if (editForm.getRepositoryId() != null) {
+			AppRepo appRepo = appRepoService.getAppRepo(editForm.getRepositoryId());
+			model.addAttribute("appRepository", appRepo);
+		}
+
+		AppResourceType templateType = editForm.getResourceType();
+		if (!AppResourceType.NONE.equals(templateType)) {
+			List<AppRepoDto> appRepoList = appRepoService.getAppRepoListByType(templateType);
+			model.addAttribute("appRepositoryList", appRepoList);
+		}
+
+		EnumSet<CommandShell> commandShellList = EnumSet.allOf(CommandShell.class);
+		model.addAttribute("commandShellList", commandShellList);
+
+		return "app/template/edit";
+	}
+
+	@RequestMapping(path = "/update", method = RequestMethod.POST)
+	public String update(@Valid @ModelAttribute("editForm") AppTemplateUpdateForm editForm,
+			BindingResult bindingResult, Model model,
+			RedirectAttributes redirectAttributes) {
+		if (bindingResult.hasErrors()) {
+			return updateForm(editForm, model);
+		}
+		appTemplateService.updateAppTemplate(editForm);
+
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
+
+		return "redirect:/app/template";
+	}
+
+	@RequestMapping(path = "/delete", method = RequestMethod.GET)
+	public String delete(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+
+		appTemplateService.deleteAppTemplate(id);
+
+		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.DELETE_SUCCESS));
+
+		return "redirect:/app/template";
+	}
 }

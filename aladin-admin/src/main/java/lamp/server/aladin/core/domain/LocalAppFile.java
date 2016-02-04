@@ -20,27 +20,28 @@ public class LocalAppFile extends AbstractAuditingEntity {
 
 	private String description;
 
-	@Column(name = "repository_id")
 	private Long repositoryId;
 
-	@Column(name = "group_id")
 	private String groupId;
 
-	@Column(name = "artifact_id")
 	private String artifactId;
 
-	@Column(name = "version")
+	private String baseVersion;
 	private String version;
 
 	private String pathname;
 	private String filename;
 
-	@Column(name = "file_size")
 	private Long fileSize;
-	@Column(name = "content_type")
 	private String contentType;
 
 	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;
+
+
+	@Transient
+	public boolean isSnapshot() {
+		return baseVersion != null && baseVersion.endsWith("-SNAPSHOT");
+	}
 
 }

@@ -13,7 +13,7 @@
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form"  th:action="@{/app-repository/LOCAL/{id}/file/{action}(id=${appRepository.id},action=${action})}" th:object="${editForm}" method="post" enctype="multipart/form-data">
+						<form class="form-horizontal" role="form"  th:action="@{/app/repository/LOCAL/{id}/file/{action}(id=${appRepository.id},action=${action})}" th:object="${editForm}" method="post" enctype="multipart/form-data">
 							<div class="form-body">
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Name</label>
@@ -40,7 +40,7 @@
 									<label class="col-md-3 control-label">ArtifactId</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{artifactId}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('artifactId')}" th:errors="*{artifactId}"> A block of help text. </span>
+										<span class="help-block" th:if="${#fields.hasErrors('artifactId')}" th:errors="*{groupId}"> A block of help text. </span>
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('version')} ? 'form-group has-error' : 'form-group'">

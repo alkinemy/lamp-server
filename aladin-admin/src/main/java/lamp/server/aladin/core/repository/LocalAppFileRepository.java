@@ -7,14 +7,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LocalAppFileRepository extends JpaRepository<LocalAppFile, Long> {
+public interface LocalAppFileRepository extends LampRepository<LocalAppFile, Long> {
 
-	Optional<LocalAppFile> findOneByGroupIdAndArtifactIdAndVersion(String groupId, String artifactId, String version);
+	List<LocalAppFile> findAllByGroupIdAndArtifactIdAndBaseVersion(String groupId, String artifactId, String baseVersion);
+	Optional<LocalAppFile> findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(Long repositoryId, String groupId, String artifactId, String baseVersion);
 
-	Page<LocalAppFile> findAllByGroupIdAndArtifactIdOrderByVersionDesc(String groupId, String artifactId, Pageable pageable);
+	Page<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(Long repositoryId, String groupId, String artifactId, Pageable pageable);
 
-	Page<LocalAppFileDto> findAllByRepositoryId(Long repositoryId, Pageable pageable);
+	Page<LocalAppFile> findAllByRepositoryId(Long repositoryId, Pageable pageable);
 }

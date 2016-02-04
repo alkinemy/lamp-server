@@ -13,7 +13,7 @@
 						</div>
 						<div class="actions">
 							<div class="btn-group btn-group-devided">
-								<a th:href="@{/app-repository/LOCAL/__${appRepository.id}__/file/create}" class="btn btn-sm default">등록</a>
+
 							</div>
 						</div>
 					</div>
@@ -23,6 +23,7 @@
 								<thead>
 								<tr>
 									<th> # </th>
+									<th> Repository </th>
 									<th> GroupId </th>
 									<th> ArtifactId </th>
 									<th> Version </th>
@@ -31,10 +32,11 @@
 								</thead>
 								<tbody>
 								<tr th:each="appFile : ${page}">
-									<td th:text="${appFile.id}"> 2 </td>
+									<td th:text="${appFile.repositoryId}"> Joke </td>
+									<td th:text="${appFile.id}"> Joke </td>
 									<td th:text="${appFile.groupId}"> Joke </td>
 									<td th:text="${appFile.artifactId}"> Joke </td>
-									<td th:text="${appFile.version}"> Joke </td>
+									<td th:text="${appFile.baseVersion}"> Joke </td>
 									<td>
 										삭제
 									</td>

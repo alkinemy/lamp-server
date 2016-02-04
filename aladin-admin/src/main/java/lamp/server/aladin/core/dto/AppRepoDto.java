@@ -1,5 +1,6 @@
 package lamp.server.aladin.core.dto;
 
+import lamp.server.aladin.core.domain.AppResourceType;
 import lombok.*;
 
 @Getter
@@ -12,6 +13,8 @@ public class AppRepoDto {
 	private Long id;
 	private String name;
 	private String description;
-	private String repositoryType;
+	private AppResourceType repositoryType;
+
+	private String etc;
 
 }

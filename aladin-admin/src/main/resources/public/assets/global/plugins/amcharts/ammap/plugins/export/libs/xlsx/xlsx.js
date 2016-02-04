@@ -2024,7 +2024,7 @@ var DocSummaryPIDDSI = {
     0x11: { n: 'CharacterCount', t: VT_I4 },
     0x13: { n: 'SharedDoc', t: VT_BOOL },
     0x16: { n: 'HLinksChanged', t: VT_BOOL },
-    0x17: { n: 'AppVersion', t: VT_I4, p: 'version' },
+    0x17: { n: 'Version', t: VT_I4, p: 'version' },
     0x1A: { n: 'ContentType', t: VT_STRING },
     0x1B: { n: 'ContentStatus', t: VT_STRING },
     0x1C: { n: 'Language', t: VT_STRING },
@@ -2616,7 +2616,7 @@ function write_core_props(cp, opts) {
 /* [MS-OSHARED] 2.3.3.2.[1-2].1 (PIDSI/PIDDSI) */
 var EXT_PROPS = [
     ["Application", "Application", "string"],
-    ["AppVersion", "AppVersion", "string"],
+    ["Version", "Version", "string"],
     ["Company", "Company", "string"],
     ["DocSecurity", "DocSecurity", "string"],
     ["Manager", "Manager", "string"],
@@ -8107,7 +8107,7 @@ function parse_wb_defaults(wb) {
 /* 18.2 Workbook */
 var wbnsregex = /<\w+:workbook/;
 function parse_wb_xml(data, opts) {
-    var wb = { AppVersion:{}, WBProps:{}, WBView:[], Sheets:[], CalcPr:{}, xmlns: "" };
+    var wb = { Version:{}, WBProps:{}, WBView:[], Sheets:[], CalcPr:{}, xmlns: "" };
     var pass = false, xmlns = "xmlns";
     data.match(tagregex).forEach(function xml_wb(x) {
         var y = parsexmltag(x);
@@ -8122,7 +8122,7 @@ function parse_wb_xml(data, opts) {
             case '</workbook>': break;
 
             /* 18.2.13 fileVersion CT_FileVersion ? */
-            case '<fileVersion': delete y[0]; wb.AppVersion = y; break;
+            case '<fileVersion': delete y[0]; wb.Version = y; break;
             case '<fileVersion/>': break;
 
             /* 18.2.12 fileSharing CT_FileSharing ? */
@@ -8285,7 +8285,7 @@ function parse_BrtFRTArchID$(data, length) {
 
 /* [MS-XLSB] 2.1.7.60 Workbook */
 function parse_wb_bin(data, opts) {
-    var wb = { AppVersion:{}, WBProps:{}, WBView:[], Sheets:[], CalcPr:{}, xmlns: "" };
+    var wb = { Version:{}, WBProps:{}, WBView:[], Sheets:[], CalcPr:{}, xmlns: "" };
     var pass = false, z;
 
     recordhopper(data, function hopper_wb(val, R) {

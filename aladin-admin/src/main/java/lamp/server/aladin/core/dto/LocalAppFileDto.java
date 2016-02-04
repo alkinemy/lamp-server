@@ -10,8 +10,10 @@ import lombok.ToString;
 public class LocalAppFileDto {
 
 	private Long id;
+	private Long repositoryId;
 	private String groupId;
 	private String artifactId;
+	private String baseVersion;
 	private String version;
 
 	private String pathname;

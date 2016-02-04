@@ -15,7 +15,7 @@ public class AppEventForm {
 
 	private String hostname;
 	private String agentId;
-	private String appId;
+	private String artifactId;
 
 	private String eventName;
 	private String eventLevel;

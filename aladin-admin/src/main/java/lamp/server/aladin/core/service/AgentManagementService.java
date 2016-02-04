@@ -1,6 +1,7 @@
 package lamp.server.aladin.core.service;
 
 import lamp.server.aladin.admin.security.SecurityUtils;
+import lamp.server.aladin.core.domain.AppResource;
 import lamp.server.aladin.core.domain.AppTemplate;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.dto.AgentInstallForm;
@@ -44,32 +45,39 @@ public class AgentManagementService {
 
 	@Transactional
 	public void installAgent(Long targetServerId, AgentInstallForm installForm) {
-		Optional<AppTemplate> appTemplateFromDb = appTemplateService.getAppTemplate(installForm.getTemplateId());
+		Optional<AppTemplate> appTemplateFromDb = appTemplateService.getAppTemplateOptional(installForm.getTemplateId());
 		AppTemplate appTemplate = appTemplateFromDb.orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, installForm.getTemplateId()));
 		String version = installForm.getVersion();
 
 		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(targetServerId);
 		TargetServer targetServer = targetServerFromDb.orElseThrow(EntityNotFoundException::new);
 
-		Resource resource = appResourceService.getResource(appTemplate, version);
+		AppResource resource = appResourceService.getResource(appTemplate, version);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("groupId", resource.getGroupId());
+		parameters.put("artifactId", resource.getArtifactId());
+		parameters.put("version", resource.getVersion());
+
 		File file = null;
-		String filename;
+		String filename = expressionParser.getValue(appTemplate.getAppFilename(), parameters);
+		if (StringUtils.isBlank(filename)) {
+			filename = resource.getFilename();
+			if (StringUtils.isBlank(filename)) {
+				filename = "lamp-agent.jar";
+			}
+		}
+		parameters.put("filename", filename);
+
 		boolean isTempFile = false;
 		try {
-
 			try {
 				file = resource.getFile();
-				filename = resource.getFilename();
 			} catch (IOException ie) {
-				filename = resource.getFilename();
-				if (StringUtils.isBlank(filename)) {
-					filename = "lamp-agent.jar";
-				}
 				file = File.createTempFile(FilenameUtils.getBaseName(filename), "." + FilenameUtils.getExtension(filename));
 				isTempFile = true;
 				FileUtils.copyInputStreamToFile(resource.getInputStream(), file);
 			}
-
 			// passwordless SSH
 			String host = targetServer.getAddress();
 			int port = targetServer.getSshPort();
@@ -91,6 +99,7 @@ public class AgentManagementService {
 			targetServer.setAgentInstalledBy(SecurityUtils.getCurrentUserLogin());
 			targetServer.setAgentInstalledDate(LocalDateTime.now());
 			targetServer.setAgentInstallFilename(filename);
+			targetServer.setAgentStartCommandLine(expressionParser.getValue(appTemplate.getStartCommandLine(), parameters));
 		} catch (Exception e) {
 			log.warn("Agent Install failed", e);
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);

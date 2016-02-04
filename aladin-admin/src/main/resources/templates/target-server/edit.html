@@ -1,40 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
 <body>
 
-<div layout:fragment="content" class="page-content-wrapper">
-	<!-- BEGIN CONTENT BODY -->
-	<div class="page-content">
-		<!-- BEGIN PAGE HEADER-->
-		<!-- BEGIN PAGE BAR -->
-		<div class="page-bar">
-			<ul class="page-breadcrumb">
-				<li>
-					<a href="index.html">Home</a>
-					<i class="fa fa-circle"></i>
-				</li>
-				<li>
-					<a href="#">Target Server</a>
-					<i class="fa fa-circle"></i>
-				</li>
-				<li>
-					<span>Target Server</span>
-				</li>
-			</ul>
-			<div class="page-toolbar">
-				<div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
-					<i class="icon-calendar"></i>&nbsp;
-					<span class="thin uppercase hidden-xs"></span>&nbsp;
-					<i class="fa fa-angle-down"></i>
-				</div>
-			</div>
-		</div>
-		<!-- END PAGE BAR -->
-		<!-- BEGIN PAGE TITLE-->
-		<h3 class="page-title"> Target Servers </h3>
-		<!-- END PAGE TITLE-->
-		<!-- END PAGE HEADER-->
-		<div class="row">
+
+		<div class="row" layout:fragment="content-main">
 			<div class="col-md-12">
 				<!-- BEGIN BORDERED TABLE PORTLET-->
 				<div class="portlet light bordered">
@@ -44,51 +13,47 @@
 							<span class="caption-subject font-dark sbold uppercase">Server Form</span>
 						</div>
 						<div class="actions">
-							<div class="btn-group btn-group-devided" data-toggle="buttons">
-								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm active">
-									<input type="radio" name="options" class="toggle" id="option1" />Actions</label>
-								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm">
-									<input type="radio" name="options" class="toggle" id="option2" />Settings</label>
-							</div>
 						</div>
 					</div>
 					<div class="portlet-body form">
 						<form class="form-horizontal" role="form"  th:action="@{/target-server/{action}(action=${action})}" th:object="${editForm}" method="post">
 							<input type="hidden" th:if="${action == 'update'}" th:field="*{id}"/>
 							<div class="form-body">
+								<h4>Server</h4>
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Name</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter name" />
 										<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Description</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{description}" placeholder="Enter text" />
+										<input type="text" class="form-control" th:field="*{description}" placeholder="Enter description" />
 										<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('hostname')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Hostname</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{hostname}" placeholder="Enter text" th:readonly="${action == 'update'}"/>
+										<input type="text" class="form-control" th:field="*{hostname}" placeholder="Enter hostname" th:readonly="${action == 'update'}"/>
 										<span class="help-block" th:if="${#fields.hasErrors('hostname')}" th:errors="*{hostname}"> A block of help text. </span>
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('address')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">IP Address</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{address}" placeholder="Enter text" />
+										<input type="text" class="form-control" th:field="*{address}" placeholder="Enter address" />
 										<span class="help-block" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"> A block of help text. </span>
 									</div>
 								</div>
-
+								<hr />
+								<h4>SSH Login</h4>
 								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Username</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter text" />
+										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
 										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
 									</div>
 								</div>
@@ -105,6 +70,8 @@
 									</div>
 								</div>
 
+								<hr />
+								<h4>Agent</h4>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Agent Installed</label>
 									<div class="col-md-9">
@@ -133,11 +100,11 @@
 								</div>
 
 								<div class="form-group">
-									<label class="col-md-3 control-label">Monitor</label>
+									<label class="col-md-3 control-label">Agent Monitor</label>
 									<div class="col-md-9">
 										<div class="checkbox-list">
 											<label class="checkbox-inline">
-												<span class=""><input type="checkbox" th:field="*{monitor}" /></span>
+												<span class=""><input type="checkbox" th:field="*{agentMonitor}" /></span>
 												Monitoring </label>
 										</div>
 									</div>
@@ -158,9 +125,7 @@
 				<!-- END BORDERED TABLE PORTLET-->
 			</div>
 		</div>
-	</div>
-	<!-- END CONTENT BODY -->
-</div>
+
 
 </body>
 </html>

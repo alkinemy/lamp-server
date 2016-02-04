@@ -19,7 +19,7 @@
 
 +function ($) { "use strict";
 
-  var isIE = window.navigator.appName == 'Microsoft Internet Explorer'
+  var isIE = window.navigator.artifactName == 'Microsoft Internet Explorer'
 
   // FILEUPLOAD PUBLIC CLASS DEFINITION
   // =================================

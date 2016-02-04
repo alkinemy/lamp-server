@@ -1,6 +1,7 @@
 package lamp.server.aladin.core.service;
 
 import lamp.server.aladin.core.domain.Agent;
+import lamp.server.aladin.core.domain.AppResource;
 import lamp.server.aladin.core.domain.AppTemplate;
 import lamp.server.aladin.core.dto.AppDto;
 import lamp.server.aladin.core.dto.AppRegisterForm;
@@ -41,14 +42,15 @@ public class AppService {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
 		Long templateId = editForm.getTemplateId();
-		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, templateId));
+		AppTemplate appTemplate = appTemplateService.getAppTemplateOptional(templateId).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, templateId));
 
 		AgentAppRegisterForm agentAppRegisterForm = new AgentAppRegisterForm();
 		agentAppRegisterForm.setId((editForm.getId()));
 		agentAppRegisterForm.setName(editForm.getName());
-		agentAppRegisterForm.setAppId(appTemplate.getAppId());
-		agentAppRegisterForm.setAppName(appTemplate.getAppName());
-		agentAppRegisterForm.setAppVersion(StringUtils.defaultIfBlank(editForm.getAppVersion(), appTemplate.getAppVersion()));
+		agentAppRegisterForm.setGroupId(appTemplate.getGroupId());
+		agentAppRegisterForm.setArtifactId(appTemplate.getArtifactId());
+		agentAppRegisterForm.setArtifactName(appTemplate.getArtifactName());
+		agentAppRegisterForm.setVersion(StringUtils.defaultIfBlank(editForm.getVersion(), appTemplate.getVersion()));
 		agentAppRegisterForm.setProcessType(appTemplate.getProcessType());
 		agentAppRegisterForm.setPidFile(appTemplate.getPidFile());
 		agentAppRegisterForm.setAppDirectory(appTemplate.getAppDirectory());
@@ -58,10 +60,12 @@ public class AppService {
 
 		agentAppRegisterForm.setPreInstalled(appTemplate.isPreInstalled());
 		if (!appTemplate.isPreInstalled()) {
-			String groupId = appTemplate.getAppGroupId();
-			String artifactId = agentAppRegisterForm.getAppId();
-			String version = agentAppRegisterForm.getAppVersion();
-			agentAppRegisterForm.setInstallFile(appResourceService.getResource(appTemplate, groupId, artifactId, version));
+			String groupId = agentAppRegisterForm.getGroupId();
+			String artifactId = agentAppRegisterForm.getArtifactId();
+			String version = agentAppRegisterForm.getVersion();
+			AppResource appResource = appResourceService.getResource(appTemplate, groupId, artifactId, version);
+			agentAppRegisterForm.setVersion(appResource.getVersion());
+			agentAppRegisterForm.setInstallFile(appResource);
 		}
 		agentAppRegisterForm.setFilename(appTemplate.getAppFilename());
 		agentAppRegisterForm.setMonitor(ObjectUtils.defaultIfNull(editForm.getMonitor(), appTemplate.isMonitor()));
@@ -70,22 +74,22 @@ public class AppService {
 		agentClient.register(agent, agentAppRegisterForm);
 	}
 
-	public void startApp(String agentId, String appId) {
+	public void startApp(String agentId, String artifactId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
-		agentClient.start(agent, appId);
+		agentClient.start(agent, artifactId);
 	}
 
-	public void stopApp(String agentId, String appId) {
+	public void stopApp(String agentId, String artifactId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
-		agentClient.stop(agent, appId);
+		agentClient.stop(agent, artifactId);
 	}
 
-	public void deleteApp(String agentId, String appId) {
+	public void deleteApp(String agentId, String artifactId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
-		agentClient.deregister(agent, appId);
+		agentClient.deregister(agent, artifactId);
 	}
 
 

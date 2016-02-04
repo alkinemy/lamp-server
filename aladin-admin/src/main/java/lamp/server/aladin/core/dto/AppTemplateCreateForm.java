@@ -21,13 +21,14 @@ public class AppTemplateCreateForm {
 	private AppResourceType resourceType = AppResourceType.NONE;
 
 	private Long repositoryId;
-	private String appGroupId;
-	private String appId;
-	private String appName;
-	private String appVersion;
+	private String groupId;
+	private String artifactId;
+	private String artifactName;
+	private String version;
+
 	private String appUrl;
 
-	private AppProcessType processType = AppProcessType.DEFAULT;
+	private AppProcessType processType = AppProcessType.DAEMON;
 	private String appDirectory;
 	private String workDirectory;
 	private String pidFile;

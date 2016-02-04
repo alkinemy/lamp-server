@@ -43,9 +43,9 @@ public class AgentClient {
 			parts.add("id", form.getId());
 			parts.add("name", StringUtils.utf8ToIso88591(form.getName()));
 			parts.add("description", StringUtils.utf8ToIso88591(form.getDescription()));
-			parts.add("appId", form.getAppId());
-			parts.add("appName", StringUtils.utf8ToIso88591(form.getAppName()));
-			parts.add("appVersion", form.getAppVersion());
+			parts.add("artifactId", form.getArtifactId());
+			parts.add("artifactName", StringUtils.utf8ToIso88591(form.getArtifactName()));
+			parts.add("version", form.getVersion());
 			parts.add("processType", form.getProcessType().name());
 			parts.add("appDirectory", form.getAppDirectory());
 			parts.add("workDirectory", form.getWorkDirectory());
@@ -68,19 +68,19 @@ public class AgentClient {
 		}
 	}
 
-	public void deregister(Agent agent, String appId) {
+	public void deregister(Agent agent, String artifactId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		restTemplate.delete(baseUrl + "/api/app/" + appId);
+		restTemplate.delete(baseUrl + "/api/app/" + artifactId);
 	}
 
-	public void start(Agent agent, String appId) {
+	public void start(Agent agent, String artifactId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/start", Void.class);
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + artifactId + "/start", Void.class);
 	}
 
-	public void stop(Agent agent, String appId) {
+	public void stop(Agent agent, String artifactId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/stop", Void.class);
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + artifactId + "/stop", Void.class);
 	}
 
 

@@ -18,7 +18,7 @@ public class WatchedApp {
 
 	private String hostname;
 	private String agentId;
-	private String appId;
+	private String artifactId;
 
 	private String healthType;
 	private String healthUrl;

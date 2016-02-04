@@ -10,6 +10,7 @@ CREATE TABLE `app_local_file` (
   `repository_id` bigint(20) NOT NULL,
   `group_id` varchar(200) DEFAULT NULL,
   `artifact_id` varchar(200) DEFAULT NULL,
+  `base_version` varchar(200) DEFAULT NULL,
   `version` varchar(200) DEFAULT NULL,
   `pathname` varchar(500) DEFAULT NULL,
   `filename` varchar(200) DEFAULT NULL,

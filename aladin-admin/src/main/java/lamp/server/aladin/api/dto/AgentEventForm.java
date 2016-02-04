@@ -11,13 +11,15 @@ import java.util.Date;
 @ToString
 public class AgentEventForm {
 
+
+	private Long instanceId;
+	private Long instanceEventSequence;
+
 	private String eventName;
 
 	private String eventLevel;
 
 	private Date eventTime;
-
-	private Long eventSequence;
 
 	private String appId;
 

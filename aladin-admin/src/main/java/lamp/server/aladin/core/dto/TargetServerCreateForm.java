@@ -29,7 +29,7 @@ public class TargetServerCreateForm {
 
 	private String agentStartCommandLine;
 
-	private Boolean monitor;
-	private Long monitorInterval;
+	private Boolean agentMonitor = Boolean.FALSE;
+	private Long agentMonitorInterval;
 
 }
