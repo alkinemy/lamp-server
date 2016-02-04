@@ -20,7 +20,13 @@ public class MenuItemService {
 		{
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
-				subMenuItems.add(MenuItem.of(TARGET_SERVER, "Target Server", "/target-server", "icon-bulb"));
+
+				{
+					MenuItem targetServerAgent  = MenuItem.of(TARGET_SERVER_AGENT, "Agent", null);
+					MenuItem targetServer = MenuItem.of(TARGET_SERVER, "Target Server", "/target-server", "icon-bulb");
+					targetServer.setSubMenuItems(Lists.newArrayList(targetServerAgent));
+					subMenuItems.add(targetServer);
+				}
 				{
 
 					MenuItem agentAppMenuItem  = MenuItem.of(AGENT_APP, "Agent App", null);

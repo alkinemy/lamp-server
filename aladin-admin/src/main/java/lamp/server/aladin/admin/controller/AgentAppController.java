@@ -4,7 +4,6 @@ import lamp.server.aladin.LampConstants;
 import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.support.FlashMessage;
-import lamp.server.aladin.admin.support.FlashMessageLevel;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
 import lamp.server.aladin.core.dto.AgentDto;
 import lamp.server.aladin.core.dto.AppDto;
@@ -54,7 +53,7 @@ public class AgentAppController {
 		model.addAttribute("action", LampConstants.ACTION_CREATE);
 
 		// TODO Popup이나 Wizard 형식으로 분리하기
-		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplatesitoryList();
+		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
 		model.addAttribute("appTemplateList", appTemplateList);
 
 		return "agent/app/edit";

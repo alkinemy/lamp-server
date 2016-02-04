@@ -46,7 +46,7 @@ public class AppTemplateController {
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String list(Model model, Pageable pageable) {
-		Page<AppTemplateDto> page = appTemplateService.getAppTemplatesitoryList(pageable);
+		Page<AppTemplateDto> page = appTemplateService.getAppTemplateDtoList(pageable);
 		model.addAttribute("page", page);
 		return "app/template/list";
 	}

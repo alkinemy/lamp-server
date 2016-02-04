@@ -29,12 +29,12 @@ public class AppTemplateService {
 	@Autowired
 	private SmartAssembler smartAssembler;
 
-	public List<AppTemplateDto> getAppTemplatesitoryList() {
+	public List<AppTemplateDto> getAppTemplateDtoList() {
 		List<AppTemplate> page = appTemplateRepository.findAll();
 		return smartAssembler.assemble(page, AppTemplateDto.class);
 	}
 
-	public Page<AppTemplateDto> getAppTemplatesitoryList(Pageable pageable) {
+	public Page<AppTemplateDto> getAppTemplateDtoList(Pageable pageable) {
 		Page<AppTemplate> page = appTemplateRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, AppTemplateDto.class);
 	}

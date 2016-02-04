@@ -58,7 +58,10 @@
 								<div class="form-group" th:class="${#fields.hasErrors('templateId')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Template</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{templateId}" placeholder="Enter text" />
+										<select class="form-control" th:field="*{templateId}">
+											<option th:each="appTemplate : ${appTemplateList}"
+													th:value="${appTemplate.id}" th:text="${appTemplate.name}">Option 1</option>
+										</select>
 										<span class="help-block" th:if="${#fields.hasErrors('templateId')}" th:errors="*{templateId}"> A block of help text. </span>
 									</div>
 								</div>
@@ -69,6 +72,29 @@
 										<span class="help-block" th:if="${#fields.hasErrors('version')}" th:errors="*{version}"> A block of help text. </span>
 									</div>
 								</div>
+
+								<hr />
+								<h4>SSH Login</h4>
+								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Username</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
+										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Password</label>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input type="password" class="form-control" th:field="*{password}" placeholder="Password" />
+											<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+
 
 							</div>
 							<div class="form-actions">

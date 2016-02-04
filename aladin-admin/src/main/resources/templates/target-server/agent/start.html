@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/layout">
+<body>
+
+<div layout:fragment="content" class="page-content-wrapper">
+	<!-- BEGIN CONTENT BODY -->
+	<div class="page-content">
+		<!-- BEGIN PAGE HEADER-->
+		<!-- BEGIN PAGE BAR -->
+		<div class="page-bar">
+			<ul class="page-breadcrumb">
+				<li>
+					<a href="index.html">Home</a>
+					<i class="fa fa-circle"></i>
+				</li>
+				<li>
+					<a href="#">Target Server</a>
+					<i class="fa fa-circle"></i>
+				</li>
+				<li>
+					<span>Target Server</span>
+				</li>
+			</ul>
+			<div class="page-toolbar">
+				<div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
+					<i class="icon-calendar"></i>&nbsp;
+					<span class="thin uppercase hidden-xs"></span>&nbsp;
+					<i class="fa fa-angle-down"></i>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE BAR -->
+		<!-- BEGIN PAGE TITLE-->
+		<h3 class="page-title" th:text="${targetServer.hostname}"> Target Servers </h3>
+		<!-- END PAGE TITLE-->
+		<!-- END PAGE HEADER-->
+		<div class="row">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">Agent Start</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided" data-toggle="buttons">
+								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm active">
+									<input type="radio" name="options" class="toggle" id="option1" />Actions</label>
+								<label class="btn btn-transparent dark btn-outline btn-circle btn-sm">
+									<input type="radio" name="options" class="toggle" id="option2" />Settings</label>
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="@{/target-server/{id}/agent/start(id=${targetServer.id})}" th:object="${startForm}" method="post">
+							<div class="form-body">
+								<h4>SSH Login</h4>
+								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Username</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
+										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Password</label>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input type="password" class="form-control" th:field="*{password}" placeholder="Password" />
+											<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+	</div>
+	<!-- END CONTENT BODY -->
+</div>
+
+</body>
+</html>
