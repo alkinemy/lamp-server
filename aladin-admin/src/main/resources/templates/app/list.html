@@ -2,52 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
 <body>
 
-		<div class="row" layout:fragment="content-main">
-			<div class="col-md-12">
-				<!-- BEGIN BORDERED TABLE PORTLET-->
-				<div class="portlet light portlet-fit bordered">
-					<div class="portlet-title">
-						<div class="caption">
-							<i class="icon-bubble font-dark"></i>
-							<span class="caption-subject font-dark bold uppercase">Events</span>
-						</div>
-						<div class="actions">
-							<div class="btn-group btn-group-devided">
-							</div>
-						</div>
-					</div>
-					<div class="portlet-body">
-						<div class="table-scrollable">
-							<table class="table table-bordered table-hover">
-								<thead>
-								<tr>
-									<th> # </th>
-									<th> Event Time </th>
-									<th> Event Level </th>
-									<th> Event Name </th>
-									<th> Agent Id </th>
-									<th> App Id </th>
-									<th> Message </th>
-								</tr>
-								</thead>
-								<tbody>
-								<tr th:each="event : ${page}">
-									<td th:text="${event.id}"> Joke </td>
-									<td th:text="${event.eventTime}"> Joke </td>
-									<td th:text="${event.eventLevel}"> Joke </td>
-									<td th:text="${event.eventName}"> Joke </td>
-									<td th:text="${event.agentId}"> Joke </td>
-									<td th:text="${event.appId}"> Joke </td>
-									<td th:text="${event.message}"> Joke </td>
-								</tr>
-								</tbody>
-							</table>
-						</div>
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light portlet-fit bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-bubble font-dark"></i>
+					<span class="caption-subject font-dark bold uppercase">Managed Apps</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group btn-group-devided">
+						<a class="btn btn-sm default">등록</a>
 					</div>
 				</div>
-				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+			<div class="portlet-body">
+				<div class="table-scrollable">
+					<table class="table table-bordered table-hover">
+						<thead>
+						<tr>
+							<th> Id </th>
+							<th> Name </th>
+							<th> Description </th>
+							<th> Hostname </th>
+							<th> Group Id </th>
+							<th> Artifact Id </th>
+							<th> Version </th>
+							<th> Install Date </th>
+							<th> Action </th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="app : ${page}">
+							<td th:text="${app.id}"> 2 </td>
+							<td th:text="${app.name}"> Joke </td>
+							<td th:text="${app.description}"> Joke </td>
+							<td th:text="${app.hostname}"> Joke </td>
+							<td th:text="${app.groupId}"> Joke </td>
+							<td th:text="${app.artifactId}"> Joke </td>
+							<td th:text="${app.version}"> Joke </td>
+							<td th:text="${#temporals.format(app.installDate, 'yyyy-MM-dd HH:mm:ss')}"> Joke </td>
+							<td>
+								<a th:href="@{/app/{id}/start(id=${app.id})}" class="btn btn-icon-only blue">
+									<i class="fa fa-play"></i> </a>
+								<a th:href="@{/app/{id}/stop(id=${app.id})}" class="btn btn-icon-only blue">
+									<i class="fa fa-stop"></i> </a>
+								<a th:href="@{/app/{id}/file(id=${app.id})}" class="btn btn-icon-only yellow">
+									<i class="fa fa-upload"></i> </a>
+								<a th:href="@{/app/{id}/delete(id=${app.id})}" class="btn btn-icon-only red">
+									<i class="fa fa-eject"></i> </a>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
 
 
 </body>

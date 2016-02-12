@@ -33,14 +33,17 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(name = "ssh_port")
 	private int sshPort = 22;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "auth_type", length = 100, nullable = false)
-	private String authType;
+	private SshAuthType authType;
 
 	@Column(length = 100)
 	private String username;
 
 	@Column(name = "encrypted_password", length = 100)
 	private String password;
+
+	private String privateKey;
 
 	@Column(name = "agent_installed", columnDefinition = "TINYINT")
 	private Boolean agentInstalled = Boolean.FALSE;

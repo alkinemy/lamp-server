@@ -19,5 +19,6 @@ CREATE TABLE `lamp_agent_event` (
   `last_modified_by` varchar(100) DEFAULT NULL,
   `last_modified_date` datetime,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `lamp_agent_event_uk_01` (`agent_id`, `agent_instance_id`, `agent_instance_event_sequence`)
+  UNIQUE KEY `lamp_agent_event_uk_01` (`agent_id`, `agent_instance_id`, `agent_instance_event_sequence`),
+  KEY `lamp_agent_event_idx01` (`app_id`, `agent_instance_id`, `agent_instance_event_sequence`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

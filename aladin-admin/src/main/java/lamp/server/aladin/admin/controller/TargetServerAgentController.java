@@ -5,6 +5,7 @@ import lamp.server.aladin.admin.AdminErrorCode;
 import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.support.FlashMessage;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
+import lamp.server.aladin.core.domain.SshAuthType;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.dto.AgentInstallForm;
 import lamp.server.aladin.core.dto.AgentStartForm;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,12 +54,6 @@ public class TargetServerAgentController {
 		TargetServer targetServer = targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
 
 		model.addAttribute("targetServer", targetServer);
-		if (StringUtils.isBlank(editForm.getUsername())) {
-			editForm.setUsername(targetServer.getUsername());
-		}
-		if (StringUtils.isBlank(editForm.getPassword())) {
-			editForm.setPassword(targetServer.getPassword());
-		}
 
 		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
 		model.addAttribute("appTemplateList", appTemplateList);
@@ -90,9 +86,6 @@ public class TargetServerAgentController {
 		TargetServer targetServer = targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
 
 		model.addAttribute("targetServer", targetServer);
-		if (StringUtils.isBlank(startForm.getUsername())) {
-			startForm.setUsername(targetServer.getUsername());
-		}
 
 		return "target-server/agent/start";
 	}
@@ -104,8 +97,9 @@ public class TargetServerAgentController {
 
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				PrintStream printStream = new PrintStream(baos)) {
-			agentManagementService.startAgent(id, startForm.getUsername(), startForm.getPassword(), printStream);
+			agentManagementService.startAgent(id, startForm, printStream);
 			String output = baos.toString("UTF-8");
+			output = StringUtils.replace(output, "\n", "<br/>");
 
 			FlashMessage flashMessage = FlashMessage.ofInfo(output);
 			redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, flashMessage);

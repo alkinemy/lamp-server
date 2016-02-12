@@ -38,6 +38,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-configuration-processor")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.1.RELEASE")
+    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")

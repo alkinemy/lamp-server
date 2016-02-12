@@ -14,6 +14,7 @@ CREATE TABLE `lamp_target_server` (
   `auth_type` varchar(100) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
   `encrypted_password` varchar(100) DEFAULT NULL,
+  `private_key` varchar(200) DEFAULT NULL,
   `agent_installed` tinyint(1) NOT NULL,
   `agent_installed_by` varchar(200) DEFAULT NULL,
   `agent_installed_date` datetime DEFAULT NULL,

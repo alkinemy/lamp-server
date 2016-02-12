@@ -1,11 +1,11 @@
 USE `lamp`;
 
-DROP TABLE IF EXISTS `app_repository`;
-DROP TABLE IF EXISTS `app_local_repository`;
-DROP TABLE IF EXISTS `app_maven_repository`;
-DROP TABLE IF EXISTS `app_url_repository`;
+DROP TABLE IF EXISTS `lamp_app_repository`;
+DROP TABLE IF EXISTS `lamp_app_local_repository`;
+DROP TABLE IF EXISTS `lamp_app_maven_repository`;
+DROP TABLE IF EXISTS `lamp_app_url_repository`;
 
-CREATE TABLE `app_repository` (
+CREATE TABLE `lamp_app_repository` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `repository_type` varchar(200) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -16,10 +16,10 @@ CREATE TABLE `app_repository` (
   `last_modified_by` varchar(100) DEFAULT NULL,
   `last_modified_date` datetime,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `app_repository_uk_01` (`name`)
+  UNIQUE KEY `lamp_app_repository_uk_01` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `app_local_repository` (
+CREATE TABLE `lamp_app_local_repository` (
   `id` bigint(20) NOT NULL,
   `repository_path` varchar(100) DEFAULT NULL,
   `file_limit_size` bigint(20) NULL,
@@ -27,7 +27,7 @@ CREATE TABLE `app_local_repository` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `app_maven_repository` (
+CREATE TABLE `lamp_app_maven_repository` (
   `id` bigint(20) NOT NULL,
   `repository_path` varchar(100) DEFAULT NULL,
   `repository_url` varchar(1000) DEFAULT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE `app_maven_repository` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `app_url_repository` (
+CREATE TABLE `lamp_app_url_repository` (
   `id` bigint(20) NOT NULL,
   `repository_auth_type` varchar(200) DEFAULT NULL,
   `repository_auth_url` varchar(1000) DEFAULT NULL,

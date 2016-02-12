@@ -75,6 +75,33 @@ public class SshClient {
 		return b;
 	}
 
+
+
+	public void connect(String username) {
+		connect(username, null, null);
+	}
+
+	public void connect(String username, String privateKey, String password) {
+		try {
+			File knownHosts = new File("~/.ssh/known_hosts");
+			if (knownHosts.exists()) {
+				jsch.setKnownHosts("~/.ssh/known_hosts");
+			}
+
+			if (StringUtils.isBlank(privateKey)) {
+				jsch.addIdentity("~/.ssh/id_rsa");
+			} else {
+				jsch.addIdentity(privateKey, password);
+			}
+
+			session = jsch.getSession(username, host, port);
+			session.setConfig("StrictHostKeyChecking", "no");
+			session.connect();
+		} catch (JSchException e) {
+			throw new SshException("ssh connection failed", e);
+		}
+	}
+
 	public void connect(String username, String password) {
 		try {
 			if (useGateway) {
@@ -272,6 +299,8 @@ public class SshClient {
 		}
 
 	}
+
+
 
 	public static class UserPasswordInfo implements UserInfo {
 

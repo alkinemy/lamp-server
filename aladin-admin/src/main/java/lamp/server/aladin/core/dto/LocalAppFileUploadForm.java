@@ -29,4 +29,5 @@ public class LocalAppFileUploadForm {
 	@MultipartFileNotEmpty
 	private MultipartFile uploadFile;
 
+	private Long refId;
 }

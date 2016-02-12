@@ -32,13 +32,14 @@
 								</thead>
 								<tbody>
 								<tr th:each="appFile : ${page}">
-									<td th:text="${appFile.repositoryId}"> Joke </td>
 									<td th:text="${appFile.id}"> Joke </td>
+									<td th:text="${appFile.repositoryId}"> Joke </td>
 									<td th:text="${appFile.groupId}"> Joke </td>
 									<td th:text="${appFile.artifactId}"> Joke </td>
 									<td th:text="${appFile.baseVersion}"> Joke </td>
 									<td>
-										삭제
+										<a th:href="@{/app/file/LOCAL/create?refId={id}(id=${appFile.id})}" class="btn btn-icon-only yellow">
+											<i class="fa fa-upload"></i> </a>
 									</td>
 								</tr>
 								</tbody>

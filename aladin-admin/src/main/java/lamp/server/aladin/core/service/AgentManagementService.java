@@ -3,8 +3,10 @@ package lamp.server.aladin.core.service;
 import lamp.server.aladin.admin.security.SecurityUtils;
 import lamp.server.aladin.core.domain.AppResource;
 import lamp.server.aladin.core.domain.AppTemplate;
+import lamp.server.aladin.core.domain.SshAuthType;
 import lamp.server.aladin.core.domain.TargetServer;
 import lamp.server.aladin.core.dto.AgentInstallForm;
+import lamp.server.aladin.core.dto.AgentStartForm;
 import lamp.server.aladin.core.exception.EntityNotFoundException;
 import lamp.server.aladin.core.exception.Exceptions;
 import lamp.server.aladin.core.exception.LampErrorCode;
@@ -81,11 +83,15 @@ public class AgentManagementService {
 			// SSH
 			String host = targetServer.getAddress();
 			int port = targetServer.getSshPort();
-			String username = StringUtils.defaultString(installForm.getUsername(), targetServer.getUsername());
+			String username = targetServer.getUsername();
 			String password = StringUtils.defaultString(installForm.getPassword(), targetServer.getPassword());
 
 			SshClient sshClient = new SshClient(host, port);
-			sshClient.connect(username, password);
+			if (SshAuthType.PUBLIC_KEY.equals(targetServer.getAuthType())) {
+				sshClient.connect(username, targetServer.getPrivateKey(), password);
+			} else {
+				sshClient.connect(username, password);
+			}
 
 			String agentPath = targetServer.getAgentInstallPath();
 			if (StringUtils.isBlank(agentPath)) {
@@ -112,7 +118,7 @@ public class AgentManagementService {
 		}
 	}
 
-	public void startAgent(Long targetServerId, String inputUsername, String inputPassword, PrintStream printStream) {
+	public void startAgent(Long targetServerId, AgentStartForm startForm, PrintStream printStream) {
 		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(targetServerId);
 		TargetServer targetServer = targetServerFromDb.orElseThrow(EntityNotFoundException::new);
 
@@ -128,11 +134,15 @@ public class AgentManagementService {
 
 		String host = targetServer.getAddress();
 		int port = targetServer.getSshPort();
-		String username = StringUtils.defaultString(inputUsername, targetServer.getUsername());
-		String password = StringUtils.defaultString(inputPassword, targetServer.getPassword());
+		String username = targetServer.getUsername();
+		String password = StringUtils.defaultString(startForm.getPassword(), targetServer.getPassword());
 
 		SshClient sshClient = new SshClient(host, port);
-		sshClient.connect(username, password);
+		if (SshAuthType.PUBLIC_KEY.equals(targetServer.getAuthType())) {
+			sshClient.connect(username, targetServer.getPrivateKey(), password);
+		} else {
+			sshClient.connect(username, password);
+		}
 
 		long timeout = 5 * 1000;
 		sshClient.exec(agentPath, startCommand, printStream, timeout);

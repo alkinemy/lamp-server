@@ -50,6 +50,17 @@
 								</div>
 								<hr />
 								<h4>SSH Login</h4>
+
+								<div class="form-group" th:class="${#fields.hasErrors('authType')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Preferred Authentications</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{authType}">
+											<option th:each="sshAuthType : ${sshAuthTypes}"
+													th:value="${sshAuthType}" th:text="${sshAuthType}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('authType')}" th:errors="*{authType}"> A block of help text. </span>
+									</div>
+								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Username</label>
 									<div class="col-md-9">

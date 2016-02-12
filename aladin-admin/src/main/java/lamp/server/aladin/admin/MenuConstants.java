@@ -11,4 +11,6 @@ public abstract class MenuConstants {
 	public static final String APP_REPO = "APP_REPO";
 	public static final String APP_TEMPLATE = "APP_TEMPLATE";
 	public static final String LOCAL_APP_FILE = "APP_FILE";
+	public static final String MANAGED_APP = "MANAGED_APP";
+
 }

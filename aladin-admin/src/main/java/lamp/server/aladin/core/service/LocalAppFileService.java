@@ -50,6 +50,11 @@ public class LocalAppFileService {
 		return getLocalAppFileList(searchParams, pageable);
 	}
 
+	public LocalAppFileDto getLocalAppFileDto(Long id) {
+		LocalAppFile localAppFile = localAppFileRepository.findOne(id);
+		return smartAssembler.assemble(localAppFile, LocalAppFileDto.class);
+	}
+
 	@Transactional
 	public LocalAppFile uploadLocalAppFile(Long repositoryId, LocalAppFileUploadForm editForm) throws MessageException {
 		LocalAppRepo appRepo = appRepoService.getAppRepo(repositoryId);
@@ -64,12 +69,11 @@ public class LocalAppFileService {
 		localAppFile.setVersion(localAppFile.getBaseVersion() + "." + System.currentTimeMillis());
 		localAppFile.setDeleted(false);
 
-		Optional<LocalAppFile> localAppFileFromDbOptional = localAppFileRepository.findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(repositoryId, localAppFile.getGroupId(), localAppFile.getArtifactId(), localAppFile.getBaseVersion());
-		if (localAppFileFromDbOptional.isPresent()) {
-			LocalAppFile localAppFileFromDb = localAppFileFromDbOptional.get();
-			Exceptions.throwsException(!localAppFileFromDb.isSnapshot(), LampErrorCode.DUPLICATED_LOCAL_APP_FILE);
+		if (!localAppFile.isSnapshot()) {
+			Optional<LocalAppFile> localAppFileFromDbOptional = localAppFileRepository.findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(repositoryId, localAppFile.getGroupId(), localAppFile.getArtifactId(), localAppFile.getBaseVersion());
+			Exceptions.throwsException(localAppFileFromDbOptional.isPresent(), LampErrorCode.DUPLICATED_LOCAL_APP_FILE);
 		}
-
+		
 		try {
 			MultipartFile uploadFile = editForm.getUploadFile();
 			String originalFilename = uploadFile.getOriginalFilename();
@@ -92,5 +96,6 @@ public class LocalAppFileService {
 			throw Exceptions.newException(AdminErrorCode.LOCAL_APP_FILE_UPLOAD_FAILED, e);
 		}
 	}
+
 
 }

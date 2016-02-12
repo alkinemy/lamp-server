@@ -31,5 +31,7 @@ public class ManagedApp extends AbstractAuditingEntity {
 	private String version;
 
 	private LocalDateTime registerDate;
+	private LocalDateTime installDate;
 
+	private boolean updatable;
 }

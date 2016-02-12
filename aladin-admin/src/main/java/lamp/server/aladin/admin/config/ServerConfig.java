@@ -21,6 +21,8 @@ import org.springframework.validation.beanvalidation.MessageSourceResourceBundle
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.dialect.IDialect;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 @Configuration
 @EnableConfigurationProperties({ ServerProperties.class, AgentProperties.class})
@@ -31,6 +33,11 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private MessageSource messageSource;
+
+	@Bean
+	public IDialect java8TimeDialect () {
+		return  new Java8TimeDialect();
+	}
 
 	@Bean
 	public SmartAssembler smartAssembler() {

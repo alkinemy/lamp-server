@@ -26,16 +26,21 @@ public class AgentClient {
 
 
 	public List<AppDto> getAppList(Agent agent) {
-		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<List<AppDto>> responseEntity = restTemplate.exchange(baseUrl + "/api/app", HttpMethod.GET, null, new ParameterizedTypeReference<List<AppDto>>() {});
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<List<AppDto>> responseEntity = restTemplate.exchange(baseUrl + "/api/app", HttpMethod.GET, null, new ParameterizedTypeReference<List<AppDto>>() {});
 
-		return responseEntity.getBody();
+			return responseEntity.getBody();
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
 	}
 
 	public void register(Agent agent, AgentAppRegisterForm form) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
-			String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+			String baseUrl = getBaseUrl(agent);
 
 			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
 
@@ -59,7 +64,7 @@ public class AgentClient {
 			parts.add("monitor", form.isMonitor());
 			parts.add("commands", form.getCommands());
 
-			log.info("parts = {}", parts);
+			log.debug("parts = {}", parts);
 
 			ResponseEntity<Void> responseEntity = restTemplate.postForEntity(baseUrl + "/api/app", parts, Void.class);
 		} finally {
@@ -67,20 +72,89 @@ public class AgentClient {
 		}
 	}
 
+	public void updateFile(Agent agent, AgentAppUpdateFileForm form) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+
+			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+
+			parts.add("id", form.getId());
+			parts.add("artifactId", form.getArtifactId());
+			parts.add("artifactName", StringUtils.utf8ToIso88591(form.getArtifactName()));
+			parts.add("version", form.getVersion());
+			parts.add("installFile", form.getInstallFile());
+			parts.add("commands", form.getCommands());
+
+			log.debug("parts = {}", parts);
+
+			ResponseEntity<Void> responseEntity = restTemplate.postForEntity(baseUrl + "/api/app/{id}/file", parts, Void.class, form.getId());
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
+	public void updateSpec(Agent agent, AgentAppUpdateSpecForm form) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+
+			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+
+			parts.add("id", form.getId());
+			parts.add("name", StringUtils.utf8ToIso88591(form.getName()));
+			parts.add("description", StringUtils.utf8ToIso88591(form.getDescription()));
+			parts.add("artifactId", form.getArtifactId());
+			parts.add("artifactName", StringUtils.utf8ToIso88591(form.getArtifactName()));
+			parts.add("version", form.getVersion());
+			parts.add("processType", form.getProcessType().name());
+			parts.add("appDirectory", form.getAppDirectory());
+			parts.add("workDirectory", form.getWorkDirectory());
+			parts.add("pidFile", form.getPidFile());
+			parts.add("startCommandLine", form.getStartCommandLine());
+			parts.add("stopCommandLine", form.getStopCommandLine());
+
+			log.debug("parts = {}", parts);
+
+			ResponseEntity<Void> responseEntity = restTemplate.postForEntity(baseUrl + "/api/app/{id}", parts, Void.class, form);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
+
 	public void deregister(Agent agent, String appId) {
-		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		restTemplate.delete(baseUrl + "/api/app/" + appId);
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			restTemplate.delete(baseUrl + "/api/app/" + appId);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
 	}
 
 	public void start(Agent agent, String appId) {
-		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/start", Void.class);
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/start", Void.class);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
 	}
 
 	public void stop(Agent agent, String appId) {
-		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/stop", Void.class);
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/stop", Void.class);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
 	}
 
+	protected String getBaseUrl(Agent agent) {
+		return agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+	}
 
 }

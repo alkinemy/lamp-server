@@ -9,9 +9,9 @@ import lamp.server.aladin.core.dto.AgentDto;
 import lamp.server.aladin.core.dto.AppDto;
 import lamp.server.aladin.core.dto.AppRegisterForm;
 import lamp.server.aladin.core.dto.AppTemplateDto;
+import lamp.server.aladin.core.exception.MessageException;
 import lamp.server.aladin.core.service.AgentService;
 import lamp.server.aladin.core.service.AppFacadeService;
-import lamp.server.aladin.core.service.AppService;
 import lamp.server.aladin.core.service.AppTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app", method = RequestMethod.GET)
 	public String list(@PathVariable("agentId") String agentId, Model model) {
-		List<AppDto> appList = appFacadeService.getAppList(agentId);
+		List<AppDto> appList = appFacadeService.getAppDtoList(agentId);
 		model.addAttribute("appList", appList);
 		return "agent/app/list";
 	}
@@ -67,33 +67,40 @@ public class AgentAppController {
 		if (bindingResult.hasErrors()) {
 			return createForm(agentId, editForm, model);
 		}
-		appFacadeService.registerApp(agentId, editForm);
 
-		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
+		try {
+			appFacadeService.registerApp(agentId, editForm);
 
-		return "redirect:/agent/{agentId}/app";
+			redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
+
+			return "redirect:/agent/{agentId}/app";
+		} catch (MessageException e) {
+			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
+			return createForm(agentId, editForm, model);
+		}
+
 	}
 
-	@RequestMapping(path = "/app/{artifactId}/start", method = RequestMethod.GET)
+	@RequestMapping(path = "/app/{appId}/start", method = RequestMethod.GET)
 	public String start(@PathVariable("agentId") String agentId,
-			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
-		appFacadeService.startApp(agentId, artifactId);
+			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
+		appFacadeService.startApp(agentId, appId);
 
 		return "redirect:/agent/{agentId}/app";
 	}
 
-	@RequestMapping(path = "/app/{artifactId}/stop", method = RequestMethod.GET)
+	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.GET)
 	public String stop(@PathVariable("agentId") String agentId,
-			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
-		appFacadeService.stopApp(agentId, artifactId);
+			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
+		appFacadeService.stopApp(agentId, appId);
 
 		return "redirect:/agent/{agentId}/app";
 	}
 
-	@RequestMapping(path = "/app/{artifactId}/delete", method = RequestMethod.GET)
+	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("agentId") String agentId,
-			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
-		appFacadeService.deregisterApp(agentId, artifactId);
+			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
+		appFacadeService.deregisterApp(agentId, appId);
 
 		return "redirect:/agent/{agentId}/app";
 	}

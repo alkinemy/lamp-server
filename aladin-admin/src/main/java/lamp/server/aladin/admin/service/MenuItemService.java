@@ -41,6 +41,7 @@ public class MenuItemService {
 			}
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
+				subMenuItems.add(MenuItem.of(MANAGED_APP,"Managed App", "/app", "icon-bulb"));
 				subMenuItems.add(MenuItem.of(APP_REPO, "App Repository", "/app/repository", "icon-bulb"));
 				subMenuItems.add(MenuItem.of(APP_TEMPLATE,"App Template", "/app/template", "icon-bulb"));
 				subMenuItems.add(MenuItem.of(LOCAL_APP_FILE,"Local App File", "/app/file/LOCAL", "icon-bulb"));

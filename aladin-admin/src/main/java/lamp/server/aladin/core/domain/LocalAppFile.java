@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "app_local_file")
+@Table(name = "lamp_app_local_file")
 public class LocalAppFile extends AbstractAuditingEntity {
 
 	@Id

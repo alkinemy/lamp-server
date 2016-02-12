@@ -1,9 +1,9 @@
 USE `lamp`;
 
-DROP TABLE IF EXISTS `app_local_file`;
+DROP TABLE IF EXISTS `lamp_app_local_file`;
 
 
-CREATE TABLE `app_local_file` (
+CREATE TABLE `lamp_app_local_file` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,

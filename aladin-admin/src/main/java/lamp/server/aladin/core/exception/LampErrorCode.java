@@ -10,6 +10,7 @@ public enum LampErrorCode implements ErrorCode {
 
 	,
 	APP_NOT_FOUND("애플리케이션이 존재하지 않습니다."),
+	MANAGED_APP_NOT_FOUND("애플리케이션이 존재하지 않습니다."),
 	INVALID_MOUNT_POINT_NAME("잘못된 마운트 포인트 이름입니다."),
 	INVALID_MOUNT_POINT_PARENT("잘못된 마운트 포인트 부모입니다."),
 	FILE_DOWNLOAD_FAILED("파일을 다운로드 하는 중 에러가 발생하였습니다."),
@@ -36,6 +37,7 @@ public enum LampErrorCode implements ErrorCode {
 	, SECRET_KEY_GENERATION_FAILED("비밀키 생성을 실패하였습니다.")
 	, APP_DEPLOY_FAILED("애클리케이션을 디플로이 하는 중 문제가 발생하였습니다.")
 	, AGENT_NOT_FOUND("에이전트가 존재하지 않습니다.")
+	, AGENT_NOT_FOUND_BY_TARGET_SERVER("에이전트가 존재하지 않습니다.")
 	, APP_TEMPLATE_NOT_FOUND("앱 템플릿이 존재하지 않습니다.")
 	, APP_RESOURCE_NOT_FOUND("앱 리소스를 찾을 수 없습니다.")
 	, UNSUPPORTED_APP_TEMPLATE_TYPE("지원하지 않는 앱 템플릿 타입입니다."), AGENT_INSTALL_FAILED("에이전트 설치를 실패하였습니다.")

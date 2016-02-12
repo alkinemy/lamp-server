@@ -13,7 +13,7 @@ CREATE TABLE `lamp_user` (
   `last_name` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `lang_key` varchar(5) DEFAULT NULL,
-  `activated` bit(1) NOT NULL,
+  `activated` tinyint(1) NOT NULL,
   `activation_key` varchar(20) DEFAULT NULL,
   `reset_date` datetime,
   `reset_key` varchar(20) DEFAULT NULL,

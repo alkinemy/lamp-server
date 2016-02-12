@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "app_template")
+@Table(name = "lamp_app_template")
 public class AppTemplate extends AbstractAuditingEntity {
 
 	@Id

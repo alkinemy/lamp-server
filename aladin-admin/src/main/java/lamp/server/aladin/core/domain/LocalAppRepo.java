@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @DiscriminatorValue(value = AppResourceType.Values.LOCAL)
-@Table(name = "app_local_repository")
+@Table(name = "lamp_app_local_repository")
 @PrimaryKeyJoinColumn(name = "id")
 public class LocalAppRepo extends AppRepo {
 

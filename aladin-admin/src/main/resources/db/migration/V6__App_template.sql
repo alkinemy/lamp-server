@@ -1,8 +1,8 @@
 USE `lamp`;
 
-DROP TABLE IF EXISTS `app_template`;
+DROP TABLE IF EXISTS `lamp_app_template`;
 
-CREATE TABLE `app_template` (
+CREATE TABLE `lamp_app_template` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `resource_type` varchar(200) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -39,5 +39,5 @@ CREATE TABLE `app_template` (
   `last_modified_by` varchar(100) DEFAULT NULL,
   `last_modified_date` datetime,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `app_repository_uk_01` (`name`)
+  UNIQUE KEY `lamp_app_template_uk_01` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

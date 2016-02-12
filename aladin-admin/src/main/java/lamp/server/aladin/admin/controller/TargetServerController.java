@@ -6,6 +6,7 @@ import lamp.server.aladin.admin.MenuConstants;
 import lamp.server.aladin.admin.config.AgentProperties;
 import lamp.server.aladin.admin.support.FlashMessage;
 import lamp.server.aladin.admin.support.annotation.MenuMapping;
+import lamp.server.aladin.core.domain.SshAuthType;
 import lamp.server.aladin.core.dto.TargetServerCreateForm;
 import lamp.server.aladin.core.dto.TargetServerDto;
 import lamp.server.aladin.core.dto.TargetServerUpdateForm;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.EnumSet;
 
 @MenuMapping(MenuConstants.TARGET_SERVER)
 @Controller
@@ -55,6 +57,9 @@ public class TargetServerController {
 		if (StringUtils.isBlank(editForm.getAgentStartCommandLine())) {
 			editForm.setAgentStartCommandLine(agentProperties.getStartCommandLine());
 		}
+
+		EnumSet<SshAuthType> sshAuthTypes = EnumSet.allOf(SshAuthType.class);
+		model.addAttribute("sshAuthTypes", sshAuthTypes);
 		return "target-server/edit";
 	}
 
@@ -82,6 +87,8 @@ public class TargetServerController {
 
 	protected String updateForm(TargetServerUpdateForm editForm, Model model) {
 		model.addAttribute("action", "update");
+
+		model.addAttribute("sshAuthTypes", SshAuthType.values());
 		return "target-server/edit";
 	}
 

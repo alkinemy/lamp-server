@@ -32,13 +32,26 @@ public class AgentService {
 	private TargetServerService targetServerService;
 
 
-	public Optional<Agent> getAgent(String id) {
+	public Agent getAgent(String id) {
+		Optional<Agent> agentOptional = getAgentOptional(id);
+		return agentOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, id));
+	}
+
+	public Optional<Agent> getAgentOptional(String id) {
 		return Optional.ofNullable(agentRepository.findOne(id));
 	}
 
+	public Agent getAgentByTargetServerId(Long id) {
+		Optional<Agent> agentOptional = getAgentByTargetServerIdOptional(id);
+		return agentOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND_BY_TARGET_SERVER, id));
+	}
+
+	public Optional<Agent> getAgentByTargetServerIdOptional(Long id) {
+		return Optional.ofNullable(agentRepository.findOneByTargetServerId(id));
+	}
 
 	public AgentDto getAgentDto(String id) {
-		Optional<Agent> agentFromDb = getAgent(id);
+		Optional<Agent> agentFromDb = getAgentOptional(id);
 		if (agentFromDb.isPresent()) {
 			return smartAssembler.assemble(agentFromDb.get(), AgentDto.class);
 		} else {
@@ -58,7 +71,7 @@ public class AgentService {
 	@Transactional
 	public Agent register(AgentRegisterForm form) {
 		String id = form.getId();
-		Optional<Agent> agentFromDb = getAgent(id);
+		Optional<Agent> agentFromDb = getAgentOptional(id);
 
 		boolean duplicated = agentFromDb
 				.filter(a -> !StringUtils.equals(a.getSecretKey(), form.getSecretKey()))
@@ -113,7 +126,7 @@ public class AgentService {
 
 	@Transactional
 	public void deregister(String id) {
-		Optional<Agent> agentFromDb = getAgent(id);
+		Optional<Agent> agentFromDb = getAgentOptional(id);
 		agentFromDb.ifPresent(this::delete);
 	}
 
@@ -122,7 +135,5 @@ public class AgentService {
 		agentRepository.delete(agent);
 	}
 
-	public Agent getAgentByTargetServerId(Long id) {
-		return agentRepository.findOneByTargetServerId(id);
-	}
+
 }

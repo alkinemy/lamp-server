@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @DiscriminatorValue(value = AppResourceType.Values.URL)
-@Table(name = "app_url_repository")
+@Table(name = "lamp_app_url_repository")
 @PrimaryKeyJoinColumn(name = "id")
 public class UrlAppRepo extends AppRepo {
 

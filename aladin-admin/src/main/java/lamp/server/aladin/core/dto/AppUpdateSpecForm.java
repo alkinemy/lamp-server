@@ -7,8 +7,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AgentStartForm {
+public class AppUpdateSpecForm {
 
-	private String password;
+	private String id;
+	private String name;
+	private String description;
+
+	private Boolean monitor;
 
 }

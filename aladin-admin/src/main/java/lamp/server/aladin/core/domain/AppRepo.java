@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "app_repository")
+@Table(name = "lamp_app_repository")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "repository_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class AppRepo extends AbstractAuditingEntity {
