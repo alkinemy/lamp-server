@@ -1,6 +1,7 @@
 package lamp.server.aladin.core.service;
 
 import lamp.server.aladin.core.domain.Agent;
+import lamp.server.aladin.core.domain.AgentMetrics;
 import lamp.server.aladin.core.support.agent.AgentClient;
 import lamp.server.aladin.utils.NameUtils;
 import lamp.server.aladin.utils.StringUtils;
@@ -55,9 +56,15 @@ public class AgentMetricCollectService {
 
 			log.debug("metrics = {}", metricsWithName);
 			if (metricsExportServices != null) {
+				long timestamp = System.currentTimeMillis();
 				for (MetricsExportService metricsExportService : metricsExportServices) {
 					try {
-						metricsExportService.exportMetrics(agent, metricsWithName);
+						Map<String ,String> tags = new LinkedHashMap<>();
+						tags.put("host", agent.getHostname());
+						tags.put("agent", agent.getId());
+
+						AgentMetrics agentMetrics = AgentMetrics.of(timestamp, agent, metrics, tags);
+						metricsExportService.exportMetrics(agentMetrics);
 					} catch(Throwable e) {
 						log.warn("Export Metrics failed", e);
 					}

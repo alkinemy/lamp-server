@@ -2,7 +2,9 @@ package lamp.server.watch.core.service;
 
 import lamp.server.aladin.utils.StringUtils;
 import lamp.server.watch.core.domain.WatchedApp;
+import lamp.server.watch.core.domain.WatchedAppMetrics;
 import lamp.server.watch.core.service.metrics.MetricsAssembler;
+import lamp.server.watch.core.service.metrics.SpringBootMetricsAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -20,6 +22,8 @@ public class AppMetricCollectService {
 
 	private RestTemplate restTemplate = new RestTemplate();
 
+	private SpringBootMetricsAssembler springBootMetricsAssembler = new SpringBootMetricsAssembler();
+
 	@Autowired(required = false)
 	private List<AppMetricsExportService> appMetricsExportServices;
 
@@ -31,14 +35,14 @@ public class AppMetricCollectService {
 		if (StringUtils.isNotBlank(url)) {
 			Map<String, Object> metrics = getRestTemplate(watchedApp).getForObject(url, LinkedHashMap.class);
 
-			Map<String, Object> assembledMetrics = assembleMetrics(watchedApp, metrics);
-			log.debug("assembledMetrics = {}", assembledMetrics);
-			Map<String, String> tags = new LinkedHashMap<>();
+			long timestamp = System.currentTimeMillis();
+			WatchedAppMetrics watchedAppMetrics = assembleMetrics(timestamp, watchedApp, metrics);
+			log.debug("watchedAppMetrics = {}", watchedAppMetrics);
 
 			if (appMetricsExportServices != null) {
 				for (AppMetricsExportService appMetricsExportService : appMetricsExportServices) {
 					try {
-						appMetricsExportService.exportMetrics(watchedApp, assembledMetrics, tags);
+						appMetricsExportService.exportMetrics(watchedAppMetrics);
 					} catch(Throwable e) {
 						log.warn("Export Metrics failed", e);
 					}
@@ -51,9 +55,13 @@ public class AppMetricCollectService {
 		return restTemplate;
 	}
 
-	protected Map<String, Object> assembleMetrics(WatchedApp watchedApp, Map<String, Object> metrics) {
-		MetricsAssembler metricsAssembler = null;
-		return metricsAssembler.assemble(watchedApp, metrics);
+	protected WatchedAppMetrics assembleMetrics(long timestamp, WatchedApp watchedApp, Map<String, Object> metrics) {
+		MetricsAssembler metricsAssembler = getMetricsAssembler(watchedApp.getMetricsType());
+		return metricsAssembler.assemble(timestamp, watchedApp, metrics);
+	}
+
+	protected MetricsAssembler getMetricsAssembler(String metricsType) {
+		return springBootMetricsAssembler;
 	}
 
 }

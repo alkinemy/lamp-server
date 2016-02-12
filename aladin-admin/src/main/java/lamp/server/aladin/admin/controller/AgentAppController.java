@@ -10,6 +10,7 @@ import lamp.server.aladin.core.dto.AppDto;
 import lamp.server.aladin.core.dto.AppRegisterForm;
 import lamp.server.aladin.core.dto.AppTemplateDto;
 import lamp.server.aladin.core.service.AgentService;
+import lamp.server.aladin.core.service.AppFacadeService;
 import lamp.server.aladin.core.service.AppService;
 import lamp.server.aladin.core.service.AppTemplateService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,14 +37,14 @@ public class AgentAppController {
 	private AgentService agentService;
 
 	@Autowired
-	private AppService appService;
+	private AppFacadeService appFacadeService;
 
 	@Autowired
 	private AppTemplateService appTemplateService;
 
 	@RequestMapping(path = "/app", method = RequestMethod.GET)
 	public String list(@PathVariable("agentId") String agentId, Model model) {
-		List<AppDto> appList = appService.getAppList(agentId);
+		List<AppDto> appList = appFacadeService.getAppList(agentId);
 		model.addAttribute("appList", appList);
 		return "agent/app/list";
 	}
@@ -66,7 +67,7 @@ public class AgentAppController {
 		if (bindingResult.hasErrors()) {
 			return createForm(agentId, editForm, model);
 		}
-		appService.registerApp(agentId, editForm);
+		appFacadeService.registerApp(agentId, editForm);
 
 		redirectAttributes.addFlashAttribute(LampConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
@@ -76,7 +77,7 @@ public class AgentAppController {
 	@RequestMapping(path = "/app/{artifactId}/start", method = RequestMethod.GET)
 	public String start(@PathVariable("agentId") String agentId,
 			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
-		appService.startApp(agentId, artifactId);
+		appFacadeService.startApp(agentId, artifactId);
 
 		return "redirect:/agent/{agentId}/app";
 	}
@@ -84,7 +85,7 @@ public class AgentAppController {
 	@RequestMapping(path = "/app/{artifactId}/stop", method = RequestMethod.GET)
 	public String stop(@PathVariable("agentId") String agentId,
 			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
-		appService.stopApp(agentId, artifactId);
+		appFacadeService.stopApp(agentId, artifactId);
 
 		return "redirect:/agent/{agentId}/app";
 	}
@@ -92,7 +93,7 @@ public class AgentAppController {
 	@RequestMapping(path = "/app/{artifactId}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("agentId") String agentId,
 			@PathVariable("artifactId") String artifactId, RedirectAttributes redirectAttributes) {
-		appService.deleteApp(agentId, artifactId);
+		appFacadeService.deregisterApp(agentId, artifactId);
 
 		return "redirect:/agent/{agentId}/app";
 	}

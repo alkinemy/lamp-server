@@ -34,7 +34,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-security")
 
-    compile("org.kairosdb:client:2.1.0")
+    compile("org.kairosdb:client:${kairosdbVersion}")
+    compile("org.apache.kafka:kafka-clients:${kafkaVersion}")
+
 
 }
 

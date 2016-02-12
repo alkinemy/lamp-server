@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "app_local_file")
-@PrimaryKeyJoinColumn(name = "id")
 public class LocalAppFile extends AbstractAuditingEntity {
 
 	@Id

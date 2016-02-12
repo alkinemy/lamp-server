@@ -1,11 +1,12 @@
 package lamp.server.watch.core.service.metrics;
 
 import lamp.server.watch.core.domain.WatchedApp;
+import lamp.server.watch.core.domain.WatchedAppMetrics;
 
 import java.util.Map;
 
 public interface MetricsAssembler {
 
-	Map<String,Object> assemble(WatchedApp watchedApp, Map<String, Object> metrics);
+	WatchedAppMetrics assemble(long timestamp, WatchedApp watchedApp, Map<String, Object> metrics);
 
 }

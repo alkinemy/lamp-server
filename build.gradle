@@ -3,6 +3,9 @@ ext {
 
     springBootVersion = "1.3.2.RELEASE"
     igniteVersion = "1.5.0.final"
+
+    kairosdbVersion = "2.1.0"
+    kafkaVersion = "0.9.0.0"
 }
 
 

@@ -1,11 +1,9 @@
 package lamp.server.aladin.core.service;
 
-import lamp.server.aladin.core.domain.Agent;
-
-import java.util.Map;
+import lamp.server.aladin.core.domain.AgentMetrics;
 
 public interface MetricsExportService {
 
-	void exportMetrics(Agent agent, Map<String, Object> metrics);
+	void exportMetrics(AgentMetrics agentMetrics);
 
 }

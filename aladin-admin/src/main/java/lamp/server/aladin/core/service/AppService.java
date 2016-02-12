@@ -33,19 +33,22 @@ public class AppService {
 	@Autowired
 	private AppResourceService appResourceService;
 
+
 	public List<AppDto> getAppList(String agentId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 		return agentClient.getAppList(agent);
 	}
 
-	public void registerApp(String agentId, AppRegisterForm editForm) {
+	public AgentAppRegisterForm registerApp(String agentId, AppRegisterForm editForm) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
-
 		Long templateId = editForm.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplateOptional(templateId).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, templateId));
+		return registerApp(agent, appTemplate, editForm);
+	}
 
+	public AgentAppRegisterForm registerApp(Agent agent, AppTemplate appTemplate, AppRegisterForm editForm) {
 		AgentAppRegisterForm agentAppRegisterForm = new AgentAppRegisterForm();
-		agentAppRegisterForm.setId((editForm.getId()));
+		agentAppRegisterForm.setId(editForm.getId());
 		agentAppRegisterForm.setName(editForm.getName());
 		agentAppRegisterForm.setGroupId(appTemplate.getGroupId());
 		agentAppRegisterForm.setArtifactId(appTemplate.getArtifactId());
@@ -72,24 +75,26 @@ public class AppService {
 		agentAppRegisterForm.setCommands(appTemplate.getCommands());
 
 		agentClient.register(agent, agentAppRegisterForm);
+
+		return agentAppRegisterForm;
 	}
 
-	public void startApp(String agentId, String artifactId) {
+	public void startApp(String agentId, String appId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
-		agentClient.start(agent, artifactId);
+		agentClient.start(agent, appId);
 	}
 
-	public void stopApp(String agentId, String artifactId) {
+	public void stopApp(String agentId, String appId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
-		agentClient.stop(agent, artifactId);
+		agentClient.stop(agent, appId);
 	}
 
-	public void deleteApp(String agentId, String artifactId) {
+	public void deregisterApp(String agentId, String appId) {
 		Agent agent = agentService.getAgent(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
 
-		agentClient.deregister(agent, artifactId);
+		agentClient.deregister(agent, appId);
 	}
 
 

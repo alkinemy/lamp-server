@@ -2,6 +2,7 @@ package lamp.server.watch.core.service.metrics;
 
 import lamp.server.aladin.utils.NameUtils;
 import lamp.server.watch.core.domain.WatchedApp;
+import lamp.server.watch.core.domain.WatchedAppMetrics;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class SpringBootMetricsAssembler implements MetricsAssembler {
 		"heap.committed", "heap.init", "heap.used", "heap",
 		"nonheap.committed", "nonheap.init", "nonheap.used", "nonheap"};
 
-	@Override public Map<String, Object> assemble(WatchedApp watchedApp, Map<String, Object> metrics) {
+	@Override public WatchedAppMetrics assemble(long timestamp, WatchedApp watchedApp, Map<String, Object> metrics) {
 		for (String memoryMetricName : memoryMetricNames) {
 			metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
 		}
@@ -23,7 +24,10 @@ public class SpringBootMetricsAssembler implements MetricsAssembler {
 			String name = NameUtils.name(watchedApp.getId(), entry.getKey());
 			assembledMetrics.put(name, entry.getValue());
 		}
-		return assembledMetrics;
+
+		Map<String, String> tags = new LinkedHashMap<>();
+
+		return WatchedAppMetrics.of(timestamp, watchedApp, assembledMetrics, tags);
 	}
 
 	protected Object newMemoryMetric(Object o) {

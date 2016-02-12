@@ -32,7 +32,6 @@ public class AgentClient {
 		return responseEntity.getBody();
 	}
 
-
 	public void register(Agent agent, AgentAppRegisterForm form) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
@@ -68,19 +67,19 @@ public class AgentClient {
 		}
 	}
 
-	public void deregister(Agent agent, String artifactId) {
+	public void deregister(Agent agent, String appId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		restTemplate.delete(baseUrl + "/api/app/" + artifactId);
+		restTemplate.delete(baseUrl + "/api/app/" + appId);
 	}
 
-	public void start(Agent agent, String artifactId) {
+	public void start(Agent agent, String appId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + artifactId + "/start", Void.class);
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/start", Void.class);
 	}
 
-	public void stop(Agent agent, String artifactId) {
+	public void stop(Agent agent, String appId) {
 		String baseUrl = agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
-		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + artifactId + "/stop", Void.class);
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/" + appId + "/stop", Void.class);
 	}
 
 
