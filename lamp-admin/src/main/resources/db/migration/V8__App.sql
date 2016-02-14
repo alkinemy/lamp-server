@@ -13,6 +13,7 @@ CREATE TABLE `lamp_managed_app` (
   `artifact_id` varchar(200) DEFAULT NULL,
   `artifact_name` varchar(200) DEFAULT NULL,
   `version` varchar(200) DEFAULT NULL,
+  `app_management_listener` varchar(1000) DEFAULT NULL,
   `updatable` tinyint(1) DEFAULT NULL,
   `register_date` datetime DEFAULT NULL,
   `install_date` datetime DEFAULT NULL,

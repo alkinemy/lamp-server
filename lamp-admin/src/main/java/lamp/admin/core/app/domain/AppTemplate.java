@@ -56,9 +56,6 @@ public class AppTemplate extends AbstractAuditingEntity {
 
 	private String commands;
 
-//	private String beforeAppStop;
-//	private String afterAppStart;
-
 	@Column(columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;
 

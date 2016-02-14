@@ -9,5 +9,5 @@ import lombok.ToString;
 @ToString
 public class AppStopForm {
 
-    private String beforeAppStop;
+    private String appManagementListener;
 }

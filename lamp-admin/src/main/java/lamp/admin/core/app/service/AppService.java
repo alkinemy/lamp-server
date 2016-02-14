@@ -116,6 +116,9 @@ public class AppService {
 	}
 
 	public void deregisterApp(Agent agent, String appId) {
+		// FIXME 상태 체크해서 작동중이면 삭제 못하도록 변경할것
+
+
 		agentClient.deregister(agent, appId);
 	}
 

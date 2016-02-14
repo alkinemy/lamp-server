@@ -3,10 +3,10 @@ package lamp.admin.web.controller;
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.domain.AgentDto;
 import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.core.app.domain.AppDto;
-import lamp.admin.core.app.domain.AppRegisterForm;
-import lamp.admin.core.app.domain.AppTemplateDto;
+import lamp.admin.core.app.AppManagementListener;
+import lamp.admin.core.app.domain.*;
 import lamp.admin.core.app.service.AppFacadeService;
+import lamp.admin.core.app.service.AppManagementListenerService;
 import lamp.admin.core.app.service.AppTemplateService;
 import lamp.admin.core.base.exception.MessageException;
 import lamp.admin.web.AdminErrorCode;
@@ -41,6 +41,10 @@ public class AgentAppController {
 
 	@Autowired
 	private AppTemplateService appTemplateService;
+	
+	@Autowired
+	private AppManagementListenerService appManagementListenerService;
+
 
 	@RequestMapping(path = "/app", method = RequestMethod.GET)
 	public String list(@PathVariable("agentId") String agentId, Model model) {
@@ -62,8 +66,9 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.POST)
 	public String create(@PathVariable("agentId") String agentId, @Valid @ModelAttribute("editForm") AppRegisterForm editForm,
-			BindingResult bindingResult, Model model,
-			RedirectAttributes redirectAttributes) {
+						 Model model,
+						 BindingResult bindingResult,
+						 RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
 			return createForm(agentId, editForm, model);
 		}
@@ -81,28 +86,132 @@ public class AgentAppController {
 
 	}
 
+
+
+	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
+	public String delete(@PathVariable("agentId") String agentId,
+						@PathVariable("appId") String appId,
+						@ModelAttribute("editForm") AppDeregisterForm editForm,
+						Model model) {
+
+		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
+		model.addAttribute("managedApp", managedAppDto);
+
+		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
+
+		return deleteForm(agentId, appId, editForm, model);
+	}
+
+	protected String deleteForm(String agentId, String appId, AppDeregisterForm editForm, Model model) {
+		if (!model.containsAttribute("managedApp")) {
+			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
+			model.addAttribute("managedApp", managedAppDto);
+		}
+
+		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
+		model.addAttribute("appManagementListeners", appManagementListeners);
+
+		return "agent/app/delete";
+	}
+
+	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.POST)
+	public String delete(@PathVariable("agentId") String agentId,
+						@PathVariable("appId") String appId,
+						@ModelAttribute("editForm") AppDeregisterForm editForm,
+						Model model,
+						BindingResult bindingResult,
+						RedirectAttributes redirectAttributes) {
+		try {
+			appFacadeService.deregisterApp(agentId, appId, editForm);
+			return "redirect:/agent/{agentId}/app";
+		} catch (MessageException e) {
+			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
+			return deleteForm(agentId, appId, editForm, model);
+		}
+	}
+
+
 	@RequestMapping(path = "/app/{appId}/start", method = RequestMethod.GET)
 	public String start(@PathVariable("agentId") String agentId,
-			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
-		appFacadeService.startApp(agentId, appId);
+						@PathVariable("appId") String appId,
+						@ModelAttribute("editForm") AppStartForm editForm,
+						Model model) {
 
-		return "redirect:/agent/{agentId}/app";
+		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
+		model.addAttribute("managedApp", managedAppDto);
+
+		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
+
+		return startForm(agentId, appId, editForm, model);
+	}
+
+	protected String startForm(String agentId, String appId, AppStartForm editForm, Model model) {
+		if (!model.containsAttribute("managedApp")) {
+			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
+			model.addAttribute("managedApp", managedAppDto);
+		}
+
+		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
+		model.addAttribute("appManagementListeners", appManagementListeners);
+		
+		return "agent/app/start";
+	}
+
+	@RequestMapping(path = "/app/{appId}/start", method = RequestMethod.POST)
+	public String start(@PathVariable("agentId") String agentId,
+						@PathVariable("appId") String appId,
+						@ModelAttribute("editForm") AppStartForm editForm,
+						Model model,
+						BindingResult bindingResult,
+						RedirectAttributes redirectAttributes) {
+		try {
+			appFacadeService.startApp(agentId, appId, editForm);
+			return "redirect:/agent/{agentId}/app";
+		} catch (MessageException e) {
+			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
+			return startForm(agentId, appId, editForm, model);
+		}
 	}
 
 	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.GET)
 	public String stop(@PathVariable("agentId") String agentId,
-			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
-		appFacadeService.stopApp(agentId, appId);
+						@PathVariable("appId") String appId,
+						@ModelAttribute("editForm") AppStopForm editForm,
+						Model model) {
 
-		return "redirect:/agent/{agentId}/app";
+		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
+		model.addAttribute("managedApp", managedAppDto);
+
+		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
+
+		return stopForm(agentId, appId, editForm, model);
 	}
 
-	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
-	public String delete(@PathVariable("agentId") String agentId,
-			@PathVariable("appId") String appId, RedirectAttributes redirectAttributes) {
-		appFacadeService.deregisterApp(agentId, appId);
+	protected String stopForm(String agentId, String appId, AppStopForm editForm, Model model) {
+		if (!model.containsAttribute("managedApp")) {
+			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
+			model.addAttribute("managedApp", managedAppDto);
+		}
+		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
+		model.addAttribute("appManagementListeners", appManagementListeners);
 
-		return "redirect:/agent/{agentId}/app";
+		return "agent/app/stop";
+	}
+
+	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.POST)
+	public String stop(@PathVariable("agentId") String agentId,
+						@PathVariable("appId") String appId,
+						@ModelAttribute("editForm") AppStopForm editForm,
+						Model model,
+						BindingResult bindingResult,
+						RedirectAttributes redirectAttributes) {
+		try {
+			appFacadeService.stopApp(agentId, appId, editForm);
+			return "redirect:/agent/{agentId}/app";
+		} catch (MessageException e) {
+			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
+			return stopForm(agentId, appId, editForm, model);
+		}
 	}
 
 	@ModelAttribute("agent")

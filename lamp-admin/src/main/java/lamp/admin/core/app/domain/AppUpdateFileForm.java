@@ -11,4 +11,6 @@ public class AppUpdateFileForm {
 
 	private String version;
 
+	private String appManagementListener;
+
 }

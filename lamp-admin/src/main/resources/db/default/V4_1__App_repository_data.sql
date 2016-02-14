@@ -6,5 +6,5 @@ VALUES
 
 INSERT INTO `lamp_app_local_repository` (`id`, `repository_path`, `file_limit_size`, `file_expiration_date`)
 VALUES
-	(1, '/lamp/loca-repository', NULL, NULL);
+	(1, '/lamp/local-repository', NULL, NULL);
 

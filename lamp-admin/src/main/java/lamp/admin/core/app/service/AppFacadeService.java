@@ -45,6 +45,10 @@ public class AppFacadeService {
 		return smartAssembler.assemble(managedApp, ManagedAppDto.class);
 	}
 
+	public ManagedApp getManagedApp(String id) {
+		return managedAppService.getManagedApp(id);
+	}
+
 	@Transactional
 	public void registerApp(String agentId, AppRegisterForm form) {
 		Agent agent = getAgent(agentId);
@@ -99,7 +103,7 @@ public class AppFacadeService {
 
 
 	@Transactional
-	public void deregisterApp(String agentId, String appId) {
+	public void deregisterApp(String agentId, String appId, AppDeregisterForm form) {
 		Agent agent = getAgent(agentId);
 		appService.deregisterApp(agent, appId);
 
@@ -107,29 +111,29 @@ public class AppFacadeService {
 	}
 
 	@Transactional
-	public void deregisterApp(String appId) {
+	public void deregisterApp(String appId, AppDeregisterForm form) {
 		Agent agent = getAgentByAppId(appId);
 		appService.deregisterApp(agent, appId);
 
 		managedAppService.delete(appId);
 	}
 
-	public void startApp(String agentId, String appId) {
+	public void startApp(String agentId, String appId, AppStartForm form) {
 		Agent agent = getAgent(agentId);
 		appService.startApp(agent, appId);
 	}
 
-	public void startApp(String appId) {
+	public void startApp(String appId, AppStartForm form) {
 		Agent agent = getAgentByAppId(appId);
 		appService.startApp(agent, appId);
 	}
 
-	public void stopApp(String agentId, String appId) {
+	public void stopApp(String agentId, String appId, AppStopForm form) {
 		Agent agent = getAgent(agentId);
 		appService.stopApp(agent, appId);
 	}
 
-	public void stopApp(String appId) {
+	public void stopApp(String appId, AppStopForm form) {
 		Agent agent = getAgentByAppId(appId);
 		appService.stopApp(agent, appId);
 	}

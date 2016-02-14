@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AppStartForm {
+public class AppDeregisterForm {
 
     private String appManagementListener;
 }

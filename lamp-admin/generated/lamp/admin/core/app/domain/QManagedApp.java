@@ -24,6 +24,8 @@ public class QManagedApp extends EntityPathBase<ManagedApp> {
 
     public final lamp.admin.core.base.domain.QAbstractAuditingEntity _super = new lamp.admin.core.base.domain.QAbstractAuditingEntity(this);
 
+    public final StringPath appManagementListener = createString("appManagementListener");
+
     public final QAppTemplate appTemplate;
 
     public final StringPath artifactId = createString("artifactId");

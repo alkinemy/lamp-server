@@ -32,6 +32,8 @@ public class ManagedApp extends AbstractAuditingEntity {
 	private String artifactName;
 	private String version;
 
+	private String appManagementListener;
+
 	private LocalDateTime registerDate;
 	private LocalDateTime installDate;
 

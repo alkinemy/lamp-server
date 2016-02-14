@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@Table(name = "llamp_watched_app_event")
+@Table(name = "lamp_watched_app_event")
 public class AppEvent {
 
 	@Id
