@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.Oneway;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -82,8 +81,8 @@ public class TargetServerService {
 	@Transactional
 	public void deleteTargetServer(Long id) {
 		TargetServer targetServer = getTargetServer(id);
-		Agent agent = agentService.getAgentByTargetServerId(targetServer.getId());
-		Exceptions.throwsException(agent != null, LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);
+		Optional<Agent> agent = agentService.getAgentByTargetServerIdOptional(targetServer.getId());
+		Exceptions.throwsException(agent.isPresent(), LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);
 		targetServerRepository.delete(targetServer);
 	}
 }
