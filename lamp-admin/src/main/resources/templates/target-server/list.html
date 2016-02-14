@@ -40,7 +40,12 @@
 									<td th:text="${targetServer.address}"> Joke </td>
 									<td th:text="${targetServer.agentInstalled}"> Joke </td>
 									<td th:text="${targetServer.agentMonitor}"> Joke </td>
-									<td><span th:text="${targetServer?.agentStatus}" class="label label-sm label-warning"> Suspended </span></td>
+									<td><span th:text="${targetServer?.agentStatus}"
+                                              th:class="${targetServer?.agentStatus}? 'label label-sm'
+                                              + (${targetServer.agentStatus == 'UNKNOWN'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'UP'}? ' label-success' : '')
+                                              + (${targetServer.agentStatus == 'OUT_OF_SERVICE'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'DOWN'}? ' label-warning' : '')">Suspended </span></td>
 									<td>
                                         <a th:href="@{/target-server/update(id=${targetServer.id})}" class="btn yellow btn-outline">Modify</a>
 										<a th:href="@{/target-server/delete(id=${targetServer.id})}" class="btn red btn-outline">Delete</a>
