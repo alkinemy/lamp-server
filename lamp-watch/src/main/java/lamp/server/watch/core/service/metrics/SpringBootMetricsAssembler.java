@@ -1,6 +1,6 @@
 package lamp.server.watch.core.service.metrics;
 
-import lamp.server.aladin.utils.NameUtils;
+import lamp.admin.utils.NameUtils;
 import lamp.server.watch.core.domain.WatchedApp;
 import lamp.server.watch.core.domain.WatchedAppMetrics;
 

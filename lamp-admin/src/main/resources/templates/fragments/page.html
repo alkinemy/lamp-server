@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="page-bar">
+	<ul class="page-breadcrumb" th:fragment="breadcrumb">
+		<li>
+			<a href="index.html" th:href="@{/}">Home</a>
+			<i class="fa fa-circle"></i>
+		</li>
+		<li th:each="menuItem : ${SELECTED_MENU_ITEM.breadcrumb}">
+			<a href="#" th:if="${!#strings.isEmpty(menuItem.href)}" th:href="@{${menuItem.href}}" th:text="${menuItem.title}">Title</a>
+			<span th:if="${#strings.isEmpty(menuItem.href)}" th:text="${menuItem.title}">Title</span>
+			<i class="fa fa-circle" th:if="${menuItem != SELECTED_MENU_ITEM}"></i>
+		</li>
+	</ul>
+</div>
+
+<div class="page-flashMessage" th:fragment="flashMessage">
+	<div class="alert alert-success alert-dismissable" th:if="${flashMessage != null}" th:class="'alert ' + ${flashMessage.level.cssClass} + ' alert-dismissable'">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+		<span th:text="${flashMessage.message}"></span>
+	</div>
+</div>
+
+
+
+</body>
+</html>

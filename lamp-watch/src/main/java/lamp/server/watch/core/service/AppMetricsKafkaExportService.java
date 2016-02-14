@@ -31,7 +31,7 @@ public class AppMetricsKafkaExportService implements AppMetricsExportService {
 
 
 	@Override public void exportMetrics(WatchedAppMetrics watchedAppMetrics) {
-		String key = new StringBuilder().append(watchedAppMetrics.getApp().getId()).append('-').append(watchedAppMetrics.getTimestamp()).toString();
+		String key = new StringBuilder().append(watchedAppMetrics.getId()).append('-').append(watchedAppMetrics.getTimestamp()).toString();
 
 		ProducerRecord<String, WatchedApp> data = new ProducerRecord(topic, key, watchedAppMetrics);
 		producer.send(data);

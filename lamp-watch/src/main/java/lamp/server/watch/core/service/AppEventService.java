@@ -1,7 +1,7 @@
 package lamp.server.watch.core.service;
 
 
-import lamp.server.aladin.utils.assembler.SmartAssembler;
+import lamp.admin.utils.assembler.SmartAssembler;
 import lamp.server.watch.core.domain.AppEvent;
 import lamp.server.watch.core.domain.AppEventForm;
 import lamp.server.watch.core.repository.AppEventRepository;
