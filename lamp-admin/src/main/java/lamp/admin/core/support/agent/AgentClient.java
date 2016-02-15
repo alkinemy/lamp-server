@@ -42,6 +42,18 @@ public class AgentClient {
 		}
 	}
 
+	public AppDto getApp(Agent agent, String appId) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<AppDto> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/{appId}", AppDto.class, appId);
+
+			return responseEntity.getBody();
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
 	public void register(Agent agent, AgentAppRegisterForm form) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
@@ -161,5 +173,6 @@ public class AgentClient {
 	protected String getBaseUrl(Agent agent) {
 		return agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
 	}
+
 
 }

@@ -41,7 +41,7 @@
 									<td>
 										<a th:href="@{/app/repository/{resourceType}/update(id=${repository.id},resourceType=${repository.repositoryType})}">수정</a>
 										<a th:href="@{/app/template/create(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">Template 등록</a>
-										<a th:if="${repository.repositoryType == T(lamp.server.aladin.core.domain.AppResourceType).LOCAL}" th:href="@{/app/repository/{resourceType}/{repositoryId}/file(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">File</a>
+										<a th:if="${repository.repositoryType == T(lamp.admin.core.app.domain.AppResourceType).LOCAL}" th:href="@{/app/repository/{resourceType}/{repositoryId}/file(repositoryId=${repository.id},resourceType=${repository.repositoryType})}">File</a>
 									</td>
 								</tr>
 								</tbody>

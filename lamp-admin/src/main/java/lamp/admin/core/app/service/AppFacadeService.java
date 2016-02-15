@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,6 +36,10 @@ public class AppFacadeService {
 		return appService.getAppList(agentId);
 	}
 
+	public AppDto getAppDto(String agentId, String appId) {
+		return appService.getApp(agentId, appId);
+	}
+
 	public Page<ManagedAppDto> getManagedAppDtoList(Pageable pageable) {
 		Page<ManagedApp> page = managedAppService.getManagedAppList(pageable);
 		return smartAssembler.assemble(pageable, page, ManagedAppDto.class);
@@ -43,6 +48,12 @@ public class AppFacadeService {
 	public ManagedAppDto getManagedAppDto(String id) {
 		ManagedApp managedApp = managedAppService.getManagedApp(id);
 		return smartAssembler.assemble(managedApp, ManagedAppDto.class);
+	}
+
+	public Optional<ManagedAppDto> getManagedAppDtoOptional(String id) {
+		Optional<ManagedApp> managedAppOptional = managedAppService.getManagedAppOptional(id);
+		ManagedAppDto managedAppDto = smartAssembler.assemble(managedAppOptional.orElse(null), ManagedAppDto.class);
+		return Optional.ofNullable(managedAppDto);
 	}
 
 	public ManagedApp getManagedApp(String id) {

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase" >App Start</span>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form" th:action="@{/app/{id}/start(id=${app.id})}" th:object="${editForm}" method="post">
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+								The daily cronjob has failed.
+							</div>
+
+							<div class="form-body">
+								<div class="form-group" th:class="${#fields.hasErrors('appManagementListener')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">AppManagementListener</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{appManagementListener}">
+											<option value="">NONE</option>
+											<option th:each="listener : ${appManagementListeners}"
+													th:value="${listener.id}" th:text="${appRepo.listener}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('appManagementListener')}" th:errors="*{appManagementListener}"> A block of help text. </span>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>

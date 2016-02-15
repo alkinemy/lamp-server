@@ -32,7 +32,7 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.server.aladin.core.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('repositoryId')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('repositoryId')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Repository</label>
 									<div class="col-md-9">
 										<select class="form-control" th:field="*{repositoryId}">
@@ -126,7 +126,7 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.server.aladin.core.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Install filename</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{appFilename}" placeholder="Enter text" />
@@ -145,7 +145,7 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.server.aladin.core.domain.AppResourceType).NONE}">
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}">
 									<label class="col-md-3 control-label">Commands</label>
 									<div class="col-md-9">
 										<textarea class="form-control" name="commands" rows="3"></textarea>

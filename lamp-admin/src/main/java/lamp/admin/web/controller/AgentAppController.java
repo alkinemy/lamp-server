@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @MenuMapping(MenuConstants.AGENT_APP)
@@ -94,19 +95,15 @@ public class AgentAppController {
 						@ModelAttribute("editForm") AppDeregisterForm editForm,
 						Model model) {
 
-		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
-		model.addAttribute("managedApp", managedAppDto);
-
-		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
+		Optional<ManagedAppDto> managedAppDtoOptional = appFacadeService.getManagedAppDtoOptional(appId);
+		managedAppDtoOptional.ifPresent(managedAppDto -> editForm.setAppManagementListener(managedAppDto.getAppManagementListener()));
 
 		return deleteForm(agentId, appId, editForm, model);
 	}
 
 	protected String deleteForm(String agentId, String appId, AppDeregisterForm editForm, Model model) {
-		if (!model.containsAttribute("managedApp")) {
-			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
-			model.addAttribute("managedApp", managedAppDto);
-		}
+		AppDto appDto = appFacadeService.getAppDto(agentId, appId);
+		model.addAttribute("app", appDto);
 
 		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 		model.addAttribute("appManagementListeners", appManagementListeners);
@@ -137,19 +134,15 @@ public class AgentAppController {
 						@ModelAttribute("editForm") AppStartForm editForm,
 						Model model) {
 
-		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
-		model.addAttribute("managedApp", managedAppDto);
-
-		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
+		Optional<ManagedAppDto> managedAppDtoOptional = appFacadeService.getManagedAppDtoOptional(appId);
+		managedAppDtoOptional.ifPresent(managedAppDto -> editForm.setAppManagementListener(managedAppDto.getAppManagementListener()));
 
 		return startForm(agentId, appId, editForm, model);
 	}
 
 	protected String startForm(String agentId, String appId, AppStartForm editForm, Model model) {
-		if (!model.containsAttribute("managedApp")) {
-			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
-			model.addAttribute("managedApp", managedAppDto);
-		}
+		AppDto appDto = appFacadeService.getAppDto(agentId, appId);
+		model.addAttribute("app", appDto);
 
 		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 		model.addAttribute("appManagementListeners", appManagementListeners);
@@ -179,19 +172,15 @@ public class AgentAppController {
 						@ModelAttribute("editForm") AppStopForm editForm,
 						Model model) {
 
-		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
-		model.addAttribute("managedApp", managedAppDto);
-
-		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
+		Optional<ManagedAppDto> managedAppDtoOptional = appFacadeService.getManagedAppDtoOptional(appId);
+		managedAppDtoOptional.ifPresent(managedAppDto -> editForm.setAppManagementListener(managedAppDto.getAppManagementListener()));
 
 		return stopForm(agentId, appId, editForm, model);
 	}
 
 	protected String stopForm(String agentId, String appId, AppStopForm editForm, Model model) {
-		if (!model.containsAttribute("managedApp")) {
-			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(appId);
-			model.addAttribute("managedApp", managedAppDto);
-		}
+		AppDto appDto = appFacadeService.getAppDto(agentId, appId);
+		model.addAttribute("app", appDto);
 		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 		model.addAttribute("appManagementListeners", appManagementListeners);
 

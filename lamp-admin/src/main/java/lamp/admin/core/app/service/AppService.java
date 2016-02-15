@@ -35,12 +35,17 @@ public class AppService {
 
 
 	public List<AppDto> getAppList(String agentId) {
-		Agent agent = agentService.getAgentOptional(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
+		Agent agent = agentService.getAgent(agentId);
 		return agentClient.getAppList(agent);
 	}
 
+	public AppDto getApp(String agentId, String appId) {
+		Agent agent = agentService.getAgent(agentId);
+		return agentClient.getApp(agent, appId);
+	}
+
 	public AgentAppRegisterForm registerApp(String agentId, AppRegisterForm editForm) {
-		Agent agent = agentService.getAgentOptional(agentId).orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND, agentId));
+		Agent agent = agentService.getAgent(agentId);
 		Long templateId = editForm.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplateOptional(templateId).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, templateId));
 		return registerApp(agent, appTemplate, editForm);
@@ -130,5 +135,6 @@ public class AppService {
 	public void stopApp(Agent agent, String appId) {
 		agentClient.stop(agent, appId);
 	}
+
 
 }
