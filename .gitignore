@@ -1,8 +1,6 @@
-/aladin-admin/src/test/java/lamp/server/aladin/core/support/ssh/ExpectTest.java
-/aladin-admin/src/test/java/lamp/server/aladin/core/support/ssh/SshClientTest.java
-/aladin-admin/src/main/resources/static/bower_components
-/aladin-admin/generated
 
+/*/generated
+/logs
 *.pid
 
 # Created by .ignore support plugin (hsz.mobi)

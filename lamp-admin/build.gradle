@@ -19,7 +19,7 @@ idea {
 
 
 jar {
-    baseName = 'lamp-admin-core'
+    baseName = 'lamp-admin'
     version =  '0.0.1-SNAPSHOT'
 
     manifest {

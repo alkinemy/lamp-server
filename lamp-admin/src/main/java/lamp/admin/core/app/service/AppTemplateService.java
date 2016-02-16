@@ -1,12 +1,12 @@
 package lamp.admin.core.app.service;
 
-import lamp.admin.core.app.domain.AppTemplate;
-import lamp.admin.core.app.domain.AppTemplateCreateForm;
-import lamp.admin.core.app.domain.AppTemplateDto;
-import lamp.admin.core.app.domain.AppTemplateUpdateForm;
+import com.google.common.collect.Lists;
+import com.mysema.query.BooleanBuilder;
+import lamp.admin.core.app.domain.*;
 import lamp.admin.core.app.repository.AppTemplateRepository;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
+import lamp.admin.utils.StringUtils;
 import lamp.admin.utils.assembler.SmartAssembler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +71,26 @@ public class AppTemplateService {
 		return form;
 	}
 
+	public Iterable<AppTemplate> getAppTemplateIterableByProcessTypeAndGroupIdAndArtifactId(String processType, String groupId, String artifactId) {
+		BooleanBuilder predicate = new BooleanBuilder();
+		QAppTemplate qAppTemplate = QAppTemplate.appTemplate;
+		if (StringUtils.isNotBlank(processType)) {
+			AppProcessType appProcessType = AppProcessType.valueOf(processType);
+			predicate.and(qAppTemplate.processType.eq(appProcessType));
+		}
+		if (StringUtils.isNotBlank(groupId)) {
+			predicate.and(qAppTemplate.groupId.eq(groupId));
+		}
+		if (StringUtils.isNotBlank(artifactId)) {
+			predicate.and(qAppTemplate.artifactId.eq(artifactId));
+		}
+		return appTemplateRepository.findAll(predicate);
+	}
+
+	public List<AppTemplateDto> getAppTemplateDtoListByProcessTypeAndGroupIdAndArtifactId(String processType, String groupId, String artifactId) {
+		Iterable<AppTemplate> appTemplateIterable = getAppTemplateIterableByProcessTypeAndGroupIdAndArtifactId(processType, groupId, artifactId);
+		List<AppTemplate> appTemplateList = Lists.newArrayList(appTemplateIterable);
+		return smartAssembler.assemble(appTemplateList, AppTemplateDto.class);
+	}
 
 }

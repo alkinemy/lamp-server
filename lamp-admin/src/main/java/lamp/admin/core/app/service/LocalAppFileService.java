@@ -7,6 +7,7 @@ import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
 import lamp.admin.core.base.exception.MessageException;
 import lamp.admin.utils.assembler.SmartAssembler;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class LocalAppFileService {
 
@@ -63,8 +66,8 @@ public class LocalAppFileService {
 		localAppFile.setVersion(localAppFile.getBaseVersion() + "." + System.currentTimeMillis());
 		localAppFile.setDeleted(false);
 
+		Optional<LocalAppFile> localAppFileFromDbOptional = localAppFileRepository.findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(repositoryId, localAppFile.getGroupId(), localAppFile.getArtifactId(), localAppFile.getBaseVersion());
 		if (!localAppFile.isSnapshot()) {
-			Optional<LocalAppFile> localAppFileFromDbOptional = localAppFileRepository.findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(repositoryId, localAppFile.getGroupId(), localAppFile.getArtifactId(), localAppFile.getBaseVersion());
 			Exceptions.throwsException(localAppFileFromDbOptional.isPresent(), LampErrorCode.DUPLICATED_LOCAL_APP_FILE);
 		}
 		
@@ -84,12 +87,23 @@ public class LocalAppFileService {
 			localAppFile.setFilename(originalFilename);
 
 			localAppFile.setFileSize(uploadFile.getSize());
+			localAppFile.setFileDate(LocalDateTime.now());
 			localAppFile.setContentType(uploadFile.getContentType());
-			return localAppFileRepository.save(localAppFile);
+
+			LocalAppFile saved = localAppFileRepository.save(localAppFile);
+			localAppFileFromDbOptional.ifPresent(this::deleteLocalAppFile);
+			return saved;
 		} catch (Exception e) {
 			throw Exceptions.newException(LampErrorCode.LOCAL_APP_FILE_UPLOAD_FAILED, e);
 		}
 	}
 
-
+	@Transactional
+	public void deleteLocalAppFile(LocalAppFile localAppFile) {
+		File file = new File(localAppFile.getPathname());
+		if (!file.delete()) {
+			log.warn("{} file delete failed", file.getAbsolutePath());
+		}
+		localAppFileRepository.delete(localAppFile);
+	}
 }

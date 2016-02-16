@@ -29,6 +29,7 @@
 							<th> Group Id </th>
 							<th> Artifact Id </th>
 							<th> Version </th>
+							<th> Register Date </th>
 							<th> Install Date </th>
 							<th> Action </th>
 						</tr>
@@ -42,11 +43,12 @@
 							<td th:text="${app.groupId}"> Joke </td>
 							<td th:text="${app.artifactId}"> Joke </td>
 							<td th:text="${app.version}"> Joke </td>
-							<td th:text="${#temporals.format(app.installDate, 'yyyy-MM-dd HH:mm:ss')}"> Joke </td>
+							<td th:text="${app.registerDate != null} ? ${#temporals.format(app.registerDate, 'yyyy-MM-dd HH:mm:ss')}"> Joke </td>
+							<td th:text="${app.installDate != null} ? ${#temporals.format(app.installDate, 'yyyy-MM-dd HH:mm:ss')}"> Joke </td>
 							<td>
 								<a th:href="@{/app/{id}/start(id=${app.id})}" class="btn btn-icon-only blue">
 									<i class="fa fa-play"></i> </a>
-								<a th:href="@{/app/{id}/stop(id=${app.id})}" class="btn btn-icon-only blue">
+								<a th:href="@{/app/{id}/stop(id=${app.id})}" class="btn btn-icon-only yellow">
 									<i class="fa fa-stop"></i> </a>
 								<a th:href="@{/app/{id}/file(id=${app.id})}" class="btn btn-icon-only yellow">
 									<i class="fa fa-upload"></i> </a>

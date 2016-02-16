@@ -101,7 +101,6 @@ public class TargetServerAgentController {
 				PrintStream printStream = new PrintStream(baos)) {
 			agentManagementService.startAgent(id, startForm, printStream);
 			String output = baos.toString("UTF-8");
-			output = StringUtils.replace(output, "\n", "<br/>");
 
 			FlashMessage flashMessage = FlashMessage.ofInfo(output);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, flashMessage);

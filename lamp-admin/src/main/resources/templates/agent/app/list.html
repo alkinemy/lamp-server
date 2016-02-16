@@ -46,12 +46,14 @@
 							<td th:text="${app.status}"> Joke </td>
 							<td th:text="${app.monitor}"> Joke </td>
 							<td>
-								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/start}" class="btn dark btn-sm btn-outline sbold uppercase">
-									<i class="fa fa-play"></i> Start </a>
-								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/stop}" class="btn dark btn-sm btn-outline sbold uppercase">
-									<i class="fa fa-stop"></i> Stop </a>
-								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/delete}" class="btn dark btn-sm btn-outline sbold uppercase">
-									<i class="fa fa-eject"></i> Delete </a>
+								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/start}" class="btn btn-icon-only blue">
+									<i class="fa fa-play"></i></a>
+								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/stop}" class="btn btn-icon-only yellow">
+									<i class="fa fa-stop"></i></a>
+								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/delete}" class="btn btn-icon-only red">
+									<i class="fa fa-eject"></i></a>
+								<a th:href="@{/app/create(agentId=${agent.id},id=${app.id})}" class="btn btn-icon-only blue">
+									<i class="fa fa-object-group"></i></a>
 							</td>
 						</tr>
 						</tbody>

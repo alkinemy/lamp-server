@@ -1,6 +1,7 @@
 package lamp.admin.api.controller;
 
 import lamp.admin.api.service.AgentFacadeService;
+import lamp.admin.api.util.HttpServletRequestUtils;
 import lamp.admin.core.agent.domain.AgentDto;
 import lamp.admin.core.agent.domain.AgentEventForm;
 import lamp.admin.core.agent.domain.AgentRegisterForm;
@@ -11,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -25,7 +27,9 @@ public class AgentApiController {
 	private AgentEventService agentEventService;
 
 	@RequestMapping(path = "", method = RequestMethod.POST)
-	public AgentDto register(@Valid @RequestBody AgentRegisterForm form) {
+	public AgentDto register(@Valid @RequestBody AgentRegisterForm form, HttpServletRequest request) {
+		String address = HttpServletRequestUtils.getClientAddress(request);
+		form.setAddress(address);
 		return agentFacadeService.register(form);
 	}
 

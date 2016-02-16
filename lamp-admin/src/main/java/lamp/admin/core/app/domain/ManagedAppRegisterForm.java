@@ -4,23 +4,26 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @ToString
-public class LocalAppFileDto {
+public class ManagedAppRegisterForm {
 
-	private Long id;
+	private String agentId;
+
+	private String id;
 	private String name;
 	private String description;
-	private Long repositoryId;
+
+	private Long templateId;
+
 	private String groupId;
 	private String artifactId;
-	private String baseVersion;
+	private String artifactName;
 	private String version;
 
-	private String pathname;
-	private String filename;
-	private LocalDateTime fileDate;
+	private String processType;
+
+	private Boolean monitor;
+
 }

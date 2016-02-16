@@ -34,12 +34,12 @@ public class AppService {
 	private AppResourceService appResourceService;
 
 
-	public List<AppDto> getAppList(String agentId) {
+	public List<AppDto> getAppDtoList(String agentId) {
 		Agent agent = agentService.getAgent(agentId);
 		return agentClient.getAppList(agent);
 	}
 
-	public AppDto getApp(String agentId, String appId) {
+	public AppDto getAppDto(String agentId, String appId) {
 		Agent agent = agentService.getAgent(agentId);
 		return agentClient.getApp(agent, appId);
 	}

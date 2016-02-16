@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -33,6 +34,7 @@ public class LocalAppFile extends AbstractAuditingEntity {
 	private String filename;
 
 	private Long fileSize;
+	private LocalDateTime fileDate;
 	private String contentType;
 
 	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)

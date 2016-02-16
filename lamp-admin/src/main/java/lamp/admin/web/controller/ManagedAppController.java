@@ -13,6 +13,7 @@ import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +54,38 @@ public class ManagedAppController {
 		return "app/list";
 	}
 
+
+	@RequestMapping(path = "/create", method = RequestMethod.GET)
+	public String create(@ModelAttribute("editForm") ManagedAppRegisterForm editForm,
+						 Model model) {
+
+		ManagedAppRegisterForm registerForm = appFacadeService.getManagedAppRegisterForm(editForm.getAgentId(), editForm.getId());
+		BeanUtils.copyProperties(registerForm, editForm);
+
+		return createForm(editForm, model);
+	}
+
+	protected String createForm(ManagedAppRegisterForm editForm, Model model) {
+
+		List<AppTemplateDto> appTemplateDtoList = appTemplateService.getAppTemplateDtoListByProcessTypeAndGroupIdAndArtifactId(editForm.getProcessType(), editForm.getGroupId(), editForm.getArtifactId());
+		model.addAttribute("appTemplateList", appTemplateDtoList);
+
+		return "app/edit";
+	}
+
+	@RequestMapping(path = "/create", method = RequestMethod.POST)
+	public String create(@ModelAttribute("editForm") ManagedAppRegisterForm editForm,
+						 Model model,
+						 BindingResult bindingResult,
+						 RedirectAttributes redirectAttributes) {
+		try {
+			appFacadeService.registerManagedApp(editForm);
+			return "redirect:/app";
+		} catch (MessageException e) {
+			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
+			return createForm(editForm, model);
+		}
+	}
 
 	@RequestMapping(path = "/{id}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("id") String id,

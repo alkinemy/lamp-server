@@ -64,6 +64,7 @@ public class AgentClient {
 			parts.add("id", form.getId());
 			parts.add("name", StringUtils.utf8ToIso88591(form.getName()));
 			parts.add("description", StringUtils.utf8ToIso88591(form.getDescription()));
+			parts.add("groupId", form.getGroupId());
 			parts.add("artifactId", form.getArtifactId());
 			parts.add("artifactName", StringUtils.utf8ToIso88591(form.getArtifactName()));
 			parts.add("version", form.getVersion());

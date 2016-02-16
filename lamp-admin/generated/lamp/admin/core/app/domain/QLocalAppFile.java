@@ -37,6 +37,8 @@ public class QLocalAppFile extends EntityPathBase<LocalAppFile> {
 
     public final StringPath description = createString("description");
 
+    public final DateTimePath<java.time.LocalDateTime> fileDate = createDateTime("fileDate", java.time.LocalDateTime.class);
+
     public final StringPath filename = createString("filename");
 
     public final NumberPath<Long> fileSize = createNumber("fileSize", Long.class);

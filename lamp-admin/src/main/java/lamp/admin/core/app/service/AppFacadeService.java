@@ -1,5 +1,7 @@
 package lamp.admin.core.app.service;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.app.domain.*;
@@ -7,6 +9,7 @@ import lamp.admin.core.support.agent.model.AgentAppRegisterForm;
 import lamp.admin.core.support.agent.model.AgentAppUpdateFileForm;
 import lamp.admin.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +36,11 @@ public class AppFacadeService {
 	private SmartAssembler smartAssembler;
 
 	public List<AppDto> getAppDtoList(String agentId) {
-		return appService.getAppList(agentId);
+		return appService.getAppDtoList(agentId);
 	}
 
 	public AppDto getAppDto(String agentId, String appId) {
-		return appService.getApp(agentId, appId);
+		return appService.getAppDto(agentId, appId);
 	}
 
 	public Page<ManagedAppDto> getManagedAppDtoList(Pageable pageable) {
@@ -58,6 +61,21 @@ public class AppFacadeService {
 
 	public ManagedApp getManagedApp(String id) {
 		return managedAppService.getManagedApp(id);
+	}
+
+	public ManagedAppRegisterForm getManagedAppRegisterForm(String agentId, String appId) {
+		ManagedAppRegisterForm form = new ManagedAppRegisterForm();
+
+		AppDto appDto = appService.getAppDto(agentId, appId);
+		BeanUtils.copyProperties(appDto, form);
+		form.setAgentId(agentId);
+
+		Iterable<AppTemplate> appTemplateIterable = appTemplateService.getAppTemplateIterableByProcessTypeAndGroupIdAndArtifactId(appDto.getProcessType(), appDto.getGroupId(), appDto.getArtifactId());
+		AppTemplate appTemplate = Iterables.getFirst(appTemplateIterable, null);
+		if (appTemplate != null) {
+			form.setTemplateId(appTemplate.getId());
+		}
+		return form;
 	}
 
 	@Transactional
@@ -81,7 +99,27 @@ public class AppFacadeService {
 		managedApp.setVersion(agentAppRegisterForm.getVersion());
 		managedApp.setUpdatable(!agentAppRegisterForm.isPreInstalled());
 		managedApp.setRegisterDate(LocalDateTime.now());
-		managedApp.setInstallDate(managedApp.getRegisterDate());
+		if (!agentAppRegisterForm.isPreInstalled()) {
+			managedApp.setInstallDate(managedApp.getRegisterDate());
+		}
+
+		managedAppService.insert(managedApp);
+	}
+
+	@Transactional
+	public void registerManagedApp(ManagedAppRegisterForm editForm) {
+		Agent agent = getAgent(editForm.getAgentId());
+
+		Long templateId = editForm.getTemplateId();
+		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId);
+
+		ManagedApp managedApp = new ManagedApp();
+		BeanUtils.copyProperties(editForm, managedApp);
+		managedApp.setTargetServer(agent.getTargetServer());
+		managedApp.setAppTemplate(appTemplate);
+		managedApp.setUpdatable(!appTemplate.isPreInstalled());
+		managedApp.setRegisterDate(LocalDateTime.now());
+
 		managedAppService.insert(managedApp);
 	}
 

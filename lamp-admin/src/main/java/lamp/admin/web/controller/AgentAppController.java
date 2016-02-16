@@ -14,6 +14,7 @@ import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +56,9 @@ public class AgentAppController {
 	}
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.GET)
-	public String createForm(@PathVariable("agentId") String agentId, @ModelAttribute("editForm") AppRegisterForm editForm, Model model) {
+	public String createForm(@PathVariable("agentId") String agentId,
+							 @ModelAttribute("editForm") AppRegisterForm editForm,
+							 Model model) {
 		model.addAttribute("action", LampAdminConstants.ACTION_CREATE);
 
 		// TODO Popup이나 Wizard 형식으로 분리하기
@@ -66,7 +69,8 @@ public class AgentAppController {
 	}
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.POST)
-	public String create(@PathVariable("agentId") String agentId, @Valid @ModelAttribute("editForm") AppRegisterForm editForm,
+	public String create(@PathVariable("agentId") String agentId,
+						 @Valid @ModelAttribute("editForm") AppRegisterForm editForm,
 						 Model model,
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
@@ -86,8 +90,6 @@ public class AgentAppController {
 		}
 
 	}
-
-
 
 	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("agentId") String agentId,
@@ -168,9 +170,9 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.GET)
 	public String stop(@PathVariable("agentId") String agentId,
-						@PathVariable("appId") String appId,
-						@ModelAttribute("editForm") AppStopForm editForm,
-						Model model) {
+					   @PathVariable("appId") String appId,
+					   @ModelAttribute("editForm") AppStopForm editForm,
+					   Model model) {
 
 		Optional<ManagedAppDto> managedAppDtoOptional = appFacadeService.getManagedAppDtoOptional(appId);
 		managedAppDtoOptional.ifPresent(managedAppDto -> editForm.setAppManagementListener(managedAppDto.getAppManagementListener()));
