@@ -48,8 +48,6 @@ public class QAppTemplate extends EntityPathBase<AppTemplate> {
 
     public final StringPath description = createString("description");
 
-    public final StringPath errorLogFile = createString("errorLogFile");
-
     public final StringPath groupId = createString("groupId");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -60,11 +58,15 @@ public class QAppTemplate extends EntityPathBase<AppTemplate> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final StringPath logFile = createString("logFile");
+    public final StringPath logDirectory = createString("logDirectory");
 
     public final BooleanPath monitor = createBoolean("monitor");
 
     public final StringPath name = createString("name");
+
+    public final StringPath parameters = createString("parameters");
+
+    public final EnumPath<ParametersType> parametersType = createEnum("parametersType", ParametersType.class);
 
     public final StringPath pidFile = createString("pidFile");
 
@@ -77,6 +79,10 @@ public class QAppTemplate extends EntityPathBase<AppTemplate> {
     public final StringPath resourceUrl = createString("resourceUrl");
 
     public final StringPath startCommandLine = createString("startCommandLine");
+
+    public final StringPath stdErrFile = createString("stdErrFile");
+
+    public final StringPath stdOutFile = createString("stdOutFile");
 
     public final StringPath stopCommandLine = createString("stopCommandLine");
 

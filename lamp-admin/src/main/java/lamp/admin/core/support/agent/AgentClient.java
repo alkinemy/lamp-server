@@ -2,21 +2,29 @@ package lamp.admin.core.support.agent;
 
 import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.app.domain.AppDto;
+import lamp.admin.core.app.domain.LogFile;
+import lamp.admin.core.base.domain.JavaVirtualMachine;
 import lamp.admin.core.support.agent.model.AgentAppRegisterForm;
 import lamp.admin.core.support.agent.model.AgentAppUpdateFileForm;
 import lamp.admin.core.support.agent.model.AgentAppUpdateSpecForm;
 import lamp.admin.core.support.agent.security.AgentRequestUser;
 import lamp.admin.core.support.agent.security.AgentRequestUserHolder;
+import lamp.admin.utils.IOUtils;
 import lamp.admin.utils.StringUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 @Slf4j
@@ -71,7 +79,10 @@ public class AgentClient {
 			parts.add("processType", form.getProcessType().name());
 			parts.add("appDirectory", form.getAppDirectory());
 			parts.add("workDirectory", form.getWorkDirectory());
+			parts.add("logDirectory", form.getLogDirectory());
 			parts.add("pidFile", form.getPidFile());
+			parts.add("stdOutFile", form.getStdOutFile());
+			parts.add("stdErrFile", form.getStdErrFile());
 			parts.add("startCommandLine", form.getStartCommandLine());
 			parts.add("stopCommandLine", form.getStopCommandLine());
 			parts.add("preInstalled", form.isPreInstalled());
@@ -81,6 +92,12 @@ public class AgentClient {
 			parts.add("filename", form.getFilename());
 			parts.add("monitor", form.isMonitor());
 			parts.add("commands", form.getCommands());
+
+			if (form.getParametersType() != null) {
+				parts.add("parametersType", form.getParametersType().name());
+			}
+
+			parts.add("parameters", StringUtils.utf8ToIso88591(form.getParameters()));
 
 			log.debug("parts = {}", parts);
 
@@ -175,5 +192,46 @@ public class AgentClient {
 		return agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
 	}
 
+
+	// Extenstion
+
+	public List<JavaVirtualMachine> getVmList(Agent agent) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<List<JavaVirtualMachine>> responseEntity = restTemplate.exchange(baseUrl + "/api/vm", HttpMethod.GET, null, new ParameterizedTypeReference<List<JavaVirtualMachine>>() {});
+
+			return responseEntity.getBody();
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
+	public List<LogFile> getLogFiles(Agent agent, String appId) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<List<LogFile>> responseEntity = restTemplate.exchange(baseUrl + "/api/app/{appId}/log", HttpMethod.GET, null, new ParameterizedTypeReference<List<LogFile>>() {}, appId);
+
+			return responseEntity.getBody();
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
+	public void transferLogFile(Agent agent, String appId, String filename, final OutputStream outputStream) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			RequestCallback requestCallback = request -> {};
+			ResponseExtractor<Void> responseExtractor = response -> {
+				IOUtils.copy(response.getBody(), outputStream);
+				return null;
+			};
+			restTemplate.execute(baseUrl + "/api/app/{appId}/log/{filename}", HttpMethod.GET, requestCallback, responseExtractor, appId, filename);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
 
 }

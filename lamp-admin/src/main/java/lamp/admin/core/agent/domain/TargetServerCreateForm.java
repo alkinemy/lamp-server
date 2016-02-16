@@ -20,17 +20,16 @@ public class TargetServerCreateForm {
 	private String address;
 
 	private SshAuthType authType;
-
 	private String username;
 	private String password;
-
 	private String privateKey;
 
 	private Boolean agentInstalled;
 	@NotEmpty
 	private String agentInstallPath;
-
+	private String agentPidFile;
 	private String agentStartCommandLine;
+	private String agentStopCommandLine;
 
 	private Boolean agentMonitor = Boolean.FALSE;
 	private Long agentMonitorInterval;

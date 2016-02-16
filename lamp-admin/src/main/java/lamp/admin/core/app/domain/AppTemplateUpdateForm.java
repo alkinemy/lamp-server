@@ -29,7 +29,11 @@ public class AppTemplateUpdateForm {
 	private AppProcessType processType = AppProcessType.DAEMON;
 	private String appDirectory;
 	private String workDirectory;
+	private String logDirectory;
+
 	private String pidFile;
+	private String stdOutFile;
+	private String stdErrFile;
 
 	private String commandShell;
 	private String startCommandLine;
@@ -41,5 +45,7 @@ public class AppTemplateUpdateForm {
 
 	private String commands;
 
+	private ParametersType parametersType;
+	private String parameters;
 
 }

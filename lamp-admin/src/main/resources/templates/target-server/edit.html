@@ -101,12 +101,26 @@
 										<span class="help-block" th:if="${#fields.hasErrors('agentInstallPath')}" th:errors="*{agentInstallPath}"> A block of help text. </span>
 									</div>
 								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('agentPidFile')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Agent Pid File</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{agentPidFile}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('agentPidFile')}" th:errors="*{agentPidFile}"> A block of help text. </span>
+									</div>
+								</div>
 
-								<div class="form-group">
+								<div class="form-group" th:class="${#fields.hasErrors('agentStartCommandLine')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Agent Start Command Line</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{agentStartCommandLine}" placeholder="Enter text" />
 										<span class="help-block" th:if="${#fields.hasErrors('agentStartCommandLine')}" th:errors="*{agentStartCommandLine}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('agentStopCommandLine')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Agent Stop Command Line</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{agentStopCommandLine}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('agentStopCommandLine')}" th:errors="*{agentStopCommandLine}"> A block of help text. </span>
 									</div>
 								</div>
 

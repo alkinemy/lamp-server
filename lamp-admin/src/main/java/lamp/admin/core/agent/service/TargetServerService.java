@@ -39,6 +39,11 @@ public class TargetServerService {
 		return targetServerRepository.findAll();
 	}
 
+	public TargetServerDto getTargetServerDto(Long id) {
+		TargetServer targetServer = getTargetServer(id);
+		return smartAssembler.assemble(targetServer, TargetServerDto.class);
+	}
+
 	public TargetServer getTargetServer(Long id) {
 		return getTargetServerOptional(id).orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
 	}
@@ -82,4 +87,6 @@ public class TargetServerService {
 		Exceptions.throwsException(agent.isPresent(), LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);
 		targetServerRepository.delete(targetServer);
 	}
+
+
 }

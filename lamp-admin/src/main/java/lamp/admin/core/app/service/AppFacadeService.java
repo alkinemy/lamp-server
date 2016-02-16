@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletOutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -196,5 +197,13 @@ public class AppFacadeService {
 		return agentService.getAgentByTargetServerId(managedApp.getTargetServer().getId());
 	}
 
+	public List<LogFile> getLogFiles(String agentId, String appId) {
+		Agent agent = getAgent(agentId);
+		return appService.getLogFiles(agent, appId);
+	}
 
+	public void transferLogFile(String agentId, String appId, String filename, ServletOutputStream outputStream) {
+		Agent agent = getAgent(agentId);
+		appService.transferLogFile(agent, appId, filename, outputStream);
+	}
 }

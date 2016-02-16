@@ -39,11 +39,12 @@ public class AppTemplate extends AbstractAuditingEntity {
 
 	private String appDirectory;
 	private String workDirectory;
+	private String logDirectory;
 
 	private String pidFile;
 
-	private String logFile;
-	private String errorLogFile;
+	private String stdOutFile;
+	private String stdErrFile;
 
 	private String commandShell;
 	private String startCommandLine;
@@ -53,6 +54,9 @@ public class AppTemplate extends AbstractAuditingEntity {
 	private String appFilename;
 
 	private boolean monitor;
+
+	private ParametersType parametersType;
+	private String parameters;
 
 	private String commands;
 

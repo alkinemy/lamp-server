@@ -33,8 +33,9 @@ public class TargetServerUpdateForm {
 	private Boolean agentInstalled;
 	@NotEmpty
 	private String agentInstallPath;
-
+	private String agentPidFile;
 	private String agentStartCommandLine;
+	private String agentStopCommandLine;
 
 	private Boolean agentMonitor;
 	private Long agentMonitorInterval;

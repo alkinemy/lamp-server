@@ -36,6 +36,7 @@ public class AppTemplateDto {
 
 	private String commands;
 
-
+	private ParametersType parametersType;
+	private String parameters;
 
 }

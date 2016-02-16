@@ -37,6 +37,16 @@ public class AppTemplateService {
 		return smartAssembler.assemble(pageable, page, AppTemplateDto.class);
 	}
 
+	public AppTemplateDto getAppTemplateDto(Long id) {
+		AppTemplate appTemplate = getAppTemplate(id);
+		return smartAssembler.assemble(appTemplate, AppTemplateDto.class);
+	}
+
+	public AppTemplateDto getAppTemplateDtoOptional(Long id) {
+		Optional<AppTemplate> appTemplateOptional = getAppTemplateOptional(id);
+		return smartAssembler.assemble(appTemplateOptional.orElse(null), AppTemplateDto.class);
+	}
+
 	public Optional<AppTemplate> getAppTemplateOptional(Long id) {
 		return Optional.ofNullable(appTemplateRepository.findOne(id));
 	}

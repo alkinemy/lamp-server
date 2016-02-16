@@ -13,7 +13,7 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
-						<a th:href="@{/agent/__${agent.id}__/app/create}" class="btn btn-sm default">등록</a>
+						<a th:href="@{/agent/__${agent.id}__/app/create(step=step1)}" class="btn btn-sm default">등록</a>
 					</div>
 				</div>
 			</div>
@@ -30,6 +30,7 @@
 							<th> Artifact Id </th>
 							<th> Version </th>
 							<th> Status </th>
+							<th> PID </th>
 							<th> Monitor </th>
 							<th> Action </th>
 						</tr>
@@ -44,8 +45,11 @@
 							<td th:text="${app.artifactId}"> Joke </td>
 							<td th:text="${app.version}"> Joke </td>
 							<td th:text="${app.status}"> Joke </td>
+							<td th:text="${app.pid}"> Joke </td>
 							<td th:text="${app.monitor}"> Joke </td>
 							<td>
+								<a th:href="@{/agent/{agentId}/app/{appId}/log(agentId=${agent.id},appId=${app.id})}" class="btn btn-icon-only blue">
+									<i class="fa fa-file-text-o"></i></a>
 								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/start}" class="btn btn-icon-only blue">
 									<i class="fa fa-play"></i></a>
 								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/stop}" class="btn btn-icon-only yellow">

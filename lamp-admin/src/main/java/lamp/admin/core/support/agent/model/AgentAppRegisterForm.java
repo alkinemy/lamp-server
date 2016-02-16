@@ -1,6 +1,7 @@
 package lamp.admin.core.support.agent.model;
 
 import lamp.admin.core.app.domain.AppProcessType;
+import lamp.admin.core.app.domain.ParametersType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,7 +23,10 @@ public class AgentAppRegisterForm {
 	private AppProcessType processType;
 	private String appDirectory;
 	private String workDirectory;
+	private String logDirectory;
 	private String pidFile;
+	private String stdOutFile;
+	private String stdErrFile;
 	private String commandShell;
 	private String startCommandLine;
 	private String stopCommandLine;
@@ -33,5 +37,8 @@ public class AgentAppRegisterForm {
 	private boolean monitor;
 
 	private String commands;
+
+	private ParametersType parametersType;
+	private String parameters;
 
 }

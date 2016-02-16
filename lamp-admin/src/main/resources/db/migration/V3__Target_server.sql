@@ -20,7 +20,7 @@ CREATE TABLE `lamp_target_server` (
   `agent_installed_date` datetime DEFAULT NULL,
   `agent_install_path` varchar(200) NOT NULL,
   `agent_install_filename` varchar(200) DEFAULT NULL,
-
+  `agent_pid_file` varchar(200) DEFAULT NULL,
   `agent_start_command_line` varchar(200) DEFAULT NULL,
   `agent_started_by` varchar(200) DEFAULT NULL,
   `agent_started_date` datetime DEFAULT NULL,

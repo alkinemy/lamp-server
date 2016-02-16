@@ -14,6 +14,7 @@ import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,15 +59,48 @@ public class AgentAppController {
 		return "agent/app/list";
 	}
 
+	@RequestMapping(path = "/app/create", method = RequestMethod.GET, params = {"step=step1"})
+	public String createStep1(@PathVariable("agentId") String agentId,
+			@ModelAttribute("editForm") AppRegisterForm editForm,
+			Model model) {
+		model.addAttribute("action", LampAdminConstants.ACTION_CREATE);
+
+		// TODO Popup이나 Wizard 형식으로 분리하기
+		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
+		model.addAttribute("appTemplateList", appTemplateList);
+
+		return "agent/app/edit-step1";
+	}
+
+	@RequestMapping(path = "/app/create", method = RequestMethod.POST, params = {"step=step1"})
+	public String createStep1(@PathVariable("agentId") String agentId,
+			@Valid @ModelAttribute("editForm") AppRegisterForm editForm,
+			Model model,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return createStep1(agentId, editForm, model);
+		}
+
+		return createForm(agentId, editForm, model);
+	}
+
 	@RequestMapping(path = "/app/create", method = RequestMethod.GET)
 	public String createForm(@PathVariable("agentId") String agentId,
 							 @ModelAttribute("editForm") AppRegisterForm editForm,
 							 Model model) {
 		model.addAttribute("action", LampAdminConstants.ACTION_CREATE);
 
-		// TODO Popup이나 Wizard 형식으로 분리하기
-		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
-		model.addAttribute("appTemplateList", appTemplateList);
+		AppTemplateDto appTemplateDto = appTemplateService.getAppTemplateDtoOptional(editForm.getTemplateId());
+		if (appTemplateDto == null) {
+			return createStep1(agentId, editForm, model);
+		}
+
+		model.addAttribute("appTemplate", appTemplateDto);
+
+		model.addAttribute("parametersTypes", ParametersType.values());
+
+		editForm.setParametersType(appTemplateDto.getParametersType());
+		editForm.setParameters(appTemplateDto.getParameters());
 
 		return "agent/app/edit";
 	}

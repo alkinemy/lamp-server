@@ -1,13 +1,10 @@
 package lamp.admin.core.agent.service;
 
+import lamp.admin.core.agent.domain.*;
 import lamp.admin.core.app.service.AppResourceService;
 import lamp.admin.core.app.service.AppTemplateService;
 import lamp.admin.core.app.domain.AppResource;
 import lamp.admin.core.app.domain.AppTemplate;
-import lamp.admin.core.agent.domain.SshAuthType;
-import lamp.admin.core.agent.domain.TargetServer;
-import lamp.admin.core.agent.domain.AgentInstallForm;
-import lamp.admin.core.agent.domain.AgentStartForm;
 import lamp.admin.core.base.exception.EntityNotFoundException;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
@@ -47,8 +44,7 @@ public class AgentManagementService {
 
 	@Transactional
 	public void installAgent(Long targetServerId, AgentInstallForm installForm, String agentInstalledBy) {
-		Optional<AppTemplate> appTemplateFromDb = appTemplateService.getAppTemplateOptional(installForm.getTemplateId());
-		AppTemplate appTemplate = appTemplateFromDb.orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, installForm.getTemplateId()));
+		AppTemplate appTemplate = appTemplateService.getAppTemplate(installForm.getTemplateId());
 		String version = installForm.getVersion();
 
 		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(targetServerId);
@@ -60,6 +56,11 @@ public class AgentManagementService {
 		parameters.put("groupId", resource.getGroupId());
 		parameters.put("artifactId", resource.getArtifactId());
 		parameters.put("version", resource.getVersion());
+		parameters.put("appDirectory", appTemplate.getAppDirectory());
+		parameters.put("workDirectory", appTemplate.getWorkDirectory());
+		parameters.put("logDirectory", appTemplate.getLogDirectory());
+		parameters.put("stdOutFile", appTemplate.getStdOutFile());
+		parameters.put("stdErrFile", appTemplate.getStdErrFile());
 
 		File file = null;
 		String filename = expressionParser.getValue(appTemplate.getAppFilename(), parameters);
@@ -107,7 +108,9 @@ public class AgentManagementService {
 			targetServer.setAgentInstalledBy(agentInstalledBy);
 			targetServer.setAgentInstalledDate(LocalDateTime.now());
 			targetServer.setAgentInstallFilename(filename);
+			targetServer.setAgentPidFile(expressionParser.getValue(appTemplate.getPidFile(), parameters));
 			targetServer.setAgentStartCommandLine(expressionParser.getValue(appTemplate.getStartCommandLine(), parameters));
+			targetServer.setAgentStopCommandLine(expressionParser.getValue(appTemplate.getStopCommandLine(), parameters));
 		} catch (Exception e) {
 			log.warn("Agent Install failed", e);
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);
@@ -119,23 +122,37 @@ public class AgentManagementService {
 	}
 
 	public void startAgent(Long targetServerId, AgentStartForm startForm, PrintStream printStream) {
-		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(targetServerId);
-		TargetServer targetServer = targetServerFromDb.orElseThrow(EntityNotFoundException::new);
-
-		String agentPath = targetServer.getAgentInstallPath();
-		String filename = targetServer.getAgentInstallFilename();
+		TargetServer targetServer = targetServerService.getTargetServer(targetServerId);
 
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("filename", filename);
+		parameters.put("filename", targetServer.getAgentInstallFilename());
 
-		String startCommand = targetServer.getAgentStartCommandLine();
-		startCommand = expressionParser.getValue(startCommand, parameters);
-		log.debug("[TargetServer:{}] Agent startCommandLine = {}", targetServerId, startCommand);
+		String command = startForm.getCommandLine();
+		command = expressionParser.getValue(command, parameters);
+		log.debug("[TargetServer:{}] Agent startCommandLine = {}", targetServerId, command);
 
+		executeCmd(targetServer, startForm.getPassword(), command, printStream);
+	}
+
+	public void stopAgent(Long targetServerId, AgentStopForm stopForm, PrintStream printStream) {
+		TargetServer targetServer = targetServerService.getTargetServer(targetServerId);
+
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("filename", targetServer.getAgentInstallFilename());
+		parameters.put("pidFile", targetServer.getAgentPidFile());
+
+		String command = stopForm.getCommandLine();
+		command = expressionParser.getValue(command, parameters);
+		log.debug("[TargetServer:{}] Agent stopCommandLine = {}", targetServerId, command);
+
+		executeCmd(targetServer, stopForm.getPassword(), command, printStream);
+	}
+
+	protected void executeCmd(TargetServer targetServer, String inputPassword, String command, PrintStream printStream) {
 		String host = targetServer.getAddress();
 		int port = targetServer.getSshPort();
 		String username = targetServer.getUsername();
-		String password = StringUtils.defaultString(startForm.getPassword(), targetServer.getPassword());
+		String password = StringUtils.defaultString(inputPassword, targetServer.getPassword());
 
 		SshClient sshClient = new SshClient(host, port);
 		if (SshAuthType.KEY.equals(targetServer.getAuthType())) {
@@ -145,7 +162,7 @@ public class AgentManagementService {
 		}
 
 		long timeout = 5 * 1000;
-		sshClient.exec(agentPath, startCommand, printStream, timeout);
+		String agentPath = targetServer.getAgentInstallPath();
+		sshClient.exec(agentPath, command, printStream, timeout);
 	}
-
 }

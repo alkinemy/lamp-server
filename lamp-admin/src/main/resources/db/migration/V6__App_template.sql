@@ -19,10 +19,12 @@ CREATE TABLE `lamp_app_template` (
   `process_type` varchar(200) NOT NULL,
   `app_directory` varchar(1000) DEFAULT NULL,
   `work_directory` varchar(1000) DEFAULT NULL,
+  `log_directory` varchar(1000) DEFAULT NULL,
+
   `pid_file` varchar(500) DEFAULT NULL,
 
-  `log_file` varchar(500) DEFAULT NULL,
-  `error_log_file` varchar(500) DEFAULT NULL,
+  `std_out_file` varchar(500) DEFAULT NULL,
+  `std_err_file` varchar(500) DEFAULT NULL,
 
   `command_shell` varchar(255) DEFAULT NULL,
   `start_command_line` varchar(1000) DEFAULT NULL,
@@ -32,6 +34,9 @@ CREATE TABLE `lamp_app_template` (
   `monitor` tinyint(1) NOT NULL,
 
   `commands` text DEFAULT NULL,
+
+  `parameters_type` varchar(500) DEFAULT NULL,
+  `parameters` text DEFAULT NULL,
 
   `deleted` tinyint(1) NOT NULL,
   `created_by` varchar(100) NOT NULL,

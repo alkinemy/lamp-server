@@ -96,14 +96,36 @@
 										<span class="help-block" th:if="${#fields.hasErrors('workDirectory')}" th:errors="*{workDirectory}"> A block of help text. </span>
 									</div>
 								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('logDirectory')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Log Directory (logDirectory)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{logDirectory}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('logDirectory')}" th:errors="*{logDirectory}"> A block of help text. </span>
+									</div>
+								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('pidFile')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">PID file</label>
+									<label class="col-md-3 control-label">PID file (pidFile)</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{pidFile}" placeholder="Enter text" />
 										<span class="help-block" th:if="${#fields.hasErrors('pidFile')}" th:errors="*{pidFile}"> A block of help text. </span>
 									</div>
 								</div>
-
+								<div class="form-group" th:class="${#fields.hasErrors('stdOutFile')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Standard Out File (stdOutFile)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{stdOutFile}" placeholder="Standard Out File" />
+										<span class="help-block" th:if="${#fields.hasErrors('stdOutFile')}" th:errors="*{stdOutFile}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('stdErrFile')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Standard Error File (stdErrFile)</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{stdErrFile}" placeholder="Enter Standard Error File" />
+										<span class="help-block" th:if="${#fields.hasErrors('stdErrFile')}" th:errors="*{stdErrFile}"> A block of help text. </span>
+									</div>
+								</div>
+								<hr />
+								<h4>Command</h4>
 								<div class="form-group" th:class="${#fields.hasErrors('commandShell')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Command Shell</label>
 									<div class="col-md-9">
@@ -126,14 +148,6 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Install filename</label>
-									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{appFilename}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('appFilename')}" th:errors="*{appFilename}"> A block of help text. </span>
-									</div>
-								</div>
-
 								<div class="form-group">
 									<label class="col-md-3 control-label">Monitor</label>
 									<div class="col-md-9">
@@ -144,15 +158,42 @@
 										</div>
 									</div>
 								</div>
-
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}">
-									<label class="col-md-3 control-label">Commands</label>
+								<hr />
+								<h4>Install</h4>
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Install filename</label>
 									<div class="col-md-9">
-										<textarea class="form-control" name="commands" rows="3"></textarea>
+										<input type="text" class="form-control" th:field="*{appFilename}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('appFilename')}" th:errors="*{appFilename}"> A block of help text. </span>
 									</div>
 								</div>
 
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('commands')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Commands</label>
+									<div class="col-md-9">
+										<textarea class="form-control" th:field="*{commands}" rows="3"></textarea>
+									</div>
+								</div>
 
+								<hr />
+								<h4>Parameters</h4>
+								<div class="form-group" th:class="${#fields.hasErrors('parametersType')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Parameters Type</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{parametersType}">
+											<option th:each="type : ${parametersTypes}"
+													th:value="${type.name()}" th:text="${type.name()}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('parametersType')}" th:errors="*{parametersType}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('parameters')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Parameters</label>
+									<div class="col-md-9">
+										<textarea class="form-control" th:field="*{parameters}" rows="3"></textarea>
+										<span class="help-block" th:if="${#fields.hasErrors('parameters')}" th:errors="*{parameters}"> A block of help text. </span>
+									</div>
+								</div>
 
 							</div>
 							<div class="form-actions">

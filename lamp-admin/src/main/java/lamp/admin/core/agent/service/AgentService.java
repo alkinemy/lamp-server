@@ -6,8 +6,10 @@ import lamp.admin.core.agent.domain.AgentDto;
 import lamp.admin.core.agent.domain.AgentRegisterForm;
 import lamp.admin.core.agent.domain.TargetServer;
 import lamp.admin.core.agent.repository.AgentRepository;
+import lamp.admin.core.base.domain.JavaVirtualMachine;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
+import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.utils.StringUtils;
 import lamp.admin.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,7 +34,8 @@ public class AgentService {
 	private AgentRepository agentRepository;
 	@Autowired
 	private TargetServerService targetServerService;
-
+	@Autowired
+	private AgentClient agentClient;
 
 	public Agent getAgent(String id) {
 		Optional<Agent> agentOptional = getAgentOptional(id);
@@ -67,6 +71,11 @@ public class AgentService {
 
 	public Collection<Agent> getAgentList() {
 		return agentRepository.findAll();
+	}
+
+	public List<JavaVirtualMachine> getJavaVmList(String id) {
+		Agent agent = getAgent(id);
+		return agentClient.getVmList(agent);
 	}
 
 	@Transactional

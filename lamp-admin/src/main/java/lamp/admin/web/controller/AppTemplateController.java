@@ -74,6 +74,8 @@ public class AppTemplateController {
 
 		model.addAttribute("commandShellList", CommandShell.values());
 
+		model.addAttribute("parametersTypes", ParametersType.values());
+
 		return "app/template/edit";
 	}
 
@@ -118,6 +120,8 @@ public class AppTemplateController {
 
 		EnumSet<CommandShell> commandShellList = EnumSet.allOf(CommandShell.class);
 		model.addAttribute("commandShellList", commandShellList);
+
+		model.addAttribute("parametersTypes", ParametersType.values());
 
 		return "app/template/edit";
 	}

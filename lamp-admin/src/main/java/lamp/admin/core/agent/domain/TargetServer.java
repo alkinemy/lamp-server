@@ -47,34 +47,28 @@ public class TargetServer extends AbstractAuditingEntity {
 
 	private String privateKey;
 
-	@Column(name = "agent_installed", columnDefinition = "TINYINT")
+	@Column(columnDefinition = "TINYINT")
 	private Boolean agentInstalled = Boolean.FALSE;
 
-	@Column(name = "agent_installed_by")
 	private String agentInstalledBy;
 
-	@Column(name = "agent_installed_date")
 	private LocalDateTime agentInstalledDate;
 
-	@Column(name = "agent_install_path")
 	private String agentInstallPath;
 
-	@Column(name = "agent_install_filename")
 	private String agentInstallFilename;
 
-	@Column(name = "agent_start_command_line")
+	private String agentPidFile;
+
 	private String agentStartCommandLine;
 
-	@Column(name = "agent_stop_command_line")
 	private String agentStopCommandLine;
 
-	@Column(name = "agent_health_url")
 	private String agentHealthUrl;
 
-	@Column(name = "agent_monitor", columnDefinition = "TINYINT")
+	@Column(columnDefinition = "TINYINT")
 	private Boolean agentMonitor;
 
-	@Column(name = "agent_monitor_interval")
 	private Long agentMonitorInterval;
 
 	@Column(name = "agent_status", table = "lamp_target_server_status")

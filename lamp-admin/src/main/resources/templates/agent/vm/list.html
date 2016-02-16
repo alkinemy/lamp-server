@@ -9,7 +9,7 @@
 					<div class="portlet-title">
 						<div class="caption">
 							<i class="icon-bubble font-dark"></i>
-							<span class="caption-subject font-dark bold uppercase">Agents</span>
+							<span class="caption-subject font-dark bold uppercase">Agent VMs</span>
 						</div>
 						<div class="actions">
 							<div class="btn-group btn-group-devided">
@@ -21,31 +21,16 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 								<tr>
-									<th> # </th>
+									<th> PID </th>
 									<th> Name </th>
-									<th> Type </th>
-									<th> Version </th>
-									<th> Protocol </th>
-									<th> Hostname </th>
-									<th> Address </th>
-									<th> Port </th>
 									<th> Action </th>
 								</tr>
 								</thead>
 								<tbody>
-								<tr th:each="agent : ${page}">
-									<td th:text="${agent.id}"> Joke </td>
-									<td th:text="${agent.name}"> Joke </td>
-									<td th:text="${agent.type}"> Joke </td>
-									<td th:text="${agent.version}"> Joke </td>
-									<td th:text="${agent.protocol}"> Joke </td>
-									<td th:text="${agent.hostname}"> lJokear </td>
-									<td th:text="${agent.address}"> Joke </td>
-									<td th:text="${agent.port}"> Joke </td>
+								<tr th:each="vm : ${vmList}">
+									<td th:text="${vm.id}"> Joke </td>
+									<td th:text="${vm.displayName}"> Joke </td>
 									<td>
-										<a th:href="@{/agent/{id}(id=${agent.id})}">View</a> |
-										<a th:href="@{/agent/{id}/app(id=${agent.id})}">App</a>
-										<a th:href="@{/agent/{id}/vm(id=${agent.id})}">JavaVM</a>
 									</td>
 								</tr>
 								</tbody>

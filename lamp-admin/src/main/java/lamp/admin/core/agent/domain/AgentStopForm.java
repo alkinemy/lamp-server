@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AgentStartForm {
+public class AgentStopForm {
 
 	private String password;
 

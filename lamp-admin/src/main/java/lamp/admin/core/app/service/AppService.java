@@ -15,6 +15,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
 import java.util.List;
 
 @Slf4j
@@ -60,9 +61,12 @@ public class AppService {
 		agentAppRegisterForm.setArtifactName(appTemplate.getArtifactName());
 		agentAppRegisterForm.setVersion(StringUtils.defaultIfBlank(editForm.getVersion(), appTemplate.getVersion()));
 		agentAppRegisterForm.setProcessType(appTemplate.getProcessType());
-		agentAppRegisterForm.setPidFile(appTemplate.getPidFile());
 		agentAppRegisterForm.setAppDirectory(appTemplate.getAppDirectory());
 		agentAppRegisterForm.setWorkDirectory(appTemplate.getWorkDirectory());
+		agentAppRegisterForm.setLogDirectory(appTemplate.getLogDirectory());
+		agentAppRegisterForm.setPidFile(appTemplate.getPidFile());
+		agentAppRegisterForm.setStdOutFile(appTemplate.getStdOutFile());
+		agentAppRegisterForm.setStdErrFile(appTemplate.getStdErrFile());
 		agentAppRegisterForm.setStartCommandLine(appTemplate.getStartCommandLine());
 		agentAppRegisterForm.setStopCommandLine(appTemplate.getStopCommandLine());
 
@@ -76,8 +80,13 @@ public class AppService {
 			agentAppRegisterForm.setInstallFile(appResource);
 		}
 		agentAppRegisterForm.setFilename(appTemplate.getAppFilename());
-		agentAppRegisterForm.setMonitor(ObjectUtils.defaultIfNull(editForm.getMonitor(), appTemplate.isMonitor()));
+		agentAppRegisterForm.setMonitor(editForm.getMonitor() != null ? editForm.getMonitor() : Boolean.FALSE);
+
+		// FIXME AppTemplate -> Form으로 변경해야함.
 		agentAppRegisterForm.setCommands(appTemplate.getCommands());
+
+		agentAppRegisterForm.setParametersType(appTemplate.getParametersType());
+		agentAppRegisterForm.setParameters(appTemplate.getParameters());
 
 		agentClient.register(agent, agentAppRegisterForm);
 
@@ -136,5 +145,11 @@ public class AppService {
 		agentClient.stop(agent, appId);
 	}
 
+	public List<LogFile> getLogFiles(Agent agent, String appId) {
+		return agentClient.getLogFiles(agent, appId);
+	}
 
+	public void transferLogFile(Agent agent, String appId, String filename, ServletOutputStream outputStream) {
+		agentClient.transferLogFile(agent, appId, filename, outputStream);
+	}
 }

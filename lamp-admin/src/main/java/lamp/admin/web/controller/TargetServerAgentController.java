@@ -1,9 +1,7 @@
 package lamp.admin.web.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.agent.domain.AgentInstallForm;
-import lamp.admin.core.agent.domain.AgentStartForm;
-import lamp.admin.core.agent.domain.TargetServer;
+import lamp.admin.core.agent.domain.*;
 import lamp.admin.core.agent.service.AgentManagementService;
 import lamp.admin.core.agent.service.TargetServerService;
 import lamp.admin.core.app.domain.AppTemplateDto;
@@ -84,13 +82,16 @@ public class TargetServerAgentController {
 	public String agentStart(@PathVariable("id") Long id,
 							 @ModelAttribute("startForm") AgentStartForm startForm, Model model) throws IOException {
 
-		Optional<TargetServer> targetServerOptional = targetServerService.getTargetServerOptional(id);
-		TargetServer targetServer = targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
-
+		TargetServerDto targetServer = targetServerService.getTargetServerDto(id);
 		model.addAttribute("targetServer", targetServer);
+
+		if (StringUtils.isBlank(startForm.getCommandLine())) {
+			startForm.setCommandLine(targetServer.getAgentStartCommandLine());
+		}
 
 		return "target-server/agent/start";
 	}
+
 
 	@RequestMapping(path = "/start", method = RequestMethod.POST)
 	public String agentStart(@PathVariable("id") Long id,
@@ -109,4 +110,34 @@ public class TargetServerAgentController {
 		}
 	}
 
+	@RequestMapping(path = "/stop", method = RequestMethod.GET)
+	public String agentStop(@PathVariable("id") Long id,
+			@ModelAttribute("stopForm") AgentStopForm stopForm, Model model) throws IOException {
+
+		TargetServerDto targetServer = targetServerService.getTargetServerDto(id);
+		model.addAttribute("targetServer", targetServer);
+
+		if (StringUtils.isBlank(stopForm.getCommandLine())) {
+			stopForm.setCommandLine(targetServer.getAgentStopCommandLine());
+		}
+
+		return "target-server/agent/stop";
+	}
+
+	@RequestMapping(path = "/stop", method = RequestMethod.POST)
+	public String agentStop(@PathVariable("id") Long id,
+			@ModelAttribute("stopForm") AgentStopForm stopForm,
+			Model model, RedirectAttributes redirectAttributes) throws IOException {
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream printStream = new PrintStream(baos)) {
+			agentManagementService.stopAgent(id, stopForm, printStream);
+			String output = baos.toString("UTF-8");
+
+			FlashMessage flashMessage = FlashMessage.ofInfo(output);
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, flashMessage);
+
+			return "redirect:/target-server";
+		}
+	}
 }

@@ -39,6 +39,8 @@ public class QTargetServer extends EntityPathBase<TargetServer> {
 
     public final NumberPath<Long> agentMonitorInterval = createNumber("agentMonitorInterval", Long.class);
 
+    public final StringPath agentPidFile = createString("agentPidFile");
+
     public final StringPath agentStartCommandLine = createString("agentStartCommandLine");
 
     public final StringPath agentStatus = createString("agentStatus");
