@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class AppTemplateUpdateForm {
 
-	private Long id;
 	private String name;
 	private String description;
 

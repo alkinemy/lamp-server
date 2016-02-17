@@ -2,6 +2,7 @@ package lamp.admin.web.controller;
 
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.domain.*;
+import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppRepoService;
 import lamp.admin.core.app.service.AppTemplateService;
 import lamp.admin.web.AdminErrorCode;
@@ -16,10 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -36,6 +34,8 @@ public class AppTemplateController {
 	private AppTemplateService appTemplateService;
 
 	@Autowired
+	private AppInstallScriptService appInstallScriptService;
+	@Autowired
 	private AppRepoService appRepoService;
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
@@ -43,6 +43,17 @@ public class AppTemplateController {
 		Page<AppTemplateDto> page = appTemplateService.getAppTemplateDtoList(pageable);
 		model.addAttribute("page", page);
 		return "app/template/list";
+	}
+
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
+	public String view(@PathVariable("id") Long id, Model model) {
+		AppTemplateDto appTemplateDto = appTemplateService.getAppTemplateDto(id);
+		model.addAttribute("appTemplate", appTemplateDto);
+
+		List<AppInstallScriptDto> appInstallScriptDtos = appInstallScriptService.getAppInstallScriptDtoList(id);
+		model.addAttribute("appInstallScripts", appInstallScriptDtos);
+
+		return "app/template/view";
 	}
 
 	@RequestMapping(path = "/create", method = RequestMethod.GET)
@@ -95,16 +106,18 @@ public class AppTemplateController {
 	}
 
 
-	@RequestMapping(path = "/update", method = RequestMethod.GET)
-	public String update(@ModelAttribute("editForm") AppTemplateUpdateForm editForm, Model model) {
+	@RequestMapping(path = "/{id}/update", method = RequestMethod.GET)
+	public String update(@PathVariable("id") Long id,
+						 @ModelAttribute("editForm") AppTemplateUpdateForm editForm, Model model) {
 
-		AppTemplateUpdateForm updateForm = appTemplateService.getAppTemplateUpdateForm(editForm.getId());
+		AppTemplateUpdateForm updateForm = appTemplateService.getAppTemplateUpdateForm(id);
 		BeanUtils.copyProperties(updateForm, editForm);
 
-		return updateForm(editForm, model);
+		return updateForm(id, editForm, model);
 	}
 
-	protected String updateForm(@ModelAttribute("editForm") AppTemplateUpdateForm editForm, Model model) {
+	protected String updateForm(Long id,
+								AppTemplateUpdateForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_UPDATE);
 
 		if (editForm.getRepositoryId() != null) {
@@ -126,14 +139,15 @@ public class AppTemplateController {
 		return "app/template/edit";
 	}
 
-	@RequestMapping(path = "/update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("editForm") AppTemplateUpdateForm editForm,
+	@RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
+	public String update(@PathVariable("id") Long id,
+						 @Valid @ModelAttribute("editForm") AppTemplateUpdateForm editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
-			return updateForm(editForm, model);
+			return updateForm(id, editForm, model);
 		}
-		appTemplateService.updateAppTemplate(editForm);
+		appTemplateService.updateAppTemplate(id, editForm);
 
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
 

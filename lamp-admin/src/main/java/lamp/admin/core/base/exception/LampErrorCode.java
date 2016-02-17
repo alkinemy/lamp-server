@@ -47,7 +47,9 @@ public enum LampErrorCode implements ErrorCode {
 	, TARGET_SERVER_DELETE_FAILED_AGENT_EXIST("에이전트가 존재하기 때문에, 타겟 서버를 삭제할 수 없습니다.", FlashMessageException.class)
 	, DUPLICATED_LOCAL_APP_FILE("이미 등록되어 있습니다.")
 	, LOCAL_APP_FILE_UPLOAD_FAILED("파일 업로드를 실패하였습니다")
-	, INVALID_AUTH_TOKEN("인증 토큰이 유효하지 않습니다");
+	, INVALID_AUTH_TOKEN("인증 토큰이 유효하지 않습니다")
+	, APP_INSTALL_COMMAND_NOT_FOUND("명령어가 존재하지 않습니다")
+	, UNSUPPORTED_APP_INSTALL_COMMAND_TYPE("지원하지 않는 명령어 타입입니다");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

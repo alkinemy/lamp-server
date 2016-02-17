@@ -63,8 +63,8 @@ public class AppTemplateService {
 	}
 
 	@Transactional
-	public AppTemplate updateAppTemplate(AppTemplateUpdateForm editForm) {
-		AppTemplate appTemplate = getAppTemplate(editForm.getId());
+	public AppTemplate updateAppTemplate(Long id, AppTemplateUpdateForm editForm) {
+		AppTemplate appTemplate = getAppTemplate(id);
 		smartAssembler.populate(editForm, appTemplate);
 		return appTemplate;
 	}

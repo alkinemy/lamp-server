@@ -12,6 +12,7 @@ public class AppTemplateDto {
 	private String description;
 
 	private AppResourceType resourceType;
+	private Long repositoryId;
 
 	private String groupId;
 	private String artifactId;
@@ -19,13 +20,15 @@ public class AppTemplateDto {
 	private String version;
 
 	private AppProcessType processType;
-	private String homeDirectory;
+	private String appDirectory;
 	private String workDirectory;
+	private String logDirectory;
+
 	private String pidFile;
+	private String stdOutFile;
+	private String stdErrFile;
 
-	private String logFile;
-	private String errorLogFile;
-
+	private String commandShell;
 	private String startCommandLine;
 	private String stopCommandLine;
 
