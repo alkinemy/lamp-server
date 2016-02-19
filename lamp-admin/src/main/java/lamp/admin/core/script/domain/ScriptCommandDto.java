@@ -1,4 +1,4 @@
-package lamp.admin.core.app.domain;
+package lamp.admin.core.script.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,11 +7,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AppInstallScriptCreateForm {
+public abstract class ScriptCommandDto {
 
+	private Long id;
 	private String name;
 	private String description;
-	private String version;
 
-	private String commands;
+	public abstract ScriptCommandType getType();
 }

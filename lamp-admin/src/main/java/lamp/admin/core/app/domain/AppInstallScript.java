@@ -1,30 +1,21 @@
 package lamp.admin.core.app.domain;
 
-import lamp.admin.core.base.domain.AbstractAuditingEntity;
+import lamp.admin.core.script.domain.Script;
+import lamp.admin.core.script.domain.ScriptType;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@DiscriminatorValue(value = ScriptType.Values.INSTALL)
 @Table(name = "lamp_app_install_script")
-public class AppInstallScript extends AbstractAuditingEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+@PrimaryKeyJoinColumn(name = "id")
+public class AppInstallScript extends Script {
 
 	@Column(updatable = false)
 	private Long templateId;
-
-	private String name;
-	private String description;
-	private String version;
-
-	@OneToMany(mappedBy = "appInstallScript")
-	private List<AppInstallCommand> commands;
 
 }

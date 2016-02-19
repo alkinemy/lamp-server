@@ -17,4 +17,5 @@ public abstract class AbstractListAssembler<F, T> extends AbstractAssembler<F, T
 		return list;
 	}
 
+
 }

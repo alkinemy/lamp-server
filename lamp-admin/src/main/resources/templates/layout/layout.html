@@ -27,11 +27,14 @@
         <link th:href="@{/assets/global/plugins/morris/morris.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/assets/global/plugins/fullcalendar/fullcalendar.min.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/assets/global/plugins/jqvmap/jqvmap/jqvmap.css}" rel="stylesheet" type="text/css" />
+        <div layout:fragment="page-level-style" th:remove="tag">
+        </div>
         <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link th:href="@{/assets/global/css/components.min.css}" rel="stylesheet" id="style_components" type="text/css" />
         <link th:href="@{/assets/global/css/plugins.min.css}" rel="stylesheet" type="text/css" />
         <!-- END THEME GLOBAL STYLES -->
+
         <!-- BEGIN THEME LAYOUT STYLES -->
         <link th:href="@{/assets/layouts/layout/css/layout.min.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/assets/layouts/layout/css/themes/darkblue.min.css}" rel="stylesheet" type="text/css" id="style_color" />
@@ -68,7 +71,7 @@
         <!-- BEGIN FOOTER -->
         <div th:replace="fragments/footer :: footer">...</div>
         <!-- END FOOTER -->
-        <!--[if lt IE 9]>
+<!--[if lt IE 9]>
 <script th:src="@{/assets/global/plugins/respond.min.js}"></script>
 <script th:src="@{/assets/global/plugins/excanvas.min.js}"></script> 
 <![endif]-->
@@ -118,6 +121,8 @@
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <!--<script th:src="@{/assets/pages/scripts/dashboard.min.js}" type="text/javascript"></script>-->
+        <div layout:fragment="page-level-script" th:remove="tag">
+        </div>
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script th:src="@{/assets/layouts/layout/scripts/layout.min.js}" type="text/javascript"></script>

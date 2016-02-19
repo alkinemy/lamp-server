@@ -5,6 +5,8 @@ import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.app.domain.*;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
+import lamp.admin.core.script.domain.ScriptCommand;
+import lamp.admin.core.script.domain.ScriptCommandDtoAssembler;
 import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.core.support.agent.model.AgentAppRegisterForm;
 import lamp.admin.core.support.agent.model.AgentAppUpdateFileForm;
@@ -34,6 +36,11 @@ public class AppService {
 	@Autowired
 	private AppResourceService appResourceService;
 
+	@Autowired
+	private AppInstallScriptService appInstallScriptService;
+
+	@Autowired
+	private ScriptCommandDtoAssembler scriptCommandDtoAssembler;
 
 	public List<AppDto> getAppDtoList(String agentId) {
 		Agent agent = agentService.getAgent(agentId);
@@ -80,10 +87,15 @@ public class AppService {
 			agentAppRegisterForm.setInstallFile(appResource);
 		}
 		agentAppRegisterForm.setFilename(appTemplate.getAppFilename());
-		agentAppRegisterForm.setMonitor(editForm.getMonitor() != null ? editForm.getMonitor() : Boolean.FALSE);
+		agentAppRegisterForm.setMonitor(ObjectUtils.defaultIfNull(editForm.getMonitor(), Boolean.FALSE));
 
 		// FIXME AppTemplate -> Form으로 변경해야함.
-		agentAppRegisterForm.setCommands(appTemplate.getCommands());
+		Long installScriptId = editForm.getInstallScriptId();
+		if (installScriptId != null) {
+			AppInstallScript installScript = appInstallScriptService.getAppInstallScript(installScriptId);
+			String commands = scriptCommandDtoAssembler.stringify(installScript.getCommands());
+			agentAppRegisterForm.setCommands(commands);
+		}
 
 		agentAppRegisterForm.setParametersType(appTemplate.getParametersType());
 		agentAppRegisterForm.setParameters(appTemplate.getParameters());

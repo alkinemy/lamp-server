@@ -1,5 +1,6 @@
 package lamp.admin.core.app.domain;
 
+import lamp.admin.core.script.domain.ScriptCommand;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,6 @@ public class AppInstallScriptDto {
 	private String description;
 	private String version;
 
-	private List<AppInstallCommand> commands;
+	private List<ScriptCommand> commands;
 
 }

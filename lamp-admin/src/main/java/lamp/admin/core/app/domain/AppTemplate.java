@@ -58,8 +58,6 @@ public class AppTemplate extends AbstractAuditingEntity {
 	private ParametersType parametersType;
 	private String parameters;
 
-	private String commands;
-
 	@Column(columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;
 
