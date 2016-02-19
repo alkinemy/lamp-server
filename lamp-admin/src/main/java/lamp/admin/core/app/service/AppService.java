@@ -72,6 +72,7 @@ public class AppService {
 		agentAppRegisterForm.setWorkDirectory(appTemplate.getWorkDirectory());
 		agentAppRegisterForm.setLogDirectory(appTemplate.getLogDirectory());
 		agentAppRegisterForm.setPidFile(appTemplate.getPidFile());
+		agentAppRegisterForm.setPtql(appTemplate.getPtql());
 		agentAppRegisterForm.setStdOutFile(appTemplate.getStdOutFile());
 		agentAppRegisterForm.setStdErrFile(appTemplate.getStdErrFile());
 		agentAppRegisterForm.setStartCommandLine(appTemplate.getStartCommandLine());

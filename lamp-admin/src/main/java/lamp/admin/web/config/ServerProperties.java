@@ -22,7 +22,7 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 
 	private int connectTimeout = 3 * 1000;
 	private int connectionRequestTimeout = 3 * 1000;
-	private int readTimeout = 3 * 1000;
+	private int readTimeout = 10 * 1000;
 
 	private Long healthCheckPeriod;
 	private Long metricsCheckPeriod;

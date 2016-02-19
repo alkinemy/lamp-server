@@ -22,6 +22,7 @@ CREATE TABLE `lamp_app_template` (
   `log_directory` varchar(1000) DEFAULT NULL,
 
   `pid_file` varchar(500) DEFAULT NULL,
+  `ptql` varchar(500) DEFAULT NULL,
 
   `std_out_file` varchar(500) DEFAULT NULL,
   `std_err_file` varchar(500) DEFAULT NULL,

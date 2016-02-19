@@ -1,7 +1,7 @@
 package lamp.admin.core.app.domain;
 
 import lamp.admin.core.script.domain.ScriptCommand;
-import lamp.admin.core.script.service.ScriptCommandsParser;
+import lamp.admin.core.script.domain.ScriptCommandsParser;
 import lamp.admin.utils.assembler.AbstractAssembler;
 import lamp.admin.utils.assembler.Populater;
 import lombok.extern.slf4j.Slf4j;

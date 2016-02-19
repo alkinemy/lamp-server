@@ -16,9 +16,6 @@ public class ScriptCommandDtoAssembler extends AbstractListAssembler<ScriptComma
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
-	@Autowired
-	private ScriptCommandDtoAssembler scriptCommandDtoAssembler;
-
 	@Override protected ScriptCommandDto doAssemble(ScriptCommand appInstallCommand) {
 		ScriptCommandDto appInstallCommandDto;
 		if (appInstallCommand instanceof ScriptExecuteCommand) {
@@ -40,7 +37,7 @@ public class ScriptCommandDtoAssembler extends AbstractListAssembler<ScriptComma
 			return null;
 		}
 
-		List<ScriptCommandDto> scriptCommandDtoList = scriptCommandDtoAssembler.assemble(scriptCommands);
+		List<ScriptCommandDto> scriptCommandDtoList = assemble(scriptCommands);
 		try {
 			return objectMapper.writeValueAsString(scriptCommandDtoList);
 		} catch (JsonProcessingException e) {

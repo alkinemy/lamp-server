@@ -52,23 +52,36 @@
 			return obj;
 		};
 
-		var addCommand = function() {
-			var modal = $(this).parents('.modal:first');
+		var addItem = function() {
+			var modal = $(this).closest('.modal');
 			var form = modal.find("form");
 			console.log('form = ' + form.attr('name'));
 			var formData = form.serializeObject();
 			console.log(JSON.stringify(formData));
 
 			// var item = $("<li class='dd-item' data-id='" + formData.name+ "'><div class='dd-handle'>" + formData.name + "</div></li>");
-			var $div = $("<div class='dd-handle' />").text(formData.name);
+			var $divHandle = $("<div class='dd-handle dd3-handle' > </div>");
+			var $divContent = $("<div class='dd3-content' />");
+			var $spanName = $("<span />").text(formData.name);
+			var $spanClose = $("<span class='pull-right'><a class='item-delete text-danger'><i class='fa fa-close'></i></a></span>");
+			$divContent.append($spanName);
+			$divContent.append($spanClose);
+
 			var $li = $("<li class='dd-item' />")
 			$li.attr('data-id', formData.name);
 			$li.attr('data-json', JSON.stringify(formData));
-			$li.append($div);
+			$li.append($divHandle);
+			$li.append($divContent);
 
 			$("#command_list ol").append($li);
 			form.trigger("reset");
 			modal.modal("hide")
+		};
+
+		var deleteItem = function() {
+			$(this).closest('li').fadeOut(500, function() {
+				$(this).remove();
+			});
 		};
 
 		jQuery(document).ready(function() {
@@ -93,8 +106,9 @@
 			});
 
 
-			$(".modal-submit").click(addCommand);
+			$(".modal-submit").click(addItem);
 
+			$("#command_list").on('click', '.item-delete', deleteItem);
 
 		});
 	// ]]>
@@ -169,8 +183,12 @@
 											<div class="portlet-body" style="display: block;">
 												<div class="dd" id="command_list">
 													<ol class="dd-list">
-														<li class="dd-item" th:each="command : ${commandList}" th:attr="data-id=${command.id},data-json=${JSON.stringify(command)}">
-															<div class="dd-handle" th:text="${command.name}"> Item 14 </div>
+														<li class="dd-item dd3-item" th:each="command : ${commandList}" th:attr="data-id=${command.id},data-json=${JSON.stringify(command)}">
+															<div class="dd-handle dd3-handle"> </div>
+															<div class="dd3-content">
+																<span th:text="${command.name}">Item</span>
+																<span class="pull-right"><a class="item-delete text-danger"><i class="fa fa-close"></i></a></span>
+															</div>
 														</li>
 													</ol>
 												</div>
@@ -216,7 +234,7 @@
 										<div class="col-md-9">
 											<select class="form-control" name="commandShell">
 												<option th:each="shell : ${commandShells}"
-														th:value="${shell.name()}" th:text="${shell.name()}">Option 1</option>
+														th:value="${shell.getShell()}" th:text="${shell.name()}">Option 1</option>
 											</select>
 										</div>
 									</div>
@@ -271,7 +289,7 @@
 										<div class="col-md-9">
 											<div class="checkbox-list">
 												<label class="checkbox-inline">
-													<span class=""><input type="checkbox" name="execute" /></span>Execute </label>
+													<span class=""><input type="checkbox" name="executable" /></span>Executable </label>
 											</div>
 										</div>
 									</div>

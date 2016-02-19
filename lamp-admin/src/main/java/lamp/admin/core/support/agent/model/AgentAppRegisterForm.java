@@ -25,6 +25,7 @@ public class AgentAppRegisterForm {
 	private String workDirectory;
 	private String logDirectory;
 	private String pidFile;
+	private String ptql;
 	private String stdOutFile;
 	private String stdErrFile;
 	private String commandShell;

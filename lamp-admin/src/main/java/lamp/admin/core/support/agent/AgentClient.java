@@ -81,6 +81,7 @@ public class AgentClient {
 			parts.add("workDirectory", form.getWorkDirectory());
 			parts.add("logDirectory", form.getLogDirectory());
 			parts.add("pidFile", form.getPidFile());
+			parts.add("ptql", form.getPtql());
 			parts.add("stdOutFile", form.getStdOutFile());
 			parts.add("stdErrFile", form.getStdErrFile());
 			parts.add("startCommandLine", form.getStartCommandLine());
@@ -91,7 +92,7 @@ public class AgentClient {
 			}
 			parts.add("filename", form.getFilename());
 			parts.add("monitor", form.isMonitor());
-			parts.add("commands", form.getCommands());
+			parts.add("commands", StringUtils.utf8ToIso88591(form.getCommands()));
 
 			if (form.getParametersType() != null) {
 				parts.add("parametersType", form.getParametersType().name());

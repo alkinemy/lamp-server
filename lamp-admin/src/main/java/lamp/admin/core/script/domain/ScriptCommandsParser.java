@@ -1,4 +1,4 @@
-package lamp.admin.core.script.service;
+package lamp.admin.core.script.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lamp.admin.core.app.domain.CommandShell;
@@ -31,24 +31,24 @@ public class ScriptCommandsParser {
 		List<ScriptCommand> scriptCommands = new ArrayList<>();
 		if (StringUtils.isNotBlank(commandsStr)) {
 			try {
+				log.info("commands = {}", commandsStr);
 				Map<String, Object>[] commandMaps = objectMapper.readValue(commandsStr, Map[].class);
-				log.info("commands = {}", commandMaps);
 				for (Map<String, Object> command : commandMaps) {
 					ScriptCommandType type = ScriptCommandType.valueOf((String) command.get("type"));
 					ScriptCommand scriptCommand;
 					switch (type) {
 						case EXECUTE:
 							scriptCommand = new ScriptExecuteCommand();
-							((ScriptExecuteCommand)scriptCommand).setCommandShell(CommandShell.valueOf((String) command.get("commandShell")));
+							((ScriptExecuteCommand)scriptCommand).setCommandShell((String) command.get("commandShell"));
 							((ScriptExecuteCommand)scriptCommand).setCommandLine((String) command.get("commandLine"));
 							break;
 						case FILE_CREATE:
 							scriptCommand = new ScriptFileCreateCommand();
 							((ScriptFileCreateCommand)scriptCommand).setFilename((String) (command.get("filename")));
 							((ScriptFileCreateCommand)scriptCommand).setContent((String) command.get("content"));
-//							((ScriptFileCreateCommand)scriptCommand).setRead(BooleanUtils.toBoolean(command.get("read")));
-//							((ScriptFileCreateCommand)scriptCommand).setWrite(BooleanUtils.toBoolean(command.get("write")));
-							((ScriptFileCreateCommand)scriptCommand).setExecute(BooleanUtils.toBoolean(String.valueOf(command.get("execute"))));
+//							((ScriptFileCreateCommand)scriptCommand).setReadable(BooleanUtils.toBoolean(command.get("readable")));
+//							((ScriptFileCreateCommand)scriptCommand).setWritable(BooleanUtils.toBoolean(command.get("writable")));
+							((ScriptFileCreateCommand)scriptCommand).setExecutable(BooleanUtils.toBoolean(String.valueOf(command.get("executable"))));
 							break;
 						case FILE_REMOVE:
 							scriptCommand = new ScriptFileRemoveCommand();

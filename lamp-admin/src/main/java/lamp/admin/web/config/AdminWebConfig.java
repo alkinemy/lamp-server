@@ -4,6 +4,7 @@ package lamp.admin.web.config;
 import lamp.admin.core.app.service.MavenAppResourceLoader;
 import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.core.support.agent.AgentHttpRequestInterceptor;
+import lamp.admin.core.support.agent.AgentResponseErrorHandler;
 import lamp.admin.utils.assembler.SmartAssembler;
 import lamp.admin.web.support.LampMessageInterpolator;
 import lamp.admin.web.support.MenuItemInterceptor;
@@ -62,7 +63,9 @@ public class AdminWebConfig extends WebMvcConfigurerAdapter {
 		clientHttpRequestFactory.setConnectionRequestTimeout(serverProperties.getConnectionRequestTimeout());
 		clientHttpRequestFactory.setReadTimeout(serverProperties.getReadTimeout());
 
+		AgentResponseErrorHandler errorHandler = new AgentResponseErrorHandler();
 		RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+		restTemplate.setErrorHandler(errorHandler);
 		restTemplate.getInterceptors().add(new AgentHttpRequestInterceptor());
 		return new AgentClient(restTemplate);
 	}

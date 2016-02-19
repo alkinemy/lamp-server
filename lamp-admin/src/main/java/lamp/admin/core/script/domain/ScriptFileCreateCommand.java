@@ -18,11 +18,11 @@ public class ScriptFileCreateCommand extends ScriptCommand {
 	private String content;
 
 
-	@Column(name = "readable", columnDefinition = "TINYINT", nullable = false)
-	private boolean read = true;
-	@Column(name = "writable",columnDefinition = "TINYINT", nullable = false)
-	private boolean write = true;
-	@Column(name = "executable",columnDefinition = "TINYINT", nullable = false)
-	private boolean execute = false;
+	@Column(columnDefinition = "TINYINT", nullable = false)
+	private boolean readable = true;
+	@Column(columnDefinition = "TINYINT", nullable = false)
+	private boolean writable = true;
+	@Column(columnDefinition = "TINYINT", nullable = false)
+	private boolean executable = false;
 
 }
