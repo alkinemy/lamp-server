@@ -6,6 +6,7 @@ import lamp.admin.core.app.repository.LocalAppFileRepository;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
 import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.utils.StringUtils;
 import lamp.admin.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.plexus.util.FileUtils;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -45,6 +47,10 @@ public class LocalAppFileService {
 		LocalAppFileSearchParams searchParams = new LocalAppFileSearchParams();
 		searchParams.setRepositoryId(repositoryId);
 		return getLocalAppFileList(searchParams, pageable);
+	}
+
+	public List<LocalAppFile> getLocalAppFiles(Long repositoryId, String groupId, String artifactId) {
+		return localAppFileRepository.findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(repositoryId, groupId, artifactId);
 	}
 
 	public LocalAppFileDto getLocalAppFileDto(Long id) {
@@ -106,4 +112,6 @@ public class LocalAppFileService {
 		}
 		localAppFileRepository.delete(localAppFile);
 	}
+
+
 }

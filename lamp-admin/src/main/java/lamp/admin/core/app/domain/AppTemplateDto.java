@@ -13,6 +13,7 @@ public class AppTemplateDto {
 
 	private AppResourceType resourceType;
 	private Long repositoryId;
+	private String repositoryName;
 
 	private String groupId;
 	private String artifactId;

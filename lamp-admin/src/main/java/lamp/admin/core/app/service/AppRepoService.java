@@ -21,6 +21,12 @@ public class AppRepoService {
 	private AppRepoRepository appRepoRepository;
 
 	@Autowired
+	private LocalAppRepoService localAppRepoService;
+
+	@Autowired
+	private MavenAppRepoService mavenAppRepoService;
+
+	@Autowired
 	private SmartAssembler smartAssembler;
 
 	public Page<AppRepoDto> getAppRepoList(Pageable pageable) {
@@ -39,6 +45,16 @@ public class AppRepoService {
 
 	public <T extends AppRepo> T getAppRepo(Long id) {
 		return (T) getAppRepoOptional(id).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_REPOSITORY_NOT_FOUND, id));
+	}
+
+	public List<String> getVersions(Long id,String groupId, String artifactId) {
+		AppRepo appRepo = getAppRepo(id);
+		if (appRepo instanceof LocalAppRepo) {
+			return localAppRepoService.getVersions((LocalAppRepo) appRepo, groupId, artifactId);
+		} else if (appRepo instanceof MavenAppRepo) {
+			return mavenAppRepoService.getVersions((MavenAppRepo) appRepo, groupId, artifactId);
+		}
+		return null;
 	}
 
 	public AppRepoUpdateForm getAppRepoUpdateForm(Long id) {

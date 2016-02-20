@@ -71,11 +71,6 @@ public class AdminWebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public MavenAppResourceLoader mavenAppResourceLoader(ServerProperties serverProperties) {
-		return new MavenAppResourceLoader(serverProperties.getMavenAppRepository());
-	}
-
-	@Bean
 	public LampErrorAttributes errorAttributes() {
 		return new LampErrorAttributes();
 	}

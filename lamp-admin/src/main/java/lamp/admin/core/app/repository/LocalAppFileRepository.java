@@ -18,5 +18,7 @@ public interface LocalAppFileRepository extends LampJpaRepository<LocalAppFile, 
 
 	Page<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(Long repositoryId, String groupId, String artifactId, Pageable pageable);
 
+	List<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(Long repositoryId, String groupId, String artifactId);
+
 	Page<LocalAppFile> findAllByRepositoryId(Long repositoryId, Pageable pageable);
 }

@@ -5,10 +5,7 @@ import lamp.admin.core.agent.domain.AgentDto;
 import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.app.AppManagementListener;
 import lamp.admin.core.app.domain.*;
-import lamp.admin.core.app.service.AppFacadeService;
-import lamp.admin.core.app.service.AppInstallScriptService;
-import lamp.admin.core.app.service.AppManagementListenerService;
-import lamp.admin.core.app.service.AppTemplateService;
+import lamp.admin.core.app.service.*;
 import lamp.admin.core.base.exception.MessageException;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
@@ -18,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,6 +46,9 @@ public class AgentAppController {
 
 	@Autowired
 	private AppTemplateService appTemplateService;
+
+	@Autowired
+	private AppRepoService appRepoService;
 
 	@Autowired
 	private AppInstallScriptService appInstallScriptService;
@@ -85,13 +86,13 @@ public class AgentAppController {
 			return createStep1(agentId, editForm, model);
 		}
 
-		return createForm(agentId, editForm, model);
+		return create(agentId, editForm, model, HttpMethod.GET);
 	}
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.GET)
-	public String createForm(@PathVariable("agentId") String agentId,
+	public String create(@PathVariable("agentId") String agentId,
 							 @ModelAttribute("editForm") AppRegisterForm editForm,
-							 Model model) {
+							 Model model, HttpMethod httpMethod) {
 		model.addAttribute("action", LampAdminConstants.ACTION_CREATE);
 
 		AppTemplateDto appTemplateDto = appTemplateService.getAppTemplateDtoOptional(editForm.getTemplateId());
@@ -99,17 +100,22 @@ public class AgentAppController {
 			return createStep1(agentId, editForm, model);
 		}
 
+
+
 		List<AppInstallScriptDto> appInstallScriptDtoList = appInstallScriptService.getAppInstallScriptDtoList(appTemplateDto.getId());
 		model.addAttribute("appInstallScripts", appInstallScriptDtoList);
 
 		model.addAttribute("appTemplate", appTemplateDto);
 		model.addAttribute("parametersTypes", ParametersType.values());
 
-		editForm.setParametersType(appTemplateDto.getParametersType());
-		editForm.setParameters(appTemplateDto.getParameters());
+		List<String> versions = appRepoService.getVersions(appTemplateDto.getRepositoryId(), appTemplateDto.getGroupId(), appTemplateDto.getArtifactId());
+		model.addAttribute("versions", versions);
 
-
-
+		if (httpMethod.equals(HttpMethod.GET)) {
+			editForm.setParametersType(appTemplateDto.getParametersType());
+			editForm.setParameters(appTemplateDto.getParameters());
+			editForm.setVersion(versions.stream().findFirst().orElse(null));
+		}
 		return "agent/app/edit";
 	}
 
@@ -120,7 +126,7 @@ public class AgentAppController {
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
-			return createForm(agentId, editForm, model);
+			return create(agentId, editForm, model, HttpMethod.POST);
 		}
 
 		try {
@@ -131,7 +137,7 @@ public class AgentAppController {
 			return "redirect:/agent/{agentId}/app";
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-			return createForm(agentId, editForm, model);
+			return create(agentId, editForm, model, HttpMethod.POST);
 		}
 
 	}
