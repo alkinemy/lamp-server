@@ -1,8 +1,28 @@
 USE `lamp`;
 
+DROP TABLE IF EXISTS `lamp_ssh_key`;
 DROP TABLE IF EXISTS `lamp_target_server`;
 DROP TABLE IF EXISTS `lamp_target_server_status`;
 DROP TABLE IF EXISTS `lamp_agent`;
+
+CREATE TABLE `lamp_ssh_key` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `description` varchar(200) DEFAULT NULL,
+
+  `private_key` varchar(1000) DEFAULT NULL,
+  `public_key` varchar(1000) DEFAULT NULL,
+
+  `username` varchar(100) DEFAULT NULL,
+  `encrypted_password` varchar(100) DEFAULT NULL,
+
+  `created_by` varchar(100) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `last_modified_by` varchar(100) DEFAULT NULL,
+  `last_modified_date` datetime,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lamp_ssh_key_uk_01` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_target_server` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
