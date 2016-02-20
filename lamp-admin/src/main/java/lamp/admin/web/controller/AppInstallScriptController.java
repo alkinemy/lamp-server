@@ -5,8 +5,10 @@ import lamp.admin.core.app.domain.*;
 import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppRepoService;
 import lamp.admin.core.app.service.AppTemplateService;
+import lamp.admin.core.script.service.ScriptCommandService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
+import lamp.admin.web.service.JsonService;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +39,10 @@ public class AppInstallScriptController {
 	private AppInstallScriptService appInstallScriptService;
 
 	@Autowired
-	private AppRepoService appRepoService;
+	private ScriptCommandService scriptCommandService;
+
+	@Autowired
+	private JsonService jsonService;
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
 	public String list(Model model, Pageable pageable) {
@@ -67,6 +72,8 @@ public class AppInstallScriptController {
 
 	protected String createForm(Long id, @ModelAttribute("editForm") AppInstallScriptCreateForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
+
+		model.addAttribute("commandShells", CommandShell.values());
 
 		return "app/template/script/edit";
 	}
@@ -102,6 +109,11 @@ public class AppInstallScriptController {
 			AppInstallScriptUpdateForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_UPDATE);
 
+		model.addAttribute("commandShells", CommandShell.values());
+		String commandsJson = editForm.getCommands();
+
+		// TODO 수정바람
+		model.addAttribute("commandList", scriptCommandService.getScriptCommandDtoList(commandsJson));
 
 		return "app/template/script/edit";
 	}
@@ -132,5 +144,10 @@ public class AppInstallScriptController {
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.DELETE_SUCCESS));
 
 		return "redirect:/app/template/{id}";
+	}
+
+	@ModelAttribute("JSON")
+	protected JsonService jsonService() {
+		return jsonService;
 	}
 }

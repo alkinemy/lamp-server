@@ -42,6 +42,7 @@ public class AppTemplate extends AbstractAuditingEntity {
 	private String logDirectory;
 
 	private String pidFile;
+	private String ptql;
 
 	private String stdOutFile;
 	private String stdErrFile;
@@ -57,8 +58,6 @@ public class AppTemplate extends AbstractAuditingEntity {
 
 	private ParametersType parametersType;
 	private String parameters;
-
-	private String commands;
 
 	@Column(columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;

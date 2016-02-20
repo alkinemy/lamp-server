@@ -55,7 +55,7 @@ public class SmartAssembler implements ApplicationContextAware {
 		String[] populaterNames = applicationContext.getBeanNamesForType(Populater.class);
 		for (String name : populaterNames) {
 			Populater populater = (Populater) applicationContext.getBean(name);
-			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(populater.getClass(), Assembler.class);
+			Class<?>[] classes = GenericTypeResolver.resolveTypeArguments(populater.getClass(), Populater.class);
 			Pair<Class, Class> pair = key(classes[0], classes[1]);
 			populaterMap.put(pair, populater);
 			log.info("Populater {} registered ({}, {})", populater, classes[0], classes[1]);

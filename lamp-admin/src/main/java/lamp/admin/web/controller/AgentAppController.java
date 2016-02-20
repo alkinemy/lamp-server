@@ -6,6 +6,7 @@ import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.app.AppManagementListener;
 import lamp.admin.core.app.domain.*;
 import lamp.admin.core.app.service.AppFacadeService;
+import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppManagementListenerService;
 import lamp.admin.core.app.service.AppTemplateService;
 import lamp.admin.core.base.exception.MessageException;
@@ -47,6 +48,9 @@ public class AgentAppController {
 
 	@Autowired
 	private AppTemplateService appTemplateService;
+
+	@Autowired
+	private AppInstallScriptService appInstallScriptService;
 	
 	@Autowired
 	private AppManagementListenerService appManagementListenerService;
@@ -95,12 +99,16 @@ public class AgentAppController {
 			return createStep1(agentId, editForm, model);
 		}
 
-		model.addAttribute("appTemplate", appTemplateDto);
+		List<AppInstallScriptDto> appInstallScriptDtoList = appInstallScriptService.getAppInstallScriptDtoList(appTemplateDto.getId());
+		model.addAttribute("appInstallScripts", appInstallScriptDtoList);
 
+		model.addAttribute("appTemplate", appTemplateDto);
 		model.addAttribute("parametersTypes", ParametersType.values());
 
 		editForm.setParametersType(appTemplateDto.getParametersType());
 		editForm.setParameters(appTemplateDto.getParameters());
+
+
 
 		return "agent/app/edit";
 	}

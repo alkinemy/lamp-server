@@ -1,5 +1,7 @@
 package lamp.admin.core.app.domain;
 
+import lombok.Getter;
+
 public enum CommandShell {
 
 	NONE("")
@@ -10,6 +12,7 @@ public enum CommandShell {
 	, POWERSHELL("powershell -Command")
 	;
 
+	@Getter
 	private String shell;
 
 	CommandShell(String shell) {

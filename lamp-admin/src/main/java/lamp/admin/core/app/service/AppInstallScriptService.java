@@ -76,10 +76,8 @@ public class AppInstallScriptService {
 	}
 
 	public AppInstallScriptUpdateForm getAppInstallScriptUpdateForm(Long id) {
-		AppInstallScript AppInstallScript = getAppInstallScript(id);
-		AppInstallScriptUpdateForm form = new AppInstallScriptUpdateForm();
-		BeanUtils.copyProperties(AppInstallScript, form);
-		return form;
+		AppInstallScript appInstallScript = getAppInstallScript(id);
+		return smartAssembler.assemble(appInstallScript, AppInstallScript.class, AppInstallScriptUpdateForm.class);
 	}
 
 }

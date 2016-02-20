@@ -24,4 +24,5 @@ public class AppRegisterForm {
 	private ParametersType parametersType;
 	private String parameters;
 
+	private Long installScriptId;
 }
