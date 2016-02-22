@@ -166,6 +166,7 @@ public class SshClient {
 	}
 
 	public void mkdir(String path) {
+		log.info("mkdir -p {}", path);
 		exec("mkdir -p " + path);
 	}
 
@@ -177,6 +178,8 @@ public class SshClient {
 	}
 
 	public boolean scpTo(File localFile, String remoteFilename) {
+		log.info("scp {} to {}", localFile.getAbsolutePath(), remoteFilename);
+		
 		boolean ptimestamp = true;
 		String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + remoteFilename;
 		Channel channel = null;

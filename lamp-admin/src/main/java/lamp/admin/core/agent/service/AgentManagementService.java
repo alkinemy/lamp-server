@@ -145,9 +145,9 @@ public class AgentManagementService {
 		tempParameters.put("startCommandLine", appTemplate.getStartCommandLine());
 		tempParameters.put("stopCommandLine", appTemplate.getStopCommandLine());
 
-		return tempParameters.entrySet().stream().collect(Collectors.toMap(
+		return tempParameters.entrySet().stream().filter(e -> e.getValue() != null).collect(Collectors.toMap(
 			e -> e.getKey(),
-			e -> expressionParser.getValue(e.getValue() != null ? String.valueOf(e.getValue()) : null, tempParameters)
+			e -> expressionParser.getValue(String.valueOf(e.getValue()), tempParameters)
 		));
 	}
 
