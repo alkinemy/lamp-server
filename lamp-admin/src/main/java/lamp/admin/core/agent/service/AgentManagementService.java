@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -62,25 +64,18 @@ public class AgentManagementService {
 
 		AppResource resource = appResourceService.getResource(appTemplate, version);
 
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("groupId", resource.getGroupId());
-		parameters.put("artifactId", resource.getArtifactId());
-		parameters.put("version", resource.getVersion());
-		parameters.put("appDirectory", appTemplate.getAppDirectory());
-		parameters.put("workDirectory", appTemplate.getWorkDirectory());
-		parameters.put("logDirectory", appTemplate.getLogDirectory());
-		parameters.put("stdOutFile", appTemplate.getStdOutFile());
-		parameters.put("stdErrFile", appTemplate.getStdErrFile());
+		Map<String, String> parameters = getParameters(appTemplate, resource);
 
 		File file = null;
-		String filename = expressionParser.getValue(appTemplate.getAppFilename(), parameters);
+		String filename = parameters.get("filename");
 		if (StringUtils.isBlank(filename)) {
 			filename = resource.getFilename();
 			if (StringUtils.isBlank(filename)) {
 				filename = "lamp-agent.jar";
+				parameters.put("filename", filename);
 			}
 		}
-		parameters.put("filename", filename);
+
 
 		boolean isTempFile = false;
 		try {
@@ -116,9 +111,9 @@ public class AgentManagementService {
 			targetServer.setAgentInstalledBy(agentInstalledBy);
 			targetServer.setAgentInstalledDate(LocalDateTime.now());
 			targetServer.setAgentInstallFilename(filename);
-			targetServer.setAgentPidFile(expressionParser.getValue(appTemplate.getPidFile(), parameters));
-			targetServer.setAgentStartCommandLine(expressionParser.getValue(appTemplate.getStartCommandLine(), parameters));
-			targetServer.setAgentStopCommandLine(expressionParser.getValue(appTemplate.getStopCommandLine(), parameters));
+			targetServer.setAgentPidFile(parameters.get("pidFile"));
+			targetServer.setAgentStartCommandLine(parameters.get("startCommandLine"));
+			targetServer.setAgentStopCommandLine(parameters.get("stopCommandLine"));
 
 			if (installForm.getInstallScriptId() != null) {
 				executeInstallScript(targetServer, sshClient, installForm.getInstallScriptId(), printStream);
@@ -133,6 +128,27 @@ public class AgentManagementService {
 				file.delete();
 			}
 		}
+	}
+
+	protected Map<String, String> getParameters(AppTemplate appTemplate, AppResource resource) {
+		Map<String, Object> tempParameters = new HashMap<>();
+		tempParameters.put("groupId", resource.getGroupId());
+		tempParameters.put("artifactId", resource.getArtifactId());
+		tempParameters.put("version", resource.getVersion());
+		tempParameters.put("appDirectory", appTemplate.getAppDirectory());
+		tempParameters.put("workDirectory", appTemplate.getWorkDirectory());
+		tempParameters.put("logDirectory", appTemplate.getLogDirectory());
+		tempParameters.put("pidFile", appTemplate.getPidFile());
+		tempParameters.put("stdOutFile", appTemplate.getStdOutFile());
+		tempParameters.put("stdErrFile", appTemplate.getStdErrFile());
+		tempParameters.put("filename", appTemplate.getAppFilename());
+		tempParameters.put("startCommandLine", appTemplate.getStartCommandLine());
+		tempParameters.put("stopCommandLine", appTemplate.getStopCommandLine());
+
+		return tempParameters.entrySet().stream().collect(Collectors.toMap(
+			e -> e.getKey(),
+			e -> expressionParser.getValue(e.getValue() != null ? String.valueOf(e.getValue()) : null, tempParameters)
+		));
 	}
 
 	protected void executeInstallScript(TargetServer targetServer, SshClient sshClient, Long installScriptId, PrintStream printStream) {
