@@ -51,6 +51,7 @@
 										<a th:href="@{/target-server/delete(id=${targetServer.id})}" class="btn red btn-outline">Delete</a>
 										<a th:if="${!targetServer.agentInstalled}" th:href="@{/target-server/{id}/agent/install(id=${targetServer.id})}" class="btn blue btn-outline">Agent Install</a>
 										<a th:if="${targetServer.agentInstalled}" th:href="@{/target-server/{id}/agent/start(id=${targetServer.id})}" class="btn blue btn-outline">Agent Start</a>
+										<a th:if="${targetServer.agentInstalled}" th:href="@{/target-server/{id}/agent/stop(id=${targetServer.id})}" class="btn blue btn-outline">Agent Stop</a>
 									</td>
 								</tr>
 								</tbody>

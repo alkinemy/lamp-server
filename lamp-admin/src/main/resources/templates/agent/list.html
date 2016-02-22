@@ -39,12 +39,12 @@
 									<td th:text="${agent.type}"> Joke </td>
 									<td th:text="${agent.version}"> Joke </td>
 									<td th:text="${agent.protocol}"> Joke </td>
-									<td th:text="${agent.hostname}"> lJokear </td>
+									<td th:text="${agent.hostname}"> Joke </td>
 									<td th:text="${agent.address}"> Joke </td>
 									<td th:text="${agent.port}"> Joke </td>
 									<td>
 										<a th:href="@{/agent/{id}(id=${agent.id})}">View</a> |
-										<a th:href="@{/agent/{id}/app(id=${agent.id})}">App</a>
+										<a th:href="@{/agent/{id}/app(id=${agent.id})}">App</a> |
 										<a th:href="@{/agent/{id}/vm(id=${agent.id})}">JavaVM</a>
 									</td>
 								</tr>
