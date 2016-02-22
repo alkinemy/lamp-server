@@ -26,4 +26,6 @@ public class ScriptCommand extends AbstractAuditingEntity {
 	private String name;
 	private String description;
 
+	@Column(insertable = false, updatable = false)
+	private String type;
 }

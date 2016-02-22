@@ -1,6 +1,8 @@
 package lamp.admin.core.agent.service;
 
 import lamp.admin.core.agent.domain.*;
+import lamp.admin.core.app.domain.AppInstallScript;
+import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppResourceService;
 import lamp.admin.core.app.service.AppTemplateService;
 import lamp.admin.core.app.domain.AppResource;
@@ -8,6 +10,10 @@ import lamp.admin.core.app.domain.AppTemplate;
 import lamp.admin.core.base.exception.EntityNotFoundException;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
+import lamp.admin.core.script.domain.ScriptCommand;
+import lamp.admin.core.script.domain.ExecuteCommand;
+import lamp.admin.core.script.domain.FileCreateCommand;
+import lamp.admin.core.script.domain.FileRemoveCommand;
 import lamp.admin.core.support.el.ExpressionParser;
 import lamp.admin.core.support.ssh.SshClient;
 import lamp.admin.utils.FileUtils;
@@ -24,6 +30,7 @@ import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,10 +47,13 @@ public class AgentManagementService {
 	@Autowired
 	private AppTemplateService appTemplateService;
 
+	@Autowired
+	private AppInstallScriptService appInstallScriptService;
+
 	private ExpressionParser expressionParser = new ExpressionParser();
 
 	@Transactional
-	public void installAgent(Long targetServerId, AgentInstallForm installForm, String agentInstalledBy) {
+	public void installAgent(Long targetServerId, AgentInstallForm installForm, String agentInstalledBy, PrintStream printStream) {
 		AppTemplate appTemplate = appTemplateService.getAppTemplate(installForm.getTemplateId());
 		String version = installForm.getVersion();
 
@@ -99,10 +109,8 @@ public class AgentManagementService {
 				agentPath = appTemplate.getAppDirectory();
 				targetServer.setAgentInstallPath(agentPath);
 			}
-			sshClient.mkdir(agentPath);
-
 			String remoteFilename = Paths.get(agentPath, filename).toString();
-			sshClient.scpTo(file, remoteFilename);
+			sshClient.scpTo(file, remoteFilename, true);
 
 			targetServer.setAgentInstalled(true);
 			targetServer.setAgentInstalledBy(agentInstalledBy);
@@ -111,6 +119,12 @@ public class AgentManagementService {
 			targetServer.setAgentPidFile(expressionParser.getValue(appTemplate.getPidFile(), parameters));
 			targetServer.setAgentStartCommandLine(expressionParser.getValue(appTemplate.getStartCommandLine(), parameters));
 			targetServer.setAgentStopCommandLine(expressionParser.getValue(appTemplate.getStopCommandLine(), parameters));
+
+			if (installForm.getInstallScriptId() != null) {
+				executeInstallScript(targetServer, sshClient, installForm.getInstallScriptId(), printStream);
+			}
+
+
 		} catch (Exception e) {
 			log.warn("Agent Install failed", e);
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);
@@ -118,6 +132,35 @@ public class AgentManagementService {
 			if (isTempFile && file != null) {
 				file.delete();
 			}
+		}
+	}
+
+	protected void executeInstallScript(TargetServer targetServer, SshClient sshClient, Long installScriptId, PrintStream printStream) {
+		AppInstallScript installScript = appInstallScriptService.getAppInstallScript(installScriptId);
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("filename", targetServer.getAgentInstallFilename());
+
+		List<ScriptCommand> scriptCommands = installScript.getCommands();
+		scriptCommands.stream().forEach(sc -> executeScriptCommand(targetServer, sshClient, sc, parameters, printStream));
+
+	}
+
+	protected void executeScriptCommand(TargetServer targetServer, SshClient sshClient, ScriptCommand command, Map<String, Object> parameters, PrintStream printStream) {
+		String agentPath = targetServer.getAgentInstallPath();
+		if (command instanceof ExecuteCommand) {
+			long timeout = 10 * 1000;
+			String commandLine = expressionParser.getValue(((ExecuteCommand) command).getCommandLine(), parameters);
+			sshClient.exec(agentPath, commandLine, printStream, timeout);
+		} else if (command instanceof FileCreateCommand) {
+			String filename = ((FileCreateCommand) command).getFilename();
+			File file = new File(FilenameUtils.getName(filename));
+			String remoteFilename = Paths.get(agentPath, filename).toString();
+			sshClient.scpTo(file, remoteFilename, true);
+		} else if (command instanceof FileRemoveCommand) {
+			// FIXME 구현바람
+			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());
+		} else {
+			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());
 		}
 	}
 

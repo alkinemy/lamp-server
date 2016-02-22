@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @DiscriminatorValue(value = ScriptCommandType.Values.FILE_REMOVE)
 @Table(name = "lamp_script_file_remove_command")
 @PrimaryKeyJoinColumn(name = "id")
-public class ScriptFileRemoveCommand extends ScriptCommand {
+public class FileRemoveCommand extends ScriptCommand {
 
 	private String filename;
 

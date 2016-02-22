@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @DiscriminatorValue(value = ScriptCommandType.Values.EXECUTE)
 @Table(name = "lamp_script_execute_command")
 @PrimaryKeyJoinColumn(name = "id")
-public class ScriptExecuteCommand extends ScriptCommand {
+public class ExecuteCommand extends ScriptCommand {
 
 	private String commandShell;
 

@@ -2,6 +2,7 @@ package lamp.admin.core.support.ssh;
 
 import com.jcraft.jsch.*;
 import lamp.admin.utils.FileUtils;
+import lamp.admin.utils.FilenameUtils;
 import lamp.admin.utils.StringUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -166,6 +167,13 @@ public class SshClient {
 
 	public void mkdir(String path) {
 		exec("mkdir -p " + path);
+	}
+
+	public boolean scpTo(File localFile, String remoteFilename, boolean mkdir) {
+		if (mkdir) {
+			mkdir(FilenameUtils.getPath(remoteFilename));
+		}
+		return scpTo(localFile, remoteFilename);
 	}
 
 	public boolean scpTo(File localFile, String remoteFilename) {

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @DiscriminatorValue(value = ScriptCommandType.Values.FILE_CREATE)
 @Table(name = "lamp_script_file_create_command")
 @PrimaryKeyJoinColumn(name = "id")
-public class ScriptFileCreateCommand extends ScriptCommand {
+public class FileCreateCommand extends ScriptCommand {
 
 	private String filename;
 

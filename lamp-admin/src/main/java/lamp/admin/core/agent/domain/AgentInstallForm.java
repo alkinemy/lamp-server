@@ -1,5 +1,6 @@
 package lamp.admin.core.agent.domain;
 
+import lamp.admin.core.app.domain.ParametersType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +16,11 @@ public class AgentInstallForm {
 	private Long templateId;
 	private String version;
 
+	// SSH
 	private String password;
 
+	private ParametersType parametersType;
+	private String parameters;
+
+	private Long installScriptId;
 }

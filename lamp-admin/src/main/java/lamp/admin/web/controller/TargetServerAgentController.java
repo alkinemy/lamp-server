@@ -67,15 +67,20 @@ public class TargetServerAgentController {
 	public String agentInstall(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("editForm") AgentInstallForm editForm,
 				BindingResult bindingResult, Model model,
-				RedirectAttributes redirectAttributes) {
+				RedirectAttributes redirectAttributes) throws IOException {
 		if (bindingResult.hasErrors()) {
 			return agentInstallForm(id, editForm, model);
 		}
-		agentManagementService.installAgent(id, editForm, SecurityUtils.getCurrentUserLogin());
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream printStream = new PrintStream(baos)) {
 
-		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
+			agentManagementService.installAgent(id, editForm, SecurityUtils.getCurrentUserLogin(), printStream);
 
-		return "redirect:/target-server";
+			String output = baos.toString("UTF-8");
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
+
+			return "redirect:/target-server";
+		}
 	}
 
 	@RequestMapping(path = "/start", method = RequestMethod.GET)

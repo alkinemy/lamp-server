@@ -6,7 +6,6 @@ import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
 import lamp.admin.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,11 +17,11 @@ public class ScriptCommandDtoAssembler extends AbstractListAssembler<ScriptComma
 
 	@Override protected ScriptCommandDto doAssemble(ScriptCommand appInstallCommand) {
 		ScriptCommandDto appInstallCommandDto;
-		if (appInstallCommand instanceof ScriptExecuteCommand) {
+		if (appInstallCommand instanceof ExecuteCommand) {
 			appInstallCommandDto = new ScriptExecuteCommandDto();
-		} else if (appInstallCommand instanceof ScriptFileCreateCommand) {
+		} else if (appInstallCommand instanceof FileCreateCommand) {
 			appInstallCommandDto = new ScriptFileCreateCommandDto();
-		} else if (appInstallCommand instanceof ScriptFileRemoveCommand) {
+		} else if (appInstallCommand instanceof FileRemoveCommand) {
 			appInstallCommandDto = new ScriptFileRemoveCommandDto();
 		} else {
 			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE);
