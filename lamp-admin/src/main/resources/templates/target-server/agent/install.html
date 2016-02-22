@@ -16,21 +16,31 @@
 					<div class="portlet-body form">
 						<form class="form-horizontal" role="form"  th:action="@{/target-server/{id}/agent/install(id=${targetServer.id})}" th:object="${editForm}" method="post">
 							<div class="form-body">
-								<div class="form-group" th:class="${#fields.hasErrors('templateId')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group">
 									<label class="col-md-3 control-label">Template</label>
 									<div class="col-md-9">
-										<select class="form-control" th:field="*{templateId}">
-											<option th:each="appTemplate : ${appTemplateList}"
-													th:value="${appTemplate.id}" th:text="${appTemplate.name}">Option 1</option>
-										</select>
-										<span class="help-block" th:if="${#fields.hasErrors('templateId')}" th:errors="*{templateId}"> A block of help text. </span>
+										<p class="form-control-static" th:text="${appTemplate.name}"> username </p>
+										<input type="hidden" th:field="*{templateId}" />
 									</div>
 								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('version')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Version</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{version}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('version')}" th:errors="*{version}"> A block of help text. </span>
+										<select class="form-control" th:field="*{version}">
+											<option th:each="ver : ${versions}"
+													th:value="${ver}" th:text="${ver}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('installScriptId')}" th:errors="*{installScriptId}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('installScriptId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Install Script</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{installScriptId}">
+											<option th:each="appInstallScript : ${appInstallScripts}"
+													th:value="${appInstallScript.id}" th:text="${appInstallScript.name}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('installScriptId')}" th:errors="*{installScriptId}"> A block of help text. </span>
 									</div>
 								</div>
 
@@ -59,7 +69,6 @@
 										</div>
 									</div>
 								</div>
-
 
 							</div>
 							<div class="form-actions">

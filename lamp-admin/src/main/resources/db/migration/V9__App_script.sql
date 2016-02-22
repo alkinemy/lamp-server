@@ -59,6 +59,7 @@ CREATE TABLE `lamp_script_file_create_command` (
 
   `filename` varchar(1000) DEFAULT NULL,
   `content` MEDIUMTEXT DEFAULT NULL,
+  `charset` varchar(100) DEFAULT NULL,
 
   `readable` tinyint(1) NOT NULL,
   `writable` tinyint(1) NOT NULL,

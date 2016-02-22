@@ -51,7 +51,8 @@ public enum LampErrorCode implements ErrorCode {
 	, APP_INSTALL_COMMAND_NOT_FOUND("명령어가 존재하지 않습니다")
 	, UNSUPPORTED_SCRIPT_COMMAND_TYPE("지원하지 않는 명령어 타입입니다")
 	, INVALID_SCRIPT_COMMANDS("스크립트 명령어가 잘못되었습니다.")
-	, JSON_PROCESS_FAILED("Json Processing failed");
+	, JSON_PROCESS_FAILED("Json Processing failed")
+	, SCRIPT_COMMAND_EXECUTION_FAILED("스크립트 명령어 실행을 실패하였습니다");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

@@ -17,6 +17,8 @@ public class FileCreateCommand extends ScriptCommand {
 
 	private String content;
 
+	private String charset = "UTF-8";
+
 
 	@Column(columnDefinition = "TINYINT", nullable = false)
 	private boolean readable = true;

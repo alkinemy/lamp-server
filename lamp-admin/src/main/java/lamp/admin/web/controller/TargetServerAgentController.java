@@ -4,10 +4,11 @@ import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.domain.*;
 import lamp.admin.core.agent.service.AgentManagementService;
 import lamp.admin.core.agent.service.TargetServerService;
+import lamp.admin.core.app.domain.AppInstallScriptDto;
 import lamp.admin.core.app.domain.AppTemplateDto;
+import lamp.admin.core.app.service.AppInstallScriptService;
+import lamp.admin.core.app.service.AppRepoService;
 import lamp.admin.core.app.service.AppTemplateService;
-import lamp.admin.core.base.exception.Exceptions;
-import lamp.admin.core.base.exception.LampErrorCode;
 import lamp.admin.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
@@ -29,7 +30,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
-import java.util.Optional;
 
 @MenuMapping(MenuConstants.TARGET_SERVER_AGENT)
 @Controller
@@ -42,26 +42,55 @@ public class TargetServerAgentController {
 	@Autowired
 	private AppTemplateService appTemplateService;
 
-
 	@Autowired
 	private AgentManagementService agentManagementService;
 
-	@RequestMapping(path = "/install", method = RequestMethod.GET)
-	public String agentInstallForm(@PathVariable("id") Long id,
-								   @ModelAttribute("editForm") AgentInstallForm editForm, Model model) {
+	@Autowired
+	private AppRepoService appRepoService;
 
-		Optional<TargetServer> targetServerOptional = targetServerService.getTargetServerOptional(id);
-		TargetServer targetServer = targetServerOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
+	@Autowired
+	private AppInstallScriptService appInstallScriptService;
 
-		model.addAttribute("targetServer", targetServer);
+	@RequestMapping(path = "/install-step1", method = RequestMethod.GET)
+	public String agentInstallStep1(@PathVariable("id") Long id,
+		@ModelAttribute("editForm") AgentInstallForm editForm, Model model) {
+
+		TargetServerDto targetServerDto = targetServerService.getTargetServerDto(id);
+		model.addAttribute("targetServer", targetServerDto);
 
 		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
 		model.addAttribute("appTemplateList", appTemplateList);
 
-		return "target-server/agent/install";
+		return "target-server/agent/install-step1";
 	}
 
+	@RequestMapping(path = "/install-step1", method = RequestMethod.POST)
+	public String agentInstallStep1(@PathVariable("id") Long id,
+									@ModelAttribute("editForm") AgentInstallForm editForm,
+									Model model,
+									BindingResult bindingResult) {
 
+		return agentInstall(id, editForm, model);
+	}
+
+	@RequestMapping(path = "/install", method = RequestMethod.GET)
+	public String agentInstall(@PathVariable("id") Long id,
+								   @ModelAttribute("editForm") AgentInstallForm editForm, Model model) {
+
+		TargetServerDto targetServerDto = targetServerService.getTargetServerDto(id);
+		model.addAttribute("targetServer", targetServerDto);
+
+		AppTemplateDto appTemplateDto = appTemplateService.getAppTemplateDto(editForm.getTemplateId());
+		model.addAttribute("appTemplate", appTemplateDto);
+
+		List<String> versions = appRepoService.getVersions(appTemplateDto.getRepositoryId(), appTemplateDto.getGroupId(), appTemplateDto.getArtifactId());
+		model.addAttribute("versions", versions);
+
+		List<AppInstallScriptDto> appInstallScriptDtoList = appInstallScriptService.getAppInstallScriptDtoList(appTemplateDto.getId());
+		model.addAttribute("appInstallScripts", appInstallScriptDtoList);
+
+		return "target-server/agent/install";
+	}
 
 	@RequestMapping(path = "/install", method = RequestMethod.POST)
 	public String agentInstall(@PathVariable("id") Long id,
@@ -69,7 +98,7 @@ public class TargetServerAgentController {
 				BindingResult bindingResult, Model model,
 				RedirectAttributes redirectAttributes) throws IOException {
 		if (bindingResult.hasErrors()) {
-			return agentInstallForm(id, editForm, model);
+			return agentInstall(id, editForm, model);
 		}
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				PrintStream printStream = new PrintStream(baos)) {
