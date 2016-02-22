@@ -1,5 +1,6 @@
 package lamp.admin.core.agent.service;
 
+import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.domain.*;
 import lamp.admin.core.app.domain.AppInstallScript;
 import lamp.admin.core.app.service.AppInstallScriptService;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -169,9 +171,27 @@ public class AgentManagementService {
 			sshClient.exec(agentPath, commandLine, printStream, timeout);
 		} else if (command instanceof FileCreateCommand) {
 			String filename = ((FileCreateCommand) command).getFilename();
-			File file = new File(FilenameUtils.getName(filename));
-			String remoteFilename = Paths.get(agentPath, filename).toString();
-			sshClient.scpTo(file, remoteFilename, true);
+			String localFilename = FilenameUtils.getName(filename);
+			File localFile = null;
+			try {
+				localFile = File.createTempFile(FilenameUtils.getBaseName(localFilename), FilenameUtils.getExtension(localFilename));
+				// FIXME EL 추가
+				log.info("file content = {}", ((FileCreateCommand) command).getContent());
+				Charset charset = LampAdminConstants.DEFAULT_CHARSET;
+				String charsetName = ((FileCreateCommand) command).getCharset();
+				if (StringUtils.isNotBlank(charsetName)) {
+					charset = Charset.forName(charsetName);
+				}
+				FileUtils.write(localFile, ((FileCreateCommand) command).getContent(), charset, false);
+				String remoteFilename = Paths.get(agentPath, filename).toString();
+				log.info("file2 content = {}", FileUtils.readFileToString(localFile));
+				sshClient.scpTo(localFile, remoteFilename, true);
+			} catch (Exception e) {
+				throw Exceptions.newException(LampErrorCode.SCRIPT_COMMAND_EXECUTION_FAILED, e);
+			} finally {
+				FileUtils.deleteQuietly(localFile);
+			}
+
 		} else if (command instanceof FileRemoveCommand) {
 			// FIXME 구현바람
 			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());

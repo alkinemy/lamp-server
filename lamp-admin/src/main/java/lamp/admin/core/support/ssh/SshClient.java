@@ -172,7 +172,7 @@ public class SshClient {
 
 	public boolean scpTo(File localFile, String remoteFilename, boolean mkdir) {
 		if (mkdir) {
-			mkdir(FilenameUtils.getPath(remoteFilename));
+			mkdir("/" + FilenameUtils.getPath(remoteFilename));
 		}
 		return scpTo(localFile, remoteFilename);
 	}
