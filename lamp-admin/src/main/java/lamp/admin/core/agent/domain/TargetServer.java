@@ -58,6 +58,10 @@ public class TargetServer extends AbstractAuditingEntity {
 
 	private String agentInstallFilename;
 
+	private String agentGroupId;
+	private String agentArtifactId;
+	private String agentVersion;
+
 	private String agentPidFile;
 
 	private String agentStartCommandLine;

@@ -38,7 +38,8 @@ public class AgentApiControllerIntegrationTests {
 		AgentRegisterForm agentForm = new AgentRegisterForm();
 		agentForm.setId("test-1");
 		agentForm.setName("test");
-		agentForm.setType("type");
+		agentForm.setGroupId("lamp.agent.test");
+		agentForm.setArtifactId("lamp-agent");
 		agentForm.setVersion("0.0.1");
 		agentForm.setHostname("host");
 		agentForm.setAddress("localhost");

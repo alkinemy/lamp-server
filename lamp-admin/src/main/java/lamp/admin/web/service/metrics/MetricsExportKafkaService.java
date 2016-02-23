@@ -3,6 +3,7 @@ package lamp.admin.web.service.metrics;
 import lamp.admin.core.monitoring.domain.AgentMetrics;
 import lamp.admin.core.monitoring.service.MetricsExportService;
 import lamp.admin.web.config.metrics.KafkaProperties;
+import lamp.admin.web.support.kafka.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -30,7 +31,7 @@ public class MetricsExportKafkaService implements MetricsExportService {
 		props.put("client.id", kafkaProperties.getClientId());
 
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		props.put("value.serializer", "lamp.server.aladin.admin.support.kafka.JsonSerializer");
+		props.put("value.serializer", JsonSerializer.class.getName());
 		props.put("partitioner.class", "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
 
 		this.producer = new KafkaProducer<>(props);

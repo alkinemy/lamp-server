@@ -19,7 +19,7 @@
 <div class="page-flashMessage" th:fragment="flashMessage">
 	<div class="alert alert-success alert-dismissable" th:if="${flashMessage != null}" th:class="'alert ' + ${flashMessage.level.cssClass} + ' alert-dismissable'">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-		<span th:text="${flashMessage.message}"></span>
+		<pre th:text="${flashMessage.message}"></pre>
 	</div>
 </div>
 

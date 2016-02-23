@@ -4,13 +4,18 @@ import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.agent.domain.TargetServer;
 import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.agent.service.TargetServerService;
+import lamp.admin.core.agent.service.TargetServerStatusService;
+import lamp.admin.core.monitoring.domain.HealthStatus;
+import lamp.admin.core.monitoring.domain.HealthStatusCode;
 import lamp.admin.core.monitoring.service.AgentHealthCheckService;
 import lamp.admin.core.monitoring.service.AgentMetricCollectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -18,6 +23,9 @@ public class AgentScheduledCheckService {
 
 	@Autowired
 	private TargetServerService targetServerService;
+
+	@Autowired
+	private TargetServerStatusService targetServerStatusService;
 
 	@Autowired
 	private AgentService agentService;
@@ -31,7 +39,12 @@ public class AgentScheduledCheckService {
 	public void checkHealth() {
 		Collection<TargetServer> targetServers = targetServerService.getTargetServerList();
 		for (TargetServer targetServer : targetServers) {
-			agentHealthCheckService.checkHealth(targetServer);
+			if (targetServer.getAgentMonitor() &&
+					targetServer.getAgentInstalled()) {
+				agentHealthCheckService.checkHealth(targetServer);
+			} else {
+				targetServerStatusService.updateStatus(targetServer, HealthStatus.of(HealthStatusCode.UNKNOWN, null), LocalDateTime.now());
+			}
 		}
 	}
 

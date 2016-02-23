@@ -100,8 +100,6 @@ public class AgentAppController {
 			return createStep1(agentId, editForm, model);
 		}
 
-
-
 		List<AppInstallScriptDto> appInstallScriptDtoList = appInstallScriptService.getAppInstallScriptDtoList(appTemplateDto.getId());
 		model.addAttribute("appInstallScripts", appInstallScriptDtoList);
 
@@ -112,6 +110,9 @@ public class AgentAppController {
 		model.addAttribute("versions", versions);
 
 		if (httpMethod.equals(HttpMethod.GET)) {
+			editForm.setId(appTemplateDto.getArtifactId());
+			editForm.setName(appTemplateDto.getName());
+
 			editForm.setParametersType(appTemplateDto.getParametersType());
 			editForm.setParameters(appTemplateDto.getParameters());
 			editForm.setVersion(versions.stream().findFirst().orElse(null));

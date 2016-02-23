@@ -11,5 +11,6 @@ public class AgentProperties {
 
 	private String installPath;
 	private String startCommandLine;
+	private String stopCommandLine;
 
 }

@@ -86,8 +86,14 @@ public class AppService {
 			AppResource appResource = appResourceService.getResource(appTemplate, groupId, artifactId, version);
 			agentAppRegisterForm.setVersion(appResource.getVersion());
 			agentAppRegisterForm.setInstallFile(appResource);
+
+			String filename = appTemplate.getAppFilename();
+			if (StringUtils.isBlank(filename)) {
+				filename = appResource.getFilename();
+			}
+			agentAppRegisterForm.setFilename(filename);
 		}
-		agentAppRegisterForm.setFilename(appTemplate.getAppFilename());
+
 		agentAppRegisterForm.setMonitor(ObjectUtils.defaultIfNull(editForm.getMonitor(), Boolean.FALSE));
 
 		// FIXME AppTemplate -> Form으로 변경해야함.

@@ -19,7 +19,8 @@ public class Agent extends AbstractAuditingEntity {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	private String type;
+	private String groupId;
+	private String artifactId;
 	private String version;
 
 	@OneToOne(fetch = FetchType.LAZY)

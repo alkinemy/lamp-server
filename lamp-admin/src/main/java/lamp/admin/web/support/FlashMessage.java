@@ -1,6 +1,7 @@
 package lamp.admin.web.support;
 
 import lamp.admin.core.base.exception.ErrorCode;
+import lamp.admin.core.base.exception.MessageException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,11 @@ public class FlashMessage {
 	public static FlashMessage ofError(String message, String code, Object[] parameters) {
 		return of(FlashMessageLevel.ERROR, message, code, parameters);
 	}
+
+	public static FlashMessage ofError(MessageException e) {
+		return of(FlashMessageLevel.ERROR, e.getMessage(), e.getCode(), e.getArgs());
+	}
+
 
 	public static FlashMessage ofInfo(String message) {
 		return of(FlashMessageLevel.INFO, message, null, null);

@@ -3,6 +3,7 @@ package lamp.server.watch.core.service;
 import lamp.server.watch.core.config.KafkaProperties;
 import lamp.server.watch.core.domain.WatchedApp;
 import lamp.server.watch.core.domain.WatchedAppMetrics;
+import lamp.server.watch.core.support.kafka.JsonSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -23,7 +24,7 @@ public class AppMetricsKafkaExportService implements AppMetricsExportService {
 		props.put("client.id", kafkaProperties.getClientId());
 
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		props.put("value.serializer", "lamp.server.watch.core.support.kafka.JsonSerializer");
+		props.put("value.serializer", JsonSerializer.class.getName());
 		props.put("partitioner.class", "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
 
 		this.producer = new KafkaProducer<>(props);

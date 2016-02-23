@@ -44,4 +44,9 @@ public class ManagedAppService {
 		managedAppRepository.delete(id);
 	}
 
+	@Transactional
+	public void delete(ManagedApp managedApp) {
+		managedAppRepository.delete(managedApp);
+	}
+
 }

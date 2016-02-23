@@ -157,7 +157,7 @@ public class AppFacadeService {
 		Agent agent = getAgent(agentId);
 		appService.deregisterApp(agent, appId);
 
-		managedAppService.delete(appId);
+		managedAppService.getManagedAppOptional(appId).ifPresent(managedAppService::delete);
 	}
 
 	@Transactional
@@ -165,7 +165,7 @@ public class AppFacadeService {
 		Agent agent = getAgentByAppId(appId);
 		appService.deregisterApp(agent, appId);
 
-		managedAppService.delete(appId);
+		managedAppService.getManagedAppOptional(appId).ifPresent(managedAppService::delete);
 	}
 
 	public void startApp(String agentId, String appId, AppStartForm form) {

@@ -9,6 +9,7 @@ import lamp.admin.core.app.domain.AppTemplateDto;
 import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppRepoService;
 import lamp.admin.core.app.service.AppTemplateService;
+import lamp.admin.core.base.exception.MessageException;
 import lamp.admin.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
@@ -109,6 +110,14 @@ public class TargetServerAgentController {
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 			return "redirect:/target-server";
+		} catch (MessageException e) {
+			String defaultMessage = e.getMessage();
+			if (e.getCause() != null) {
+				defaultMessage = defaultMessage + ("(" + e.getCause().getMessage() + ")");
+			}
+
+			bindingResult.reject(e.getCode(), e.getArgs(), defaultMessage);
+			return agentInstall(id, editForm, model);
 		}
 	}
 

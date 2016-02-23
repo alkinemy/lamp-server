@@ -19,7 +19,8 @@ public class AgentMetrics {
 	private String id;
 	private String name;
 
-	private String type;
+	private String groupId;
+	private String artifactId;
 	private String version;
 
 	private Map<String, Object> metrics;
@@ -27,6 +28,6 @@ public class AgentMetrics {
 	private Map<String, String> tags;
 
 	public static AgentMetrics of(long timestamp, Agent agent, Map<String, Object> metrics, Map<String, String> tags) {
-		return of(timestamp, agent.getId(), agent.getName(), agent.getType(), agent.getVersion(), metrics, tags);
+		return of(timestamp, agent.getId(), agent.getName(), agent.getGroupId(), agent.getArtifactId(), agent.getVersion(), metrics, tags);
 	}
 }

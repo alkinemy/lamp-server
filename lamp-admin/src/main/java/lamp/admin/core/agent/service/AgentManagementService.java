@@ -1,20 +1,22 @@
 package lamp.admin.core.agent.service;
 
-import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.domain.*;
 import lamp.admin.core.app.domain.AppInstallScript;
+import lamp.admin.core.app.domain.AppResource;
+import lamp.admin.core.app.domain.AppTemplate;
+import lamp.admin.core.app.domain.ManagedApp;
 import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppResourceService;
 import lamp.admin.core.app.service.AppTemplateService;
-import lamp.admin.core.app.domain.AppResource;
-import lamp.admin.core.app.domain.AppTemplate;
+import lamp.admin.core.app.service.ManagedAppService;
 import lamp.admin.core.base.exception.EntityNotFoundException;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
-import lamp.admin.core.script.domain.ScriptCommand;
+import lamp.admin.core.base.exception.MessageException;
 import lamp.admin.core.script.domain.ExecuteCommand;
 import lamp.admin.core.script.domain.FileCreateCommand;
 import lamp.admin.core.script.domain.FileRemoveCommand;
+import lamp.admin.core.script.domain.ScriptCommand;
 import lamp.admin.core.support.el.ExpressionParser;
 import lamp.admin.core.support.ssh.SshClient;
 import lamp.admin.utils.FileUtils;
@@ -25,22 +27,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.Charset;
+import java.io.*;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class AgentManagementService {
+
+	private static final char LF = '\n';
+	private static final char CR = '\r';
 
 	@Autowired
 	private TargetServerService targetServerService;
@@ -53,6 +54,9 @@ public class AgentManagementService {
 
 	@Autowired
 	private AppInstallScriptService appInstallScriptService;
+
+	@Autowired
+	private ManagedAppService managedAppService;
 
 	private ExpressionParser expressionParser = new ExpressionParser();
 
@@ -113,15 +117,27 @@ public class AgentManagementService {
 			targetServer.setAgentInstalledBy(agentInstalledBy);
 			targetServer.setAgentInstalledDate(LocalDateTime.now());
 			targetServer.setAgentInstallFilename(filename);
-			targetServer.setAgentPidFile(parameters.get("pidFile"));
-			targetServer.setAgentStartCommandLine(parameters.get("startCommandLine"));
-			targetServer.setAgentStopCommandLine(parameters.get("stopCommandLine"));
+			targetServer.setAgentGroupId(resource.getGroupId());
+			targetServer.setAgentArtifactId(resource.getArtifactId());
+			targetServer.setAgentVersion(resource.getVersion());
+			if (StringUtils.isBlank(targetServer.getAgentPidFile())) {
+				targetServer.setAgentPidFile(appTemplate.getPidFile());
+			}
+			if (StringUtils.isBlank(targetServer.getAgentStartCommandLine())) {
+				targetServer.setAgentStartCommandLine(appTemplate.getStartCommandLine());
+			}
+			if (StringUtils.isBlank(targetServer.getAgentStopCommandLine())) {
+				targetServer.setAgentStopCommandLine(appTemplate.getStopCommandLine());
+
+			}
 
 			if (installForm.getInstallScriptId() != null) {
 				executeInstallScript(targetServer, sshClient, installForm.getInstallScriptId(), printStream);
 			}
 
-
+		} catch (MessageException e) {
+			log.warn("Agent Install failed", e);
+			throw e;
 		} catch (Exception e) {
 			log.warn("Agent Install failed", e);
 			throw Exceptions.newException(LampErrorCode.AGENT_INSTALL_FAILED, e);
@@ -131,6 +147,67 @@ public class AgentManagementService {
 			}
 		}
 	}
+
+	protected void executeInstallScript(TargetServer targetServer, SshClient sshClient, Long installScriptId, PrintStream printStream) {
+		AppInstallScript installScript = appInstallScriptService.getAppInstallScript(installScriptId);
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("filename", targetServer.getAgentInstallFilename());
+
+		List<ScriptCommand> scriptCommands = installScript.getCommands();
+		scriptCommands.stream().forEach(sc -> executeScriptCommand(targetServer, sshClient, sc, parameters, printStream));
+	}
+
+
+
+	protected void executeScriptCommand(TargetServer targetServer, SshClient sshClient, ScriptCommand command, Map<String, Object> parameters, PrintStream printStream) {
+		String agentPath = targetServer.getAgentInstallPath();
+		long timeout = 10 * 1000;
+		if (command instanceof ExecuteCommand) {
+			String commandLine = expressionParser.getValue(((ExecuteCommand) command).getCommandLine(), parameters);
+			sshClient.exec(agentPath, commandLine, printStream, timeout);
+		} else if (command instanceof FileCreateCommand) {
+			FileCreateCommand fileCreateCommand = (FileCreateCommand) command;
+			String filename = fileCreateCommand.getFilename();
+			String localFilename = FilenameUtils.getName(filename);
+			File localFile = null;
+			try {
+				localFile = File.createTempFile(FilenameUtils.getBaseName(localFilename), FilenameUtils.getExtension(localFilename));
+				log.info("localFile = {}", localFile.getAbsolutePath());
+				// FIXME EL 추가
+				log.info("file content = {}", fileCreateCommand.getContent());
+
+				try (BufferedReader reader = new BufferedReader(new StringReader(fileCreateCommand.getContent()));
+						BufferedWriter writer = new BufferedWriter(new FileWriter(localFile))) {
+					String line;
+					for (int i = 0; (line = reader.readLine()) != null; i++) {
+						if (i > 0) {
+							writer.write(LF); // os type?
+						}
+						writer.write(line);
+					}
+					writer.flush();
+				}
+				String remoteFilename = Paths.get(agentPath, filename).toString();
+				log.info("file2 content = {}", FileUtils.readFileToString(localFile));
+				sshClient.scpTo(localFile, remoteFilename, true);
+				if (fileCreateCommand.isExecutable()) {
+					sshClient.exec(agentPath, "chmod +x " + FilenameUtils.getName(remoteFilename), printStream, timeout);
+				}
+			} catch (Exception e) {
+				log.warn("FileCreateCommand Failed", e);
+				throw Exceptions.newException(LampErrorCode.SCRIPT_COMMAND_EXECUTION_FAILED, e);
+			} finally {
+				FileUtils.deleteQuietly(localFile);
+			}
+
+		} else if (command instanceof FileRemoveCommand) {
+			// FIXME 구현바람
+			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());
+		} else {
+			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());
+		}
+	}
+
 
 	protected Map<String, String> getParameters(AppTemplate appTemplate, AppResource resource) {
 		Map<String, Object> tempParameters = new HashMap<>();
@@ -148,63 +225,35 @@ public class AgentManagementService {
 		tempParameters.put("stopCommandLine", appTemplate.getStopCommandLine());
 
 		return tempParameters.entrySet().stream().filter(e -> e.getValue() != null).collect(Collectors.toMap(
-			e -> e.getKey(),
-			e -> expressionParser.getValue(String.valueOf(e.getValue()), tempParameters)
+				e -> e.getKey(),
+				e -> expressionParser.getValue(String.valueOf(e.getValue()), tempParameters)
 		));
 	}
 
-	protected void executeInstallScript(TargetServer targetServer, SshClient sshClient, Long installScriptId, PrintStream printStream) {
-		AppInstallScript installScript = appInstallScriptService.getAppInstallScript(installScriptId);
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("filename", targetServer.getAgentInstallFilename());
+	protected Map<String, Object> getParameters(TargetServer targetServer) {
+		Map<String, Object> tempParameters = new HashMap<>();
+		tempParameters.put("groupId", targetServer.getAgentGroupId());
+		tempParameters.put("artifactId", targetServer.getAgentArtifactId());
+		tempParameters.put("version", targetServer.getAgentVersion());
+		tempParameters.put("appDirectory", targetServer.getAgentInstallPath());
+		tempParameters.put("workDirectory", targetServer.getAgentInstallPath());
+//		tempParameters.put("logDirectory", appTemplate.getLogDirectory());
+		tempParameters.put("pidFile", targetServer.getAgentPidFile());
+//		tempParameters.put("stdOutFile", appTemplate.getStdOutFile());
+//		tempParameters.put("stdErrFile", appTemplate.getStdErrFile());
+		tempParameters.put("filename", targetServer.getAgentInstallFilename());
+		tempParameters.put("startCommandLine", targetServer.getAgentStartCommandLine());
+		tempParameters.put("stopCommandLine", targetServer.getAgentStopCommandLine());
 
-		List<ScriptCommand> scriptCommands = installScript.getCommands();
-		scriptCommands.stream().forEach(sc -> executeScriptCommand(targetServer, sshClient, sc, parameters, printStream));
-
-	}
-
-	protected void executeScriptCommand(TargetServer targetServer, SshClient sshClient, ScriptCommand command, Map<String, Object> parameters, PrintStream printStream) {
-		String agentPath = targetServer.getAgentInstallPath();
-		if (command instanceof ExecuteCommand) {
-			long timeout = 10 * 1000;
-			String commandLine = expressionParser.getValue(((ExecuteCommand) command).getCommandLine(), parameters);
-			sshClient.exec(agentPath, commandLine, printStream, timeout);
-		} else if (command instanceof FileCreateCommand) {
-			String filename = ((FileCreateCommand) command).getFilename();
-			String localFilename = FilenameUtils.getName(filename);
-			File localFile = null;
-			try {
-				localFile = File.createTempFile(FilenameUtils.getBaseName(localFilename), FilenameUtils.getExtension(localFilename));
-				// FIXME EL 추가
-				log.info("file content = {}", ((FileCreateCommand) command).getContent());
-				Charset charset = LampAdminConstants.DEFAULT_CHARSET;
-				String charsetName = ((FileCreateCommand) command).getCharset();
-				if (StringUtils.isNotBlank(charsetName)) {
-					charset = Charset.forName(charsetName);
-				}
-				FileUtils.write(localFile, ((FileCreateCommand) command).getContent(), charset, false);
-				String remoteFilename = Paths.get(agentPath, filename).toString();
-				log.info("file2 content = {}", FileUtils.readFileToString(localFile));
-				sshClient.scpTo(localFile, remoteFilename, true);
-			} catch (Exception e) {
-				throw Exceptions.newException(LampErrorCode.SCRIPT_COMMAND_EXECUTION_FAILED, e);
-			} finally {
-				FileUtils.deleteQuietly(localFile);
-			}
-
-		} else if (command instanceof FileRemoveCommand) {
-			// FIXME 구현바람
-			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());
-		} else {
-			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, command.getType());
-		}
+		return tempParameters.entrySet().stream().filter(e -> e.getValue() != null).collect(Collectors.toMap(
+				e -> e.getKey(),
+				e -> expressionParser.getValue(String.valueOf(e.getValue()), tempParameters)
+		));
 	}
 
 	public void startAgent(Long targetServerId, AgentStartForm startForm, PrintStream printStream) {
 		TargetServer targetServer = targetServerService.getTargetServer(targetServerId);
-
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("filename", targetServer.getAgentInstallFilename());
+		Map<String, Object> parameters = getParameters(targetServer);
 
 		String command = startForm.getCommandLine();
 		command = expressionParser.getValue(command, parameters);
@@ -215,10 +264,7 @@ public class AgentManagementService {
 
 	public void stopAgent(Long targetServerId, AgentStopForm stopForm, PrintStream printStream) {
 		TargetServer targetServer = targetServerService.getTargetServer(targetServerId);
-
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("filename", targetServer.getAgentInstallFilename());
-		parameters.put("pidFile", targetServer.getAgentPidFile());
+		Map<String, Object> parameters = getParameters(targetServer);
 
 		String command = stopForm.getCommandLine();
 		command = expressionParser.getValue(command, parameters);
