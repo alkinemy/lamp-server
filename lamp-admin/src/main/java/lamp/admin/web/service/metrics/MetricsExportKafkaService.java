@@ -34,6 +34,7 @@ public class MetricsExportKafkaService implements MetricsExportService {
 		props.put("value.serializer", JsonSerializer.class.getName());
 		props.put("partitioner.class", "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
 
+		log.info("Kafka Properties : {}", props);
 		this.producer = new KafkaProducer<>(props);
 	}
 

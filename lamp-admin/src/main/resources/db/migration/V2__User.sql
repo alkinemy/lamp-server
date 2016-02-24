@@ -36,9 +36,7 @@ CREATE TABLE `lamp_user_authority` (
   `user_id` bigint(20) NOT NULL,
   `authority_name` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`,`authority_name`),
-  KEY `lamp_user_authority_idx_01` (`authority_name`),
-  CONSTRAINT `lamp_user_authority_fk_01` FOREIGN KEY (`authority_name`) REFERENCES `lamp_authority` (`name`),
-  CONSTRAINT `lamp_user_authority_fk_02` FOREIGN KEY (`user_id`) REFERENCES `lamp_user` (`id`)
+  KEY `lamp_user_authority_idx_01` (`authority_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -50,8 +48,7 @@ CREATE TABLE `lamp_persistent_token` (
   `user_agent` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`series`),
-  KEY `lamp_persistent_token_idx_01` (`user_id`),
-  CONSTRAINT `lamp_persistent_token_fk_01` FOREIGN KEY (`user_id`) REFERENCES `lamp_user` (`id`)
+  KEY `lamp_persistent_token_idx_01` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
