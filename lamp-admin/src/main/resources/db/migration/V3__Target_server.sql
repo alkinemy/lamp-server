@@ -51,7 +51,14 @@ CREATE TABLE `lamp_target_server` (
   `agent_stopped_by` varchar(200) DEFAULT NULL,
   `agent_stopped_date` datetime DEFAULT NULL,
 
+
+  `agent_health_check_enabled` tinyint(1) DEFAULT 0,
+  `agent_health_type` varchar(100) DEFAULT NULL,
   `agent_health_url` varchar(1000) DEFAULT NULL,
+  `agent_metrics_collect_enabled` tinyint(1) DEFAULT 0,
+  `agent_metrics_type` varchar(100) DEFAULT NULL,
+  `agent_metrics_url` varchar(1000) DEFAULT NULL,
+
   `agent_monitor` tinyint(1) NOT NULL,
   `agent_monitor_interval` bigint(20) DEFAULT '0',
   `created_by` varchar(100) NOT NULL,
@@ -86,7 +93,9 @@ CREATE TABLE `lamp_agent` (
   `work_directory` varchar(1000) NULL,
   `secret_key` varchar(255) DEFAULT NULL,
   `agent_time` datetime DEFAULT NULL,
+  `health_type` varchar(100) DEFAULT NULL,
   `health_path` varchar(200) DEFAULT NULL,
+  `metrics_type` varchar(100) DEFAULT NULL,
   `metrics_path` varchar(200) DEFAULT NULL,
   `created_by` varchar(100) NOT NULL,
   `created_date` datetime NOT NULL,

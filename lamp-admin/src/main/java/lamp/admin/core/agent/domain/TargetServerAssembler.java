@@ -24,7 +24,7 @@ public class TargetServerAssembler extends AbstractAssembler<TargetServerCreateF
 			}
 		}
 
-		// TODO Password Encypt
+		// TODO Password Encrypt
 
 		return targetServer;
 	}

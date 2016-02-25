@@ -41,8 +41,11 @@ public class Agent extends AbstractAuditingEntity {
 	@Column(name = "agent_time", nullable = true)
 	private LocalDateTime time;
 
+	private String healthType;
 	@Column(name = "health_path")
 	private String healthPath;
+
+	private String metricsType;
 	@Column(name = "metrics_path")
 	private String metricsPath;
 

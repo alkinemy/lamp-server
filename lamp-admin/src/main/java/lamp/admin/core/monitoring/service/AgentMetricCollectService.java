@@ -1,6 +1,7 @@
 package lamp.admin.core.monitoring.service;
 
 import lamp.admin.core.agent.domain.Agent;
+import lamp.admin.core.agent.domain.TargetServer;
 import lamp.admin.core.monitoring.domain.AgentMetrics;
 import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.utils.NameUtils;
@@ -33,9 +34,11 @@ public class AgentMetricCollectService {
 
 	@Async
 	public void collectMetrics(Agent agent) {
-		String url = agent.getMetricsUrl();
-		log.debug("agent = {}, url = {}", agent.getId(), url);
-		if (StringUtils.isNotBlank(url)) {
+		log.debug("collectMetrics : agentId={}", agent.getId());
+		TargetServer targetServer = agent.getTargetServer();
+		if (targetServer.getAgentMetricsCollectEnabled()) {
+			String url = agent.getMetricsUrl();
+			log.debug("metricsUrl = {}", url);
 			Map<String, Object> metrics = agentClient.getRestTemplate().getForObject(url, LinkedHashMap.class);
 
 			for (String memoryMetricName : memoryMetricNames) {

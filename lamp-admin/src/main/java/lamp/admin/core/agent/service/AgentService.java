@@ -124,13 +124,7 @@ public class AgentService {
 		TargetServer targetServer;
 		if (targetServerFromDb.isPresent()) {
 			targetServer = targetServerFromDb.get();
-			targetServer.setAddress(agent.getAddress());
-			targetServer.setAgentInstalled(true);
-			targetServer.setAgentInstallPath(agent.getAppDirectory());
-			targetServer.setAgentGroupId(agent.getGroupId());
-			targetServer.setAgentArtifactId(agent.getArtifactId());
-			targetServer.setAgentVersion(agent.getVersion());
-			targetServer.setAgentHealthUrl(agent.getHealthUrl());
+			smartAssembler.populate(agent, targetServer);
 		} else {
 			targetServer = targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class));
 		}

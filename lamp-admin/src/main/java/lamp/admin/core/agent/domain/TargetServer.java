@@ -68,12 +68,22 @@ public class TargetServer extends AbstractAuditingEntity {
 
 	private String agentStopCommandLine;
 
-	private String agentHealthUrl;
+
 
 	@Column(columnDefinition = "TINYINT")
 	private Boolean agentMonitor;
 
 	private Long agentMonitorInterval;
+
+	@Column(columnDefinition = "TINYINT")
+	private Boolean agentHealthCheckEnabled = Boolean.FALSE;
+	private String agentHealthType;
+	private String agentHealthUrl;
+
+	@Column(columnDefinition = "TINYINT")
+	private Boolean agentMetricsCollectEnabled = Boolean.FALSE;
+	private String agentMetricsType;
+	private String agentMetricsUrl;
 
 	@Column(name = "agent_status", table = "lamp_target_server_status")
 	private String agentStatus = HealthStatusCode.UNKNOWN.name();

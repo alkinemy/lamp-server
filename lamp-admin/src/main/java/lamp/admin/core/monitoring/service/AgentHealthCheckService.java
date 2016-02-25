@@ -33,9 +33,10 @@ public class AgentHealthCheckService {
 
 	@Async
 	public void checkHealth(TargetServer targetServer) {
-		String url = targetServer.getAgentHealthUrl();
-		log.debug("targetServer = {}, url = {}", targetServer.getHostname(), url);
-		if (StringUtils.isNotBlank(url)) {
+		if (targetServer.getAgentHealthCheckEnabled()) {
+			String url = targetServer.getAgentHealthUrl();
+			log.debug("targetServer = {}, url = {}", targetServer.getHostname(), url);
+
 			Map<String, Object> health = getHealth(url);
 			HealthStatus healthStatus = getHealthStatus(health);
 			LocalDateTime healthStatusDate = LocalDateTime.now();
