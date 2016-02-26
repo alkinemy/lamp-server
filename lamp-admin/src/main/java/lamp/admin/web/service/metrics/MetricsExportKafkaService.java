@@ -1,12 +1,13 @@
 package lamp.admin.web.service.metrics;
 
-import lamp.admin.core.monitoring.domain.TargetMetrics;
+import lamp.admin.core.monitoring.domain.TargetServerMetrics;
 import lamp.admin.core.monitoring.service.MetricsExportService;
 import lamp.admin.web.config.metrics.KafkaProperties;
 import lamp.admin.web.support.kafka.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.scheduling.annotation.Async;
 
@@ -19,7 +20,7 @@ public class MetricsExportKafkaService implements MetricsExportService {
 	private final KafkaProperties kafkaProperties;
 
 	private String topic;
-	private Producer<String, TargetMetrics> producer;
+	private Producer<String, TargetServerMetrics> producer;
 
 	public MetricsExportKafkaService(KafkaProperties kafkaProperties) {
 		this.kafkaProperties = kafkaProperties;
@@ -27,12 +28,13 @@ public class MetricsExportKafkaService implements MetricsExportService {
 		this.topic = kafkaProperties.getTopic();
 
 		Properties props = new Properties();
-		props.put("bootstrap.servers", kafkaProperties.getBootstrapServers());
-		props.put("client.id", kafkaProperties.getClientId());
 
-		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		props.put("value.serializer", JsonSerializer.class.getName());
-		props.put("partitioner.class", "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+		props.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProperties.getClientId());
+
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
+//		props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
 
 		log.info("Kafka Properties : {}", props);
 		this.producer = new KafkaProducer<>(props);
@@ -40,12 +42,12 @@ public class MetricsExportKafkaService implements MetricsExportService {
 
 	@Override
 	@Async
-	public void exportMetrics(TargetMetrics agentMetrics) {
+	public void exportMetrics(TargetServerMetrics agentMetrics) {
 		try {
 
 			String key = new StringBuilder().append(agentMetrics.getId()).append('-').append(agentMetrics.getTimestamp()).toString();
 
-			ProducerRecord<String, TargetMetrics> data = new ProducerRecord(topic, key, agentMetrics);
+			ProducerRecord<String, TargetServerMetrics> data = new ProducerRecord(topic, key, agentMetrics);
 			producer.send(data);
 
 		} catch (Exception e) {

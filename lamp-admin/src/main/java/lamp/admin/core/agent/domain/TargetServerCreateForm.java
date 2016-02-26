@@ -21,7 +21,7 @@ public class TargetServerCreateForm {
 	@NotEmpty
 	private String address;
 
-	private SshAuthType authType;
+	private SshAuthType authType = SshAuthType.PASSWORD;
 	private Long sshKeyId;
 	private String privateKey;
 

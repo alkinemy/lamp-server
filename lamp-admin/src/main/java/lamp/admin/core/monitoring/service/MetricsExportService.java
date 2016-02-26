@@ -1,10 +1,10 @@
 package lamp.admin.core.monitoring.service;
 
 
-import lamp.admin.core.monitoring.domain.TargetMetrics;
+import lamp.admin.core.monitoring.domain.TargetServerMetrics;
 
 public interface MetricsExportService {
 
-	void exportMetrics(TargetMetrics agentMetrics);
+	void exportMetrics(TargetServerMetrics agentMetrics);
 
 }

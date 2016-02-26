@@ -1,6 +1,6 @@
 package lamp.admin.web.service.metrics;
 
-import lamp.admin.core.monitoring.domain.TargetMetrics;
+import lamp.admin.core.monitoring.domain.TargetServerMetrics;
 import lamp.admin.core.monitoring.service.MetricsExportService;
 import lamp.admin.web.config.metrics.KairosdbProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class MetricsExportKairosdbService implements MetricsExportService {
 
 	@Override
 	@Async
-	public void exportMetrics(TargetMetrics agentMetrics) {
+	public void exportMetrics(TargetServerMetrics agentMetrics) {
 		try {
 			log.debug("Export Metrics : {}", kairosdbProperties.getUrl());
 			long timestamp = agentMetrics.getTimestamp();

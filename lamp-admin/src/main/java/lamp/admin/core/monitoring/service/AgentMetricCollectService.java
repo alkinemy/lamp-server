@@ -3,7 +3,7 @@ package lamp.admin.core.monitoring.service;
 import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.agent.domain.TargetServer;
 import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.core.monitoring.domain.TargetMetrics;
+import lamp.admin.core.monitoring.domain.TargetServerMetrics;
 import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.utils.NameUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class AgentMetricCollectService {
 						tags.put("host", agent.getHostname());
 						tags.put("agent", agent.getId());
 
-						TargetMetrics targetMetrics = TargetMetrics.of(timestamp, targetServer.getHostname(), targetServer.getName(), metrics, tags);
+						TargetServerMetrics targetMetrics = TargetServerMetrics.of(timestamp, targetServer.getHostname(), targetServer.getName(), metrics, tags);
 						metricsExportService.exportMetrics(targetMetrics);
 					} catch(Throwable e) {
 						log.warn("Export Metrics failed", e);
