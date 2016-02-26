@@ -2,10 +2,10 @@ package lamp.admin.core.monitoring.service;
 
 import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.agent.domain.TargetServer;
-import lamp.admin.core.monitoring.domain.AgentMetrics;
+import lamp.admin.core.agent.service.AgentService;
+import lamp.admin.core.monitoring.domain.TargetMetrics;
 import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.utils.NameUtils;
-import lamp.admin.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -29,17 +29,21 @@ public class AgentMetricCollectService {
 	@Autowired
 	private AgentClient agentClient;
 
+	@Autowired
+	private AgentService agentService;
+
 	@Autowired(required = false)
 	private List<MetricsExportService> metricsExportServices;
 
 	@Async
-	public void collectMetrics(Agent agent) {
-		log.debug("collectMetrics : agentId={}", agent.getId());
-		TargetServer targetServer = agent.getTargetServer();
+	public void collectMetrics(TargetServer targetServer) {
+		log.debug("collectMetrics : TargetServer={}", targetServer.getId());
 		if (targetServer.getAgentMetricsCollectEnabled()) {
+			Agent agent = agentService.getAgentByTargetServerId(targetServer.getId());
+
 			String url = agent.getMetricsUrl();
 			log.debug("metricsUrl = {}", url);
-			Map<String, Object> metrics = agentClient.getRestTemplate().getForObject(url, LinkedHashMap.class);
+			Map<String, Object> metrics = agentClient.getForObject(agent, url, LinkedHashMap.class);
 
 			for (String memoryMetricName : memoryMetricNames) {
 				metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
@@ -64,8 +68,8 @@ public class AgentMetricCollectService {
 						tags.put("host", agent.getHostname());
 						tags.put("agent", agent.getId());
 
-						AgentMetrics agentMetrics = AgentMetrics.of(timestamp, agent, metrics, tags);
-						metricsExportService.exportMetrics(agentMetrics);
+						TargetMetrics targetMetrics = TargetMetrics.of(timestamp, targetServer.getHostname(), targetServer.getName(), metrics, tags);
+						metricsExportService.exportMetrics(targetMetrics);
 					} catch(Throwable e) {
 						log.warn("Export Metrics failed", e);
 					}

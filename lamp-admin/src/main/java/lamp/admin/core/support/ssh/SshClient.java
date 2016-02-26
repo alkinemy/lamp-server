@@ -90,7 +90,7 @@ public class SshClient {
 			if (StringUtils.isBlank(privateKey)) {
 				jsch.addIdentity("~/.ssh/id_rsa");
 			} else {
-				jsch.addIdentity(privateKey, password);
+				jsch.addIdentity(privateKey, StringUtils.defaultIfBlank(password, null));
 			}
 
 			session = jsch.getSession(username, host, port);

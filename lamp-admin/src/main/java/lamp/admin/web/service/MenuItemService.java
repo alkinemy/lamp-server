@@ -35,6 +35,7 @@ public class MenuItemService {
 					subMenuItems.add(availableAgentMenuItem);
 
 				}
+				subMenuItems.add(MenuItem.of(SSH_KEY, "SSH Key", "/ssh-key", "icon-bulb"));
 				subMenuItems.add(MenuItem.of(AGENT_EVENT, "Agent Event", "/agent/event", "icon-bulb"));
 
 				menuItems.add(MenuItem.of("AGENT_TOP", "Agent", "icon-layers", subMenuItems));

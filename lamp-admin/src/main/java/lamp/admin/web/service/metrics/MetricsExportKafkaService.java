@@ -1,6 +1,6 @@
 package lamp.admin.web.service.metrics;
 
-import lamp.admin.core.monitoring.domain.AgentMetrics;
+import lamp.admin.core.monitoring.domain.TargetMetrics;
 import lamp.admin.core.monitoring.service.MetricsExportService;
 import lamp.admin.web.config.metrics.KafkaProperties;
 import lamp.admin.web.support.kafka.JsonSerializer;
@@ -19,7 +19,7 @@ public class MetricsExportKafkaService implements MetricsExportService {
 	private final KafkaProperties kafkaProperties;
 
 	private String topic;
-	private Producer<String, AgentMetrics> producer;
+	private Producer<String, TargetMetrics> producer;
 
 	public MetricsExportKafkaService(KafkaProperties kafkaProperties) {
 		this.kafkaProperties = kafkaProperties;
@@ -40,12 +40,12 @@ public class MetricsExportKafkaService implements MetricsExportService {
 
 	@Override
 	@Async
-	public void exportMetrics(AgentMetrics agentMetrics) {
+	public void exportMetrics(TargetMetrics agentMetrics) {
 		try {
 
 			String key = new StringBuilder().append(agentMetrics.getId()).append('-').append(agentMetrics.getTimestamp()).toString();
 
-			ProducerRecord<String, AgentMetrics> data = new ProducerRecord(topic, key, agentMetrics);
+			ProducerRecord<String, TargetMetrics> data = new ProducerRecord(topic, key, agentMetrics);
 			producer.send(data);
 
 		} catch (Exception e) {

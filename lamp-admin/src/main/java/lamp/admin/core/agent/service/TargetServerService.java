@@ -76,7 +76,7 @@ public class TargetServerService {
 	@Transactional
 	public TargetServer updateTargetServer(TargetServerUpdateForm editForm) {
 		TargetServer targetServer = getTargetServer(editForm.getId());
-		BeanUtils.copyProperties(editForm, targetServer);
+		smartAssembler.populate(editForm, targetServer);
 		return targetServerRepository.save(targetServer);
 	}
 

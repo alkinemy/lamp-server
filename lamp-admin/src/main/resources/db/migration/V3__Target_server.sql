@@ -10,8 +10,8 @@ CREATE TABLE `lamp_ssh_key` (
   `name` varchar(200) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
 
-  `private_key` varchar(1000) DEFAULT NULL,
-  `public_key` varchar(1000) DEFAULT NULL,
+  `private_key` text DEFAULT NULL,
+  `public_key` text DEFAULT NULL,
 
   `username` varchar(100) DEFAULT NULL,
   `encrypted_password` varchar(100) DEFAULT NULL,
@@ -32,9 +32,10 @@ CREATE TABLE `lamp_target_server` (
   `address` varchar(100) NOT NULL,
   `ssh_port` int NOT NULL,
   `auth_type` varchar(100) DEFAULT NULL,
+  `ssh_key_id` bigint(20) DEFAULT NULL,
+  `private_key` varchar(200) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
   `encrypted_password` varchar(100) DEFAULT NULL,
-  `private_key` varchar(200) DEFAULT NULL,
   `agent_installed` tinyint(1) NOT NULL,
   `agent_installed_by` varchar(200) DEFAULT NULL,
   `agent_installed_date` datetime DEFAULT NULL,

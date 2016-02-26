@@ -39,8 +39,7 @@ public class AgentScheduledCheckService {
 	public void checkHealth() {
 		Collection<TargetServer> targetServers = targetServerService.getTargetServerList();
 		for (TargetServer targetServer : targetServers) {
-			if (targetServer.getAgentMonitor() &&
-					targetServer.getAgentInstalled()) {
+			if (targetServer.getAgentHealthCheckEnabled()) {
 				agentHealthCheckService.checkHealth(targetServer);
 			} else {
 				targetServerStatusService.updateStatus(targetServer, HealthStatus.of(HealthStatusCode.UNKNOWN, null), LocalDateTime.now());
@@ -49,9 +48,11 @@ public class AgentScheduledCheckService {
 	}
 
 	public void collectMetrics() {
-		Collection<Agent> agents = agentService.getAgentList();
-		for (Agent agent : agents) {
-			agentMetricCollectService.collectMetrics(agent);
+		Collection<TargetServer> targetServers = targetServerService.getTargetServerList();
+		for (TargetServer targetServer : targetServers) {
+			if (targetServer.getAgentMetricsCollectEnabled()) {
+				agentMetricCollectService.collectMetrics(targetServer);
+			}
 		}
 	}
 

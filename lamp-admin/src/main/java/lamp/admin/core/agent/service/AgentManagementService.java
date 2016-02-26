@@ -56,6 +56,9 @@ public class AgentManagementService {
 	private AppInstallScriptService appInstallScriptService;
 
 	@Autowired
+	private SshKeyService sshKeyService;
+
+	@Autowired
 	private ManagedAppService managedAppService;
 
 	private ExpressionParser expressionParser = new ExpressionParser();
@@ -98,12 +101,7 @@ public class AgentManagementService {
 			String username = targetServer.getUsername();
 			String password = StringUtils.defaultString(installForm.getPassword(), targetServer.getPassword());
 
-			SshClient sshClient = new SshClient(host, port);
-			if (SshAuthType.KEY.equals(targetServer.getAuthType())) {
-				sshClient.connect(username, targetServer.getPrivateKey(), password);
-			} else {
-				sshClient.connect(username, password);
-			}
+			SshClient sshClient = getSshClient(targetServer, host, port, username, password);
 
 			String agentPath = targetServer.getAgentInstallPath();
 			if (StringUtils.isBlank(agentPath)) {
@@ -279,15 +277,30 @@ public class AgentManagementService {
 		String username = targetServer.getUsername();
 		String password = StringUtils.defaultString(inputPassword, targetServer.getPassword());
 
-		SshClient sshClient = new SshClient(host, port);
-		if (SshAuthType.KEY.equals(targetServer.getAuthType())) {
-			sshClient.connect(username, targetServer.getPrivateKey(), password);
-		} else {
-			sshClient.connect(username, password);
-		}
+		SshClient sshClient = getSshClient(targetServer, host, port, username, password);
 
 		long timeout = 5 * 1000;
 		String agentPath = targetServer.getAgentInstallPath();
 		sshClient.exec(agentPath, command, printStream, timeout);
+	}
+
+	private SshClient getSshClient(TargetServer targetServer, String host, int port, String username, String password) {
+		SshClient sshClient = new SshClient(host, port);
+		if (SshAuthType.KEY.equals(targetServer.getAuthType())) {
+			String privateKey;
+			Long sshKeyId = targetServer.getSshKeyId();
+			if (sshKeyId != null) {
+				SshKey sshKey = sshKeyService.getSshKey(sshKeyId);
+				username = sshKey.getUsername();
+				password = sshKey.getPassword();
+				privateKey = sshKey.getPassword();
+			} else {
+				privateKey = targetServer.getPrivateKey();
+			}
+			sshClient.connect(username, privateKey, password);
+		} else {
+			sshClient.connect(username, password);
+		}
+		return sshClient;
 	}
 }

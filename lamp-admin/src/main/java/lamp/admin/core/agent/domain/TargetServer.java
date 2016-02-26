@@ -39,13 +39,16 @@ public class TargetServer extends AbstractAuditingEntity {
 	@Column(name = "auth_type", length = 100, nullable = false)
 	private SshAuthType authType;
 
+	private Long sshKeyId;
+	private String privateKey;
+
+
 	@Column(length = 100)
 	private String username;
 
 	@Column(name = "encrypted_password", length = 100)
 	private String password;
 
-	private String privateKey;
 
 	@Column(columnDefinition = "TINYINT")
 	private Boolean agentInstalled = Boolean.FALSE;

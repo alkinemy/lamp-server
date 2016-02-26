@@ -16,15 +16,15 @@ public class AgentToTargetServerAssembler extends AbstractListAssembler<Agent, T
 		targetServer.setAgentArtifactId(agent.getArtifactId());
 		targetServer.setAgentVersion(agent.getVersion());
 
-		targetServer.setAgentHealthCheckEnabled(false);
+		targetServer.setAgentHealthCheckEnabled(true);
 		targetServer.setAgentHealthType(agent.getHealthType());
 		targetServer.setAgentHealthUrl(agent.getHealthUrl());
 
-		targetServer.setAgentMetricsCollectEnabled(false);
+		targetServer.setAgentMetricsCollectEnabled(true);
 		targetServer.setAgentMetricsType(agent.getMetricsType());
 		targetServer.setAgentMetricsUrl(agent.getMetricsUrl());
 
-		targetServer.setAgentMonitor(false);
+		targetServer.setAgentMonitor(true);
 		targetServer.setAgentInstalled(true);
 		targetServer.setAgentInstallPath(agent.getAppDirectory());
 

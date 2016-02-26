@@ -21,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -37,6 +38,15 @@ public class AgentClient {
 		this.restTemplate = restTemplate;
 	}
 
+
+	public <T> T getForObject(Agent agent, String url, Class<T> responseType, Object... urlVariables) throws RestClientException {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			return restTemplate.getForObject(url, responseType, urlVariables);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
 
 	public List<AppDto> getAppList(Agent agent) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
