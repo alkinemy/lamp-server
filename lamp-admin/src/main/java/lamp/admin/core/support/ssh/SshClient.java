@@ -88,7 +88,7 @@ public class SshClient {
 			}
 
 			if (StringUtils.isBlank(privateKey)) {
-				jsch.addIdentity("~/.ssh/id_rsa");
+				jsch.addIdentity("~/.ssh/id_rsa", StringUtils.defaultIfBlank(password, null));
 			} else {
 				jsch.addIdentity(privateKey, StringUtils.defaultIfBlank(password, null));
 			}
