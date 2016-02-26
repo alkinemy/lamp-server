@@ -19,6 +19,8 @@ public class TargetServerDto {
 	private String address;
 
 	private SshAuthType authType;
+	private Long sshKeyId;
+	private String sshKeyName;
 	private String username;
 	private String password;
 
