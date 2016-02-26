@@ -86,7 +86,7 @@
 										<span class="help-block" th:if="${#fields.hasErrors('authType')}" th:errors="*{authType}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:style="${authType} == 'KEY' ? 'display:inline' : 'display:none'" th:class="${#fields.hasErrors('sshKeyId')} ? 'form-group has-error auth-type-key' : 'form-group auth-type-key'">
+								<div class="form-group" th:style="${editForm.authType} == 'KEY' ? 'display:inline' : 'display:none'" th:class="${#fields.hasErrors('sshKeyId')} ? 'form-group has-error auth-type-key' : 'form-group auth-type-key'">
 									<label class="col-md-3 control-label">SSH Key</label>
 									<div class="col-md-9">
 										<select class="form-control" th:field="*{sshKeyId}">
@@ -96,7 +96,7 @@
 										<span class="help-block" th:if="${#fields.hasErrors('sshKeyId')}" th:errors="*{sshKeyId}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:style="${authType} == 'PASSWORD' ? 'display:inline' : 'display:none'" th:class="${#fields.hasErrors('username')} ? 'form-group has-error auth-type-password' : 'form-group auth-type-password'">
+								<div class="form-group" th:style="${editForm.authType} == 'PASSWORD' ? 'display:inline' : 'display:none'" th:class="${#fields.hasErrors('username')} ? 'form-group has-error auth-type-password' : 'form-group auth-type-password'">
 									<label class="col-md-3 control-label">Username</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
@@ -104,7 +104,7 @@
 									</div>
 								</div>
 
-								<div class="form-group auth-type-password" th:style="${authType} == 'PASSWORD' ? 'display:inline' : 'display:none'">
+								<div class="form-group auth-type-password" th:style="${editForm.authType} == 'PASSWORD' ? 'display:inline' : 'display:none'">
 									<label class="col-md-3 control-label">Password</label>
 									<div class="col-md-9">
 										<div class="input-group">
