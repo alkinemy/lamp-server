@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Order(20)
 @EnableWebSecurity
@@ -50,6 +51,10 @@ public class AdminWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.rememberMeServices(rememberMeServices())
 				.rememberMeParameter("remember-me")
 				.key(env.getProperty("lamp.security.rememberme.key"))
+		.and()
+			.logout()
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+			.logoutSuccessUrl("/login")
 		.and()
 			.formLogin()
 				.loginPage("/login")
