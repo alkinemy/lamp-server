@@ -6,7 +6,7 @@ ext {
     igniteVersion = "1.5.0.final"
 
     kairosdbVersion = "2.1.0"
-    kafkaVersion = "0.9.0.1"
+    kafkaVersion = "0.9.0.0"
 }
 
 

@@ -2,6 +2,6 @@ rootProject.name = 'lamp-server'
 
 include 'lamp-utils'
 include 'lamp-admin'
-include 'lamp-watch'
+include 'lamp-watcher'
 
 

@@ -23,8 +23,6 @@ public class AgentMetricCollectService {
 	private String[] memoryMetricNames = {"mem", "mem.free",
 			"heap.committed", "heap.init", "heap.used", "heap",
 			"nonheap.committed", "nonheap.init", "nonheap.used", "nonheap"};
-	private String serverMetricsPrefix = "server.";
-	private String lampAgentMetricsPrefix = "lamp.agent.";
 
 	@Autowired
 	private AgentClient agentClient;
@@ -49,22 +47,12 @@ public class AgentMetricCollectService {
 				metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
 			}
 
-			Map<String, Object> metricsWithName = new LinkedHashMap<>();
-
-			for (Map.Entry<String, Object> entry : metrics.entrySet()) {
-				String name = entry.getKey();
-				if (!name.startsWith(serverMetricsPrefix)) {
-					name = NameUtils.name(lampAgentMetricsPrefix, name);
-				}
-				metricsWithName.put(name, entry.getValue());
-			}
-
-			log.debug("metrics = {}", metricsWithName);
 			if (metricsExportServices != null) {
 				long timestamp = System.currentTimeMillis();
 				for (MetricsExportService metricsExportService : metricsExportServices) {
 					try {
 						Map<String ,String> tags = new LinkedHashMap<>();
+						tags.put("type", "targetServer");
 						tags.put("host", agent.getHostname());
 						tags.put("agent", agent.getId());
 
