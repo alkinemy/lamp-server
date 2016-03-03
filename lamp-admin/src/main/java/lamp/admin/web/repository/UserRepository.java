@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface UserRepository extends LampJpaRepository<User, Long> {
 
 	Optional<User> findOneByLogin(String login);
+	Optional<User> findOneByEmail(String email);
 
 }
