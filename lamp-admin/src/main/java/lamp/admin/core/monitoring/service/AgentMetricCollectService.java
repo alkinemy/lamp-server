@@ -5,7 +5,6 @@ import lamp.admin.core.agent.domain.TargetServer;
 import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.monitoring.domain.TargetServerMetrics;
 import lamp.admin.core.support.agent.AgentClient;
-import lamp.admin.utils.NameUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -49,14 +48,15 @@ public class AgentMetricCollectService {
 
 			if (metricsExportServices != null) {
 				long timestamp = System.currentTimeMillis();
+				Map<String ,String> tags = new LinkedHashMap<>();
+				tags.put("type", "targetServer");
+				tags.put("host", agent.getHostname());
+				tags.put("agent", agent.getId());
+
+				TargetServerMetrics targetMetrics = TargetServerMetrics.of(timestamp, targetServer.getHostname(), targetServer.getName(), metrics, tags);
+
 				for (MetricsExportService metricsExportService : metricsExportServices) {
 					try {
-						Map<String ,String> tags = new LinkedHashMap<>();
-						tags.put("type", "targetServer");
-						tags.put("host", agent.getHostname());
-						tags.put("agent", agent.getId());
-
-						TargetServerMetrics targetMetrics = TargetServerMetrics.of(timestamp, targetServer.getHostname(), targetServer.getName(), metrics, tags);
 						metricsExportService.exportMetrics(targetMetrics);
 					} catch(Throwable e) {
 						log.warn("Export Metrics failed", e);
