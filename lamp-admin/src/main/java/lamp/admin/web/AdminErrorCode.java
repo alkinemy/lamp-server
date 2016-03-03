@@ -39,6 +39,7 @@ public enum AdminErrorCode implements ErrorCode {
 	, INSERT_SUCCESS("성공적으로 등록하였습니다.", FlashMessageException.class)
 	, UPDATE_SUCCESS("성공적으로 수정하였습니다.", FlashMessageException.class)
 	, DELETE_SUCCESS("성공적으로 삭제하였습니다.", FlashMessageException.class)
+	, USER_REGISTER_SUCCESS("성공적으로 유저가 등록되었습니다. 승인 이후에 사용가능합니다.", FlashMessageException.class)
 	;
 
 	private String defaultMessage;
