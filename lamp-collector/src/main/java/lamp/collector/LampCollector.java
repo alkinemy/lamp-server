@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LampCollector {
 
-	private static final String PID_FILE_NAME = "lamp-watcher.pid";
+	private static final String PID_FILE_NAME = "lamp-collector.pid";
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication springApplication = new SpringApplication(LampCollector.class);
