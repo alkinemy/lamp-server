@@ -66,7 +66,7 @@ public class AdminWebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.permitAll()
 			.and()
 				.authorizeRequests()
-					.antMatchers("/signup").permitAll()
+					.antMatchers("/signup", "/forget").permitAll()
 					.anyRequest().hasAuthority(AuthoritiesConstants.ADMIN)
 		;
 

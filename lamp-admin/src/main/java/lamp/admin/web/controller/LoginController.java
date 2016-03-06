@@ -34,6 +34,11 @@ public class LoginController {
 		return "account/signup";
 	}
 
+	@RequestMapping(path = "/forget", method = RequestMethod.GET)
+	public String forget() {
+		return "account/forget";
+	}
+
 	@RequestMapping(path = "/signup", method = RequestMethod.POST)
 	public String register(@ModelAttribute @Valid UserRegisterForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		//TODO binding result 처리

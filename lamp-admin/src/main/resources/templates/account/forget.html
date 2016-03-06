@@ -60,42 +60,20 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
 <div class="content">
-    <!-- BEGIN REGISTRATION FORM -->
-    <form class="register-form" action="/signup" method="post">
-        <h3 class="font-green">Sign Up</h3>
-        <p class="hint"> Enter your account details below: </p>
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+    <form class="forget-form" action="/forget" method="post">
+        <h3 class="font-green">Forget Password ?</h3>
+        <p> Enter your e-mail address below to reset your password. </p>
         <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Login ID</label>
-            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Login ID" name="login" /> </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Email</label>
-            <input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email" /> </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Username</label>
-            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username" /> </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Password</label>
-            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Password" name="password" /> </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
-            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Re-type Your Password" name="rpassword" /> </div>
-        <div class="form-group margin-top-20 margin-bottom-20">
-            <label class="check">
-                <input type="checkbox" name="tnc" /> I agree to the
-                <a href="javascript:;"> Terms of Service </a> &amp;
-                <a href="javascript:;"> Privacy Policy </a>
-            </label>
-            <div id="register_tnc_error"> </div>
-        </div>
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" /> </div>
         <div class="form-actions">
             <a href="/login" alt="back">
-                <button type="button" class="btn btn-default">Back</button>
+                <button type="button" id="back-btn" class="btn btn-default">Back</button>
             </a>
-            <input type="hidden"  th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
+            <button type="submit" class="btn btn-success uppercase pull-right">Submit</button>
         </div>
     </form>
-    <!-- END REGISTRATION FORM -->
+    <!-- END FORGOT PASSWORD FORM -->
 </div>
 <div class="copyright"> 2014 © Metronic. Admin Dashboard Template. </div>
 <!--[if lt IE 9]>
