@@ -40,8 +40,9 @@ public enum AdminErrorCode implements ErrorCode {
 	, UPDATE_SUCCESS("성공적으로 수정하였습니다.", FlashMessageException.class)
 	, DELETE_SUCCESS("성공적으로 삭제하였습니다.", FlashMessageException.class)
 	, USER_REGISTER_SUCCESS("성공적으로 유저가 등록되었습니다. 승인 이후에 사용가능합니다.", FlashMessageException.class)
-	, DUPLICATED_USER_LOGIN("중복된 아이디입니다.")
-	, DUPLICATED_USER_EMAIL("중복된 이메일주소입니다.")
+	, USER_DUPLICATED_LOGIN("중복된 아이디입니다.")
+	, USER_DUPLICATED_EMAIL("중복된 이메일주소입니다.")
+	, USER_NOT_EXIST("존재하지 않는 유저입니다.")
 	;
 
 	private String defaultMessage;

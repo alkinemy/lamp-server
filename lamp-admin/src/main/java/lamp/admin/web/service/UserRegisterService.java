@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserRegisterService {
+	//TODO UserDetailsManager 적용?
 
 	@Autowired
 	private SmartAssembler assembler;
@@ -30,10 +32,10 @@ public class UserRegisterService {
 	@Transactional
 	public User register(UserRegisterForm form) {
 		userRepository.findOneByLogin(form.getLogin()).ifPresent(user -> {
-			throw Exceptions.newException(AdminErrorCode.DUPLICATED_USER_LOGIN);
+			throw Exceptions.newException(AdminErrorCode.USER_DUPLICATED_LOGIN);
 		});
 		userRepository.findOneByEmail(form.getEmail()).ifPresent(user -> {
-			throw Exceptions.newException(AdminErrorCode.DUPLICATED_USER_EMAIL);
+			throw Exceptions.newException(AdminErrorCode.USER_DUPLICATED_EMAIL);
 		});
 
 		Authority userAuthority = new Authority();
@@ -52,4 +54,9 @@ public class UserRegisterService {
 		return userRepository.findAllByActivatedIsFalse();
 	}
 
+	@Transactional
+	public void allow(Long id) {
+		User user = Optional.of(userRepository.findOne(id)).orElseThrow(() -> Exceptions.newException(AdminErrorCode.USER_NOT_EXIST));
+		user.setActivated(true);
+	}
 }

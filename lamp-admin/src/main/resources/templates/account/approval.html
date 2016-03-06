@@ -29,8 +29,8 @@
                             <td th:text="${user.firstName}"> Joke </td>
                             <td th:text="${user.email}"> Joke@Joke.joke </td>
                             <td>
-                                <a th:href="@{/account/allow(id=${user.id})}" class="btn blue btn-outline">Allow</a>
-                                <a th:href="@{/account/deny(id=${user.id})}" class="btn red btn-outline">Deny</a>
+                                <a th:href="@{/account/approval/allow(id=${user.id})}" class="btn blue btn-outline">Allow</a>
+                                <a th:href="@{/account/approval/deny(id=${user.id})}" class="btn red btn-outline">Deny</a>
                             </td>
                         </tr>
                         </tbody>
