@@ -26,17 +26,17 @@ public class LoginController {
 
 	@RequestMapping(path = "/login", method = RequestMethod.GET)
 	public String login() {
-		return "account/login";
+		return "auth/auth";
 	}
 
 	@RequestMapping(path = "/signup", method = RequestMethod.GET)
 	public String signUp() {
-		return "account/signup";
+		return "auth/signup";
 	}
 
 	@RequestMapping(path = "/forget", method = RequestMethod.GET)
 	public String forget() {
-		return "account/forget";
+		return "auth/forget";
 	}
 
 	@RequestMapping(path = "/signup", method = RequestMethod.POST)

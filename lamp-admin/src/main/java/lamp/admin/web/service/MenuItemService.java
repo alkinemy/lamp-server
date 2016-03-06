@@ -18,6 +18,7 @@ public class MenuItemService {
 	public List<MenuItem> getMenuItemList() {
 		List<MenuItem> menuItems = new ArrayList<>();
 		{
+			//Agent
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
 
@@ -40,6 +41,7 @@ public class MenuItemService {
 
 				menuItems.add(MenuItem.of("AGENT_TOP", "Agent", "icon-layers", subMenuItems));
 			}
+			//App
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
 				subMenuItems.add(MenuItem.of(MANAGED_APP, "Managed App", "/app", "icon-bulb"));
@@ -49,6 +51,7 @@ public class MenuItemService {
 
 				menuItems.add(MenuItem.of("APP", "App", "icon-layers", subMenuItems));
 			}
+			//Account
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
 				subMenuItems.add(MenuItem.of(ACCOUNT_APPROVAL, "Approval", "/account/approval", "icon-bulb"));
