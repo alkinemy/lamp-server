@@ -38,6 +38,8 @@ public class UserRegisterService {
 		userAuthority.setName(AuthoritiesConstants.USER);
 
 		User user = assembler.assemble(form, User.class);
+		user.setFirstName(form.getUsername());
+		user.setLastName(form.getUsername());
 		user.setPassword(passwordEncoder.encode(form.getPassword()));
 		user.setAuthorities(Sets.newHashSet(userAuthority));
 		return userRepository.save(user);

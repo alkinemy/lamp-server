@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -18,9 +19,13 @@ public class UserRegisterForm {
 	private String login;
 
 	@Email
+	@NotBlank
 	private String email;
 
-	@NotNull
+	@NotBlank
+	private String username;
+
+	@NotBlank
 	private String password;
 
 }
