@@ -23,9 +23,9 @@ public class MetricsCollectionScheduledService {
 				.forEach(this::metricsMonitoring);
 	}
 
-	protected void metricsMonitoring(CollectionTarget app) {
+	protected void metricsMonitoring(CollectionTarget collectionTarget) {
 		try {
-			metricsCollectionFacadeService.collection(app);
+			metricsCollectionFacadeService.collection(collectionTarget);
 		} catch (Exception e) {
 			log.warn("Metrics Collection Failed", e);
 		}

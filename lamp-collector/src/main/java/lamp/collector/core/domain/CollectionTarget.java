@@ -31,10 +31,12 @@ public class CollectionTarget {
 	private Boolean healthCollectionEnabled;
 	private String healthType;
 	private String healthUrl;
+	private String healthPrefix;
 
 	@Column(columnDefinition = "TINYINT")
 	private Boolean metricsCollectionEnabled;
 	private String metricsType;
 	private String metricsUrl;
+	private String metricsPrefix;
 
 }

@@ -16,12 +16,12 @@ public class HealthCollectionFacadeService {
 	@Autowired
 	private EventService eventService;
 
-	public void collection(CollectionTarget app) {
+	public void collection(CollectionTarget collectionTarget) {
 		try {
-			healthCollectionService.monitoring(app);
+			healthCollectionService.collection(collectionTarget);
 		} catch (Throwable e) {
 			log.warn("Health Collection Failed ", e);
-			Event event = Event.of(app, EventName.HEALTH_COLLECTION_FAILED, AppEventLevel.WARN, e);
+			Event event = Event.of(collectionTarget, EventName.HEALTH_COLLECTION_FAILED, AppEventLevel.WARN, e);
 			eventService.publish(event);
 		}
 	}

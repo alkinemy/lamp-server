@@ -1,6 +1,5 @@
 package lamp.collector.core.service;
 
-import com.google.common.collect.Lists;
 import lamp.collector.core.domain.CollectionTarget;
 import lamp.collector.core.repository.CollectionTargetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,12 @@ public class CollectionTargetJpaService implements CollectionTargetService {
 
     @Override
     public List<CollectionTarget> getCollectionTargetListForHealth() {
-        return Lists.newArrayList();
+        return collectionTargetRepository.findAll();
     }
 
     @Override
     public List<CollectionTarget> getCollectionTargetListForMetrics() {
-        return Lists.newArrayList();
+        return collectionTargetRepository.findAll();
     }
+
 }

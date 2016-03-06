@@ -18,7 +18,7 @@ public class HealthCollectionService {
 	@Autowired
 	private HealthExportFacadeService healthExportFacadeService;
 
-	public void monitoring(CollectionTarget app) {
+	public void collection(CollectionTarget app) {
 		TargetHealth health = healthCollectorService.getHealth(app);
 		healthExportFacadeService.export(app, health);
 	}

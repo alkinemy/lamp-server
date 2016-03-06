@@ -1,5 +1,6 @@
 package lamp.collector.core.service.metrics.collector;
 
+import lamp.admin.utils.StringUtils;
 import lamp.collector.core.domain.TargetMetrics;
 import lamp.collector.core.domain.CollectionTarget;
 import lombok.extern.slf4j.Slf4j;
@@ -22,20 +23,28 @@ public class MetricsRestTemplateCollector implements MetricsCollector {
 		String url = collectionTarget.getMetricsUrl();
 		log.debug("app = {}, url = {}", collectionTarget.getId(), url);
 		Map<String, Object> metrics = restTemplate.getForObject(url, LinkedHashMap.class);
+		log.debug("metrics = {}", metrics);
 
 		long timestamp = System.currentTimeMillis();
-		TargetMetrics watchedTargetMetrics = assemble(timestamp, collectionTarget, metrics);
-		log.debug("watchedTargetMetrics = {}", watchedTargetMetrics);
-		return watchedTargetMetrics;
+		TargetMetrics targetMetrics = assemble(timestamp, collectionTarget, metrics, collectionTarget.getMetricsPrefix());
+		log.debug("targetMetrics = {}", targetMetrics);
+		return targetMetrics;
 	}
 
 
-	protected TargetMetrics assemble(long timestamp, CollectionTarget collectionTarget, Map<String, Object> metrics) {
+	protected TargetMetrics assemble(long timestamp, CollectionTarget collectionTarget, Map<String, Object> metrics, String prefix) {
 		for (String memoryMetricName : memoryMetricNames) {
 			metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
 		}
 
 		Map<String, Object> assembledMetrics = new LinkedHashMap<>();
+		if (StringUtils.isNotBlank(prefix)) {
+			metrics.forEach((key, value) -> {
+				assembledMetrics.put(prefix + key, value);
+			});
+		} else {
+			assembledMetrics.putAll(metrics);
+		}
 
 		Map<String, String> tags = new LinkedHashMap<>();
 		tags.put("type", "app");
