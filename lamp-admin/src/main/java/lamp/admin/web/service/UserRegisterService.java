@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserRegisterService {
 
@@ -44,4 +46,10 @@ public class UserRegisterService {
 		user.setAuthorities(Sets.newHashSet(userAuthority));
 		return userRepository.save(user);
 	}
+
+	@Transactional(readOnly = true)
+	public List<User> getNotActivatedUsers() {
+		return userRepository.findAllByActivatedIsFalse();
+	}
+
 }
