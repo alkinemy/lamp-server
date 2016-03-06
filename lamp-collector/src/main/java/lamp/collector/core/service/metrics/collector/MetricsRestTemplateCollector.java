@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class MetricsRestTemplateCollector implements MetricsCollector {
@@ -37,18 +38,20 @@ public class MetricsRestTemplateCollector implements MetricsCollector {
 			metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
 		}
 
-		Map<String, Object> assembledMetrics = new LinkedHashMap<>();
+		Map<String, Object> assembledMetrics;
 		if (StringUtils.isNotBlank(prefix)) {
-			metrics.forEach((key, value) -> {
-				assembledMetrics.put(prefix + key, value);
-			});
+			assembledMetrics = metrics.entrySet()
+					.stream()
+					.collect(Collectors.toMap(k -> prefix + k, Map.Entry::getValue));
 		} else {
-			assembledMetrics.putAll(metrics);
+			assembledMetrics = metrics.entrySet()
+					.stream()
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
 
 		Map<String, String> tags = new LinkedHashMap<>();
 		tags.put("type", "app");
-		tags.put("appId", collectionTarget.getId());
+		tags.put("id", collectionTarget.getId());
 		tags.put("hostname", collectionTarget.getHostname());
 		tags.put("address", collectionTarget.getAddress());
 
