@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@MenuMapping(MenuConstants.ACCOUNT)
+@MenuMapping(MenuConstants.ACCOUNT_APPROVAL)
 @Controller
 @RequestMapping("/account")
 public class AccountController {
