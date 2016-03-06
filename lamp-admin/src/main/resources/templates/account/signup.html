@@ -88,7 +88,9 @@ License: You must have a valid license purchased only from themeforest(the above
             <div id="register_tnc_error"> </div>
         </div>
         <div class="form-actions">
-            <button type="button" id="register-back-btn" class="btn btn-default">Back</button>
+            <a href="/login">
+                <button type="button" class="btn btn-default">Back</button>
+            </a>
             <input type="hidden"  th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
         </div>
