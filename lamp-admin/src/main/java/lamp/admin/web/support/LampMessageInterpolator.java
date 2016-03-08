@@ -1,6 +1,6 @@
 package lamp.admin.web.support;
 
-import lamp.admin.utils.VariableReplaceUtils;
+import lamp.common.utils.VariableReplaceUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.validation.MessageInterpolator;

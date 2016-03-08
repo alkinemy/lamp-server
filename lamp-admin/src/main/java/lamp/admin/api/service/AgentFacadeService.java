@@ -4,7 +4,7 @@ import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.agent.domain.AgentDto;
 import lamp.admin.core.agent.domain.AgentRegisterForm;
 import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.utils.assembler.SmartAssembler;
+import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

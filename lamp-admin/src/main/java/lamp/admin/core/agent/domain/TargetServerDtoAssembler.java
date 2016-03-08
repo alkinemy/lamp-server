@@ -1,7 +1,7 @@
 package lamp.admin.core.agent.domain;
 
 import lamp.admin.core.agent.service.SshKeyService;
-import lamp.admin.utils.assembler.AbstractListAssembler;
+import lamp.common.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

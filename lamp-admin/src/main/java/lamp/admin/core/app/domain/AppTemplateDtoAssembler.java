@@ -1,6 +1,6 @@
 package lamp.admin.core.app.domain;
 
-import lamp.admin.utils.assembler.AbstractAssembler;
+import lamp.common.utils.assembler.AbstractAssembler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

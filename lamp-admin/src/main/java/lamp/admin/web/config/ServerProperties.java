@@ -1,6 +1,6 @@
 package lamp.admin.web.config;
 
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;

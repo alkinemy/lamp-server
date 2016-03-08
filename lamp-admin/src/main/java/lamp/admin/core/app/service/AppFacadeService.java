@@ -1,13 +1,12 @@
 package lamp.admin.core.app.service;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import lamp.admin.core.agent.domain.Agent;
 import lamp.admin.core.agent.service.AgentService;
 import lamp.admin.core.app.domain.*;
 import lamp.admin.core.support.agent.model.AgentAppRegisterForm;
 import lamp.admin.core.support.agent.model.AgentAppUpdateFileForm;
-import lamp.admin.utils.assembler.SmartAssembler;
+import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

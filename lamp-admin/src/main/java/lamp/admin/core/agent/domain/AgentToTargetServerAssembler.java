@@ -1,7 +1,7 @@
 package lamp.admin.core.agent.domain;
 
-import lamp.admin.utils.assembler.AbstractListAssembler;
-import lamp.admin.utils.assembler.Populater;
+import lamp.common.utils.assembler.AbstractListAssembler;
+import lamp.common.utils.assembler.Populater;
 import org.springframework.stereotype.Component;
 
 @Component

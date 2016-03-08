@@ -10,7 +10,7 @@ import lamp.admin.core.app.service.AppInstallScriptService;
 import lamp.admin.core.app.service.AppRepoService;
 import lamp.admin.core.app.service.AppTemplateService;
 import lamp.admin.core.base.exception.MessageException;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.security.SecurityUtils;

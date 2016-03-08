@@ -8,7 +8,7 @@ import lamp.admin.core.app.repository.LocalAppFileRepository;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
 import lamp.admin.core.support.resource.LocalFileAppResource;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,6 +1,6 @@
 package lamp.admin.web.config.metrics;
 
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import lamp.admin.web.config.ServerProperties;
 import lombok.Getter;
 import lombok.Setter;

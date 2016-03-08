@@ -1,0 +1,35 @@
+package lamp.collector.app.core.service;
+
+import lamp.common.utils.BooleanUtils;
+import lamp.collector.app.core.service.health.HealthCollectionService;
+import lamp.collector.common.CollectionTarget;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
+
+@Slf4j
+public class HealthCollectionScheduledService {
+
+	@Autowired
+	private CollectionTargetService collectionTargetService;
+
+	@Autowired
+	private HealthCollectionService healthCollectionService;
+
+	public void collection() {
+		Collection<CollectionTarget> collectionTargets = collectionTargetService.getCollectionTargetListForHealth();
+		collectionTargets.stream()
+				.filter(a -> BooleanUtils.isTrue(a.getHealthCollectionEnabled()))
+				.forEach(this::collection);
+	}
+
+	protected void collection(CollectionTarget collectionTarget) {
+		try {
+			healthCollectionService.collection(collectionTarget);
+		} catch (Exception e) {
+			log.warn("Health Collection Failed", e);
+		}
+	}
+
+}

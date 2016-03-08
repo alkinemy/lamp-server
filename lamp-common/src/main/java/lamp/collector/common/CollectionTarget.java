@@ -1,0 +1,25 @@
+package lamp.collector.common;
+
+public interface CollectionTarget {
+
+	String getId();
+	String getName();
+
+	String getHostname();
+	String getAddress();
+
+	String getGroupId();
+	String getArtifactId();
+	String getVersion();
+
+	Boolean getHealthCollectionEnabled();
+	String getHealthType();
+	String getHealthUrl();
+	String getHealthExportPrefix();
+
+	Boolean getMetricsCollectionEnabled();
+	String getMetricsType();
+	String getMetricsUrl();
+	String getMetricsExportPrefix();
+
+}

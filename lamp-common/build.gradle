@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'idea'
+
+group 'lamp-collector'
+
+
+jar {
+    baseName = 'lamp-core'
+    version =  '0.0.1-SNAPSHOT'
+
+    manifest {
+        attributes(
+                "Implementation-Title": project.name,
+                "Implementation-Version": version);
+    }
+}
+
+dependencies {
+    compile project(':lamp-utils')
+}

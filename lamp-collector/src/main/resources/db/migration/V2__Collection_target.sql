@@ -18,12 +18,12 @@ CREATE TABLE `lamp_collection_target` (
   `health_collection_enabled` tinyint(1) DEFAULT 0,
   `health_type` varchar(100) DEFAULT NULL,
   `health_url` varchar(1000) DEFAULT NULL,
-  `health_prefix` varchar(200) DEFAULT NULL,
+  `health_export_prefix` varchar(200) DEFAULT NULL,
 
   `metrics_collection_enabled` tinyint(1) DEFAULT 0,
   `metrics_type` varchar(100) DEFAULT NULL,
   `metrics_url` varchar(1000) DEFAULT NULL,
-  `metrics_prefix` varchar(200) DEFAULT NULL,
+  `metrics_export_prefix` varchar(200) DEFAULT NULL,
 
   `created_by` varchar(100) DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,

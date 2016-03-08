@@ -1,8 +1,8 @@
 package lamp.admin.core.agent.domain;
 
 import lamp.admin.core.agent.service.SshKeyService;
-import lamp.admin.utils.assembler.AbstractAssembler;
-import lamp.admin.utils.assembler.Populater;
+import lamp.common.utils.assembler.AbstractAssembler;
+import lamp.common.utils.assembler.Populater;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

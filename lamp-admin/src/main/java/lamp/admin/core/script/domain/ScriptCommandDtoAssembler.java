@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
-import lamp.admin.utils.assembler.AbstractListAssembler;
+import lamp.common.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

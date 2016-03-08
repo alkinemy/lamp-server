@@ -8,7 +8,7 @@ import lamp.admin.core.agent.domain.SshKeyUpdateForm;
 import lamp.admin.core.agent.repository.SshKeyRepository;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
-import lamp.admin.utils.assembler.SmartAssembler;
+import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

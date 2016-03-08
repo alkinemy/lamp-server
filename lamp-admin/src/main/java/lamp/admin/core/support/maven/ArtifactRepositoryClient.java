@@ -5,7 +5,7 @@ package lamp.admin.core.support.maven;
 import com.google.common.collect.Lists;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;

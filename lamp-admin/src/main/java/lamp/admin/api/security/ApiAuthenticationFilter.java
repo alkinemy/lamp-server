@@ -4,7 +4,7 @@ import lamp.admin.core.support.jwt.JwtObject;
 import lamp.admin.core.support.jwt.JwtParser;
 import lamp.admin.core.support.jwt.JwtPayload;
 import lamp.admin.core.support.jwt.JwtVerifier;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;

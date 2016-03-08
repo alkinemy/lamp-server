@@ -1,8 +1,8 @@
 package lamp.admin.core.app.domain;
 
 import lamp.admin.core.app.service.AppRepoService;
-import lamp.admin.utils.assembler.AbstractAssembler;
-import lamp.admin.utils.assembler.Populater;
+import lamp.common.utils.assembler.AbstractAssembler;
+import lamp.common.utils.assembler.Populater;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

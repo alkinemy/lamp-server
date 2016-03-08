@@ -2,7 +2,7 @@ package lamp.admin.web.service;
 
 import com.google.common.collect.Sets;
 import lamp.admin.core.base.exception.Exceptions;
-import lamp.admin.utils.assembler.SmartAssembler;
+import lamp.common.utils.assembler.SmartAssembler;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.domain.Authority;
 import lamp.admin.web.domain.User;

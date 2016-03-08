@@ -1,11 +1,10 @@
 package lamp.admin.web.config;
 
 
-import lamp.admin.core.app.service.MavenAppResourceLoader;
 import lamp.admin.core.support.agent.AgentClient;
 import lamp.admin.core.support.agent.AgentHttpRequestInterceptor;
 import lamp.admin.core.support.agent.AgentResponseErrorHandler;
-import lamp.admin.utils.assembler.SmartAssembler;
+import lamp.common.utils.assembler.SmartAssembler;
 import lamp.admin.web.support.LampMessageInterpolator;
 import lamp.admin.web.support.MenuItemInterceptor;
 import lamp.admin.web.support.error.LampErrorAttributes;

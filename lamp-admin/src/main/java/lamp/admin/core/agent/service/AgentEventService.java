@@ -4,7 +4,7 @@ import lamp.admin.core.agent.domain.AgentEvent;
 import lamp.admin.core.agent.domain.AgentEventDto;
 import lamp.admin.core.agent.domain.AgentEventForm;
 import lamp.admin.core.agent.repository.AgentEventRepository;
-import lamp.admin.utils.assembler.SmartAssembler;
+import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

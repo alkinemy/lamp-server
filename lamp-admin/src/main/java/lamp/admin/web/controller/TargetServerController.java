@@ -5,7 +5,7 @@ import lamp.admin.core.agent.domain.*;
 import lamp.admin.core.agent.service.SshKeyService;
 import lamp.admin.core.agent.service.TargetServerService;
 import lamp.admin.core.base.exception.FlashMessageException;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.config.AgentProperties;

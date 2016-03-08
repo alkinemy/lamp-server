@@ -4,7 +4,7 @@ package lamp.admin.core.support.agent;
 import lamp.admin.core.support.agent.security.AgentRequestUser;
 import lamp.admin.core.support.agent.security.AgentRequestUserHolder;
 import lamp.admin.core.support.jwt.JwtBuilder;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;

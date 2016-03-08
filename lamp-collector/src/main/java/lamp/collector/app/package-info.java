@@ -1,0 +1,1 @@
+package lamp.collector.app;

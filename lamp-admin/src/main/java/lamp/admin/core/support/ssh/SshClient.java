@@ -1,9 +1,9 @@
 package lamp.admin.core.support.ssh;
 
 import com.jcraft.jsch.*;
-import lamp.admin.utils.FileUtils;
-import lamp.admin.utils.FilenameUtils;
-import lamp.admin.utils.StringUtils;
+import lamp.common.utils.FileUtils;
+import lamp.common.utils.FilenameUtils;
+import lamp.common.utils.StringUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,7 +1,7 @@
 package lamp.admin.core.app.domain;
 
 import lamp.admin.core.agent.domain.UrlAppRepo;
-import lamp.admin.utils.assembler.AbstractListAssembler;
+import lamp.common.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
