@@ -26,7 +26,11 @@ jar {
 dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
-    compile project(':lamp-utils')
+    compile project(':lamp-common')
+    compile project(':lamp-common-utils')
+
+    compile project(':lamp-support-kafka')
+    compile project(':lamp-support-kairosdb')
 
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-configuration-processor")
@@ -39,6 +43,8 @@ dependencies {
     compile("com.mysema.querydsl:querydsl-apt:3.6.3:jpa")
     compile("mysql:mysql-connector-java:5.1.31")
     compile("org.flywaydb:flyway-core:3.2.1")
+
+    compile project(':lamp-collector-loader')
 
     compile("org.kairosdb:client:${kairosdbVersion}")
     compile("org.apache.kafka:kafka-clients:${kafkaVersion}")

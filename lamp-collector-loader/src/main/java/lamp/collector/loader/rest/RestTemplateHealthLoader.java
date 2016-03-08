@@ -1,12 +1,11 @@
 package lamp.collector.loader.rest;
 
-import lamp.collector.common.CollectionTarget;
-import lamp.collector.common.TargetHealth;
-import lamp.collector.common.health.HealthLoader;
+import lamp.common.collection.CollectionTarget;
+import lamp.common.collection.health.HealthLoader;
+import lamp.common.collection.health.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -37,17 +36,17 @@ public class RestTemplateHealthLoader implements HealthLoader {
 
 
 	protected Map<String, Object> getHealthMap(String url) {
-		Map<String, Object> health;
-		try {
-			health = restTemplate.getForObject(url, Map.class);
-		} catch (Exception e) {
-			log.warn("get health failed", e);
-			health = new HashMap<>();
-			health.put(STATUS, "OUT_OF_SERVICE");
-			health.put(DESCRIPTION, e.getMessage());
-		}
+//		Map<String, Object> health;
+//		try {
+//			health =
+//		} catch (Exception e) {
+//			log.warn("get health failed", e);
+//			health = new HashMap<>();
+//			health.put(STATUS, "OUT_OF_SERVICE");
+//			health.put(DESCRIPTION, e.getMessage());
+//		}
 
-		return health;
+		return restTemplate.getForObject(url, Map.class);
 	}
 
 }

@@ -2,7 +2,7 @@ package lamp.collector.app.support.jpa.service;
 
 import lamp.collector.app.core.service.CollectionTargetService;
 import lamp.collector.app.support.jpa.repository.JpaCollectionTargetRepository;
-import lamp.collector.common.CollectionTarget;
+import lamp.common.collection.CollectionTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;

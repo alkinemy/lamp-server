@@ -1,8 +1,8 @@
 package lamp.collector.app.core.service;
 
-import lamp.common.utils.BooleanUtils;
 import lamp.collector.app.core.service.metrics.MetricsCollectionService;
-import lamp.collector.common.CollectionTarget;
+import lamp.common.collection.CollectionTarget;
+import lamp.common.utils.BooleanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 

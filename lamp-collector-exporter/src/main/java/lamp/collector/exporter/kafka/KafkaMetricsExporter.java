@@ -1,8 +1,9 @@
 package lamp.collector.exporter.kafka;
 
-import lamp.collector.common.TargetMetrics;
-import lamp.collector.common.metrics.MetricsExporter;
-import lamp.collector.exporter.kafka.support.JsonSerializer;
+import lamp.support.kafka.KafkaProducerProperties;
+import lamp.support.kafka.serialization.JsonSerializer;
+import lamp.common.collection.metrics.MetricsExporter;
+import lamp.common.collection.metrics.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;

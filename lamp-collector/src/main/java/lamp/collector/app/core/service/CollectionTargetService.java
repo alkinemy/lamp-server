@@ -1,6 +1,6 @@
 package lamp.collector.app.core.service;
 
-import lamp.collector.common.CollectionTarget;
+import lamp.common.collection.CollectionTarget;
 
 import java.util.List;
 

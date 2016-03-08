@@ -1,7 +1,7 @@
 package lamp.collector.app.core.service.health;
 
-import lamp.collector.common.CollectionTarget;
-import lamp.collector.common.TargetHealth;
+import lamp.common.collection.CollectionTarget;
+import lamp.common.collection.health.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

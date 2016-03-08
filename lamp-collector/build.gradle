@@ -26,8 +26,6 @@ jar {
 dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
-    compile project(':lamp-utils')
-    compile project(':lamp-common')
     compile project(':lamp-collector-loader')
     compile project(':lamp-collector-exporter')
 

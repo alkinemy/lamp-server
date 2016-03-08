@@ -1,4 +1,4 @@
-USE `lamp_watcher`;
+USE `lamp_collector`;
 
 DROP TABLE IF EXISTS `lamp_event`;
 

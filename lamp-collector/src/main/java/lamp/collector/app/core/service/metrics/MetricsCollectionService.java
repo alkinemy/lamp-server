@@ -1,7 +1,7 @@
 package lamp.collector.app.core.service.metrics;
 
-import lamp.collector.common.CollectionTarget;
-import lamp.collector.common.TargetMetrics;
+import lamp.common.collection.CollectionTarget;
+import lamp.common.collection.metrics.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

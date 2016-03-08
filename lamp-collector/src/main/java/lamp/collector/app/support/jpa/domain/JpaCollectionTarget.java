@@ -1,6 +1,6 @@
 package lamp.collector.app.support.jpa.domain;
 
-import lamp.collector.common.CollectionTarget;
+import lamp.common.collection.CollectionTarget;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

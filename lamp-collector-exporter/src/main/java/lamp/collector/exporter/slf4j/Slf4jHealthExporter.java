@@ -1,7 +1,7 @@
 package lamp.collector.exporter.slf4j;
 
-import lamp.collector.common.TargetHealth;
-import lamp.collector.common.health.HealthExporter;
+import lamp.common.collection.health.HealthExporter;
+import lamp.common.collection.health.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

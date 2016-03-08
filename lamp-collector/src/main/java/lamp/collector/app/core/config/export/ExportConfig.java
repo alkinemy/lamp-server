@@ -1,8 +1,8 @@
 package lamp.collector.app.core.config.export;
 
 import lamp.collector.app.core.CollectorConstants;
-import lamp.collector.common.health.HealthExporter;
-import lamp.collector.common.metrics.MetricsExporter;
+import lamp.common.collection.health.HealthExporter;
+import lamp.common.collection.metrics.MetricsExporter;
 import lamp.collector.exporter.kafka.KafkaHealthExporter;
 import lamp.collector.exporter.kafka.KafkaMetricsExporter;
 import lamp.collector.exporter.kairosdb.KairosdbMetricsExporter;

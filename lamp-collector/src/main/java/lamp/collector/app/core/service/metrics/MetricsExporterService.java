@@ -1,11 +1,11 @@
 package lamp.collector.app.core.service.metrics;
 
 import lamp.collector.app.core.domain.EventName;
-import lamp.collector.common.TargetMetrics;
-import lamp.collector.common.metrics.MetricsExporter;
-import lamp.event.common.Event;
-import lamp.event.common.EventLevel;
-import lamp.event.common.EventPublisher;
+import lamp.common.collection.metrics.MetricsExporter;
+import lamp.common.collection.metrics.TargetMetrics;
+import lamp.common.event.Event;
+import lamp.common.event.EventLevel;
+import lamp.common.event.EventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

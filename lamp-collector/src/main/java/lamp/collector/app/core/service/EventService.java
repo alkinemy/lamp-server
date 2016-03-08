@@ -1,7 +1,7 @@
 package lamp.collector.app.core.service;
 
-import lamp.event.common.Event;
-import lamp.event.common.EventPublisher;
+import lamp.common.event.Event;
+import lamp.common.event.EventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

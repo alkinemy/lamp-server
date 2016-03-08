@@ -1,7 +1,7 @@
 package lamp.collector.exporter.slf4j;
 
-import lamp.collector.common.TargetMetrics;
-import lamp.collector.common.metrics.MetricsExporter;
+import lamp.common.collection.metrics.MetricsExporter;
+import lamp.common.collection.metrics.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,9 @@
 rootProject.name = 'lamp-server'
 
-include 'lamp-utils'
 include 'lamp-common'
+include 'lamp-common-utils'
+
+include 'lamp-support-kafka'
 
 include 'lamp-admin'
 
@@ -9,7 +11,6 @@ include 'lamp-collector-loader'
 include 'lamp-collector-exporter'
 include 'lamp-collector'
 
-include 'lamp-siren'
 include 'lamp-watcher'
-
+include 'lamp-support-kairosdb'
 

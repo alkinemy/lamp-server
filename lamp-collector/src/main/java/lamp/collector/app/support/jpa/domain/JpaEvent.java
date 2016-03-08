@@ -1,7 +1,7 @@
 package lamp.collector.app.support.jpa.domain;
 
-import lamp.event.common.Event;
-import lamp.event.common.EventLevel;
+import lamp.common.event.Event;
+import lamp.common.event.EventLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

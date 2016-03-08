@@ -1,7 +1,8 @@
 package lamp.collector.exporter.kairosdb;
 
-import lamp.collector.common.TargetMetrics;
-import lamp.collector.common.metrics.MetricsExporter;
+import lamp.common.collection.metrics.MetricsExporter;
+import lamp.common.collection.metrics.TargetMetrics;
+import lamp.support.kairosdb.KairosdbProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.kairosdb.client.Client;
 import org.kairosdb.client.HttpClient;

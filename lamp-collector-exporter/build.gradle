@@ -18,8 +18,11 @@ jar {
 }
 
 dependencies {
-    compile project(':lamp-utils')
     compile project(':lamp-common')
+    compile project(':lamp-common-utils')
+
+    compile project(':lamp-support-kafka')
+    compile project(':lamp-support-kairosdb')
 
     providedCompile('org.slf4j:slf4j-api:1.7.13')
     providedCompile("org.springframework:spring-web:${springVersion}")
@@ -28,6 +31,4 @@ dependencies {
     providedCompile("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
     providedCompile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
 
-    compile("org.kairosdb:client:${kairosdbVersion}")
-    compile("org.apache.kafka:kafka-clients:${kafkaVersion}")
 }

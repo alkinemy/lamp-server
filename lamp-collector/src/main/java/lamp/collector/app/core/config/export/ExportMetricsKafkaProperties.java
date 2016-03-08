@@ -1,7 +1,7 @@
 package lamp.collector.app.core.config.export;
 
 import lamp.collector.app.core.CollectorConstants;
-import lamp.collector.exporter.kafka.KafkaProducerProperties;
+import lamp.support.kafka.KafkaProducerProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

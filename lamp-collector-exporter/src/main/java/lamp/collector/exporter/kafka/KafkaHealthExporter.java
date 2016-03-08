@@ -1,8 +1,9 @@
 package lamp.collector.exporter.kafka;
 
-import lamp.collector.common.TargetHealth;
-import lamp.collector.common.health.HealthExporter;
-import lamp.collector.exporter.kafka.support.JsonSerializer;
+import lamp.support.kafka.KafkaProducerProperties;
+import lamp.support.kafka.serialization.JsonSerializer;
+import lamp.common.collection.health.HealthExporter;
+import lamp.common.collection.health.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;

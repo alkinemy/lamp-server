@@ -1,11 +1,11 @@
 package lamp.collector.app.core.service.health;
 
 import lamp.collector.app.core.domain.EventName;
-import lamp.collector.common.TargetHealth;
-import lamp.collector.common.health.HealthExporter;
-import lamp.event.common.Event;
-import lamp.event.common.EventLevel;
-import lamp.event.common.EventPublisher;
+import lamp.common.event.Event;
+import lamp.common.event.EventLevel;
+import lamp.common.event.EventPublisher;
+import lamp.common.collection.health.HealthExporter;
+import lamp.common.collection.health.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
