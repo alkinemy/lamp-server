@@ -4,6 +4,9 @@ include 'lamp-common'
 include 'lamp-common-utils'
 
 include 'lamp-support-kafka'
+include 'lamp-support-kairosdb'
+
+include 'lamp-notification'
 
 include 'lamp-admin'
 
@@ -12,5 +15,5 @@ include 'lamp-collector-exporter'
 include 'lamp-collector'
 
 include 'lamp-watcher'
-include 'lamp-support-kairosdb'
+
 
