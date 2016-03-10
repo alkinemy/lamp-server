@@ -1,6 +1,6 @@
 package lamp.watcher.core.service;
 
-import lamp.common.collection.health.TargetHealth;
+import lamp.common.metrics.TargetHealth;
 import lamp.common.monitoring.MonitoringTarget;
 import lamp.common.utils.BooleanUtils;
 import lombok.extern.slf4j.Slf4j;

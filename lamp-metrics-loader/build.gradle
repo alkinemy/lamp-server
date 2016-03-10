@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'idea'
+
+jar {
+    baseName = 'lamp-collector-loader'
+    version =  '0.0.1-SNAPSHOT'
+
+    manifest {
+        attributes(
+                "Implementation-Title": project.name,
+                "Implementation-Version": version);
+    }
+}
+
+dependencies {
+    compile project(':lamp-common')
+    compile project(':lamp-common-utils')
+
+    providedCompile("org.slf4j:slf4j-api:${slf4jVersion}")
+    providedCompile("org.springframework:spring-web:${springVersion}")
+
+}

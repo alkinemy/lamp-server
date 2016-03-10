@@ -17,11 +17,11 @@ public class MonitoringCollectionConfig {
 
 	@Configuration
 	@ConditionalOnProperty(name = ConfigConstants.MONITORING_HEALTH_COLLECTION_PREFIX + ".enabled", havingValue = "true")
-	@EnableConfigurationProperties({ MonitoringHealthCollectionProperties.class})
-	public static class MonitoringHealthCollectionConfig implements SchedulingConfigurer {
+	@EnableConfigurationProperties({ MonitoringHealthProperties.class})
+	public static class MonitoringHealthConfig implements SchedulingConfigurer {
 
 		@Autowired
-		private MonitoringHealthCollectionProperties monitoringHealthCollectionProperties;
+		private MonitoringHealthProperties monitoringHealthProperties;
 
 		@Bean
 		public HealthLoaderService healthLoaderService() {
@@ -29,19 +29,19 @@ public class MonitoringCollectionConfig {
 		}
 
 		@Bean
-		public MonitoringHealthCollectionService monitoringHealthCollectionService() {
-			return new MonitoringHealthCollectionService();
+		public MonitoringHealthService monitoringHealthCollectionService() {
+			return new MonitoringHealthService();
 		}
 
 		@Bean
-		public MonitoringHealthCollectionScheduledService monitoringHealthScheduledService() {
-			return new MonitoringHealthCollectionScheduledService();
+		public MonitoringHealthScheduledService monitoringHealthScheduledService() {
+			return new MonitoringHealthScheduledService();
 		}
 
 		@Override public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 			taskRegistrar.addFixedDelayTask(() -> {
 				monitoringHealthScheduledService().monitoring();
-			}, monitoringHealthCollectionProperties.getPeriod());
+			}, monitoringHealthProperties.getPeriod());
 			log.info("MonitoringHealthCollection Enabled");
 		}
 	}
@@ -49,11 +49,11 @@ public class MonitoringCollectionConfig {
 
 	@Configuration
 	@ConditionalOnProperty(name = ConfigConstants.MONITORING_METRICS_COLLECTION_PREFIX + ".enabled", havingValue = "true")
-	@EnableConfigurationProperties({ MonitoringMetricsCollectionProperties.class})
-	public static class MonitoringMetricsCollectionConfig implements SchedulingConfigurer {
+	@EnableConfigurationProperties({ MonitoringMetricsProperties.class})
+	public static class MonitoringMetricsConfig implements SchedulingConfigurer {
 
 		@Autowired
-		private MonitoringMetricsCollectionProperties monitoringMetricsCollectionProperties;
+		private MonitoringMetricsProperties monitoringMetricsProperties;
 
 		@Bean
 		public MetricsLoaderService metricsLoaderService() {
@@ -61,19 +61,19 @@ public class MonitoringCollectionConfig {
 		}
 
 		@Bean
-		public MonitoringMetricsCollectionService monitoringMetricsCollectionService() {
-			return new MonitoringMetricsCollectionService();
+		public MonitoringMetricsService monitoringMetricsCollectionService() {
+			return new MonitoringMetricsService();
 		}
 
 		@Bean
-		public MonitoringMetricsCollectionScheduledService monitoringMetricsScheduledService() {
-			return new MonitoringMetricsCollectionScheduledService();
+		public MonitoringMetricsScheduledService monitoringMetricsScheduledService() {
+			return new MonitoringMetricsScheduledService();
 		}
 
 		@Override public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 			taskRegistrar.addFixedDelayTask(() -> {
 				monitoringMetricsScheduledService().monitoring();
-			}, monitoringMetricsCollectionProperties.getPeriod());
+			}, monitoringMetricsProperties.getPeriod());
 			log.info("MonitoringMetricsCollection Enabled");
 		}
 	}

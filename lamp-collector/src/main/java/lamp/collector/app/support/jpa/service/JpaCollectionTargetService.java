@@ -1,7 +1,7 @@
 package lamp.collector.app.support.jpa.service;
 
-import lamp.collector.app.core.service.CollectionTargetService;
 import lamp.collector.app.support.jpa.repository.JpaCollectionTargetRepository;
+import lamp.collector.core.service.CollectionTargetService;
 import lamp.common.collection.CollectionTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 

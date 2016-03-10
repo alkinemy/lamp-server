@@ -6,14 +6,15 @@ include 'lamp-common-utils'
 include 'lamp-support-kafka'
 include 'lamp-support-kairosdb'
 
+include 'lamp-metrics-loader'
+include 'lamp-metrics-exporter'
+
 include 'lamp-notification'
 
 include 'lamp-admin'
 
-include 'lamp-collector-loader'
-include 'lamp-collector-exporter'
 include 'lamp-collector'
 
 include 'lamp-watcher'
-
+include 'lamp-collector-core'
 

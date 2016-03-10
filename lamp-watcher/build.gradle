@@ -31,6 +31,7 @@ dependencies {
 
     compile project(':lamp-support-kafka')
     compile project(':lamp-support-kairosdb')
+    compile project(':lamp-metrics-loader')
 
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-configuration-processor")
@@ -44,11 +45,8 @@ dependencies {
     compile("mysql:mysql-connector-java:5.1.31")
     compile("org.flywaydb:flyway-core:3.2.1")
 
-    compile project(':lamp-collector-loader')
+    compile project(':lamp-metrics-loader')
 
-    compile("org.kairosdb:client:${kairosdbVersion}")
-    compile("org.apache.kafka:kafka-clients:${kafkaVersion}")
-//    compile("org.apache.kafka:kafka-tools:${kafkaVersion}")
 
 
 }

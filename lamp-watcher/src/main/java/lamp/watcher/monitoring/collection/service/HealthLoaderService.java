@@ -1,12 +1,12 @@
 package lamp.watcher.monitoring.collection.service;
 
-import lamp.collector.loader.rest.RestTemplateHealthLoader;
+import lamp.metrics.loader.rest.RestTemplateHealthLoader;
 import lamp.common.collection.CollectionTarget;
 import lamp.common.event.Event;
 import lamp.common.event.EventLevel;
 import lamp.common.event.EventPublisher;
-import lamp.common.collection.health.HealthLoader;
-import lamp.common.collection.health.TargetHealth;
+import lamp.common.metrics.HealthLoader;
+import lamp.common.metrics.TargetHealth;
 import lamp.watcher.core.domain.EventName;
 import lamp.watcher.core.domain.TargetHealthType;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,5 @@
 package lamp.watcher.alarm;
 
 public enum AlarmCondition {
-    Open, Resolved, Acknowledged
+    OPEN, RESOLVED, ACKNOWLEDGED
 }

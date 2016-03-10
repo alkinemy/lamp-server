@@ -1,6 +1,6 @@
 package lamp.watcher.monitoring.kafka.service;
 
-import lamp.common.collection.metrics.TargetMetrics;
+import lamp.common.metrics.TargetMetrics;
 import lamp.common.monitoring.MonitoringTarget;
 import lamp.common.utils.StringUtils;
 import lamp.support.kafka.KafkaConsumerProperties;

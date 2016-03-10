@@ -6,7 +6,7 @@ public class AlarmDefinition {
     private String name;
     private String description;
 
-    private String function;
+    private String function; // rate
     private String metric;
     private String dimenstions;
     private String reliationalOperator;

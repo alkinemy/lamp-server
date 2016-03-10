@@ -1,12 +1,12 @@
 package lamp.watcher.monitoring.collection.service;
 
-import lamp.collector.loader.rest.RestTemplateMetricsLoader;
+import lamp.metrics.loader.rest.RestTemplateMetricsLoader;
 import lamp.common.collection.CollectionTarget;
 import lamp.common.event.Event;
 import lamp.common.event.EventLevel;
 import lamp.common.event.EventPublisher;
-import lamp.common.collection.metrics.MetricsLoader;
-import lamp.common.collection.metrics.TargetMetrics;
+import lamp.common.metrics.MetricsLoader;
+import lamp.common.metrics.TargetMetrics;
 import lamp.watcher.core.domain.EventName;
 import lamp.watcher.core.domain.TargetMetricsType;
 import lombok.extern.slf4j.Slf4j;

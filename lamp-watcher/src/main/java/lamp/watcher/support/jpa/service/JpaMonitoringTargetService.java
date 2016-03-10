@@ -1,7 +1,7 @@
 package lamp.watcher.support.jpa.service;
 
-import lamp.common.collection.health.TargetHealth;
-import lamp.common.collection.metrics.TargetMetrics;
+import lamp.common.metrics.TargetHealth;
+import lamp.common.metrics.TargetMetrics;
 import lamp.common.monitoring.MonitoringTarget;
 import lamp.watcher.core.service.MonitoringTargetService;
 import lamp.watcher.support.jpa.domain.JpaMonitoringTarget;

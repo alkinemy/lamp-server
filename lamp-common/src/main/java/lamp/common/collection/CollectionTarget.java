@@ -1,6 +1,11 @@
 package lamp.common.collection;
 
-public interface CollectionTarget {
+import lamp.common.metrics.HealthTarget;
+import lamp.common.metrics.MetricsTarget;
+
+import java.util.Map;
+
+public interface CollectionTarget extends HealthTarget, MetricsTarget {
 
 	String getId();
 	String getName();
@@ -22,4 +27,5 @@ public interface CollectionTarget {
 	String getMetricsUrl();
 	String getMetricsExportPrefix();
 
+	Map<String, String> getTags();
 }

@@ -1,0 +1,36 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+}
+
+apply plugin: 'idea'
+
+
+jar {
+    baseName = 'lamp-collector-core'
+    version =  '0.0.1-SNAPSHOT'
+
+    manifest {
+        attributes(
+                "Implementation-Title": project.name,
+                "Implementation-Version": version);
+    }
+}
+
+dependencies {
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+
+    providedCompile("org.slf4j:slf4j-api:${slf4jVersion}")
+    providedCompile("org.springframework:spring-web:${springVersion}")
+
+    compile project(':lamp-metrics-loader')
+    compile project(':lamp-metrics-exporter')
+
+    compile("org.springframework.boot:spring-boot:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+
+}
+
