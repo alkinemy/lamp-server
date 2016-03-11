@@ -1,10 +1,10 @@
 package lamp.collector.core.service.health;
 
 import lamp.collector.core.domain.EventName;
-import lamp.common.collection.CollectionTarget;
 import lamp.common.event.Event;
 import lamp.common.event.EventLevel;
 import lamp.common.event.EventPublisher;
+import lamp.common.metrics.HealthTarget;
 import lamp.common.metrics.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class HealthCollectionService {
 	private HealthExportService healthExportFacadeService;
 
 	@Async
-	public void collection(CollectionTarget collectionTarget) {
+	public void collection(HealthTarget healthTarget) {
 		try {
-			TargetHealth health = healthCollectorService.getHealth(collectionTarget);
+			TargetHealth health = healthCollectorService.getHealth(healthTarget);
 			if (health != null) {
 				healthExportFacadeService.export(health);
 			}

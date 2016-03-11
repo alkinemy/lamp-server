@@ -11,5 +11,5 @@ public interface AgentRepository extends LampJpaRepository<Agent, String> {
 
 	Optional<Agent> findOneByHostname(String hostname);
 
-	Agent findOneByTargetServerId(Long id);
+	Agent findOneByTargetServerId(String id);
 }

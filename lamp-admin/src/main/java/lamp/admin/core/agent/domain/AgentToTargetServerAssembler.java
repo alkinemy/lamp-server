@@ -1,7 +1,10 @@
 package lamp.admin.core.agent.domain;
 
+import lamp.collector.core.domain.TargetHealthType;
+import lamp.collector.core.domain.TargetMetricsType;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import lamp.common.utils.assembler.Populater;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,22 +12,25 @@ public class AgentToTargetServerAssembler extends AbstractListAssembler<Agent, T
 
 	@Override protected TargetServer doAssemble(Agent agent) {
 		TargetServer targetServer = new TargetServer();
+		targetServer.setId(agent.getHostname());
 		targetServer.setName(agent.getName());
 		targetServer.setHostname(agent.getHostname());
 		targetServer.setAddress(agent.getAddress());
+
 		targetServer.setAgentGroupId(agent.getGroupId());
 		targetServer.setAgentArtifactId(agent.getArtifactId());
 		targetServer.setAgentVersion(agent.getVersion());
 
-		targetServer.setAgentHealthCheckEnabled(true);
-		targetServer.setAgentHealthType(agent.getHealthType());
-		targetServer.setAgentHealthUrl(agent.getHealthUrl());
+		targetServer.setHealthMonitoringEnabled(true);
+		targetServer.setHealthCollectionEnabled(true);
+		targetServer.setHealthType(StringUtils.defaultIfBlank(agent.getHealthType(), TargetHealthType.SPRING_BOOT));
+		targetServer.setHealthUrl(agent.getHealthUrl());
 
-		targetServer.setAgentMetricsCollectEnabled(true);
-		targetServer.setAgentMetricsType(agent.getMetricsType());
-		targetServer.setAgentMetricsUrl(agent.getMetricsUrl());
+		targetServer.setMetricsMonitoringEnabled(true);
+		targetServer.setMetricsCollectionEnabled(true);
+		targetServer.setMetricsType(StringUtils.defaultIfBlank(agent.getMetricsType(), TargetMetricsType.SPRING_BOOT));
+		targetServer.setMetricsUrl(agent.getMetricsUrl());
 
-		targetServer.setAgentMonitor(true);
 		targetServer.setAgentInstalled(true);
 		targetServer.setAgentInstallPath(agent.getAppDirectory());
 
@@ -39,10 +45,10 @@ public class AgentToTargetServerAssembler extends AbstractListAssembler<Agent, T
 		targetServer.setAgentArtifactId(agent.getArtifactId());
 		targetServer.setAgentVersion(agent.getVersion());
 
-		targetServer.setAgentHealthType(agent.getHealthType());
-		targetServer.setAgentHealthUrl(agent.getHealthUrl());
+		targetServer.setHealthType(StringUtils.defaultIfBlank(agent.getHealthType(), TargetHealthType.SPRING_BOOT));
+		targetServer.setHealthUrl(agent.getHealthUrl());
 
-		targetServer.setAgentMetricsType(agent.getMetricsType());
-		targetServer.setAgentMetricsUrl(agent.getMetricsUrl());
+		targetServer.setMetricsType(StringUtils.defaultIfBlank(agent.getMetricsType(), TargetMetricsType.SPRING_BOOT));
+		targetServer.setMetricsUrl(agent.getMetricsUrl());
 	}
 }

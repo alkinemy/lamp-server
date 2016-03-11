@@ -15,7 +15,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestTemplateHealthLoader implements HealthLoader {
 
-	private RestTemplate restTemplate = new RestTemplate();
+	private RestTemplate restTemplate;
+
+	public RestTemplateHealthLoader() {
+		this(new RestTemplate());
+	}
+
+	public RestTemplateHealthLoader(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 
 	@Override
 	public TargetHealth getHealth(HealthTarget healthTarget) {
@@ -24,12 +32,16 @@ public class RestTemplateHealthLoader implements HealthLoader {
 		String url = healthTarget.getHealthUrl();
 		log.debug("healthTarget = {}, url = {}", healthTarget.getId(), url);
 
-		Map<String, Object> health = restTemplate.getForObject(url, LinkedHashMap.class);
+		Map<String, Object> health = getHealth(url);
 		log.debug("timestamp = {}, health = {}", timestamp, health);
 
 		TargetHealth targetHealth = assemble(timestamp, healthTarget, health, healthTarget.getHealthExportPrefix());
 		log.debug("targetHealth = {}", targetHealth);
 		return targetHealth;
+	}
+
+	protected Map<String, Object> getHealth(String url) {
+		return restTemplate.getForObject(url, LinkedHashMap.class);
 	}
 
 	protected TargetHealth assemble(long timestamp, HealthTarget healthTarget, Map<String, Object> health, String healthExportPrefix) {

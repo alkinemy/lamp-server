@@ -25,17 +25,19 @@ CREATE TABLE `lamp_ssh_key` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_target_server` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` varchar(100) NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
   `hostname` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,
+
   `ssh_port` int NOT NULL,
-  `auth_type` varchar(100) DEFAULT NULL,
+  `ssh_auth_type` varchar(100) DEFAULT NULL,
   `ssh_key_id` bigint(20) DEFAULT NULL,
-  `private_key` varchar(200) DEFAULT NULL,
-  `username` varchar(100) DEFAULT NULL,
-  `encrypted_password` varchar(100) DEFAULT NULL,
+  `ssh_key` varchar(1000) DEFAULT NULL,
+  `ssh_username` varchar(100) DEFAULT NULL,
+  `ssh_password` varchar(100) DEFAULT NULL,
+
   `agent_installed` tinyint(1) NOT NULL,
   `agent_installed_by` varchar(200) DEFAULT NULL,
   `agent_installed_date` datetime DEFAULT NULL,
@@ -52,16 +54,6 @@ CREATE TABLE `lamp_target_server` (
   `agent_stopped_by` varchar(200) DEFAULT NULL,
   `agent_stopped_date` datetime DEFAULT NULL,
 
-
-  `agent_health_check_enabled` tinyint(1) DEFAULT 0,
-  `agent_health_type` varchar(100) DEFAULT NULL,
-  `agent_health_url` varchar(1000) DEFAULT NULL,
-  `agent_metrics_collect_enabled` tinyint(1) DEFAULT 0,
-  `agent_metrics_type` varchar(100) DEFAULT NULL,
-  `agent_metrics_url` varchar(1000) DEFAULT NULL,
-
-  `agent_monitor` tinyint(1) NOT NULL,
-  `agent_monitor_interval` bigint(20) DEFAULT '0',
   `created_by` varchar(100) NOT NULL,
   `created_date` datetime NOT NULL,
   `last_modified_by` varchar(100) DEFAULT NULL,
@@ -71,7 +63,7 @@ CREATE TABLE `lamp_target_server` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_target_server_status` (
-  `id` bigint(20) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `agent_status` varchar(200) DEFAULT NULL,
   `agent_status_description` varchar(1000) DEFAULT NULL,
   `agent_status_date` datetime DEFAULT NULL,
@@ -85,7 +77,7 @@ CREATE TABLE `lamp_agent` (
   `group_id` varchar(200) DEFAULT NULL,
   `artifact_id` varchar(200) DEFAULT NULL,
   `version` varchar(100) DEFAULT NULL,
-  `target_server_id` bigint(20) NOT NULL,
+  `target_server_id` varchar(100) NOT NULL,
   `protocol` varchar(100) DEFAULT NULL,
   `hostname` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,

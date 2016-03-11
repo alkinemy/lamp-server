@@ -1,10 +1,10 @@
 package lamp.collector.core.service.metrics;
 
 import lamp.collector.core.domain.EventName;
-import lamp.common.collection.CollectionTarget;
 import lamp.common.event.Event;
 import lamp.common.event.EventLevel;
 import lamp.common.event.EventPublisher;
+import lamp.common.metrics.MetricsTarget;
 import lamp.common.metrics.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class MetricsCollectionService {
 	private MetricsExportService metricsExportService;
 
 	@Async
-	public void collection(CollectionTarget collectionTarget) {
+	public void collection(MetricsTarget metricsTarget) {
 		try {
-			TargetMetrics metrics = metricsCollectorService.getMetrics(collectionTarget);
+			TargetMetrics metrics = metricsCollectorService.getMetrics(metricsTarget);
 			if (metrics != null) {
 				metricsExportService.export(metrics);
 			}

@@ -1,8 +1,7 @@
 package lamp.collector.core.service;
 
 import lamp.collector.core.service.health.HealthCollectionService;
-import lamp.common.collection.CollectionTarget;
-import lamp.common.utils.BooleanUtils;
+import lamp.common.metrics.HealthTarget;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,21 +11,20 @@ import java.util.Collection;
 public class HealthCollectionScheduledService {
 
 	@Autowired
-	private CollectionTargetService collectionTargetService;
+	private HealthTargetService healthTargetService;
 
 	@Autowired
 	private HealthCollectionService healthCollectionService;
 
 	public void collection() {
-		Collection<CollectionTarget> collectionTargets = collectionTargetService.getCollectionTargetListForHealth();
+		Collection<HealthTarget> collectionTargets = healthTargetService.getHealthTargets();
 		collectionTargets.stream()
-				.filter(a -> BooleanUtils.isTrue(a.getHealthCollectionEnabled()))
 				.forEach(this::collection);
 	}
 
-	protected void collection(CollectionTarget collectionTarget) {
+	protected void collection(HealthTarget healthTarget) {
 		try {
-			healthCollectionService.collection(collectionTarget);
+			healthCollectionService.collection(healthTarget);
 		} catch (Exception e) {
 			log.warn("Health Collection Failed", e);
 		}

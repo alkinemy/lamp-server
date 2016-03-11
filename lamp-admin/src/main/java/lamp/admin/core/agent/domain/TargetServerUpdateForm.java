@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class TargetServerUpdateForm {
 
 	@NotNull
-	private Long id;
+	private String id;
 	@NotEmpty
 	private String name;
 	private String description;
@@ -24,13 +24,11 @@ public class TargetServerUpdateForm {
 	private String address;
 
 	private int sshPort = 22;
-
-	private SshAuthType authType;
+	private SshAuthType sshAuthType = SshAuthType.PASSWORD;
 	private Long sshKeyId;
-	private String privateKey;
-
-	private String username;
-	private String password;
+	private String sshKey;
+	private String sshUsername;
+	private String sshPassword;
 
 	private Boolean agentInstalled;
 	@NotEmpty
@@ -39,15 +37,16 @@ public class TargetServerUpdateForm {
 	private String agentStartCommandLine;
 	private String agentStopCommandLine;
 
-	private Boolean agentMonitor;
-	private Long agentMonitorInterval;
+	private Boolean healthMonitoringEnabled;
+	private Boolean healthCollectionEnabled;
+	private String healthType;
+	private String healthUrl;
+	private String healthExportPrefix;
 
-	private Boolean agentHealthCheckEnabled = Boolean.FALSE;
-	private String agentHealthType;
-	private String agentHealthUrl;
-
-	private Boolean agentMetricsCollectEnabled = Boolean.FALSE;
-	private String agentMetricsType;
-	private String agentMetricsUrl;
+	private Boolean metricsMonitoringEnabled;
+	private Boolean metricsCollectionEnabled;
+	private String metricsType;
+	private String metricsUrl;
+	private String metricsExportPrefix;
 
 }

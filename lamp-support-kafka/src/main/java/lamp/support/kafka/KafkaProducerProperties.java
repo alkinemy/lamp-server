@@ -1,17 +1,10 @@
 package lamp.support.kafka;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+public interface KafkaProducerProperties {
 
-@Getter
-@Setter
-@ToString
-public class KafkaProducerProperties {
+	String getBootstrapServers();
+	String getClientId();
 
-	private String bootstrapServers;
-	private String clientId;
-
-	private String topic;
+	String getTopic();
 
 }

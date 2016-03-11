@@ -46,12 +46,12 @@ public class AgentService {
 		return Optional.ofNullable(agentRepository.findOne(id));
 	}
 
-	public Agent getAgentByTargetServerId(Long id) {
+	public Agent getAgentByTargetServerId(String id) {
 		Optional<Agent> agentOptional = getAgentByTargetServerIdOptional(id);
 		return agentOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND_BY_TARGET_SERVER, id));
 	}
 
-	public Optional<Agent> getAgentByTargetServerIdOptional(Long id) {
+	public Optional<Agent> getAgentByTargetServerIdOptional(String id) {
 		return Optional.ofNullable(agentRepository.findOneByTargetServerId(id));
 	}
 

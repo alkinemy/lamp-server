@@ -11,18 +11,18 @@ import java.time.LocalDateTime;
 @ToString
 public class TargetServerDto {
 
-	private Long id;
+	private String id;
 	private String name;
 	private String description;
 
 	private String hostname;
 	private String address;
 
-	private SshAuthType authType;
+	private SshAuthType sshAuthType;
 	private Long sshKeyId;
 	private String sshKeyName;
-	private String username;
-	private String password;
+	private String sshUsername;
+	private String sshPassword;
 
 	private Boolean agentInstalled;
 	private String agentPath;
@@ -35,10 +35,17 @@ public class TargetServerDto {
 	private String agentStartCommandLine;
 	private String agentStopCommandLine;
 
-	private String agentHealthUrl;
+	private Boolean healthMonitoringEnabled;
+	private Boolean healthCollectionEnabled;
+	private String healthType;
+	private String healthUrl;
+	private String healthExportPrefix;
 
-	private Boolean agentMonitor;
-	private Long agentMonitorInterval;
+	private Boolean metricsMonitoringEnabled;
+	private Boolean metricsCollectionEnabled;
+	private String metricsType;
+	private String metricsUrl;
+	private String metricsExportPrefix;
 
 	private String agentStatus;
 }

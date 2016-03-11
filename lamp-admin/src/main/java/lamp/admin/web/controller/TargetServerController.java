@@ -113,7 +113,7 @@ public class TargetServerController {
 	}
 
 	@RequestMapping(path = "/delete", method = RequestMethod.GET)
-	public String delete(@RequestParam("id") Long id
+	public String delete(@RequestParam("id") String id
 			, RedirectAttributes redirectAttributes) {
 
 		FlashMessage flashMessage;

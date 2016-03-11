@@ -1,12 +1,7 @@
 package lamp.support.kairosdb;
 
-import lombok.Getter;
-import lombok.Setter;
+public interface KairosdbProperties {
 
-@Getter
-@Setter
-public class KairosdbProperties {
-
-	private String url;
+	String getUrl();
 
 }

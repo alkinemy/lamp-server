@@ -53,7 +53,7 @@ public class TargetServerAgentController {
 	private AppInstallScriptService appInstallScriptService;
 
 	@RequestMapping(path = "/install-step1", method = RequestMethod.GET)
-	public String agentInstallStep1(@PathVariable("id") Long id,
+	public String agentInstallStep1(@PathVariable("id") String id,
 		@ModelAttribute("editForm") AgentInstallForm editForm, Model model) {
 
 		TargetServerDto targetServerDto = targetServerService.getTargetServerDto(id);
@@ -66,7 +66,7 @@ public class TargetServerAgentController {
 	}
 
 	@RequestMapping(path = "/install-step1", method = RequestMethod.POST)
-	public String agentInstallStep1(@PathVariable("id") Long id,
+	public String agentInstallStep1(@PathVariable("id") String id,
 									@ModelAttribute("editForm") AgentInstallForm editForm,
 									Model model,
 									BindingResult bindingResult) {
@@ -75,7 +75,7 @@ public class TargetServerAgentController {
 	}
 
 	@RequestMapping(path = "/install", method = RequestMethod.GET)
-	public String agentInstall(@PathVariable("id") Long id,
+	public String agentInstall(@PathVariable("id") String id,
 								   @ModelAttribute("editForm") AgentInstallForm editForm, Model model) {
 
 		TargetServerDto targetServerDto = targetServerService.getTargetServerDto(id);
@@ -94,7 +94,7 @@ public class TargetServerAgentController {
 	}
 
 	@RequestMapping(path = "/install", method = RequestMethod.POST)
-	public String agentInstall(@PathVariable("id") Long id,
+	public String agentInstall(@PathVariable("id") String id,
 			@Valid @ModelAttribute("editForm") AgentInstallForm editForm,
 				BindingResult bindingResult, Model model,
 				RedirectAttributes redirectAttributes) throws IOException {
@@ -122,7 +122,7 @@ public class TargetServerAgentController {
 	}
 
 	@RequestMapping(path = "/start", method = RequestMethod.GET)
-	public String agentStart(@PathVariable("id") Long id,
+	public String agentStart(@PathVariable("id") String id,
 							 @ModelAttribute("startForm") AgentStartForm startForm, Model model) throws IOException {
 
 		TargetServerDto targetServer = targetServerService.getTargetServerDto(id);
@@ -137,7 +137,7 @@ public class TargetServerAgentController {
 
 
 	@RequestMapping(path = "/start", method = RequestMethod.POST)
-	public String agentStart(@PathVariable("id") Long id,
+	public String agentStart(@PathVariable("id") String id,
 			@ModelAttribute("startForm") AgentStartForm startForm,
 			Model model, RedirectAttributes redirectAttributes) throws IOException {
 
@@ -154,7 +154,7 @@ public class TargetServerAgentController {
 	}
 
 	@RequestMapping(path = "/stop", method = RequestMethod.GET)
-	public String agentStop(@PathVariable("id") Long id,
+	public String agentStop(@PathVariable("id") String id,
 			@ModelAttribute("stopForm") AgentStopForm stopForm, Model model) throws IOException {
 
 		TargetServerDto targetServer = targetServerService.getTargetServerDto(id);
@@ -168,7 +168,7 @@ public class TargetServerAgentController {
 	}
 
 	@RequestMapping(path = "/stop", method = RequestMethod.POST)
-	public String agentStop(@PathVariable("id") Long id,
+	public String agentStop(@PathVariable("id") String id,
 			@ModelAttribute("stopForm") AgentStopForm stopForm,
 			Model model, RedirectAttributes redirectAttributes) throws IOException {
 

@@ -13,11 +13,11 @@
 				console.log('this = ' +  $(this));
 				console.log('this = ' +  $(this).val());
 
-				var authType = $(this).val();
-				if ("KEY" == authType) {
+				var sshAuthType = $(this).val();
+				if ("KEY" == sshAuthType) {
 					$(".auth-type-key").show();
 					$(".auth-type-password").hide();
-				} else if ("PASSWORD" == authType) {
+				} else if ("PASSWORD" == sshAuthType) {
 					$(".auth-type-key").hide();
 					$(".auth-type-password").show();
 				}
@@ -45,6 +45,13 @@
 							<input type="hidden" th:if="${action == 'update'}" th:field="*{id}"/>
 							<div class="form-body">
 								<h4>Server</h4>
+								<div class="form-group" th:class="${#fields.hasErrors('id')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Id</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{id}" placeholder="Enter name" />
+										<span class="help-block" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"> A block of help text. </span>
+									</div>
+								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Name</label>
 									<div class="col-md-9">
@@ -76,17 +83,17 @@
 								<hr />
 								<h4>SSH Login</h4>
 
-								<div class="form-group" th:class="${#fields.hasErrors('authType')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group" th:class="${#fields.hasErrors('sshAuthType')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Authentication Type</label>
 									<div class="col-md-9">
-										<select class="form-control auth-type" th:field="*{authType}">
+										<select class="form-control auth-type" th:field="*{sshAuthType}">
 											<option th:each="sshAuthType : ${sshAuthTypes}"
 													th:value="${sshAuthType}" th:text="${sshAuthType}">Option 1</option>
 										</select>
-										<span class="help-block" th:if="${#fields.hasErrors('authType')}" th:errors="*{authType}"> A block of help text. </span>
+										<span class="help-block" th:if="${#fields.hasErrors('sshAuthType')}" th:errors="*{sshAuthType}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:style="${editForm.authType.name()} != 'KEY' ? 'display:none'" th:class="${#fields.hasErrors('sshKeyId')} ? 'form-group has-error auth-type-key' : 'form-group auth-type-key'">
+								<div class="form-group" th:style="${editForm.sshAuthType.name()} != 'KEY' ? 'display:none'" th:class="${#fields.hasErrors('sshKeyId')} ? 'form-group has-error auth-type-key' : 'form-group auth-type-key'">
 									<label class="col-md-3 control-label">SSH Key</label>
 									<div class="col-md-9">
 										<select class="form-control" th:field="*{sshKeyId}">
@@ -96,19 +103,19 @@
 										<span class="help-block" th:if="${#fields.hasErrors('sshKeyId')}" th:errors="*{sshKeyId}"> A block of help text. </span>
 									</div>
 								</div>
-								<div class="form-group" th:style="${editForm.authType.name()} != 'PASSWORD' ? 'display:none'" th:class="${#fields.hasErrors('username')} ? 'form-group has-error auth-type-password' : 'form-group auth-type-password'">
+								<div class="form-group" th:style="${editForm.sshAuthType.name()} != 'PASSWORD' ? 'display:none'" th:class="${#fields.hasErrors('sshUsername')} ? 'form-group has-error auth-type-password' : 'form-group auth-type-password'">
 									<label class="col-md-3 control-label">Username</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
-										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{sshUsername}" placeholder="Enter username" />
+										<span class="help-block" th:if="${#fields.hasErrors('sshUsername')}" th:errors="*{sshUsername}"> A block of help text. </span>
 									</div>
 								</div>
 
-								<div class="form-group auth-type-password" th:style="${editForm.authType.name()} != 'PASSWORD'  ? 'display:none'">
+								<div class="form-group auth-type-password" th:style="${editForm.sshAuthType.name()} != 'PASSWORD'  ? 'display:none'">
 									<label class="col-md-3 control-label">Password</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input type="password" class="form-control" th:field="*{password}" placeholder="Password" />
+											<input type="password" class="form-control" th:field="*{sshPassword}" placeholder="Password" />
 											<span class="input-group-addon">
 												<i class="fa fa-user"></i>
 											</span>
@@ -162,48 +169,63 @@
 								<hr />
 								<h4>Monitoring</h4>
 								<div class="form-group">
-									<label class="col-md-3 control-label">Agent Monitor</label>
+									<label class="col-md-3 control-label">Health Monitoring</label>
 									<div class="col-md-9">
 										<div class="checkbox-list">
 											<label class="checkbox-inline">
-												<span class=""><input type="checkbox" th:field="*{agentMonitor}" /></span>
+												<span class=""><input type="checkbox" th:field="*{healthMonitoringEnabled}" /></span>
 												Enabled </label>
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-md-3 control-label">Agent Health Check</label>
+									<label class="col-md-3 control-label">Health Collection</label>
 									<div class="col-md-9">
 										<div class="checkbox-list">
 											<label class="checkbox-inline">
-												<span class=""><input type="checkbox" th:field="*{agentHealthCheckEnabled}" /></span>
+												<span class=""><input type="checkbox" th:field="*{healthCollectionEnabled}" /></span>
 												Enabled </label>
 										</div>
 									</div>
 								</div>
-								<div class="form-group" th:class="${#fields.hasErrors('agentHealthUrl')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Agent Health Endpoint</label>
+								<div class="form-group" th:class="${#fields.hasErrors('healthType')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Health Type</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{agentHealthUrl}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('agentHealthUrl')}" th:errors="*{agentHealthUrl}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{healthType}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('healthType')}" th:errors="*{healthType}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('healthUrl')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Health Endpoint</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{healthUrl}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('healthUrl')}" th:errors="*{healthUrl}"> A block of help text. </span>
 									</div>
 								</div>
 
+
 								<div class="form-group">
-									<label class="col-md-3 control-label">Agent Metrics Collect</label>
+									<label class="col-md-3 control-label">Metrics Collection</label>
 									<div class="col-md-9">
 										<div class="checkbox-list">
 											<label class="checkbox-inline">
-												<span class=""><input type="checkbox" th:field="*{agentMetricsCollectEnabled}" /></span>
+												<span class=""><input type="checkbox" th:field="*{metricsCollectionEnabled}" /></span>
 												Enabled </label>
 										</div>
 									</div>
 								</div>
-								<div class="form-group" th:class="${#fields.hasErrors('agentMetricsUrl')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Agent Metrics Endpoint</label>
+								<div class="form-group" th:class="${#fields.hasErrors('metricsType')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Metrics Type</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{agentMetricsUrl}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('agentMetricsUrl')}" th:errors="*{agentMetricsUrl}"> A block of help text. </span>
+										<input type="text" class="form-control" th:field="*{metricsType}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('metricsType')}" th:errors="*{metricsType}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('metricsUrl')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Metrics Endpoint</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{metricsUrl}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('metricsUrl')}" th:errors="*{metricsUrl}"> A block of help text. </span>
 									</div>
 								</div>
 

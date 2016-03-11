@@ -24,4 +24,6 @@ dependencies {
     providedCompile("org.slf4j:slf4j-api:${slf4jVersion}")
     providedCompile("org.springframework:spring-web:${springVersion}")
 
+    providedCompile("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
+    providedCompile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
 }

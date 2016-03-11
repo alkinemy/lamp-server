@@ -1,22 +1,15 @@
 package lamp.support.kafka;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+public interface KafkaConsumerProperties {
 
-@Getter
-@Setter
-@ToString
-public class KafkaConsumerProperties {
+	String getBootstrapServers();
 
-	private String bootstrapServers;
+	String getGroupId();
 
-	private String groupId;
+	boolean isEnableAutoCommit();
+	long getAutoCommitIntervalMs();
+	long getSessionTimeoutMs();
 
-	private boolean enableAutoCommit;
-	private long autoCommitIntervalMs = 1000;
-	private long sessionTimeoutMs = 30000;
-
-	private String topics;
+	String getTopics();
 
 }

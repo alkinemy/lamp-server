@@ -27,7 +27,7 @@
 									<th> Hostname </th>
 									<th> Address </th>
 									<th> Agent Installed </th>
-									<th> Agent Monitor </th>
+									<th> Agent Health Monitoring </th>
 									<th> Agent Status </th>
 									<th> Action </th>
 								</tr>
@@ -39,7 +39,7 @@
 									<td th:text="${targetServer.hostname}"> Joke </td>
 									<td th:text="${targetServer.address}"> Joke </td>
 									<td th:text="${targetServer.agentInstalled}"> Joke </td>
-									<td th:text="${targetServer.agentMonitor}"> Joke </td>
+									<td th:text="${targetServer.healthMonitoringEnabled}"> Joke </td>
 									<td><span th:text="${targetServer?.agentStatus}"
                                               th:class="${targetServer?.agentStatus}? 'label label-sm'
                                               + (${targetServer.agentStatus == 'UNKNOWN'}? ' label-danger' : '')

@@ -1,8 +1,7 @@
 package lamp.collector.core.service;
 
 import lamp.collector.core.service.metrics.MetricsCollectionService;
-import lamp.common.collection.CollectionTarget;
-import lamp.common.utils.BooleanUtils;
+import lamp.common.metrics.MetricsTarget;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,21 +11,20 @@ import java.util.Collection;
 public class MetricsCollectionScheduledService {
 
 	@Autowired
-	private CollectionTargetService collectionTargetService;
+	private MetricsTargetService metricsTargetService;
 
 	@Autowired
 	private MetricsCollectionService metricsCollectionService;
 
 	public void collection() {
-		Collection<CollectionTarget> collectionTargets = collectionTargetService.getCollectionTargetListForMetrics();
+		Collection<MetricsTarget> collectionTargets = metricsTargetService.getMetricsTargets();
 		collectionTargets.stream()
-				.filter(a -> BooleanUtils.isTrue(a.getHealthCollectionEnabled()))
 				.forEach(this::collection);
 	}
 
-	protected void collection(CollectionTarget collectionTarget) {
+	protected void collection(MetricsTarget metricsTarget) {
 		try {
-			metricsCollectionService.collection(collectionTarget);
+			metricsCollectionService.collection(metricsTarget);
 		} catch (Exception e) {
 			log.warn("Metrics Collection Failed", e);
 		}

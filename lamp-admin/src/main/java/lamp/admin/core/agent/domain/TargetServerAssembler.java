@@ -30,15 +30,15 @@ public class TargetServerAssembler extends AbstractAssembler<TargetServerCreateF
 			}
 		}
 
-		if (SshAuthType.KEY.equals(targetServerCreateForm.getAuthType())) {
+		if (SshAuthType.KEY.equals(targetServerCreateForm.getSshAuthType())) {
 			SshKey sshKey = sshKeyService.getSshKey(targetServerCreateForm.getSshKeyId());
 			targetServer.setSshKeyId(sshKey.getId());
-			targetServer.setUsername(sshKey.getUsername());
-			targetServer.setPassword(null);
-		} else if (SshAuthType.PASSWORD.equals(targetServerCreateForm.getAuthType())) {
+			targetServer.setSshUsername(sshKey.getUsername());
+			targetServer.setSshPassword(null);
+		} else if (SshAuthType.PASSWORD.equals(targetServerCreateForm.getSshAuthType())) {
 			targetServer.setSshKeyId(null);
-			targetServer.setUsername(targetServerCreateForm.getUsername());
-			targetServer.setPassword(targetServerCreateForm.getPassword());
+			targetServer.setSshUsername(targetServerCreateForm.getSshUsername());
+			targetServer.setSshPassword(targetServerCreateForm.getSshPassword());
 		}
 
 		// TODO Password Encrypt
@@ -49,15 +49,15 @@ public class TargetServerAssembler extends AbstractAssembler<TargetServerCreateF
 	@Override public void populate(TargetServerUpdateForm form, TargetServer entity) {
 		BeanUtils.copyProperties(form, entity);
 
-		if (SshAuthType.KEY.equals(form.getAuthType())) {
+		if (SshAuthType.KEY.equals(form.getSshAuthType())) {
 			SshKey sshKey = sshKeyService.getSshKey(form.getSshKeyId());
 			entity.setSshKeyId(sshKey.getId());
-			entity.setUsername(sshKey.getUsername());
-			entity.setPassword(null);
-		} else if (SshAuthType.PASSWORD.equals(form.getAuthType())) {
+			entity.setSshUsername(sshKey.getUsername());
+			entity.setSshPassword(null);
+		} else if (SshAuthType.PASSWORD.equals(form.getSshAuthType())) {
 			entity.setSshKeyId(null);
-			entity.setUsername(form.getUsername());
-			entity.setPassword(form.getPassword());
+			entity.setSshUsername(form.getSshUsername());
+			entity.setSshPassword(form.getSshPassword());
 		}
 	}
 }

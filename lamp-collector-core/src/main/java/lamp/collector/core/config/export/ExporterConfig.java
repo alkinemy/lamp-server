@@ -55,7 +55,7 @@ public class ExporterConfig {
 
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_METRICS_KAIROSDB_PREFIX + ".enabled", havingValue = "true")
-	@EnableConfigurationProperties({ KairosdbHealthExporterProperties.class})
+	@EnableConfigurationProperties({ KairosdbMetricsExporterProperties.class})
 	public static class ExportMetricsKairosdbConfig {
 
 		@Bean

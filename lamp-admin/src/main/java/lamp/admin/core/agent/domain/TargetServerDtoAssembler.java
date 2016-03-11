@@ -15,11 +15,11 @@ public class TargetServerDtoAssembler extends AbstractListAssembler<TargetServer
 	@Override protected TargetServerDto doAssemble(TargetServer targetServer) {
 		TargetServerDto targetServerDto = new TargetServerDto();
 		BeanUtils.copyProperties(targetServer, targetServerDto);
-		if (SshAuthType.KEY.equals(targetServer.getAuthType()) && targetServer.getSshKeyId() != null) {
+		if (SshAuthType.KEY.equals(targetServer.getSshAuthType()) && targetServer.getSshKeyId() != null) {
 			SshKey sshKey = sshKeyService.getSshKey(targetServer.getSshKeyId());
 			targetServerDto.setSshKeyName(sshKey.getName());
-			targetServerDto.setUsername(sshKey.getUsername());
-			targetServerDto.setPassword(sshKey.getPassword());
+			targetServerDto.setSshUsername(sshKey.getUsername());
+			targetServerDto.setSshPassword(sshKey.getPassword());
 		}
 		return targetServerDto;
 	}

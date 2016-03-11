@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TargetServerRepository extends LampJpaRepository<TargetServer, Long> {
+public interface TargetServerRepository extends LampJpaRepository<TargetServer, String> {
 
 	Optional<TargetServer> findOneByHostname(String hostname);
 }

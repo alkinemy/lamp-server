@@ -17,4 +17,5 @@ include 'lamp-collector'
 
 include 'lamp-watcher'
 include 'lamp-collector-core'
+include 'lamp-watcher-kairosdb'
 

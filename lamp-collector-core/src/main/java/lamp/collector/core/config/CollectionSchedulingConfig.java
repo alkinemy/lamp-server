@@ -25,13 +25,13 @@ public class CollectionSchedulingConfig {
 		private CollectionHealthProperties collectionHealthProperties;
 
 		@Bean
-		public HealthCollectionScheduledService appHealthCollectionScheduledService() {
+		public HealthCollectionScheduledService healthCollectionScheduledService() {
 			return new HealthCollectionScheduledService();
 		}
 
 		@Override public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 			taskRegistrar.addFixedDelayTask(() -> {
-				appHealthCollectionScheduledService().collection();
+				healthCollectionScheduledService().collection();
 			}, collectionHealthProperties.getInterval());
 			log.info("Collection Health Enabled (interval={}ms)", collectionHealthProperties.getInterval());
 		}
@@ -46,13 +46,13 @@ public class CollectionSchedulingConfig {
 		private CollectionMetricsProperties collectionMetricsProperties;
 
 		@Bean
-		public MetricsCollectionScheduledService appMetricsCollectionScheduledService() {
+		public MetricsCollectionScheduledService metricsCollectionScheduledService() {
 			return new MetricsCollectionScheduledService();
 		}
 
 		@Override public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 			taskRegistrar.addFixedDelayTask(() -> {
-				appMetricsCollectionScheduledService().collection();
+				metricsCollectionScheduledService().collection();
 			}, collectionMetricsProperties.getInterval());
 			log.info("Collection Metrics Enabled (interval={}ms)", collectionMetricsProperties.getInterval());
 		}

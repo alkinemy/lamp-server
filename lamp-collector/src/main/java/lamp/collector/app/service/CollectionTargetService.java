@@ -1,0 +1,30 @@
+package lamp.collector.app.service;
+
+import lamp.collector.app.support.jpa.repository.CollectionTargetRepository;
+import lamp.collector.core.service.HealthTargetService;
+import lamp.collector.core.service.MetricsTargetService;
+import lamp.common.metrics.HealthTarget;
+import lamp.common.metrics.MetricsTarget;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Transactional
+public class CollectionTargetService implements HealthTargetService, MetricsTargetService {
+
+    @Autowired
+    private CollectionTargetRepository collectionTargetRepository;
+
+    @Override
+    public List<HealthTarget> getHealthTargets() {
+        return collectionTargetRepository.findAll().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MetricsTarget> getMetricsTargets() {
+        return collectionTargetRepository.findAll().stream().collect(Collectors.toList());
+    }
+
+}

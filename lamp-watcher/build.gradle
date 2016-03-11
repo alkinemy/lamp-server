@@ -23,6 +23,14 @@ jar {
     }
 }
 
+configurations {
+
+    all*.exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+    all*.exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    all*.exclude group: 'com.fasterxml.jackson.core', module: 'jackson-annotations'
+}
+
+
 dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
@@ -32,20 +40,19 @@ dependencies {
     compile project(':lamp-support-kafka')
     compile project(':lamp-support-kairosdb')
     compile project(':lamp-metrics-loader')
+    compile project(':lamp-metrics-exporter')
 
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile ("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
+    compile ("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+    compile ("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
+
     compile("org.springframework.boot:spring-boot-configuration-processor")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-//    compile("org.springframework.boot:spring-boot-starter-security")
 
-    compile('org.jadira.usertype:usertype.extended:4.0.0.GA')
-    compile("com.mysema.querydsl:querydsl-jpa:3.6.3")
-    compile("com.mysema.querydsl:querydsl-apt:3.6.3:jpa")
-    compile("mysql:mysql-connector-java:5.1.31")
-    compile("org.flywaydb:flyway-core:3.2.1")
 
-    compile project(':lamp-metrics-loader')
+    compile("org.apache.spark:spark-streaming_2.11:1.6.0")
+    compile("org.apache.spark:spark-streaming-kafka_2.11:1.6.0")
 
 
 

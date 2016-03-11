@@ -38,16 +38,16 @@ public class TargetServerService {
 		return targetServerRepository.findAll();
 	}
 
-	public TargetServerDto getTargetServerDto(Long id) {
+	public TargetServerDto getTargetServerDto(String id) {
 		TargetServer targetServer = getTargetServer(id);
 		return smartAssembler.assemble(targetServer, TargetServerDto.class);
 	}
 
-	public TargetServer getTargetServer(Long id) {
+	public TargetServer getTargetServer(String id) {
 		return getTargetServerOptional(id).orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
 	}
 
-	public Optional<TargetServer> getTargetServerOptional(Long id) {
+	public Optional<TargetServer> getTargetServerOptional(String id) {
 		TargetServer targetServer = targetServerRepository.findOne(id);
 		return Optional.ofNullable(targetServer);
 	}
@@ -67,7 +67,7 @@ public class TargetServerService {
 		return targetServerRepository.save(targetServer);
 	}
 
-	public TargetServerUpdateForm getTargetServerUpdateForm(Long id) {
+	public TargetServerUpdateForm getTargetServerUpdateForm(String id) {
 		TargetServer targetServer = getTargetServer(id);
 		return smartAssembler.assemble(targetServer, TargetServerUpdateForm.class);
 	}
@@ -80,7 +80,7 @@ public class TargetServerService {
 	}
 
 	@Transactional
-	public void deleteTargetServer(Long id) {
+	public void deleteTargetServer(String id) {
 		TargetServer targetServer = getTargetServer(id);
 		Optional<Agent> agent = agentService.getAgentByTargetServerIdOptional(targetServer.getId());
 		Exceptions.throwsException(agent.isPresent(), LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);

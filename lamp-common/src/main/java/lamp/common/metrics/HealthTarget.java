@@ -10,7 +10,6 @@ public interface HealthTarget {
 	String getHostname();
 	String getAddress();
 
-	Boolean getHealthCollectionEnabled();
 	String getHealthType();
 	String getHealthUrl();
 	String getHealthExportPrefix();

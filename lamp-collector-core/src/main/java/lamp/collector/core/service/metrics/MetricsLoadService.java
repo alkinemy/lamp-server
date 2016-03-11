@@ -1,8 +1,8 @@
 package lamp.collector.core.service.metrics;
 
 import lamp.collector.core.domain.TargetMetricsType;
-import lamp.common.collection.CollectionTarget;
 import lamp.common.metrics.MetricsLoader;
+import lamp.common.metrics.MetricsTarget;
 import lamp.common.metrics.TargetMetrics;
 import lamp.metrics.loader.rest.SpringBootMetricsLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +23,10 @@ public class MetricsLoadService {
 		loaderMap.put(TargetMetricsType.SPRING_BOOT, new SpringBootMetricsLoader(new RestTemplate()));
 	}
 
-	public TargetMetrics getMetrics(CollectionTarget collectionTarget) {
-		MetricsLoader loader = loaderMap.get(collectionTarget.getMetricsType());
-		return loader.getMetrics(collectionTarget);
+	public TargetMetrics getMetrics(MetricsTarget metricsTarget) {
+		log.debug("metricsType = {}", metricsTarget.getMetricsType());
+		MetricsLoader loader = loaderMap.get(metricsTarget.getMetricsType());
+		return loader.getMetrics(metricsTarget);
 	}
 
 }

@@ -63,7 +63,7 @@ public class AgentManagementService {
 	private ExpressionParser expressionParser = new ExpressionParser();
 
 	@Transactional
-	public void installAgent(Long targetServerId, AgentInstallForm installForm, String agentInstalledBy, PrintStream printStream) {
+	public void installAgent(String targetServerId, AgentInstallForm installForm, String agentInstalledBy, PrintStream printStream) {
 		AppTemplate appTemplate = appTemplateService.getAppTemplate(installForm.getTemplateId());
 		String version = installForm.getVersion();
 
@@ -97,8 +97,8 @@ public class AgentManagementService {
 			// SSH
 			String host = targetServer.getAddress();
 			int port = targetServer.getSshPort();
-			String username = targetServer.getUsername();
-			String password = StringUtils.defaultString(installForm.getPassword(), targetServer.getPassword());
+			String username = targetServer.getSshUsername();
+			String password = StringUtils.defaultString(installForm.getPassword(), targetServer.getSshPassword());
 
 			SshClient sshClient = getSshClient(targetServer, host, port, username, password);
 
@@ -248,7 +248,7 @@ public class AgentManagementService {
 		));
 	}
 
-	public void startAgent(Long targetServerId, AgentStartForm startForm, PrintStream printStream) {
+	public void startAgent(String targetServerId, AgentStartForm startForm, PrintStream printStream) {
 		TargetServer targetServer = targetServerService.getTargetServer(targetServerId);
 		Map<String, Object> parameters = getParameters(targetServer);
 
@@ -259,7 +259,7 @@ public class AgentManagementService {
 		executeCmd(targetServer, startForm.getPassword(), command, printStream);
 	}
 
-	public void stopAgent(Long targetServerId, AgentStopForm stopForm, PrintStream printStream) {
+	public void stopAgent(String targetServerId, AgentStopForm stopForm, PrintStream printStream) {
 		TargetServer targetServer = targetServerService.getTargetServer(targetServerId);
 		Map<String, Object> parameters = getParameters(targetServer);
 
@@ -273,8 +273,8 @@ public class AgentManagementService {
 	protected void executeCmd(TargetServer targetServer, String inputPassword, String command, PrintStream printStream) {
 		String host = targetServer.getAddress();
 		int port = targetServer.getSshPort();
-		String username = targetServer.getUsername();
-		String password = StringUtils.defaultString(inputPassword, targetServer.getPassword());
+		String username = targetServer.getSshUsername();
+		String password = StringUtils.defaultString(inputPassword, targetServer.getSshPassword());
 
 		SshClient sshClient = getSshClient(targetServer, host, port, username, password);
 
@@ -285,7 +285,7 @@ public class AgentManagementService {
 
 	private SshClient getSshClient(TargetServer targetServer, String host, int port, String username, String password) {
 		SshClient sshClient = new SshClient(host, port);
-		if (SshAuthType.KEY.equals(targetServer.getAuthType())) {
+		if (SshAuthType.KEY.equals(targetServer.getSshAuthType())) {
 			String privateKey;
 			Long sshKeyId = targetServer.getSshKeyId();
 			if (sshKeyId != null) {
@@ -294,7 +294,7 @@ public class AgentManagementService {
 				password = sshKey.getPassword();
 				privateKey = sshKey.getPassword();
 			} else {
-				privateKey = targetServer.getPrivateKey();
+				privateKey = targetServer.getSshKey();
 			}
 			sshClient.connect(username, privateKey, password);
 		} else {

@@ -29,7 +29,7 @@ dependencies {
 
     compile('org.modelmapper:modelmapper:0.7.4')
 
-    providedCompile('org.springframework:spring-context:4.2.4.RELEASE')
+    providedCompile("org.springframework:spring-context:${springVersion}")
     providedCompile('org.springframework.data:spring-data-commons:1.11.2.RELEASE')
 
 }

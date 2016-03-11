@@ -5,13 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-
 @Getter
 @Setter
 @ToString
 public class TargetServerCreateForm {
 
+	@NotEmpty
+	private String id;
 	@NotEmpty
 	private String name;
 	private String description;
@@ -21,13 +21,12 @@ public class TargetServerCreateForm {
 	@NotEmpty
 	private String address;
 
-	private SshAuthType authType = SshAuthType.PASSWORD;
+	private int sshPort = 22;
+	private SshAuthType sshAuthType = SshAuthType.PASSWORD;
 	private Long sshKeyId;
-	private String privateKey;
-
-	private String username;
-	private String password;
-
+	private String sshKey;
+	private String sshUsername;
+	private String sshPassword;
 
 	private Boolean agentInstalled;
 	@NotEmpty
@@ -36,15 +35,16 @@ public class TargetServerCreateForm {
 	private String agentStartCommandLine;
 	private String agentStopCommandLine;
 
-	private Boolean agentMonitor = Boolean.FALSE;
-	private Long agentMonitorInterval;
+	private Boolean healthMonitoringEnabled;
+	private Boolean healthCollectionEnabled;
+	private String healthType;
+	private String healthUrl;
+	private String healthExportPrefix;
 
-	private Boolean agentHealthCheckEnabled = Boolean.FALSE;
-	private String agentHealthType;
-	private String agentHealthUrl;
-
-	private Boolean agentMetricsCollectEnabled = Boolean.FALSE;
-	private String agentMetricsType;
-	private String agentMetricsUrl;
+	private Boolean metricsMonitoringEnabled;
+	private Boolean metricsCollectionEnabled;
+	private String metricsType;
+	private String metricsUrl;
+	private String metricsExportPrefix;
 
 }

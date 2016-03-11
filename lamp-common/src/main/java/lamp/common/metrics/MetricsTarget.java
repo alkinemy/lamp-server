@@ -14,7 +14,6 @@ public interface MetricsTarget {
 	String getArtifactId();
 	String getVersion();
 
-	Boolean getMetricsCollectionEnabled();
 	String getMetricsType();
 	String getMetricsUrl();
 	String getMetricsExportPrefix();
