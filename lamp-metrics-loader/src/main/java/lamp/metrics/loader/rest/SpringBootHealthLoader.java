@@ -19,7 +19,6 @@ public class SpringBootHealthLoader extends RestTemplateHealthLoader {
 
 	@Override
 	protected Map<String, Object> getHealth(String url) {
-
 		try {
 			return super.getHealth(url);
 		} catch (HttpServerErrorException e) {
