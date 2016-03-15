@@ -39,9 +39,14 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 
 	@PostConstruct
 	public void init() throws UnknownHostException {
-		InetAddress inetAddress = InetAddress.getLocalHost();
-		hostname = inetAddress.getHostName();
-		address = inetAddress.getHostAddress();
+		try {
+			InetAddress inetAddress = InetAddress.getLocalHost();
+			hostname = inetAddress.getHostName();
+			address = inetAddress.getHostAddress();
+		} catch (UnknownHostException e) {
+			hostname = e.getMessage();
+		}
+
 		if (StringUtils.isBlank(version)) {
 			version = ServerProperties.class.getPackage().getImplementationVersion();
 		}

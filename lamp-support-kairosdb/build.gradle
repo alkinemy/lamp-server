@@ -7,7 +7,7 @@ buildscript {
 apply plugin: 'idea'
 
 jar {
-    baseName = 'lamp-support-kafka'
+    baseName = 'lamp-support-kairosdb'
     version =  '0.0.1-SNAPSHOT'
 
     manifest {

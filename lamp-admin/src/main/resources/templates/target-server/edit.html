@@ -42,7 +42,6 @@
 					</div>
 					<div class="portlet-body form">
 						<form class="form-horizontal" role="form"  th:action="@{/target-server/{action}(action=${action})}" th:object="${editForm}" method="post">
-							<input type="hidden" th:if="${action == 'update'}" th:field="*{id}"/>
 							<div class="form-body">
 								<h4>Server</h4>
 								<div class="form-group" th:class="${#fields.hasErrors('id')} ? 'form-group has-error' : 'form-group'">

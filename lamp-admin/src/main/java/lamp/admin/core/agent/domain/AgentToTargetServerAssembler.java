@@ -12,7 +12,7 @@ public class AgentToTargetServerAssembler extends AbstractListAssembler<Agent, T
 
 	@Override protected TargetServer doAssemble(Agent agent) {
 		TargetServer targetServer = new TargetServer();
-		targetServer.setId(agent.getHostname());
+		targetServer.setId(agent.getId());
 		targetServer.setName(agent.getName());
 		targetServer.setHostname(agent.getHostname());
 		targetServer.setAddress(agent.getAddress());

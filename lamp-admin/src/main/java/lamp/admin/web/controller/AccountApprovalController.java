@@ -30,7 +30,8 @@ public class AccountApprovalController {
 
 	//TODO post로 처리?
 	@RequestMapping(path = "/allow", method = RequestMethod.GET)
-	public String allowAccount(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+	public String allowAccount(@RequestParam("id") Long id,
+							   RedirectAttributes redirectAttributes) {
 		userRegisterService.allow(id);
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
 		return "redirect:/account/approval";

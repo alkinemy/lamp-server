@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class AgentStartForm {
 
-	private String password;
+	private String sshPassword;
 
 	private String commandLine;
 

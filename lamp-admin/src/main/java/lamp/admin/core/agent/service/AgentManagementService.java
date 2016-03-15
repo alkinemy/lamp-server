@@ -98,7 +98,7 @@ public class AgentManagementService {
 			String host = targetServer.getAddress();
 			int port = targetServer.getSshPort();
 			String username = targetServer.getSshUsername();
-			String password = StringUtils.defaultString(installForm.getPassword(), targetServer.getSshPassword());
+			String password = StringUtils.defaultString(installForm.getSshPassword(), targetServer.getSshPassword());
 
 			SshClient sshClient = getSshClient(targetServer, host, port, username, password);
 
@@ -256,7 +256,7 @@ public class AgentManagementService {
 		command = expressionParser.getValue(command, parameters);
 		log.debug("[TargetServer:{}] Agent startCommandLine = {}", targetServerId, command);
 
-		executeCmd(targetServer, startForm.getPassword(), command, printStream);
+		executeCmd(targetServer, startForm.getSshPassword(), command, printStream);
 	}
 
 	public void stopAgent(String targetServerId, AgentStopForm stopForm, PrintStream printStream) {
@@ -267,7 +267,7 @@ public class AgentManagementService {
 		command = expressionParser.getValue(command, parameters);
 		log.debug("[TargetServer:{}] Agent stopCommandLine = {}", targetServerId, command);
 
-		executeCmd(targetServer, stopForm.getPassword(), command, printStream);
+		executeCmd(targetServer, stopForm.getSshPassword(), command, printStream);
 	}
 
 	protected void executeCmd(TargetServer targetServer, String inputPassword, String command, PrintStream printStream) {
@@ -292,7 +292,7 @@ public class AgentManagementService {
 				SshKey sshKey = sshKeyService.getSshKey(sshKeyId);
 				username = sshKey.getUsername();
 				password = sshKey.getPassword();
-				privateKey = sshKey.getPassword();
+				privateKey = sshKey.getPrivateKey();
 			} else {
 				privateKey = targetServer.getSshKey();
 			}

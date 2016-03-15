@@ -20,13 +20,13 @@
 								<div class="form-group">
 									<label class="col-md-3 control-label">AuthType</label>
 									<div class="col-md-9">
-										<p class="form-control-static" th:text="${targetServer.authType}"> authType </p>
+										<p class="form-control-static" th:text="${targetServer.sshAuthType}"> authType </p>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Username</label>
 									<div class="col-md-9">
-										<p class="form-control-static" th:text="${targetServer.username}"> username </p>
+										<p class="form-control-static" th:text="${targetServer.sshUsername}"> username </p>
 									</div>
 								</div>
 
@@ -34,7 +34,7 @@
 									<label class="col-md-3 control-label">Password</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<input type="password" class="form-control" th:field="*{password}" placeholder="Password" />
+											<input type="password" class="form-control" th:field="*{sshPassword}" placeholder="Password" />
 											<span class="input-group-addon">
 												<i class="fa fa-user"></i>
 											</span>

@@ -17,7 +17,7 @@ public class AgentInstallForm {
 	private String version;
 
 	// SSH
-	private String password;
+	private String sshPassword;
 
 	private ParametersType parametersType;
 	private String parameters;
