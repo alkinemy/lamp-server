@@ -26,7 +26,7 @@ public class MonitoringMetricsKafkaService extends KafkaConsumer<String, TargetM
 		TargetMetrics targetMetrics = record.value();
 		log.debug("targetMetrics = {}, {}", record.key(), targetMetrics);
 
-		kairosdbMetricsExporter.export(targetMetrics);
+//		kairosdbMetricsExporter.process(targetMetrics);
 	}
 
 	@PreDestroy

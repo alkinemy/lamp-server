@@ -36,6 +36,7 @@ dependencies {
     compile project(':lamp-metrics-loader')
     compile project(':lamp-metrics-exporter')
     compile project(':lamp-collector-core')
+    compile project(':lamp-alarm-health')
 
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-configuration-processor")

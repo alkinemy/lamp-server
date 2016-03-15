@@ -6,7 +6,6 @@ import lamp.common.event.EventPublisher;
 import lamp.common.metrics.MetricsLoader;
 import lamp.common.metrics.MetricsTarget;
 import lamp.common.metrics.TargetMetrics;
-import lamp.metrics.loader.rest.RestTemplateMetricsLoader;
 import lamp.watcher.core.domain.EventName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class MetricsLoaderService {
 
 	public MetricsLoaderService() {
 		loaderMap = new HashMap<>();
-		loaderMap.put(TargetMetricsType.SPRING_BOOT, new RestTemplateMetricsLoader());
+//		loaderMap.put(TargetMetricsType.SPRING_BOOT, new RestTemplateMetricsLoader());
 	}
 
 	public TargetMetrics getMetrics(MetricsTarget metricsTarget) {

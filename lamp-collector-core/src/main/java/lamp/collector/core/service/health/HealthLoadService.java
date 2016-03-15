@@ -6,14 +6,12 @@ import lamp.common.metrics.HealthTarget;
 import lamp.common.metrics.TargetHealth;
 import lamp.metrics.loader.rest.SpringBootHealthLoader;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Service
 public class HealthLoadService {
 
 	private Map<String, HealthLoader> loaderMap;

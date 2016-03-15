@@ -6,14 +6,12 @@ import lamp.common.metrics.MetricsTarget;
 import lamp.common.metrics.TargetMetrics;
 import lamp.metrics.loader.rest.SpringBootMetricsLoader;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Service
 public class MetricsLoadService {
 
 	private Map<String, MetricsLoader> loaderMap;

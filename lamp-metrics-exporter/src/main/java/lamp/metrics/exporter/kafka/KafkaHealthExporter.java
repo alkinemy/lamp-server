@@ -2,7 +2,7 @@ package lamp.metrics.exporter.kafka;
 
 import lamp.support.kafka.KafkaProducerProperties;
 import lamp.support.kafka.serialization.JsonSerializer;
-import lamp.common.metrics.HealthExporter;
+import lamp.metrics.exporter.HealthExporter;
 import lamp.common.metrics.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -14,7 +14,7 @@ import javax.annotation.PreDestroy;
 import java.util.Properties;
 
 @Slf4j
-public class KafkaHealthExporter implements HealthExporter {
+public class KafkaHealthExporter extends HealthExporter {
 
 	private Producer<String, TargetHealth> producer;
 	private String topic;

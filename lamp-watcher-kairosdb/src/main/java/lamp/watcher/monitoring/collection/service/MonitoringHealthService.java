@@ -2,7 +2,6 @@ package lamp.watcher.monitoring.collection.service;
 
 import lamp.common.metrics.TargetHealth;
 import lamp.common.monitoring.MonitoringTarget;
-import lamp.watcher.core.service.MonitoringHealthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

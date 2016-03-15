@@ -21,12 +21,12 @@ public class CollectionTargetService implements HealthTargetService, MetricsTarg
 
     @Override
     public List<HealthTarget> getHealthTargets() {
-        return targetServerService.getTargetServerList().stream().collect(Collectors.toList());
+        return targetServerService.getTargetServerList().stream().filter(s -> s.getHealthCollectionEnabled()).collect(Collectors.toList());
     }
 
     @Override
     public List<MetricsTarget> getMetricsTargets() {
-        return targetServerService.getTargetServerList().stream().collect(Collectors.toList());
+        return targetServerService.getTargetServerList().stream().filter(s -> s.getMetricsCollectionEnabled()).collect(Collectors.toList());
     }
 
 }

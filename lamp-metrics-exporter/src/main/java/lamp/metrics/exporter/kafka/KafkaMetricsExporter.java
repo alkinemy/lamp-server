@@ -2,7 +2,7 @@ package lamp.metrics.exporter.kafka;
 
 import lamp.support.kafka.KafkaProducerProperties;
 import lamp.support.kafka.serialization.JsonSerializer;
-import lamp.common.metrics.MetricsExporter;
+import lamp.metrics.exporter.MetricsExporter;
 import lamp.common.metrics.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -14,7 +14,7 @@ import javax.annotation.PreDestroy;
 import java.util.Properties;
 
 @Slf4j
-public class KafkaMetricsExporter implements MetricsExporter {
+public class KafkaMetricsExporter extends MetricsExporter {
 
 	private Producer<String, TargetMetrics> producer;
 	private String topic;

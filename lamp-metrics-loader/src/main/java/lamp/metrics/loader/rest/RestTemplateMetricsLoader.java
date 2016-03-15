@@ -1,10 +1,10 @@
 package lamp.metrics.loader.rest;
 
 import lamp.common.metrics.MetricsLoader;
+import lamp.common.metrics.MetricsTagConstants;
 import lamp.common.metrics.MetricsTarget;
 import lamp.common.metrics.TargetMetrics;
 import lamp.common.utils.StringUtils;
-import lamp.metrics.loader.TagConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
@@ -58,9 +58,9 @@ public class RestTemplateMetricsLoader implements MetricsLoader {
 		}
 
 		Map<String, String> tags = new LinkedHashMap<>();
-		tags.put(TagConstants.ID, metricsTarget.getId());
-		tags.put(TagConstants.HOSTNAME, metricsTarget.getHostname());
-		tags.put(TagConstants.ADDRESS, metricsTarget.getAddress());
+		tags.put(MetricsTagConstants.ID, metricsTarget.getId());
+		tags.put(MetricsTagConstants.HOSTNAME, metricsTarget.getHostname());
+		tags.put(MetricsTagConstants.ADDRESS, metricsTarget.getAddress());
 
 		if (metricsTarget.getTags() != null) {
 			tags.putAll(metricsTarget.getTags());

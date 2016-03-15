@@ -1,6 +1,6 @@
 package lamp.collector.app.config;
 
-import lamp.collector.app.support.jpa.service.CollectionTargetService;
+import lamp.collector.app.service.CollectionTargetService;
 import lamp.common.utils.assembler.SmartAssembler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

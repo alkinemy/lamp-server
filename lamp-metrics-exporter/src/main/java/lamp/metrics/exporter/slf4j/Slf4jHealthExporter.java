@@ -1,13 +1,13 @@
 package lamp.metrics.exporter.slf4j;
 
-import lamp.common.metrics.HealthExporter;
+import lamp.metrics.exporter.HealthExporter;
 import lamp.common.metrics.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Slf4j
-public class Slf4jHealthExporter implements HealthExporter {
+public class Slf4jHealthExporter extends HealthExporter {
 
 	private Logger logger;
 

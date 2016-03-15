@@ -1,6 +1,6 @@
 package lamp.metrics.exporter.kairosdb;
 
-import lamp.common.metrics.MetricsExporter;
+import lamp.metrics.exporter.MetricsExporter;
 import lamp.common.metrics.TargetMetrics;
 import lamp.support.kairosdb.KairosdbProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import java.net.MalformedURLException;
 import java.util.Map;
 
 @Slf4j
-public class KairosdbMetricsExporter implements MetricsExporter {
+public class KairosdbMetricsExporter extends MetricsExporter {
 
 	private final KairosdbProperties kairosdbProperties;
 

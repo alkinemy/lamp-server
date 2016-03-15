@@ -1,8 +1,8 @@
 package lamp.collector.core.config;
 
 import lamp.collector.core.CollectorConstants;
-import lamp.collector.core.service.HealthCollectionScheduledService;
-import lamp.collector.core.service.MetricsCollectionScheduledService;
+import lamp.collector.core.service.HealthProcessScheduledService;
+import lamp.collector.core.service.MetricsProcessScheduledService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,13 +25,13 @@ public class CollectionSchedulingConfig {
 		private CollectionHealthProperties collectionHealthProperties;
 
 		@Bean
-		public HealthCollectionScheduledService healthCollectionScheduledService() {
-			return new HealthCollectionScheduledService();
+		public HealthProcessScheduledService healthCollectionScheduledService() {
+			return new HealthProcessScheduledService();
 		}
 
 		@Override public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 			taskRegistrar.addFixedDelayTask(() -> {
-				healthCollectionScheduledService().collection();
+				healthCollectionScheduledService().process();
 			}, collectionHealthProperties.getInterval());
 			log.info("Collection Health Enabled (interval={}ms)", collectionHealthProperties.getInterval());
 		}
@@ -46,13 +46,13 @@ public class CollectionSchedulingConfig {
 		private CollectionMetricsProperties collectionMetricsProperties;
 
 		@Bean
-		public MetricsCollectionScheduledService metricsCollectionScheduledService() {
-			return new MetricsCollectionScheduledService();
+		public MetricsProcessScheduledService metricsCollectionScheduledService() {
+			return new MetricsProcessScheduledService();
 		}
 
 		@Override public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 			taskRegistrar.addFixedDelayTask(() -> {
-				metricsCollectionScheduledService().collection();
+				metricsCollectionScheduledService().process();
 			}, collectionMetricsProperties.getInterval());
 			log.info("Collection Metrics Enabled (interval={}ms)", collectionMetricsProperties.getInterval());
 		}

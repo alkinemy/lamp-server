@@ -1,6 +1,6 @@
 package lamp.collector.app.service;
 
-import lamp.collector.app.support.jpa.repository.CollectionTargetRepository;
+import lamp.collector.app.repository.CollectionTargetRepository;
 import lamp.collector.core.service.HealthTargetService;
 import lamp.collector.core.service.MetricsTargetService;
 import lamp.common.metrics.HealthTarget;

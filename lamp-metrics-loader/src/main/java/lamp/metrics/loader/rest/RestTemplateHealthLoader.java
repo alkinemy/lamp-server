@@ -2,9 +2,9 @@ package lamp.metrics.loader.rest;
 
 import lamp.common.metrics.HealthLoader;
 import lamp.common.metrics.HealthTarget;
+import lamp.common.metrics.MetricsTagConstants;
 import lamp.common.metrics.TargetHealth;
 import lamp.common.utils.StringUtils;
-import lamp.metrics.loader.TagConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
@@ -58,9 +58,9 @@ public class RestTemplateHealthLoader implements HealthLoader {
 		}
 
 		Map<String, String> tags = new LinkedHashMap<>();
-		tags.put(TagConstants.ID, healthTarget.getId());
-		tags.put(TagConstants.HOSTNAME, healthTarget.getHostname());
-		tags.put(TagConstants.ADDRESS, healthTarget.getAddress());
+		tags.put(MetricsTagConstants.ID, healthTarget.getId());
+		tags.put(MetricsTagConstants.HOSTNAME, healthTarget.getHostname());
+		tags.put(MetricsTagConstants.ADDRESS, healthTarget.getAddress());
 
 		if (healthTarget.getTags() != null) {
 			tags.putAll(healthTarget.getTags());

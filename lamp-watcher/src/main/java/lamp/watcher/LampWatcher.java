@@ -32,7 +32,7 @@ public class LampWatcher {
 		springApplication.run(args);
 
 
-		SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("Hello World");
+		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("Hello World");
 		JavaStreamingContext streamingContext = new JavaStreamingContext(conf, Durations.seconds(60));
 		int numThreads = 1;
 		Map<String, Integer> topicMap = new HashMap<>();
@@ -76,7 +76,6 @@ public class LampWatcher {
 			}
 		});
 
-		wordCounts.print();
 		streamingContext.start();
 		streamingContext.awaitTermination();
 	}
