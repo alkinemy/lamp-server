@@ -18,30 +18,41 @@
 						</div>
 					</div>
 					<div class="portlet-body">
-						<div class="table-scrollable">
+						<div class="table-responsive">
 							<table class="table table-bordered table-hover">
 								<thead>
 								<tr>
-									<th> # </th>
 									<th> Repository </th>
 									<th> GroupId </th>
 									<th> ArtifactId </th>
 									<th> Version </th>
+									<th> File Size </th>
 									<th> Upload Date </th>
 									<th> Action </th>
 								</tr>
 								</thead>
 								<tbody>
 								<tr th:each="appFile : ${page}">
-									<td th:text="${appFile.id}"> Joke </td>
-									<td th:text="${appFile.repositoryId}"> Joke </td>
+									<td th:text="${appFile.repositoryName}"> Joke </td>
 									<td th:text="${appFile.groupId}"> Joke </td>
 									<td th:text="${appFile.artifactId}"> Joke </td>
 									<td th:text="${appFile.baseVersion}"> Joke </td>
+									<td th:text="${appFile.fileSize}"> Joke </td>
 									<td th:text="${appFile.fileDate != null} ? ${#temporals.format(appFile.fileDate, 'yyyy-MM-dd HH:mm:ss')}"> Joke </td>
 									<td>
-										<a th:href="@{/app/file/LOCAL/create?refId={id}(id=${appFile.id})}" class="btn btn-icon-only yellow">
-											<i class="fa fa-upload"></i> </a>
+										<div class="btn-group">
+											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+												<i class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<a th:href="@{/app/file/LOCAL/create?refId={id}(id=${appFile.id})}"> Update </a>
+												</li>
+												<li>
+													<a th:href="@{/app/file/LOCAL/{id}/delete(id=${appFile.id})}"> Delete </a>
+												</li>
+											</ul>
+										</div>
 									</td>
 								</tr>
 								</tbody>

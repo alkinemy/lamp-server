@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light portlet-fit bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-bubble font-dark"></i>
+							<span class="caption-subject font-dark bold uppercase" th:text="${SELECTED_MENU_ITEM.title}">Menu Title</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided">
+								<a th:href="@{/server/target-server/create}" class="btn btn-sm default">등록</a>
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+								<tr>
+									<th> # </th>
+									<th> Name </th>
+									<th> Hostname </th>
+									<th> Address </th>
+									<th> Agent Installed </th>
+									<th> Agent Health Monitoring </th>
+									<th> Agent Status </th>
+									<th> Action </th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr th:each="targetServer : ${page}">
+									<td th:text="${targetServer.id}"> 2 </td>
+									<td th:text="${targetServer.name}"> Joke </td>
+									<td th:text="${targetServer.hostname}"> Joke </td>
+									<td th:text="${targetServer.address}"> Joke </td>
+									<td th:text="${targetServer.agentInstalled}"> Joke </td>
+									<td th:text="${targetServer.healthMonitoringEnabled}"> Joke </td>
+									<td><span th:text="${targetServer?.agentStatus}"
+                                              th:class="${targetServer?.agentStatus}? 'label label-sm'
+                                              + (${targetServer.agentStatus == 'UNKNOWN'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'UP'}? ' label-success' : '')
+                                              + (${targetServer.agentStatus == 'OUT_OF_SERVICE'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'DOWN'}? ' label-warning' : '')">Suspended </span></td>
+									<td>
+										<div class="btn-group">
+											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+												<i class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<a th:href="@{/server/target-server/update(id=${targetServer.id})}"> Modify </a>
+												</li>
+												<li>
+													<a th:href="@{/server/target-server/delete(id=${targetServer.id})}"> Delete </a>
+												</li>
+												<li class="divider"> </li>
+												<li>
+													<a th:href="@{/server/target-server/{id}/agent/start(id=${targetServer.id})}"> Agent Start </a>
+												</li>
+												<li>
+													<a th:href="@{/server/target-server/{id}/agent/stop(id=${targetServer.id})}"> Agent Stop </a>
+												</li>
+												<li class="divider"> </li>
+												<li>
+													<a th:href="@{/server/target-server/{id}/agent/install-step1(id=${targetServer.id})}"> Agent Install </a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class AgentInstallForm {
 
 	@NotNull
-	private Long templateId;
+	private String templateId;
 	private String version;
 
 	// SSH

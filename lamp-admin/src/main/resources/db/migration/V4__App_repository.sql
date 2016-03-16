@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS `lamp_app_maven_repository`;
 DROP TABLE IF EXISTS `lamp_app_url_repository`;
 
 CREATE TABLE `lamp_app_repository` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` varchar(100) NOT NULL,
   `repository_type` varchar(200) NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE `lamp_app_repository` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_app_local_repository` (
-  `id` bigint(20) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `repository_path` varchar(100) DEFAULT NULL,
   `file_limit_size` bigint(20) NULL,
   `file_expiration_date` datetime DEFAULT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE `lamp_app_local_repository` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_app_maven_repository` (
-  `id` bigint(20) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `repository_path` varchar(100) DEFAULT NULL,
   `repository_url` varchar(1000) DEFAULT NULL,
   `repository_username` varchar(200) DEFAULT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE `lamp_app_maven_repository` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_app_url_repository` (
-  `id` bigint(20) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `repository_auth_type` varchar(200) DEFAULT NULL,
   `repository_auth_url` varchar(1000) DEFAULT NULL,
   `repository_username` varchar(200) DEFAULT NULL,

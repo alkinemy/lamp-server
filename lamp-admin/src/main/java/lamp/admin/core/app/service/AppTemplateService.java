@@ -37,21 +37,21 @@ public class AppTemplateService {
 		return smartAssembler.assemble(pageable, page, AppTemplateDto.class);
 	}
 
-	public AppTemplateDto getAppTemplateDto(Long id) {
+	public AppTemplateDto getAppTemplateDto(String id) {
 		AppTemplate appTemplate = getAppTemplate(id);
 		return smartAssembler.assemble(appTemplate, AppTemplateDto.class);
 	}
 
-	public AppTemplateDto getAppTemplateDtoOptional(Long id) {
+	public AppTemplateDto getAppTemplateDtoOptional(String id) {
 		Optional<AppTemplate> appTemplateOptional = getAppTemplateOptional(id);
 		return smartAssembler.assemble(appTemplateOptional.orElse(null), AppTemplateDto.class);
 	}
 
-	public Optional<AppTemplate> getAppTemplateOptional(Long id) {
+	public Optional<AppTemplate> getAppTemplateOptional(String id) {
 		return Optional.ofNullable(appTemplateRepository.findOne(id));
 	}
 
-	public AppTemplate getAppTemplate(Long id) {
+	public AppTemplate getAppTemplate(String id) {
 		Optional<AppTemplate> appTemplateOptional = getAppTemplateOptional(id);
 		return appTemplateOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, id));
 	}
@@ -63,18 +63,18 @@ public class AppTemplateService {
 	}
 
 	@Transactional
-	public AppTemplate updateAppTemplate(Long id, AppTemplateUpdateForm editForm) {
+	public AppTemplate updateAppTemplate(String id, AppTemplateUpdateForm editForm) {
 		AppTemplate appTemplate = getAppTemplate(id);
 		smartAssembler.populate(editForm, appTemplate);
 		return appTemplate;
 	}
 
 	@Transactional
-	public void deleteAppTemplate(Long id) {
+	public void deleteAppTemplate(String id) {
 		appTemplateRepository.delete(id);
 	}
 
-	public AppTemplateUpdateForm getAppTemplateUpdateForm(Long id) {
+	public AppTemplateUpdateForm getAppTemplateUpdateForm(String id) {
 		AppTemplate appTemplate = getAppTemplate(id);
 		AppTemplateUpdateForm form = new AppTemplateUpdateForm();
 		BeanUtils.copyProperties(appTemplate, form);

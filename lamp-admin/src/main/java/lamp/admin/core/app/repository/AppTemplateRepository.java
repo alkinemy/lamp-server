@@ -5,6 +5,6 @@ import lamp.admin.core.base.repository.LampJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AppTemplateRepository extends LampJpaRepository<AppTemplate, Long> {
+public interface AppTemplateRepository extends LampJpaRepository<AppTemplate, String> {
 
 }

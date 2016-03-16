@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">Server Form</span>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="@{/server/target-server/{id}/agent/install(id=${targetServer.id})}" th:object="${editForm}" method="post">
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+								The daily cronjob has failed.
+							</div>
+							<div class="form-body">
+								<div class="form-group">
+									<label class="col-md-3 control-label">Template</label>
+									<div class="col-md-9">
+										<p class="form-control-static" th:text="${appTemplate.name}"> username </p>
+										<input type="hidden" th:field="*{templateId}" />
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('version')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Version</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{version}">
+											<option th:each="ver : ${versions}"
+													th:value="${ver}" th:text="${ver}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('installScriptId')}" th:errors="*{installScriptId}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('installScriptId')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Install Script</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{installScriptId}">
+											<option th:each="appInstallScript : ${appInstallScripts}"
+													th:value="${appInstallScript.id}" th:text="${appInstallScript.name}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('installScriptId')}" th:errors="*{installScriptId}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<hr />
+								<h4>SSH Login</h4>
+									<div class="form-group">
+										<label class="col-md-3 control-label">AuthType</label>
+										<div class="col-md-9">
+											<p class="form-control-static" th:text="${targetServer.sshAuthType}"> authType </p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Username</label>
+										<div class="col-md-9">
+											<p class="form-control-static" th:text="${targetServer.sshUsername}"> username </p>
+										</div>
+									</div>
+									<div class="form-group">
+									<label class="col-md-3 control-label">Password</label>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input type="password" class="form-control" th:field="*{sshPassword}" placeholder="Password" />
+											<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+
+</body>
+</html>

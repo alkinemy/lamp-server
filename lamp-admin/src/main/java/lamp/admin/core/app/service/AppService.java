@@ -53,7 +53,7 @@ public class AppService {
 
 	public AgentAppRegisterForm registerApp(String agentId, AppRegisterForm editForm) {
 		Agent agent = agentService.getAgent(agentId);
-		Long templateId = editForm.getTemplateId();
+		String templateId = editForm.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplateOptional(templateId).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, templateId));
 		return registerApp(agent, appTemplate, editForm);
 	}

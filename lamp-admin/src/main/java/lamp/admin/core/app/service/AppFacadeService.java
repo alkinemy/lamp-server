@@ -82,7 +82,7 @@ public class AppFacadeService {
 	public void registerApp(String agentId, AppRegisterForm form) {
 		Agent agent = getAgent(agentId);
 
-		Long templateId = form.getTemplateId();
+		String templateId = form.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId);
 
 		AgentAppRegisterForm agentAppRegisterForm = appService.registerApp(agent, appTemplate, form);
@@ -110,7 +110,7 @@ public class AppFacadeService {
 	public void registerManagedApp(ManagedAppRegisterForm editForm) {
 		Agent agent = getAgent(editForm.getAgentId());
 
-		Long templateId = editForm.getTemplateId();
+		String templateId = editForm.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId);
 
 		ManagedApp managedApp = new ManagedApp();

@@ -16,7 +16,7 @@ public class LocalAppFileUploadForm {
 	private String name;
 	private String description;
 
-	private Long repositoryId;
+	private String repositoryId;
 	@NotEmpty
 	private String groupId;
 	@NotEmpty

@@ -5,6 +5,7 @@ import lamp.collector.core.service.HealthTargetService;
 import lamp.collector.core.service.MetricsTargetService;
 import lamp.common.metrics.HealthTarget;
 import lamp.common.metrics.MetricsTarget;
+import lamp.common.utils.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,12 @@ public class CollectionTargetService implements HealthTargetService, MetricsTarg
 
     @Override
     public List<HealthTarget> getHealthTargets() {
-        return targetServerService.getTargetServerList().stream().filter(s -> s.getHealthCollectionEnabled()).collect(Collectors.toList());
+        return targetServerService.getTargetServerList().stream().filter(s -> BooleanUtils.isTrue(s.getHealthCollectionEnabled())).collect(Collectors.toList());
     }
 
     @Override
     public List<MetricsTarget> getMetricsTargets() {
-        return targetServerService.getTargetServerList().stream().filter(s -> s.getMetricsCollectionEnabled()).collect(Collectors.toList());
+        return targetServerService.getTargetServerList().stream().filter(s -> BooleanUtils.isTrue(s.getMetricsCollectionEnabled())).collect(Collectors.toList());
     }
 
 }

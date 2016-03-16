@@ -7,12 +7,12 @@ import lombok.Setter;
 @Setter
 public class AppTemplateDto {
 
-	private Long id;
+	private String id;
 	private String name;
 	private String description;
 
 	private AppResourceType resourceType;
-	private Long repositoryId;
+	private String repositoryId;
 	private String repositoryName;
 
 	private String groupId;

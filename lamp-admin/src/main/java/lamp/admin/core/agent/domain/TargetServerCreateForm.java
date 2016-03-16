@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @ToString
 public class TargetServerCreateForm {
 
-	@NotEmpty
 	private String id;
 	@NotEmpty
 	private String name;

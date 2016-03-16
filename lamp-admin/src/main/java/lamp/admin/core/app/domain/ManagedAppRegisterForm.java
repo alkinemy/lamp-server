@@ -15,7 +15,7 @@ public class ManagedAppRegisterForm {
 	private String name;
 	private String description;
 
-	private Long templateId;
+	private String templateId;
 
 	private String groupId;
 	private String artifactId;

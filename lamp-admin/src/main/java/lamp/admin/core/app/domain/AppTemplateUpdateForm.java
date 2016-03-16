@@ -17,7 +17,7 @@ public class AppTemplateUpdateForm {
 	@NotNull
 	private AppResourceType resourceType = AppResourceType.NONE;
 
-	private Long repositoryId;
+	private String repositoryId;
 	private String groupId;
 	private String artifactId;
 	private String artifactName;

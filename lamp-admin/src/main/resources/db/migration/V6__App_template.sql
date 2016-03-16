@@ -3,12 +3,12 @@ USE `lamp`;
 DROP TABLE IF EXISTS `lamp_app_template`;
 
 CREATE TABLE `lamp_app_template` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` varchar(100) NOT NULL,
   `resource_type` varchar(200) NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
 
-  `repository_id` bigint(20) DEFAULT NULL,
+  `repository_id` varchar(100) DEFAULT NULL,
   `group_id` varchar(200) DEFAULT NULL,
   `artifact_id` varchar(200) DEFAULT NULL,
   `artifact_name` varchar(200) DEFAULT NULL,

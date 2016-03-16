@@ -1,6 +1,7 @@
 package lamp.admin.core.agent.domain;
 
 import lamp.admin.core.agent.service.SshKeyService;
+import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractAssembler;
 import lamp.common.utils.assembler.Populater;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -21,6 +23,11 @@ public class TargetServerAssembler extends AbstractAssembler<TargetServerCreateF
 	@Override protected TargetServer doAssemble(TargetServerCreateForm targetServerCreateForm) {
 		TargetServer targetServer = new TargetServer();
 		BeanUtils.copyProperties(targetServerCreateForm, targetServer);
+
+		if (StringUtils.isBlank(targetServer.getId())) {
+			targetServer.setId(UUID.randomUUID().toString());
+		}
+
 		if ("localhost".equals(targetServer.getHostname())) {
 			try {
 				InetAddress inetAddress = InetAddress.getLocalHost();

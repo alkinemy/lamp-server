@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class LocalAppFileSearchParams {
 
-	private Long repositoryId;
+	private String repositoryId;
 
 	public Predicate buildPredicate() {
 		QLocalAppFile qLocalAppFile = QLocalAppFile.localAppFile;

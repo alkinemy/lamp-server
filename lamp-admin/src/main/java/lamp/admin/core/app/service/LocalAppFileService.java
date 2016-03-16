@@ -42,13 +42,13 @@ public class LocalAppFileService {
 		return smartAssembler.assemble(pageable, page, LocalAppFileDto.class);
 	}
 
-	public Page<LocalAppFileDto> getLocalAppFileList(Long repositoryId, Pageable pageable) {
+	public Page<LocalAppFileDto> getLocalAppFileList(String repositoryId, Pageable pageable) {
 		LocalAppFileSearchParams searchParams = new LocalAppFileSearchParams();
 		searchParams.setRepositoryId(repositoryId);
 		return getLocalAppFileList(searchParams, pageable);
 	}
 
-	public List<LocalAppFile> getLocalAppFiles(Long repositoryId, String groupId, String artifactId) {
+	public List<LocalAppFile> getLocalAppFiles(String repositoryId, String groupId, String artifactId) {
 		return localAppFileRepository.findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(repositoryId, groupId, artifactId);
 	}
 
@@ -58,7 +58,7 @@ public class LocalAppFileService {
 	}
 
 	@Transactional
-	public LocalAppFile uploadLocalAppFile(Long repositoryId, LocalAppFileUploadForm editForm) throws MessageException {
+	public LocalAppFile uploadLocalAppFile(String repositoryId, LocalAppFileUploadForm editForm) throws MessageException {
 		LocalAppRepo appRepo = appRepoService.getAppRepo(repositoryId);
 
 		LocalAppFile localAppFile = new LocalAppFile();

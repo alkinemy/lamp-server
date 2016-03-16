@@ -21,7 +21,7 @@ public class LocalAppFile extends AbstractAuditingEntity {
 
 	private String description;
 
-	private Long repositoryId;
+	private String repositoryId;
 
 	private String groupId;
 

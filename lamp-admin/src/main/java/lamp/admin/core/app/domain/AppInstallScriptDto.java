@@ -11,7 +11,7 @@ import java.util.List;
 public class AppInstallScriptDto {
 
 	private Long id;
-	private Long templateId;
+	private String templateId;
 
 	private String name;
 	private String description;

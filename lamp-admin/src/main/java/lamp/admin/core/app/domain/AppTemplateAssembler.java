@@ -1,11 +1,14 @@
 package lamp.admin.core.app.domain;
 
 import lamp.admin.core.app.service.AppRepoService;
+import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractAssembler;
 import lamp.common.utils.assembler.Populater;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class AppTemplateAssembler extends AbstractAssembler<AppTemplateCreateForm, AppTemplate> implements Populater<AppTemplateUpdateForm, AppTemplate> {
@@ -14,10 +17,13 @@ public class AppTemplateAssembler extends AbstractAssembler<AppTemplateCreateFor
 	private AppRepoService appRepoService;
 
 	@Override protected AppTemplate doAssemble(AppTemplateCreateForm appTemplateCreateForm) {
-		Long repositoryId = appTemplateCreateForm.getRepositoryId();
+		String repositoryId = appTemplateCreateForm.getRepositoryId();
 
 		AppTemplate appTemplate = new AppTemplate();
 		BeanUtils.copyProperties(appTemplateCreateForm, appTemplate);
+		if (StringUtils.isBlank(appTemplate.getId())) {
+			appTemplate.setId(UUID.randomUUID().toString());
+		}
 		if (repositoryId != null) {
 			appTemplate.setAppRepository(appRepoService.getAppRepo(repositoryId));
 		}

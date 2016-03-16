@@ -1,6 +1,6 @@
 package lamp.admin.web.support;
 
-import lamp.admin.web.domain.MenuItem;
+import lamp.admin.web.account.model.MenuItem;
 import lamp.admin.web.service.MenuItemService;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;

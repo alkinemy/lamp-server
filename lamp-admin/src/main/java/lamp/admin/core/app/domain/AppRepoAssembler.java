@@ -3,10 +3,13 @@ package lamp.admin.core.app.domain;
 import lamp.admin.core.agent.domain.UrlAppRepo;
 import lamp.admin.core.base.exception.Exceptions;
 import lamp.admin.core.base.exception.LampErrorCode;
+import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractAssembler;
 import lamp.common.utils.assembler.Populater;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRepo> implements Populater<AppRepoUpdateForm, AppRepo> {
@@ -24,6 +27,9 @@ public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRe
 			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_REPOSITORY_TYPE, repository);
 		}
 		BeanUtils.copyProperties(appRepoCreateForm, appRepo);
+		if (StringUtils.isBlank(appRepo.getId())) {
+			appRepo.setId(UUID.randomUUID().toString());
+		}
 		appRepo.setDeleted(false);
 		return appRepo;
 	}

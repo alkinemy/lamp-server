@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AppRepoRepository extends LampJpaRepository<AppRepo, Long> {
+public interface AppRepoRepository extends LampJpaRepository<AppRepo, String> {
 
 	List<AppRepo> findAllByRepositoryType(AppResourceType repositoryType);
 

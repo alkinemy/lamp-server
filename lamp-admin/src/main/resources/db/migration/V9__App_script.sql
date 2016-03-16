@@ -24,7 +24,7 @@ CREATE TABLE `lamp_script` (
 
 CREATE TABLE `lamp_app_install_script` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `template_id` bigint(20) NOT NULL,
+  `template_id` varchar(100) NOT NULL,
 
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -60,6 +60,7 @@ CREATE TABLE `lamp_script_file_create_command` (
   `filename` varchar(1000) DEFAULT NULL,
   `content` MEDIUMTEXT DEFAULT NULL,
   `charset` varchar(100) DEFAULT NULL,
+  `expression_parser` varchar(100) DEFAULT NULL,
 
   `readable` tinyint(1) NOT NULL,
   `writable` tinyint(1) NOT NULL,

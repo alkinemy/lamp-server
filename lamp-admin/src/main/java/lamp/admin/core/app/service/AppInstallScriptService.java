@@ -26,12 +26,12 @@ public class AppInstallScriptService {
 	@Autowired
 	private SmartAssembler smartAssembler;
 
-	public List<AppInstallScriptDto> getAppInstallScriptDtoList(Long templateId) {
+	public List<AppInstallScriptDto> getAppInstallScriptDtoList(String templateId) {
 		List<AppInstallScript> page = appInstallScriptRepository.findAllByTemplateId(templateId);
 		return smartAssembler.assemble(page, AppInstallScript.class, AppInstallScriptDto.class);
 	}
 
-	public Page<AppInstallScriptDto> getAppInstallScriptDtoList(Long templateId, Pageable pageable) {
+	public Page<AppInstallScriptDto> getAppInstallScriptDtoList(String templateId, Pageable pageable) {
 		Page<AppInstallScript> page = appInstallScriptRepository.findAllByTemplateId(templateId, pageable);
 		return smartAssembler.assemble(pageable, page, AppInstallScript.class, AppInstallScriptDto.class);
 	}
@@ -56,7 +56,7 @@ public class AppInstallScriptService {
 	}
 
 	@Transactional
-	public AppInstallScript insertAppInstallScript(Long templateId, AppInstallScriptCreateForm editForm) {
+	public AppInstallScript insertAppInstallScript(String templateId, AppInstallScriptCreateForm editForm) {
 		AppInstallScript appRepo = smartAssembler.assemble(editForm, AppInstallScriptCreateForm.class, AppInstallScript.class);
 		appRepo.setTemplateId(templateId);
 		return appInstallScriptRepository.save(appRepo);

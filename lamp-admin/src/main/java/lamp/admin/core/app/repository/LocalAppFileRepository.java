@@ -14,11 +14,11 @@ public interface LocalAppFileRepository extends LampJpaRepository<LocalAppFile, 
 
 	List<LocalAppFile> findAllByGroupIdAndArtifactIdAndBaseVersion(String groupId, String artifactId, String baseVersion);
 
-	Optional<LocalAppFile> findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(Long repositoryId, String groupId, String artifactId, String baseVersion);
+	Optional<LocalAppFile> findOneByRepositoryIdAndGroupIdAndArtifactIdAndBaseVersion(String repositoryId, String groupId, String artifactId, String baseVersion);
 
-	Page<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(Long repositoryId, String groupId, String artifactId, Pageable pageable);
+	Page<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(String repositoryId, String groupId, String artifactId, Pageable pageable);
 
-	List<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(Long repositoryId, String groupId, String artifactId);
+	List<LocalAppFile> findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(String repositoryId, String groupId, String artifactId);
 
-	Page<LocalAppFile> findAllByRepositoryId(Long repositoryId, Pageable pageable);
+	Page<LocalAppFile> findAllByRepositoryId(String repositoryId, Pageable pageable);
 }

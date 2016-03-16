@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AppInstallScriptRepository extends LampJpaRepository<AppInstallScript, Long> {
 
-	List<AppInstallScript> findAllByTemplateId(Long templateId);
+	List<AppInstallScript> findAllByTemplateId(String templateId);
 
-	Page<AppInstallScript> findAllByTemplateId(Long templateId, Pageable pageable);
+	Page<AppInstallScript> findAllByTemplateId(String templateId, Pageable pageable);
 }

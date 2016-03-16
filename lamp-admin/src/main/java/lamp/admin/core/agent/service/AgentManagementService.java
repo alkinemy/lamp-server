@@ -72,7 +72,7 @@ public class AgentManagementService {
 
 		AppResource resource = appResourceService.getResource(appTemplate, version);
 
-		Map<String, String> parameters = getParameters(appTemplate, resource);
+		Map<String, String> parameters = getParameters(targetServer, appTemplate, resource);
 
 		File file = null;
 		String filename = parameters.get("filename");
@@ -180,12 +180,12 @@ public class AgentManagementService {
 						if (i > 0) {
 							writer.write(LF); // os type?
 						}
-						writer.write(line);
+						String parsedLine = expressionParser.getValue(line, parameters);
+						writer.write(parsedLine);
 					}
 					writer.flush();
 				}
 				String remoteFilename = Paths.get(agentPath, filename).toString();
-				log.info("file2 content = {}", FileUtils.readFileToString(localFile));
 				sshClient.scpTo(localFile, remoteFilename, true);
 				if (fileCreateCommand.isExecutable()) {
 					sshClient.exec(agentPath, "chmod +x " + FilenameUtils.getName(remoteFilename), printStream, timeout);
@@ -206,8 +206,9 @@ public class AgentManagementService {
 	}
 
 
-	protected Map<String, String> getParameters(AppTemplate appTemplate, AppResource resource) {
+	protected Map<String, String> getParameters(TargetServer targetServer, AppTemplate appTemplate, AppResource resource) {
 		Map<String, Object> tempParameters = new HashMap<>();
+		tempParameters.put("id", targetServer.getId());
 		tempParameters.put("groupId", resource.getGroupId());
 		tempParameters.put("artifactId", resource.getArtifactId());
 		tempParameters.put("version", resource.getVersion());

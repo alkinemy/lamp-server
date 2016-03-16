@@ -1,8 +1,8 @@
 package lamp.admin.web.config;
 
-import lamp.admin.web.security.AdminUserDetailsService;
-import lamp.admin.web.security.AuthoritiesConstants;
-import lamp.admin.web.security.CustomPersistentRememberMeServices;
+import lamp.admin.web.support.security.AdminUserDetailsService;
+import lamp.admin.web.support.security.AuthoritiesConstants;
+import lamp.admin.web.support.security.CustomPersistentRememberMeServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;

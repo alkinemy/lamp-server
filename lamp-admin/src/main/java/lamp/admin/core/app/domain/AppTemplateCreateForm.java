@@ -11,14 +11,14 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class AppTemplateCreateForm {
 
-	private Long id;
+	private String id;
 	private String name;
 	private String description;
 
 	@NotNull
 	private AppResourceType resourceType = AppResourceType.NONE;
 
-	private Long repositoryId;
+	private String repositoryId;
 	private String groupId;
 	private String artifactId;
 	private String artifactName;

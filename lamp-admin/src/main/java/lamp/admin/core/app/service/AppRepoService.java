@@ -39,15 +39,15 @@ public class AppRepoService {
 		return smartAssembler.assemble(list, AppRepo.class, AppRepoDto.class);
 	}
 
-	public <T extends AppRepo> Optional<T> getAppRepoOptional(Long id) {
+	public <T extends AppRepo> Optional<T> getAppRepoOptional(String id) {
 		return Optional.ofNullable((T) appRepoRepository.findOne(id));
 	}
 
-	public <T extends AppRepo> T getAppRepo(Long id) {
+	public <T extends AppRepo> T getAppRepo(String id) {
 		return (T) getAppRepoOptional(id).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_REPOSITORY_NOT_FOUND, id));
 	}
 
-	public List<String> getVersions(Long id,String groupId, String artifactId) {
+	public List<String> getVersions(String id,String groupId, String artifactId) {
 		AppRepo appRepo = getAppRepo(id);
 		if (appRepo instanceof LocalAppRepo) {
 			return localAppRepoService.getVersions((LocalAppRepo) appRepo, groupId, artifactId);
@@ -57,7 +57,7 @@ public class AppRepoService {
 		return null;
 	}
 
-	public AppRepoUpdateForm getAppRepoUpdateForm(Long id) {
+	public AppRepoUpdateForm getAppRepoUpdateForm(String id) {
 		AppRepo appRepo = getAppRepo(id);
 		return smartAssembler.assemble(appRepo, AppRepo.class, AppRepoUpdateForm.class);
 	}

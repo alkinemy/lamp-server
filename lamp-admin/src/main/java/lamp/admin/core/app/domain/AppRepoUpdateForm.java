@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class AppRepoUpdateForm {
 
 	@NotNull
-	private Long id;
+	private String id;
 
 	@NotEmpty
 	private String name;

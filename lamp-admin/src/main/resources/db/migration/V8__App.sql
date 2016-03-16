@@ -8,7 +8,7 @@ CREATE TABLE `lamp_managed_app` (
   `name` varchar(200) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `target_server_id` bigint(20) NOT NULL,
-  `template_id` bigint(20) NOT NULL,
+  `template_id` varchar(100) NOT NULL,
   `group_id` varchar(200) DEFAULT NULL,
   `artifact_id` varchar(200) DEFAULT NULL,
   `artifact_name` varchar(200) DEFAULT NULL,

@@ -16,7 +16,7 @@ public class AppRegisterForm {
 	private String description;
 
 	@NotNull
-	private Long templateId;
+	private String templateId;
 	private String version;
 
 	private Boolean monitor;

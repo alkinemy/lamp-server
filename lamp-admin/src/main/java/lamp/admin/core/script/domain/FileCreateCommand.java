@@ -14,10 +14,10 @@ import javax.persistence.*;
 public class FileCreateCommand extends ScriptCommand {
 
 	private String filename;
-
 	private String content;
-
 	private String charset;
+	@Enumerated(EnumType.STRING)
+	private ExpressionParser expressionParser = ExpressionParser.SPEL;
 
 
 	@Column(columnDefinition = "TINYINT", nullable = false)

@@ -14,7 +14,8 @@ public class LocalAppFileDto {
 	private Long id;
 	private String name;
 	private String description;
-	private Long repositoryId;
+	private String repositoryId;
+	private String repositoryName;
 	private String groupId;
 	private String artifactId;
 	private String baseVersion;
@@ -23,4 +24,5 @@ public class LocalAppFileDto {
 	private String pathname;
 	private String filename;
 	private LocalDateTime fileDate;
+	private Long fileSize;
 }

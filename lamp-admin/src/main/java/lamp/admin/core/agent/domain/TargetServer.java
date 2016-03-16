@@ -72,9 +72,9 @@ public class TargetServer extends AbstractAuditingEntity implements MonitoringTa
 	private String version;
 
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean healthMonitoringEnabled;
+	private Boolean healthMonitoringEnabled = Boolean.FALSE;
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean healthCollectionEnabled;
+	private Boolean healthCollectionEnabled = Boolean.FALSE;
 	@Column(table = "lamp_collection_target")
 	private String healthType;
 	@Column(table = "lamp_collection_target")
@@ -83,9 +83,9 @@ public class TargetServer extends AbstractAuditingEntity implements MonitoringTa
 	private String healthExportPrefix;
 
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean metricsMonitoringEnabled;
+	private Boolean metricsMonitoringEnabled = Boolean.FALSE;
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean metricsCollectionEnabled;
+	private Boolean metricsCollectionEnabled = Boolean.FALSE;
 	@Column(table = "lamp_collection_target")
 	private String metricsType;
 	@Column(table = "lamp_collection_target")

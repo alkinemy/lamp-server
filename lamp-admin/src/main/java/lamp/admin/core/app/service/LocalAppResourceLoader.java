@@ -24,7 +24,7 @@ public class LocalAppResourceLoader {
 	private LocalAppFileRepository localAppFileRepository;
 
 	public AppResource getResource(LocalAppRepo localAppRepo, String groupId, String artifactId, String version) {
-		Long repositoryId = localAppRepo.getId();
+		String repositoryId = localAppRepo.getId();
 		if (StringUtils.isBlank(version)) {
 			version = getLastVersion(repositoryId, groupId, artifactId);
 		}
@@ -35,7 +35,7 @@ public class LocalAppResourceLoader {
 		return new LocalFileAppResource(file, localAppFile.getFilename(), groupId, artifactId, version);
 	}
 
-	protected String getLastVersion(Long repositoryId, String groupId, String artifactId) {
+	protected String getLastVersion(String repositoryId, String groupId, String artifactId) {
 		// TODO 정상적으로 작동하도록 수정 바람
 		Page<LocalAppFile> resourceList = localAppFileRepository.findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(repositoryId, groupId, artifactId, new PageRequest(0, 1));
 		LocalAppFile lastVersionResource = Iterables.getFirst(resourceList.getContent(), null);

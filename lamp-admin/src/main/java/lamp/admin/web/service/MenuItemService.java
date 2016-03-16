@@ -1,7 +1,7 @@
 package lamp.admin.web.service;
 
 import com.google.common.collect.Lists;
-import lamp.admin.web.domain.MenuItem;
+import lamp.admin.web.account.model.MenuItem;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +23,12 @@ public class MenuItemService {
 				List<MenuItem> subMenuItems = new ArrayList<>();
 
 				{
-					MenuItem targetServerAgent  = MenuItem.of(TARGET_SERVER_AGENT, "Agent", null);
-					MenuItem targetServer = MenuItem.of(TARGET_SERVER, "Target Server", "/target-server", "icon-bulb");
-					targetServer.setSubMenuItems(Lists.newArrayList(targetServerAgent));
+					MenuItem agentInstall  = MenuItem.of(AGENT_INSTALL, "Agent Install", null);
+					MenuItem agentStart  = MenuItem.of(AGENT_START, "Agent Start", null);
+					MenuItem agentStop  = MenuItem.of(AGENT_STOP, "Agent Stop", null);
+
+					MenuItem targetServer = MenuItem.of(TARGET_SERVER, "Target Server", "/server/target-server", "icon-bulb");
+					targetServer.setSubMenuItems(Lists.newArrayList(agentInstall, agentStart, agentStop));
 					subMenuItems.add(targetServer);
 				}
 				{
@@ -39,7 +42,7 @@ public class MenuItemService {
 				subMenuItems.add(MenuItem.of(SSH_KEY, "SSH Key", "/ssh-key", "icon-bulb"));
 				subMenuItems.add(MenuItem.of(AGENT_EVENT, "Agent Event", "/agent/event", "icon-bulb"));
 
-				menuItems.add(MenuItem.of("AGENT_TOP", "Agent", "icon-layers", subMenuItems));
+				menuItems.add(MenuItem.of(SERVER, "Server", "icon-layers", subMenuItems));
 			}
 			//App
 			{

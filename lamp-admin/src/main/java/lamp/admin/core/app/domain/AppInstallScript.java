@@ -16,6 +16,6 @@ import javax.persistence.*;
 public class AppInstallScript extends Script {
 
 	@Column(updatable = false)
-	private Long templateId;
+	private String templateId;
 
 }
