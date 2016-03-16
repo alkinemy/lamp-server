@@ -72,10 +72,10 @@ public class AgentManagementService {
 
 		AppResource resource = appResourceService.getResource(appTemplate, version);
 
-		Map<String, String> parameters = getParameters(targetServer, appTemplate, resource);
+		Map<String, Object> parameters = getParameters(targetServer, appTemplate, resource);
 
 		File file = null;
-		String filename = parameters.get("filename");
+		String filename = (String) parameters.get("filename");
 		if (StringUtils.isBlank(filename)) {
 			filename = resource.getFilename();
 			if (StringUtils.isBlank(filename)) {
@@ -129,7 +129,7 @@ public class AgentManagementService {
 			}
 
 			if (installForm.getInstallScriptId() != null) {
-				executeInstallScript(targetServer, sshClient, installForm.getInstallScriptId(), printStream);
+				executeInstallScript(targetServer, sshClient, installForm.getInstallScriptId(), parameters, printStream);
 			}
 
 		} catch (MessageException e) {
@@ -145,10 +145,8 @@ public class AgentManagementService {
 		}
 	}
 
-	protected void executeInstallScript(TargetServer targetServer, SshClient sshClient, Long installScriptId, PrintStream printStream) {
+	protected void executeInstallScript(TargetServer targetServer, SshClient sshClient, Long installScriptId, Map<String, Object> parameters, PrintStream printStream) {
 		AppInstallScript installScript = appInstallScriptService.getAppInstallScript(installScriptId);
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("filename", targetServer.getAgentInstallFilename());
 
 		List<ScriptCommand> scriptCommands = installScript.getCommands();
 		scriptCommands.stream().forEach(sc -> executeScriptCommand(targetServer, sshClient, sc, parameters, printStream));
@@ -206,7 +204,7 @@ public class AgentManagementService {
 	}
 
 
-	protected Map<String, String> getParameters(TargetServer targetServer, AppTemplate appTemplate, AppResource resource) {
+	protected Map<String, Object> getParameters(TargetServer targetServer, AppTemplate appTemplate, AppResource resource) {
 		Map<String, Object> tempParameters = new HashMap<>();
 		tempParameters.put("id", targetServer.getId());
 		tempParameters.put("groupId", resource.getGroupId());

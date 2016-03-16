@@ -38,7 +38,6 @@ public class TargetServer extends AbstractAuditingEntity implements MonitoringTa
 	private String sshPassword;
 
 
-
 	@Column(columnDefinition = "TINYINT")
 	private Boolean agentInstalled = Boolean.FALSE;
 

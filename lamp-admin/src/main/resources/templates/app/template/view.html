@@ -185,7 +185,7 @@
 						</div>
 					</div>
 					<div class="portlet-body">
-						<div class="table-scrollable">
+						<div class="table-responsive">
 							<table class="table table-bordered table-hover">
 								<thead>
 								<tr>
@@ -203,9 +203,9 @@
 									<td th:text="${installScript.description}"> Joke </td>
 									<td th:text="${installScript.version}"> Joke </td>
 									<td>
-										<a th:href="@{/app/template/{id}/script/{scriptId}/update(id=${appTemplate.id},scriptId=${installScript.id})}" class="btn btn-icon-only red">
+										<a th:href="@{/app/template/{templateId}/script/{scriptId}/update(templateId=${appTemplate.id},scriptId=${installScript.id})}" class="btn btn-icon-only red">
 											<i class="fa fa-edit"></i> </a>
-										<a th:href="@{/app/template/{id}/script/{scriptId}/create(id=${appTemplate.id},scriptId=${installScript.id})}" class="btn btn-icon-only red">
+										<a th:href="@{/app/template/{templateId}/script/{scriptId}/delete(templateId=${appTemplate.id},scriptId=${installScript.id})}" class="btn btn-icon-only red">
 											<i class="fa fa-remove"></i> </a>
 									</td>
 								</tr>

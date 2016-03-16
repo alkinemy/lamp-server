@@ -17,11 +17,8 @@ public class AgentRegisterForm {
 	@NotEmpty
 	private String name;
 
-	@NotEmpty
 	private String groupId;
-	@NotEmpty
 	private String artifactId;
-	@NotEmpty
 	private String version;
 
 	private String protocol;

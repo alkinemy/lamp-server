@@ -9,17 +9,17 @@ import org.springframework.core.env.Environment;
 import java.io.PrintStream;
 
 public class LampAdminBanner implements Banner {
-	private static final String BANNER =
-		  " ██████╗ ███████╗███╗   ██╗██╗███████╗\n"
-		+ "██╔════╝ ██╔════╝████╗  ██║██║██╔════╝\n"
-		+ "██║  ███╗█████╗  ██╔██╗ ██║██║█████╗  \n"
-		+ "██║   ██║██╔══╝  ██║╚██╗██║██║██╔══╝  \n"
-		+ "╚██████╔╝███████╗██║ ╚████║██║███████╗\n"
-		+ " ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝╚══════╝\n"
-		+ "                                      ";
+	private static final String BANNER
+			= "██╗      █████╗ ███╗   ███╗██████╗ \n" +
+			  "██║     ██╔══██╗████╗ ████║██╔══██╗\n" +
+			  "██║     ███████║██╔████╔██║██████╔╝\n" +
+		      "██║     ██╔══██║██║╚██╔╝██║██╔═══╝ \n" +
+		      "███████╗██║  ██║██║ ╚═╝ ██║██║     \n" +
+		      "╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     \n" +
+		      "                                   ";
 
 
-	private static final String SPRING_BOOT = " :: Genie (present by joke) :: ";
+	private static final String SPRING_BOOT = " :: LAMP (present by joke) :: ";
 
 	private static final int STRAP_LINE_SIZE = 42;
 

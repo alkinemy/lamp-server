@@ -126,7 +126,7 @@
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form" id="editForm" th:action="${action} == 'update' ? @{/app/template/{id}/script/{scriptId}/update(id=${id},scriptId=${scriptId})} : @{/app/template/{id}/script/create(id=${id})}" th:object="${editForm}" method="post">
+						<form class="form-horizontal" role="form" id="editForm" th:action="${action} == 'update' ? @{/app/template/{templateId}/script/{scriptId}/update(templateId=${templateId},scriptId=${scriptId})} : @{/app/template/{templateId}/script/create(templateId=${templateId})}" th:object="${editForm}" method="post">
 							<input type="hidden" th:field="*{commands}" />
 							<div class="form-body">
 								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
@@ -159,7 +159,7 @@
 											<div class="portlet-title">
 												<div class="caption">
 													<i class="icon-bubble font-red"></i>
-													<span class="caption-subject font-red sbold uppercase">Nestable List 2</span>
+													<span class="caption-subject font-red sbold uppercase">Command List</span>
 												</div>
 												<div class="actions">
 													<div class="btn-group">

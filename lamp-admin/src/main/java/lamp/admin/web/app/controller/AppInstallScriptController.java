@@ -89,7 +89,7 @@ public class AppInstallScriptController {
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 
-		return "redirect:/app/template/{id}";
+		return "redirect:/app/template/{templateId}";
 	}
 
 
@@ -130,11 +130,11 @@ public class AppInstallScriptController {
 
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
 
-		return "redirect:/app/template/{id}";
+		return "redirect:/app/template/{templateId}";
 	}
 
 	@RequestMapping(path = "/{scriptId}/delete", method = RequestMethod.GET)
-	public String delete(@RequestParam("templateId") String templateId,
+	public String delete(@PathVariable("templateId") String templateId,
 			@PathVariable("scriptId") Long scriptId,
 			RedirectAttributes redirectAttributes) {
 
@@ -142,7 +142,7 @@ public class AppInstallScriptController {
 
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.DELETE_SUCCESS));
 
-		return "redirect:/app/template/{id}";
+		return "redirect:/app/template/{templateId}";
 	}
 
 	@ModelAttribute("JSON")
