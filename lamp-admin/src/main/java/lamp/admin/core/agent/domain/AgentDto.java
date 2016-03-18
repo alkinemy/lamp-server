@@ -3,7 +3,6 @@ package lamp.admin.core.agent.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Date;
 
@@ -12,14 +11,11 @@ import java.util.Date;
 @ToString
 public class AgentDto {
 
-	@NotEmpty
 	private String id;
-	@NotEmpty
 	private String name;
 
-	@NotEmpty
-	private String type;
-	@NotEmpty
+	private String groupId;
+	private String artifactId;
 	private String version;
 
 	private String protocol;

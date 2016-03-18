@@ -1,40 +1,30 @@
-package lamp.admin.web.controller;
+package lamp.admin.web.server.controller;
 
-import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.domain.AgentDto;
 import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.core.app.AppManagementListener;
-import lamp.admin.core.app.domain.*;
+import lamp.admin.core.app.domain.AppDto;
+import lamp.admin.core.app.domain.LogFile;
 import lamp.admin.core.app.service.AppFacadeService;
-import lamp.admin.core.app.service.AppManagementListenerService;
-import lamp.admin.core.app.service.AppTemplateService;
-import lamp.admin.core.base.exception.MessageException;
-import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
-import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @MenuMapping(MenuConstants.AGENT_APP)
 @Controller
-@RequestMapping("/agent/{agentId}")
+@RequestMapping("/server/agent/{agentId}")
 public class AgentAppLogController {
 
 	@Autowired
@@ -52,7 +42,7 @@ public class AgentAppLogController {
 
 		List<LogFile> logFiles = appFacadeService.getLogFiles(agentId, appId);
 		model.addAttribute("logFiles", logFiles);
-		return "agent/app/log/list";
+		return "server/agent/app/log/list";
 	}
 
 	@RequestMapping(path = "/app/{appId}/log/{filename:.+}", method = RequestMethod.GET)

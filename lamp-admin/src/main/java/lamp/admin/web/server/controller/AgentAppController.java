@@ -1,4 +1,4 @@
-package lamp.admin.web.controller;
+package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.domain.AgentDto;
@@ -12,8 +12,6 @@ import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
@@ -25,17 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @MenuMapping(MenuConstants.AGENT_APP)
 @Controller
-@RequestMapping("/agent/{agentId}")
+@RequestMapping("/server/agent/{agentId}")
 public class AgentAppController {
 
 	@Autowired
@@ -61,7 +56,7 @@ public class AgentAppController {
 	public String list(@PathVariable("agentId") String agentId, Model model) {
 		List<AppDto> appList = appFacadeService.getAppDtoList(agentId);
 		model.addAttribute("appList", appList);
-		return "agent/app/list";
+		return "server/agent/app/list";
 	}
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.GET, params = {"step=step1"})
@@ -74,7 +69,7 @@ public class AgentAppController {
 		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
 		model.addAttribute("appTemplateList", appTemplateList);
 
-		return "agent/app/edit-step1";
+		return "server/agent/app/edit-step1";
 	}
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.POST, params = {"step=step1"})
@@ -117,7 +112,7 @@ public class AgentAppController {
 			editForm.setParameters(appTemplateDto.getParameters());
 			editForm.setVersion(versions.stream().findFirst().orElse(null));
 		}
-		return "agent/app/edit";
+		return "server/agent/app/edit";
 	}
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.POST)
@@ -135,7 +130,7 @@ public class AgentAppController {
 
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
-			return "redirect:/agent/{agentId}/app";
+			return "redirect:/server/agent/{agentId}/app";
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
 			return create(agentId, editForm, model, HttpMethod.POST);
@@ -162,7 +157,7 @@ public class AgentAppController {
 		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 		model.addAttribute("appManagementListeners", appManagementListeners);
 
-		return "agent/app/delete";
+		return "server/agent/app/delete";
 	}
 
 	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.POST)
@@ -174,7 +169,7 @@ public class AgentAppController {
 						RedirectAttributes redirectAttributes) {
 		try {
 			appFacadeService.deregisterApp(agentId, appId, editForm);
-			return "redirect:/agent/{agentId}/app";
+			return "redirect:/server/agent/{agentId}/app";
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
 			return deleteForm(agentId, appId, editForm, model);
@@ -201,7 +196,7 @@ public class AgentAppController {
 		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 		model.addAttribute("appManagementListeners", appManagementListeners);
 		
-		return "agent/app/start";
+		return "server/agent/app/start";
 	}
 
 	@RequestMapping(path = "/app/{appId}/start", method = RequestMethod.POST)
@@ -213,7 +208,7 @@ public class AgentAppController {
 						RedirectAttributes redirectAttributes) {
 		try {
 			appFacadeService.startApp(agentId, appId, editForm);
-			return "redirect:/agent/{agentId}/app";
+			return "redirect:/server/agent/{agentId}/app";
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
 			return startForm(agentId, appId, editForm, model);
@@ -238,7 +233,7 @@ public class AgentAppController {
 		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 		model.addAttribute("appManagementListeners", appManagementListeners);
 
-		return "agent/app/stop";
+		return "server/agent/app/stop";
 	}
 
 	@RequestMapping(path = "/app/{appId}/stop", method = RequestMethod.POST)
@@ -250,7 +245,7 @@ public class AgentAppController {
 						RedirectAttributes redirectAttributes) {
 		try {
 			appFacadeService.stopApp(agentId, appId, editForm);
-			return "redirect:/agent/{agentId}/app";
+			return "redirect:/server/agent/{agentId}/app";
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
 			return stopForm(agentId, appId, editForm, model);

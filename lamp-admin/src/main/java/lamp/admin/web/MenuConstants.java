@@ -7,7 +7,7 @@ public abstract class MenuConstants {
 			public static final String AGENT_INSTALL = "AGENT_INSTALL";
 			public static final String AGENT_START = "AGENT_START";
 			public static final String AGENT_STOP= "AGENT_STOP";
-		public static final String AVAILABLE_AGENT = "AVAILABLE_AGENT";
+		public static final String AGENT = "AGENT";
 			public static final String AGENT_APP = "AGENT_APP";
 		public static final String SSH_KEY = "SSH_KEY";
 		public static final String AGENT_EVENT = "AGENT_EVENT";

@@ -34,7 +34,7 @@ public class MenuItemService {
 				{
 
 					MenuItem agentAppMenuItem  = MenuItem.of(AGENT_APP, "Agent App", null);
-					MenuItem availableAgentMenuItem = MenuItem.of(AVAILABLE_AGENT, "Available Agent", "/agent", "icon-bulb");
+					MenuItem availableAgentMenuItem = MenuItem.of(AGENT, "Agent", "/server/agent", "icon-bulb");
 					availableAgentMenuItem.setSubMenuItems(Lists.newArrayList(agentAppMenuItem));
 					subMenuItems.add(availableAgentMenuItem);
 

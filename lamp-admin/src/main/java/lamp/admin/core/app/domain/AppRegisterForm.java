@@ -19,7 +19,7 @@ public class AppRegisterForm {
 	private String templateId;
 	private String version;
 
-	private Boolean monitor;
+	private Boolean monitor = Boolean.FALSE;
 
 	private ParametersType parametersType;
 	private String parameters;

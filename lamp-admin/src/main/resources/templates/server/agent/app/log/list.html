@@ -31,7 +31,7 @@
 							<td th:text="${logFile.lastModified}"> Joke </td>
 							<td th:text="${logFile.size}"> Joke </td>
 							<td>
-								<a th:href="@{/agent/{agentId}/app/{appId}/log/{filename}(agentId=${agent.id},appId=${app.id},filename=${logFile.name})}" class="btn btn-icon-only blue">
+								<a th:href="@{/server/agent/{agentId}/app/{appId}/log/{filename}(agentId=${agent.id},appId=${app.id},filename=${logFile.name})}" class="btn btn-icon-only blue">
 									<i class="fa fa-download"></i></a>
 							</td>
 						</tr>

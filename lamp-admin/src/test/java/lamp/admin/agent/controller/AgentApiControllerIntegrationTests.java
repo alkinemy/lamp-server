@@ -52,7 +52,7 @@ public class AgentApiControllerIntegrationTests {
 		assertThat(saved).isNotNull();
 		assertThat(saved.getId()).isEqualTo("test-1");
 		assertThat(saved.getName()).isEqualTo("test");
-		assertThat(saved.getType()).isEqualTo("type");
+		assertThat(saved.getArtifactId()).isEqualTo("type");
 		assertThat(saved.getVersion()).isEqualTo("0.0.1");
 		assertThat(saved.getHostname()).isEqualTo("host");
 		assertThat(saved.getAddress()).isEqualTo("localhost");

@@ -13,7 +13,7 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
-						<a th:href="@{/agent/__${agent.id}__/app/create(step=step1)}" class="btn btn-sm default">등록</a>
+						<a th:href="@{/server/agent/{id}/app/create(id=${agent.id},step=step1)}" class="btn btn-sm default">등록</a>
 					</div>
 				</div>
 			</div>
@@ -48,13 +48,13 @@
 							<td th:text="${app.pid}"> Joke </td>
 							<td th:text="${app.monitor}"> Joke </td>
 							<td>
-								<a th:href="@{/agent/{agentId}/app/{appId}/log(agentId=${agent.id},appId=${app.id})}" class="btn btn-icon-only blue">
+								<a th:href="@{/server/agent/{agentId}/app/{appId}/log(agentId=${agent.id},appId=${app.id})}" class="btn btn-icon-only blue">
 									<i class="fa fa-file-text-o"></i></a>
-								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/start}" class="btn btn-icon-only blue">
+								<a th:href="@{/server/agent/__${agent.id}__/app/__${app.id}__/start}" class="btn btn-icon-only blue">
 									<i class="fa fa-play"></i></a>
-								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/stop}" class="btn btn-icon-only yellow">
+								<a th:href="@{/server/agent/__${agent.id}__/app/__${app.id}__/stop}" class="btn btn-icon-only yellow">
 									<i class="fa fa-stop"></i></a>
-								<a th:href="@{/agent/__${agent.id}__/app/__${app.id}__/delete}" class="btn btn-icon-only red">
+								<a th:href="@{/server/agent/__${agent.id}__/app/__${app.id}__/delete}" class="btn btn-icon-only red">
 									<i class="fa fa-eject"></i></a>
 								<a th:href="@{/app/create(agentId=${agent.id},id=${app.id})}" class="btn btn-icon-only blue">
 									<i class="fa fa-object-group"></i></a>

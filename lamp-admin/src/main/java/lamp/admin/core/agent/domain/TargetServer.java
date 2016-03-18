@@ -57,7 +57,6 @@ public class TargetServer extends AbstractAuditingEntity implements MonitoringTa
 	// lamp_collection_target
 	@Column(name = "name", table = "lamp_collection_target")
 	private String targetName;
-
 	@Column(name = "hostname", table = "lamp_collection_target")
 	private String targetHostname;
 	@Column(name = "address", table = "lamp_collection_target")

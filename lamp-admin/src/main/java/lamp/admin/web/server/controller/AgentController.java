@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-@MenuMapping(MenuConstants.AVAILABLE_AGENT)
+@MenuMapping(MenuConstants.AGENT)
 @Controller
-@RequestMapping("/agent")
+@RequestMapping("/server/agent")
 public class AgentController {
 
 	@Autowired
@@ -28,7 +28,7 @@ public class AgentController {
 	public String list(Model model, Pageable pageable) {
 		Page<AgentDto> page = agentService.getAgentDtoList(pageable);
 		model.addAttribute("page", page);
-		return "agent/list";
+		return "server/agent/list";
 	}
 
 
@@ -36,7 +36,7 @@ public class AgentController {
 	public String vm(@PathVariable("id") String id, Model model) {
 		List<JavaVirtualMachine> vmList = agentService.getJavaVmList(id);
 		model.addAttribute("vmList", vmList);
-		return "agent/vm/list";
+		return "server/agent/vm/list";
 	}
 
 }

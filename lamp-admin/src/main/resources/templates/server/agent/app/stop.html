@@ -9,11 +9,11 @@
 					<div class="portlet-title">
 						<div class="caption">
 							<i class="icon-settings font-dark"></i>
-							<span class="caption-subject font-dark sbold uppercase" >App Start</span>
+							<span class="caption-subject font-dark sbold uppercase" >App Stop</span>
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form" th:action="@{/agent/{agentId}/app/{appId}/start(agentId=${agent.id},appId=${app.id})}" th:object="${editForm}" method="post">
+						<form class="form-horizontal" role="form" th:action="@{/server/agent/{agentId}/app/{appId}/stop(agentId=${agent.id},appId=${app.id})}" th:object="${editForm}" method="post">
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
 								The daily cronjob has failed.
 							</div>
