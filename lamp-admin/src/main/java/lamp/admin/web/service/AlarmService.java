@@ -1,8 +1,8 @@
 package lamp.admin.web.service;
 
-import lamp.alarm.core.model.AlarmDefinition;
-import lamp.alarm.health.model.HealthAlarmDefinition;
-import lamp.alarm.health.service.HealthAlarmDefinitionProvider;
+import lamp.alert.core.model.AlertRule;
+import lamp.alert.health.model.HealthAlertRule;
+import lamp.alert.health.service.HealthAlertRuleProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,16 +10,16 @@ import java.util.List;
 
 
 @Service
-public class AlarmService implements HealthAlarmDefinitionProvider {
+public class AlarmService implements HealthAlertRuleProvider {
 
-	@Override public List<AlarmDefinition> getHealthAlarmDefinitions() {
-		List<AlarmDefinition> alarmDefinitions = new ArrayList<>();
-		HealthAlarmDefinition alarmDefinition = new HealthAlarmDefinition();
+	@Override public List<AlertRule> getHealthAlertRules() {
+		List<AlertRule> alertRules = new ArrayList<>();
+		HealthAlertRule alarmDefinition = new HealthAlertRule();
 		alarmDefinition.setId("health");
-		alarmDefinition.setName("Health Alarm");
-		alarmDefinitions.add(alarmDefinition);
+		alarmDefinition.setName("Health Alert");
+		alertRules.add(alarmDefinition);
 
-		return alarmDefinitions;
+		return alertRules;
 	}
 
 }

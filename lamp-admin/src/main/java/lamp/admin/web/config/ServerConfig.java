@@ -1,8 +1,8 @@
 package lamp.admin.web.config;
 
-import lamp.admin.web.service.AlarmEventService;
+import lamp.admin.web.service.AlertEventService;
 import lamp.admin.web.service.AlarmService;
-import lamp.alarm.health.service.HealthWatcher;
+import lamp.alert.health.service.HealthMonitoringProcessor;
 import lamp.collector.core.config.CollectorCoreConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +14,8 @@ public class ServerConfig {
 
 
 	@Bean
-	public HealthWatcher healthWatcher(AlarmService alarmService, AlarmEventService alarmEventService) {
-		return new HealthWatcher(alarmService, alarmEventService);
+	public HealthMonitoringProcessor healthWatcher(AlarmService alarmService, AlertEventService alarmEventService) {
+		return new HealthMonitoringProcessor(alarmService, alarmEventService);
 	}
 
 }
