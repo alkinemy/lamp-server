@@ -16,9 +16,8 @@ include 'lamp-admin'
 include 'lamp-collector'
 include 'lamp-collector-core'
 
-include 'lamp-alert-core'
-include 'lamp-alert-health'
-include 'lamp-alert-metrics-kairosdb'
-include 'lamp-alert-metrics-spark'
+include 'lamp-monitoring-core'
+include 'lamp-monitoring-metrics-kairosdb'
+include 'lamp-monitoring-metrics-spark'
 
 

@@ -1,6 +1,6 @@
 package lamp.watcher.kairosdb.service;
 
-import lamp.common.metrics.TargetMetrics;
+import lamp.common.collector.TargetMetrics;
 import lamp.common.monitoring.MonitoringTarget;
 import lamp.common.utils.BooleanUtils;
 import lombok.extern.slf4j.Slf4j;

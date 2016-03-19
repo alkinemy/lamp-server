@@ -1,7 +1,7 @@
 package lamp.collector.core.service;
 
-import lamp.collector.core.service.metrics.MetricsProcessFacadeService;
-import lamp.common.metrics.MetricsTarget;
+import lamp.collector.core.service.metrics.MetricsProcessService;
+import lamp.common.collector.model.MetricsTarget;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,12 +14,12 @@ public class MetricsProcessScheduledService {
 	private MetricsTargetService metricsTargetService;
 
 	@Autowired
-	private MetricsProcessFacadeService metricsProcessFacadeService;
+	private MetricsProcessService metricsProcessService;
 
 	public void process() {
 		Collection<MetricsTarget> collectionTargets = metricsTargetService.getMetricsTargets();
 		collectionTargets.stream()
-				.forEach(metricsProcessFacadeService::process);
+				.forEach(metricsProcessService::process);
 	}
 
 }

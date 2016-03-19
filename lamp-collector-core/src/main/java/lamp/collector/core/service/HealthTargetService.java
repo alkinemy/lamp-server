@@ -1,6 +1,6 @@
 package lamp.collector.core.service;
 
-import lamp.common.metrics.HealthTarget;
+import lamp.common.collector.model.HealthTarget;
 
 import java.util.List;
 

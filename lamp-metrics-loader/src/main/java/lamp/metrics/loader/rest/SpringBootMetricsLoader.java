@@ -1,7 +1,7 @@
 package lamp.metrics.loader.rest;
 
-import lamp.common.metrics.MetricsTarget;
-import lamp.common.metrics.TargetMetrics;
+import lamp.common.collector.model.MetricsTarget;
+import lamp.common.collector.model.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 

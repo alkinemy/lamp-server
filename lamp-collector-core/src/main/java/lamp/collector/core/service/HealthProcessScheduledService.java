@@ -1,7 +1,7 @@
 package lamp.collector.core.service;
 
-import lamp.collector.core.service.health.HealthProcessFacadeService;
-import lamp.common.metrics.HealthTarget;
+import lamp.collector.core.service.health.HealthProcessService;
+import lamp.common.collector.model.HealthTarget;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,11 +14,11 @@ public class HealthProcessScheduledService {
 	private HealthTargetService healthTargetService;
 
 	@Autowired
-	private HealthProcessFacadeService healthProcessFacadeService;
+	private HealthProcessService healthProcessService;
 
 	public void process() {
 		Collection<HealthTarget> collectionTargets = healthTargetService.getHealthTargets();
-		collectionTargets.forEach(healthProcessFacadeService::process);
+		collectionTargets.forEach(healthProcessService::process);
 	}
 
 }

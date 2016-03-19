@@ -2,7 +2,10 @@ package lamp.admin.core.agent.domain;
 
 import lamp.admin.core.base.domain.AbstractAuditingEntity;
 import lamp.admin.core.monitoring.domain.HealthStatusCode;
-import lamp.common.monitoring.MonitoringTarget;
+import lamp.common.collector.model.HealthTarget;
+import lamp.common.collector.model.MetricsTarget;
+import lamp.monitoring.core.health.model.MonitoringHealthTarget;
+import lamp.monitoring.core.metrics.model.MonitoringMetricsTarget;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +21,7 @@ import java.util.Map;
 	@SecondaryTable(name="lamp_collection_target", pkJoinColumns=@PrimaryKeyJoinColumn(name="id")),
 	@SecondaryTable(name="lamp_target_server_status", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
 })
-public class TargetServer extends AbstractAuditingEntity implements MonitoringTarget {
+public class TargetServer extends AbstractAuditingEntity implements HealthTarget, MetricsTarget, MonitoringHealthTarget, MonitoringMetricsTarget {
 
 	@Id
 	private String id;
@@ -70,9 +73,9 @@ public class TargetServer extends AbstractAuditingEntity implements MonitoringTa
 	private String version;
 
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean healthMonitoringEnabled = Boolean.FALSE;
+	private boolean healthMonitoringEnabled = false;
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean healthCollectionEnabled = Boolean.FALSE;
+	private boolean healthCollectionEnabled = false;
 	@Column(table = "lamp_collection_target")
 	private String healthType;
 	@Column(table = "lamp_collection_target")
@@ -81,9 +84,9 @@ public class TargetServer extends AbstractAuditingEntity implements MonitoringTa
 	private String healthExportPrefix;
 
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean metricsMonitoringEnabled = Boolean.FALSE;
+	private boolean metricsMonitoringEnabled = false;
 	@Column(columnDefinition = "TINYINT", table = "lamp_collection_target")
-	private Boolean metricsCollectionEnabled = Boolean.FALSE;
+	private boolean metricsCollectionEnabled = false;
 	@Column(table = "lamp_collection_target")
 	private String metricsType;
 	@Column(table = "lamp_collection_target")

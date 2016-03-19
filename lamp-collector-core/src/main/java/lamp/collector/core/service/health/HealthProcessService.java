@@ -1,26 +1,34 @@
 package lamp.collector.core.service.health;
 
-import lamp.common.metrics.HealthProcessor;
-import lamp.common.metrics.HealthTarget;
-import lamp.common.metrics.TargetHealth;
+import lamp.common.collector.model.HealthTarget;
+import lamp.common.collector.model.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 public class HealthProcessService {
 
 	@Autowired
-	private HealthAsyncProcessorService healthAsyncProcessorService;
+	private HealthLoaderService healthLoaderService;
 
-	@Autowired(required = false)
-	private List<HealthProcessor> healthProcessors;
+	@Autowired
+	private HealthProcessorService healthProcessorService;
 
-	public void process(HealthTarget target, TargetHealth health, Throwable t) {
-		Optional.ofNullable(healthProcessors)
-			.ifPresent(s -> s.forEach(p -> healthAsyncProcessorService.process(p, target, health, t)));
+	@Async
+	public void process(HealthTarget target) {
+		if (!target.isHealthCollectionEnabled()) {
+			return;
+		}
+
+		TargetHealth health = null;
+		Throwable throwable = null;
+		try {
+			health = healthLoaderService.getHealth(target);
+		} catch(Throwable e) {
+			throwable = e;
+		}
+		healthProcessorService.process(target, health, throwable);
 	}
 
 }

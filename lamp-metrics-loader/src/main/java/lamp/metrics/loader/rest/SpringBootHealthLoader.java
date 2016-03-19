@@ -1,7 +1,7 @@
 package lamp.metrics.loader.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lamp.common.metrics.HealthConstants;
+import lamp.common.collector.model.HealthConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;

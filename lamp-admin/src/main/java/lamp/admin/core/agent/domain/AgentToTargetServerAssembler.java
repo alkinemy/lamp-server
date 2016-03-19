@@ -1,7 +1,7 @@
 package lamp.admin.core.agent.domain;
 
-import lamp.collector.core.domain.TargetHealthType;
-import lamp.collector.core.domain.TargetMetricsType;
+import lamp.collector.core.model.TargetHealthType;
+import lamp.collector.core.model.TargetMetricsType;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import lamp.common.utils.assembler.Populater;
 import org.apache.commons.lang.StringUtils;

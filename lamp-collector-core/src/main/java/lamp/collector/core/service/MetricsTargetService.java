@@ -1,6 +1,6 @@
 package lamp.collector.core.service;
 
-import lamp.common.metrics.MetricsTarget;
+import lamp.common.collector.model.MetricsTarget;
 
 import java.util.List;
 

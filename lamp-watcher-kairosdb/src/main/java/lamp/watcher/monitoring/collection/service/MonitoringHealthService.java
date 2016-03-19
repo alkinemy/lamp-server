@@ -1,6 +1,6 @@
 package lamp.watcher.monitoring.collection.service;
 
-import lamp.common.metrics.TargetHealth;
+import lamp.common.collector.TargetHealth;
 import lamp.common.monitoring.MonitoringTarget;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

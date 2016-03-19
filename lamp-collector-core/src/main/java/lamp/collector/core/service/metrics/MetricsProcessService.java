@@ -1,26 +1,35 @@
 package lamp.collector.core.service.metrics;
 
-import lamp.common.metrics.MetricsTarget;
-import lamp.metrics.exporter.MetricsExporter;
-import lamp.common.metrics.TargetMetrics;
+import lamp.common.collector.model.MetricsTarget;
+import lamp.common.collector.model.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 public class MetricsProcessService {
 
 	@Autowired
-	private MetricsAsyncProcessorService metricsAsyncProcessorService;
+	private MetricsLoaderService metricsLoaderService;
 
-	@Autowired(required = false)
-	private List<MetricsExporter> metricsExporters;
+	@Autowired
+	private MetricsProcessorService metricsProcessorService;
 
-	public void process(MetricsTarget target, TargetMetrics metrics, Throwable t) {
-		Optional.ofNullable(metricsExporters)
-			.ifPresent(s -> s.forEach(p -> metricsAsyncProcessorService.process(p, target, metrics, t)));
+	@Async
+	public void process(MetricsTarget target) {
+		if (!target.isMetricsCollectionEnabled()) {
+			return;
+		}
+
+		TargetMetrics metrics = null;
+		Throwable throwable = null;
+		try {
+			metrics = metricsLoaderService.getMetrics(target);
+		} catch(Throwable e) {
+			throwable = e;
+		}
+
+		metricsProcessorService.process(target ,metrics, throwable);
 	}
 
 }

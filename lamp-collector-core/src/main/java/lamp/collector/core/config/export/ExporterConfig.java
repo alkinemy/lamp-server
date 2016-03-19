@@ -19,7 +19,7 @@ public class ExporterConfig {
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_HEALTH_KAFKA_PREFIX + ".enabled", havingValue = "true")
 	@EnableConfigurationProperties({ KafkaHealthExporterProperties.class})
-	public static class ExportHealthKafkaConfig {
+	public static class hKafkaHealtExportConfig {
 
 		@Bean
 		public KafkaHealthExporter kafkaHealthExporter(KafkaHealthExporterProperties properties) {
@@ -46,7 +46,7 @@ public class ExporterConfig {
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_METRICS_KAFKA_PREFIX + ".enabled", havingValue = "true")
 	@EnableConfigurationProperties({ KafkaMetricsExporterProperties.class})
-	public static class ExportMetricsKafkaConfig {
+	public static class KafkaMetricsExportConfig {
 		@Bean
 		public KafkaMetricsExporter kafkaMetricsExporter(KafkaMetricsExporterProperties properties) {
 			return new KafkaMetricsExporter(properties);
@@ -56,7 +56,7 @@ public class ExporterConfig {
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_METRICS_KAIROSDB_PREFIX + ".enabled", havingValue = "true")
 	@EnableConfigurationProperties({ KairosdbMetricsExporterProperties.class})
-	public static class ExportMetricsKairosdbConfig {
+	public static class KairosdbMetricsExportConfig {
 
 		@Bean
 		public KairosdbMetricsExporter kairosdbMetricsExporter(KairosdbMetricsExporterProperties properties) throws Exception {

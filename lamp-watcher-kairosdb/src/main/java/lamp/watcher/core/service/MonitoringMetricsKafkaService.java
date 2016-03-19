@@ -1,6 +1,6 @@
 package lamp.watcher.core.service;
 
-import lamp.common.metrics.TargetMetrics;
+import lamp.common.collector.TargetMetrics;
 import lamp.common.utils.StringUtils;
 import lamp.metrics.exporter.kairosdb.KairosdbMetricsExporter;
 import lamp.support.kafka.KafkaConsumerProperties;

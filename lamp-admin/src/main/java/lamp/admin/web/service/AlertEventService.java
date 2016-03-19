@@ -1,7 +1,8 @@
 package lamp.admin.web.service;
 
-import lamp.alert.core.model.AlertEvent;
-import lamp.alert.core.service.AlertEventProducer;
+
+import lamp.monitoring.core.alert.model.AlertEvent;
+import lamp.monitoring.core.alert.service.AlertEventProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package lamp.collector.app.domain;
 
-import lamp.common.metrics.HealthTarget;
-import lamp.common.metrics.MetricsTarget;
+import lamp.common.collector.model.HealthTarget;
+import lamp.common.collector.model.MetricsTarget;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,9 +1,9 @@
 package lamp.metrics.loader.rest;
 
-import lamp.common.metrics.HealthLoader;
-import lamp.common.metrics.HealthTarget;
-import lamp.common.metrics.MetricsTagConstants;
-import lamp.common.metrics.TargetHealth;
+import lamp.common.collector.service.HealthLoader;
+import lamp.common.collector.model.HealthTarget;
+import lamp.common.collector.model.MetricsTagConstants;
+import lamp.common.collector.model.TargetHealth;
 import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
