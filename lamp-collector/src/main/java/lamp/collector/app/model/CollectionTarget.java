@@ -1,6 +1,7 @@
-package lamp.watcher.support.jpa.domain;
+package lamp.collector.app.model;
 
-import lamp.common.monitoring.MonitoringTarget;
+import lamp.common.collector.model.HealthTarget;
+import lamp.common.collector.model.MetricsTarget;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,8 +16,8 @@ import java.util.Map;
 @Setter
 @ToString
 @Entity
-@Table(name = "lamp_monitoring_target")
-public class JpaMonitoringTarget implements MonitoringTarget {
+@Table(name = "lamp_collection_target")
+public class CollectionTarget implements HealthTarget, MetricsTarget {
 
 	@Id
 	private String id;
@@ -25,24 +26,18 @@ public class JpaMonitoringTarget implements MonitoringTarget {
 	private String hostname;
 	private String address;
 
-	private String agentId;
-
 	private String groupId;
 	private String artifactId;
 	private String version;
 
 	@Column(columnDefinition = "TINYINT")
-	private Boolean healthMonitoringEnabled;
-	@Column(columnDefinition = "TINYINT")
-	private Boolean healthCollectionEnabled;
+	private boolean healthCollectionEnabled;
 	private String healthType;
 	private String healthUrl;
 	private String healthExportPrefix;
 
 	@Column(columnDefinition = "TINYINT")
-	private Boolean metricsMonitoringEnabled;
-	@Column(columnDefinition = "TINYINT")
-	private Boolean metricsCollectionEnabled;
+	private boolean metricsCollectionEnabled;
 	private String metricsType;
 	private String metricsUrl;
 	private String metricsExportPrefix;

@@ -1,4 +1,4 @@
-package lamp.collector.app.domain;
+package lamp.collector.app.model;
 
 import lamp.common.event.Event;
 import lamp.common.event.EventLevel;
