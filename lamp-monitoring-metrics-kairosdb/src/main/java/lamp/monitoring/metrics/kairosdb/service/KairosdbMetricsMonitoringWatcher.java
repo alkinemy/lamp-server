@@ -6,7 +6,7 @@ import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.ExceptionUtils;
 import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.alert.model.AlertState;
-import lamp.monitoring.core.alert.model.ExpressionEvaluationEvent;
+import lamp.monitoring.core.alert.model.event.AlertRuleExpressionEvaluationEvent;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
 import lamp.monitoring.core.metrics.model.MonitoringMetricsTarget;
 import lamp.monitoring.core.metrics.service.MetricsAlertRuleProvider;
@@ -74,9 +74,9 @@ public class KairosdbMetricsMonitoringWatcher {
 									  KairosdbMetricsAlertRule alertRule,
 									  MonitoringMetricsTarget metricsTarget,
 									  DataPoint dataPoint) {
-		ExpressionEvaluationEvent event = new ExpressionEvaluationEvent();
-		event.setAlarmDefinitionId(alertRule.getId());
-		event.setAlarmType(alertRule.getType());
+		AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
+		event.setAlertRuleId(alertRule.getId());
+		event.setAlertType(alertRule.getType());
 		event.setSeverity(alertRule.getSeverity());
 		event.setStateTime(stateTime);
 		event.setTenantId(metricsTarget.getId());

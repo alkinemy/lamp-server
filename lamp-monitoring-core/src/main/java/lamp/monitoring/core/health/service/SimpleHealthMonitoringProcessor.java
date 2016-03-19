@@ -3,7 +3,7 @@ package lamp.monitoring.core.health.service;
 import lamp.monitoring.core.alert.model.AlertRule;
 import lamp.monitoring.core.alert.model.AlertRuleExpression;
 import lamp.monitoring.core.alert.model.AlertState;
-import lamp.monitoring.core.alert.model.ExpressionEvaluationEvent;
+import lamp.monitoring.core.alert.model.event.AlertRuleExpressionEvaluationEvent;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
 import lamp.common.collector.model.TargetHealth;
 import lamp.common.utils.ExceptionUtils;
@@ -28,10 +28,10 @@ public class SimpleHealthMonitoringProcessor extends HealthMonitoringProcessor {
 		for (AlertRule alertRule : alertRules) {
 			AlertRuleExpression expression = alertRule.getExpression();
 
-			ExpressionEvaluationEvent event = new ExpressionEvaluationEvent();
+			AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
 			event.setTenantId(targetHealth.getId());
-			event.setAlarmDefinitionId(alertRule.getId());
-			event.setAlarmType(alertRule.getType());
+			event.setAlertRuleId(alertRule.getId());
+			event.setAlertType(alertRule.getType());
 			event.setSeverity(alertRule.getSeverity());
 			event.setDimension(targetHealth.getHealth());
 			event.setStateTime(stateTime);

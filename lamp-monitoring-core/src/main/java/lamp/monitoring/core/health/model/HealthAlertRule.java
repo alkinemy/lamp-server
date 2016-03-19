@@ -18,7 +18,7 @@ public class HealthAlertRule implements AlertRule {
 	private String id;
 	private String name;
 	private String type = AlertType.HEALTH.name();
-	private AlertSeverity severity = AlertSeverity.WARNING;
+	private AlertSeverity severity = AlertSeverity.WARN;
 
 	private List<String> okActions;
 	private List<String> alarmActions;

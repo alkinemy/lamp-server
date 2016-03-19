@@ -17,5 +17,9 @@ public class Alert {
     private Map<String, Object> dimension;
     private AlertState state;
     private Date stateTime;
+    private AlertStateHistory lastStateHistory;
 
+    public AlertStateHistory getLastStateHistory() {
+        return lastStateHistory;
+    }
 }

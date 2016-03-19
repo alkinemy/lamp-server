@@ -40,8 +40,8 @@ public class MetricsWatcher {
 		for (AlertRule alertRule : alertRules) {
 			AlertEvent alertEvent = new AlertEvent();
 			alertEvent.setTenantId(targetMetrics.getId());
-			alertEvent.setAlarmDefinitionId(alertRule.getId());
-			alertEvent.setAlarmType(alertRule.getType());
+			alertEvent.setAlertRuleId(alertRule.getId());
+			alertEvent.setAlertType(alertRule.getType());
 			alertEvent.setSeverity(alertRule.getSeverity());
 			alertEvent.setDimension(targetMetrics.getMetrics());
 			alertEvent.setStateTime(stateTime);
