@@ -29,18 +29,16 @@ public class SimpleHealthMonitoringProcessor extends HealthMonitoringProcessor {
 			AlertRuleExpression expression = alertRule.getExpression();
 
 			AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
-			event.setTenantId(targetHealth.getId());
-			event.setAlertRuleId(alertRule.getId());
-			event.setAlertType(alertRule.getType());
-			event.setSeverity(alertRule.getSeverity());
-			event.setDimension(targetHealth.getHealth());
-			event.setStateTime(stateTime);
+			event.setTenant(targetHealth);
+			event.setAlertRule(alertRule);
+			event.setReasonData(targetHealth.getHealth());
+			event.setTimestamp(stateTime);
 			try {
 				AlertState state = expression.evaluate(targetHealth);
 				event.setState(state);
 			} catch (Throwable t) {
 				event.setState(AlertState.UNDETERMINED);
-				event.setStateDescription(ExceptionUtils.getStackTrace(t));
+				event.setReason(ExceptionUtils.getStackTrace(t));
 			}
 
 			alertEventProducer.send(event);

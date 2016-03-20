@@ -18,28 +18,31 @@ public class AlertRuleExpressionEvaluationEventHandler {
     public void handle(AlertRuleExpressionEvaluationEvent event) {
         AlertState state = event.getState();
         if (AlertState.OK.equals(state)) {
-            Optional<Alert> alertOptional = alertService.getAlertOptional(event.getAlertRuleId(), event.getTenantId());
+            Optional<Alert> alertOptional = alertService.getAlertOptional(event.getTenant(), event.getAlertRule());
             alertOptional.ifPresent(alert -> {
                 AlertStateHistory stateHistory = newAlertStateHistory(event);
                 alertService.updateState(alert, stateHistory);
 
                 // Alert State Change Event
                 AlertStateChangeEvent stateChangeEvent = new AlertStateChangeEvent();
+                stateChangeEvent.setAlert(alert);
                 alertEventProducer.send(stateChangeEvent);
             });
         } else {
             AlertStateHistory stateHistory = newAlertStateHistory(event);
             Alert alert = alertService.createOrGetAlert(stateHistory);
-            AlertStateHistory lastStateHistory = alert.getLastStateHistory();
-            if (stateHistory.getId().equals(lastStateHistory.getId())) {
+            if (alert.getOldState() == null) {
                  // Alert Create event
                 AlertCreateEvent createEvent = new AlertCreateEvent();
+                createEvent.setAlert(alert);
                 alertEventProducer.send(createEvent);
             } else {
                 alertService.updateState(alert, stateHistory);
-                if (!lastStateHistory.getState().equals(stateHistory.getState())) {
+                if (!alert.getOldState().equals(alert.getNewState())) {
                     // Alert State Change Event
                     AlertStateChangeEvent stateChangeEvent = new AlertStateChangeEvent();
+                    stateChangeEvent.setAlert(alert);
+
                     alertEventProducer.send(stateChangeEvent);
                 }
             }

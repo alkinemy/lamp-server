@@ -1,7 +1,8 @@
 package lamp.monitoring.core.alert.model.event;
 
+import lamp.monitoring.core.alert.model.Alert;
 import lamp.monitoring.core.alert.model.AlertEvent;
-import lamp.monitoring.core.alert.model.AlertState;
+import lamp.monitoring.core.alert.model.AlertStateHistory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class AlertStateChangeEvent implements AlertEvent {
 
-    private AlertState state;
+    private Alert alert;
 
 }

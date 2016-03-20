@@ -66,7 +66,7 @@ public class RestTemplateMetricsLoader implements MetricsLoader {
 			tags.putAll(metricsTarget.getTags());
 		}
 
-		return new TargetMetrics(timestamp, metricsTarget.getId(), metricsTarget.getName(), assembledMetrics, tags);
+		return new TargetMetrics(timestamp, metricsTarget.getId(), metricsTarget.getName(), metricsTarget.getGroupId(), assembledMetrics, tags);
 	}
 
 }

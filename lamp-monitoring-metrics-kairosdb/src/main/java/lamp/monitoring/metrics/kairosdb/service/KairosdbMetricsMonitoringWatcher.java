@@ -75,16 +75,15 @@ public class KairosdbMetricsMonitoringWatcher {
 									  MonitoringMetricsTarget metricsTarget,
 									  DataPoint dataPoint) {
 		AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
-		event.setAlertRuleId(alertRule.getId());
-		event.setAlertType(alertRule.getType());
-		event.setSeverity(alertRule.getSeverity());
-		event.setStateTime(stateTime);
-		event.setTenantId(metricsTarget.getId());
+		event.setTenant(metricsTarget);
+		event.setAlertRule(alertRule);
+		event.setTimestamp(stateTime);
+
 		try {
 			if (dataPoint != null) {
 				Map<String, Object> dimension = new LinkedHashMap<>();
 				dimension.put(String.valueOf(dataPoint.getTimestamp()), dataPoint.getValue());
-				event.setDimension(dimension);
+				event.setReasonData(dimension);
 			}
 
 			KairosdbAlertRuleExpression expression = alertRule.getExpression();
@@ -92,7 +91,7 @@ public class KairosdbMetricsMonitoringWatcher {
 			event.setState(state);
 		} catch (Throwable t) {
 			event.setState(AlertState.UNDETERMINED);
-			event.setStateDescription(ExceptionUtils.getStackTrace(t));
+			event.setReason(ExceptionUtils.getStackTrace(t));
 		}
 
 		alertEventProducer.send(event);

@@ -1,5 +1,6 @@
 package lamp.common.collector.model;
 
+import lamp.common.monitoring.model.Tenant;
 import lombok.*;
 
 import java.util.Map;
@@ -9,12 +10,13 @@ import java.util.Map;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetHealth {
+public class TargetHealth implements Tenant {
 
 	private long timestamp;
 
 	private String id;
 	private String name;
+	private String groupId;
 
 	private Map<String, Object> health;
 

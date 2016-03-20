@@ -1,8 +1,8 @@
 package lamp.monitoring.core.metrics.model;
 
-public interface MonitoringMetricsTarget {
+import lamp.common.monitoring.model.Tenant;
 
-    String getId();
+public interface MonitoringMetricsTarget extends Tenant {
 
     boolean isMetricsMonitoringEnabled();
 

@@ -17,13 +17,14 @@ public class AlertStateHistory {
     private String alertId;
     private String alertRuleId;
     private String tenantId;
-    private Date stateTime;
-    private AlertState state;
-    private String stateDescription;
 
-    private String alertType;
-    private AlertSeverity severity;
-    private AlertCondition condition;
+    private AlertState oldState;
+    private AlertState newState;
+    private Date timestamp;
+
+    private String reason;
+    private String reasonData;
 
     private Map<String, Object> dimension;
+
 }

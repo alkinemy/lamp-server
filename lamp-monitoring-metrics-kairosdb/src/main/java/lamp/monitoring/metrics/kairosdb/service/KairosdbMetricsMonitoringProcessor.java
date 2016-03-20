@@ -43,11 +43,9 @@ public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcess
 		List<KairosdbMetricsAlertRule> alertRules = metricsAlertRuleProvider.getMetricsAlertRules(KairosdbMetricsAlertRule.class);
 		for (KairosdbMetricsAlertRule alertRule : alertRules) {
 			AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
-			event.setTenantId(metricsTarget.getId());
-			event.setAlertRuleId(alertRule.getId());
-			event.setAlertType(alertRule.getType());
-			event.setSeverity(alertRule.getSeverity());
-			event.setStateTime(stateTime);
+			event.setTenant(metricsTarget);
+			event.setAlertRule(alertRule);
+			event.setTimestamp(stateTime);
 
 			KairosdbAlertRuleExpression expression = alertRule.getExpression();
 			try {
@@ -62,7 +60,7 @@ public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcess
 					if (dataPoint != null) {
 						Map<String, Object> dimension = new LinkedHashMap<>();
 						dimension.put(String.valueOf(dataPoint.getTimestamp()), dataPoint.getValue());
-						event.setDimension(dimension);
+						event.setReasonData(dimension);
 					}
 
 					AlertState state = expression.evaluate(dataPoint);
@@ -70,14 +68,14 @@ public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcess
 				} else {
 					event.setState(AlertState.UNDETERMINED);
 					if (CollectionUtils.isNotEmpty(response.getErrors())) {
-						event.setStateDescription(response.getErrors().get(0));
+						event.setReason(response.getErrors().get(0));
 					} else {
-						event.setStateDescription(response.getBody());
+						event.setReason(response.getBody());
 					}
 				}
 			} catch (Throwable t) {
 				event.setState(AlertState.UNDETERMINED);
-				event.setStateDescription(ExceptionUtils.getStackTrace(t));
+				event.setReason(ExceptionUtils.getStackTrace(t));
 			}
 
 			alertEventProducer.send(event);

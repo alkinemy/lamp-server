@@ -1,25 +1,25 @@
 package lamp.monitoring.core.alert.model;
 
+import lamp.common.monitoring.model.Tenant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.Map;
 
 @Getter
 @Setter
 @ToString
 public class Alert {
 
-    private String tenantId;
-    private String alarmDefinitionId;
-    private Map<String, Object> dimension;
-    private AlertState state;
-    private Date stateTime;
-    private AlertStateHistory lastStateHistory;
+    private String id;
 
-    public AlertStateHistory getLastStateHistory() {
-        return lastStateHistory;
-    }
+    private Tenant tenant;
+    private AlertRule<?> rule;
+
+    private AlertState oldState;
+    private AlertState newState;
+    private Date timestamp;
+
+
 }

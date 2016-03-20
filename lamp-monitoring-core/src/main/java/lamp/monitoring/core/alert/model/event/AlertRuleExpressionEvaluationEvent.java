@@ -1,8 +1,9 @@
 package lamp.monitoring.core.alert.model.event;
 
 import lamp.monitoring.core.alert.model.AlertEvent;
-import lamp.monitoring.core.alert.model.AlertSeverity;
+import lamp.monitoring.core.alert.model.AlertRule;
 import lamp.monitoring.core.alert.model.AlertState;
+import lamp.common.monitoring.model.Tenant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,15 +16,13 @@ import java.util.Map;
 @ToString
 public class AlertRuleExpressionEvaluationEvent implements AlertEvent {
 
-    private String alertType;
+    private Tenant tenant;
+    private AlertRule<?> alertRule;
 
-    private String tenantId;
-    private String alertRuleId;
+    private Date timestamp;
+
     private AlertState state;
-    private String stateDescription;
-    private Date stateTime;
-    private AlertSeverity severity;
-
-    private Map<String, Object> dimension;
+    private String reason;
+    private Map<String, Object> reasonData;
 
 }

@@ -21,7 +21,7 @@ public class MetricsAlertRule<E extends AlertRuleExpression> implements AlertRul
 	private AlertSeverity severity = AlertSeverity.WARN;
 
 	private List<String> okActions;
-	private List<String> alarmActions;
+	private List<String> alertActions;
 	private List<String> undeterminedActions;
 
 	private E expression;

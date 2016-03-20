@@ -1,10 +1,11 @@
 package lamp.common.collector.model;
 
+import lamp.common.monitoring.model.Tenant;
+
 import java.util.Map;
 
-public interface HealthTarget {
+public interface HealthTarget extends Tenant {
 
-	String getId();
 	String getName();
 
 	String getHostname();

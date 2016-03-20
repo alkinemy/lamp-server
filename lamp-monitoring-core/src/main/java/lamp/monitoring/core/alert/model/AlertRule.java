@@ -10,9 +10,9 @@ public interface AlertRule<E extends AlertRuleExpression> {
 
     AlertSeverity getSeverity();
 
-    List<String> getOkActions();
-    List<String> getAlarmActions();
+    List<String> getAlertActions();
     List<String> getUndeterminedActions();
+    List<String> getOkActions();
 
     E getExpression();
 

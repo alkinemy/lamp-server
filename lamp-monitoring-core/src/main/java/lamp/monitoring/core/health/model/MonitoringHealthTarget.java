@@ -1,8 +1,8 @@
 package lamp.monitoring.core.health.model;
 
-public interface MonitoringHealthTarget {
+import lamp.common.monitoring.model.Tenant;
 
-    String getId();
+public interface MonitoringHealthTarget extends Tenant {
 
     boolean isHealthMonitoringEnabled();
 

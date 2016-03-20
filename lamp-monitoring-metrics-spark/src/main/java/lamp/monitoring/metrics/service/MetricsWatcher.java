@@ -35,28 +35,28 @@ public class MetricsWatcher {
 	}
 
 	protected void watch(TargetMetrics targetMetrics) {
-		Date stateTime = new Date();
-		List<AlertRule> alertRules = metricsAlertRuleProvider.getMetricsAlertRules();
-		for (AlertRule alertRule : alertRules) {
-			AlertEvent alertEvent = new AlertEvent();
-			alertEvent.setTenantId(targetMetrics.getId());
-			alertEvent.setAlertRuleId(alertRule.getId());
-			alertEvent.setAlertType(alertRule.getType());
-			alertEvent.setSeverity(alertRule.getSeverity());
-			alertEvent.setDimension(targetMetrics.getMetrics());
-			alertEvent.setStateTime(stateTime);
-
-			AlertRuleExpression expression = alertRule.getExpression();
-			try {
-				AlertState state = expression.evaluate(targetMetrics);
-				alertEvent.setState(state);
-			} catch (Throwable t) {
-				alertEvent.setState(AlertState.UNDETERMINED);
-				alertEvent.setStateDescription(ExceptionUtils.getStackTrace(t));
-			}
-
-			alertEventProducer.send(alertEvent);
-		}
+//		Date stateTime = new Date();
+//		List<AlertRule> alertRules = metricsAlertRuleProvider.getMetricsAlertRules();
+//		for (AlertRule alertRule : alertRules) {
+//			AlertEvent alertEvent = new AlertEvent();
+//			alertEvent.setTenantId(targetMetrics.getId());
+//			alertEvent.setAlertRuleId(alertRule.getId());
+//			alertEvent.setAlertType(alertRule.getType());
+//			alertEvent.setSeverity(alertRule.getSeverity());
+//			alertEvent.setDimension(targetMetrics.getMetrics());
+//			alertEvent.setStateTime(stateTime);
+//
+//			AlertRuleExpression expression = alertRule.getExpression();
+//			try {
+//				AlertState state = expression.evaluate(targetMetrics);
+//				alertEvent.setState(state);
+//			} catch (Throwable t) {
+//				alertEvent.setState(AlertState.UNDETERMINED);
+//				alertEvent.setStateDescription(ExceptionUtils.getStackTrace(t));
+//			}
+//
+//			alertEventProducer.send(alertEvent);
+//		}
 	}
 
 }
