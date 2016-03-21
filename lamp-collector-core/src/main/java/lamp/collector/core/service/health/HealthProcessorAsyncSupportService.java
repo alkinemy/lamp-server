@@ -17,7 +17,7 @@ public class HealthProcessorAsyncSupportService {
 	@Autowired
 	private EventPublisher eventPublisher;
 
-	@Async
+	@Async("healthProcessAsyncExecutor")
 	public void process(HealthProcessor healthProcessor, HealthTarget healthTarget, TargetHealth targetHealth, Throwable t) {
 		try {
 			healthProcessor.process(healthTarget, targetHealth, t);

@@ -33,4 +33,20 @@ public class AsyncConfig implements AsyncConfigurer {
 	@Override public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
 		return asyncUncaughtExceptionHandler();
 	}
+
+	@Bean public Executor healthProcessAsyncExecutor() {
+		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+		threadPoolTaskExecutor.setThreadNamePrefix("health-processor-");
+		threadPoolTaskExecutor.setCorePoolSize(5);
+		threadPoolTaskExecutor.setMaxPoolSize(20);
+		return threadPoolTaskExecutor;
+	}
+
+	@Bean public Executor metricsProcessAsyncExecutor() {
+		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+		threadPoolTaskExecutor.setThreadNamePrefix("metrics-processor-");
+		threadPoolTaskExecutor.setCorePoolSize(5);
+		threadPoolTaskExecutor.setMaxPoolSize(20);
+		return threadPoolTaskExecutor;
+	}
 }

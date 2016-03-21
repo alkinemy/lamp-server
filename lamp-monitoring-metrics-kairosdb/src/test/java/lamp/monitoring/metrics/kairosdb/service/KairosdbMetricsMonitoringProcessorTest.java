@@ -25,7 +25,7 @@ public class KairosdbMetricsMonitoringProcessorTest {
 			public <R extends AlertRule> List<R> getMetricsAlertRules(Class<R> ruleClass) {
 				KairosdbMetricsAlertRule metricsAlarmDefinition = new KairosdbMetricsAlertRule();
 				KairosdbAlertRuleExpression kairosdbAlarmExpression = new KairosdbAlertRuleExpression();
-				kairosdbAlarmExpression.setMetric("server.mem.actualUsed");
+				kairosdbAlarmExpression.setMetric("server.mem.used");
 				kairosdbAlarmExpression.setTagNames(new String[] {"id"});
 //				kairosdbAlarmExpression.setFunctions(new KairosdbFunction[] {KairosdbFunction.RATE_SECOND});
 				metricsAlarmDefinition.setExpression(kairosdbAlarmExpression);
@@ -37,7 +37,7 @@ public class KairosdbMetricsMonitoringProcessorTest {
 
 		KairosdbProperties properties = new KairosdbProperties() {
 			@Override public String getUrl() {
-				return "http://localhost:8081";
+				return "http://localhost:8080";
 			}
 		};
 		KairosdbClient kairosdbClient = new KairosdbClient(properties);
@@ -46,11 +46,11 @@ public class KairosdbMetricsMonitoringProcessorTest {
 				System.out.println("alarmEvent = " + alarmEvent);
 			}
 		};
-		KairosdbMetricsMonitoringProcessor watcher = new KairosdbMetricsMonitoringProcessor(metricsAlertRuleProvider, kairosdbClient, alertEventProducer);
+		KairosdbMetricsMonitoringProcessor processor = new KairosdbMetricsMonitoringProcessor(metricsAlertRuleProvider, kairosdbClient, alertEventProducer);
 
 		MetricsTarget metricsTarget = new MetricsTarget() {
 			@Override public String getId() {
-				return "kangwooui-iMac.local";
+				return "dc386fc0-1319-4a7d-b218-07b5c55784ff";
 			}
 
 			@Override public String getName() {
@@ -91,7 +91,7 @@ public class KairosdbMetricsMonitoringProcessorTest {
 				return true;
 			}
 		};
-		watcher.monitoring(metricsTarget);
+		processor.monitoring(metricsTarget);
 
 	}
 }

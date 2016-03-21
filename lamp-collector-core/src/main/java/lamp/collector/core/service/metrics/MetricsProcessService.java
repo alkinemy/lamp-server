@@ -4,7 +4,6 @@ import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 public class MetricsProcessService {
@@ -15,7 +14,6 @@ public class MetricsProcessService {
 	@Autowired
 	private MetricsProcessorService metricsProcessorService;
 
-	@Async
 	public void process(MetricsTarget target) {
 		if (!target.isMetricsCollectionEnabled()) {
 			return;

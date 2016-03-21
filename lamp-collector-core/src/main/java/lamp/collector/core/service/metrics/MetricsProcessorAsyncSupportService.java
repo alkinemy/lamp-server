@@ -17,7 +17,7 @@ public class MetricsProcessorAsyncSupportService {
 	@Autowired
 	private EventPublisher eventPublisher;
 
-	@Async
+	@Async("metricsProcessAsyncExecutor")
 	public void process(MetricsProcessor metricsProcessor, MetricsTarget metricsTarget, TargetMetrics targetMetrics, Throwable t) {
 		try {
 			metricsProcessor.process(metricsTarget, targetMetrics, t);

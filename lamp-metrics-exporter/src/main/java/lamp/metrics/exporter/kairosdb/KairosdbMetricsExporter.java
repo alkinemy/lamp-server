@@ -27,6 +27,8 @@ public class KairosdbMetricsExporter extends MetricsExporter {
 
 	@Override
 	public void export(TargetMetrics metrics) {
+		log.debug("Kairosdb Metrics Export : {}", metrics);
+
 		try {
 			long timestamp = metrics.getTimestamp();
 			MetricBuilder metricBuilder = MetricBuilder.getInstance();

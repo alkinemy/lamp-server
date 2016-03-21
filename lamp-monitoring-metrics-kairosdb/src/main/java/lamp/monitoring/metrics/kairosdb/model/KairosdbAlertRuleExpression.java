@@ -52,6 +52,8 @@ public class KairosdbAlertRuleExpression implements AlertRuleExpression<DataPoin
 	@Override public AlertState evaluate(DataPoint context) {
 		Object value = context.getValue();
 		LazilyParsedNumber number = new LazilyParsedNumber(threshold);
+		Number number1 = 1;
+
 		System.out.println(context.getValue());
 		System.out.println(context.getValue().getClass());
 		return null;

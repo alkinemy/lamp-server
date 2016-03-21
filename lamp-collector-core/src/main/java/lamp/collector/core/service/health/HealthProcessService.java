@@ -4,7 +4,6 @@ import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 public class HealthProcessService {
@@ -15,7 +14,6 @@ public class HealthProcessService {
 	@Autowired
 	private HealthProcessorService healthProcessorService;
 
-	@Async
 	public void process(HealthTarget target) {
 		if (!target.isHealthCollectionEnabled()) {
 			return;

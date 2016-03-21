@@ -28,6 +28,8 @@ public class KafkaHealthExporter extends HealthExporter {
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
 		props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
 
+		props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 1000L);
+
 		this.producer = new KafkaProducer<>(props);
 		this.topic = kafkaProperties.getTopic();
 	}
@@ -35,6 +37,8 @@ public class KafkaHealthExporter extends HealthExporter {
 
 	@Override
 	public void export(TargetHealth health) {
+		log.debug("Kafka Health Export : {}", health);
+
 		String key = new StringBuilder().append(health.getId()).append('-').append(health.getTimestamp()).toString();
 
 		ProducerRecord<String, TargetHealth> data = new ProducerRecord(topic, key, health);

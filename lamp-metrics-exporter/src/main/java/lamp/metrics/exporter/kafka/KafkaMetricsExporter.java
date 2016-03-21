@@ -28,6 +28,8 @@ public class KafkaMetricsExporter extends MetricsExporter {
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
 		props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "org.apache.kafka.clients.producer.internals.DefaultPartitioner");
 
+		props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 1000L);
+
 		this.producer = new KafkaProducer<>(props);
 		this.topic = kafkaProperties.getTopic();
 	}
@@ -35,6 +37,8 @@ public class KafkaMetricsExporter extends MetricsExporter {
 
 	@Override
 	public void export(TargetMetrics targetMetrics) {
+		log.debug("Kafka Metrics Export : {}", targetMetrics);
+
 		String key = new StringBuilder().append(targetMetrics.getId()).append('-').append(targetMetrics.getTimestamp()).toString();
 
 		ProducerRecord<String, TargetMetrics> data = new ProducerRecord(topic, key, targetMetrics);
