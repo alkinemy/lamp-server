@@ -1,4 +1,4 @@
-package lamp.metrics.loader.rest;
+package lamp.collector.health.loader.rest;
 
 
 public enum SpringBootHealthStatus {

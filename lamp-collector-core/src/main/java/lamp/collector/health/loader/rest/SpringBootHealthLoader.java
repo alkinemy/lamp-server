@@ -1,4 +1,4 @@
-package lamp.metrics.loader.rest;
+package lamp.collector.health.loader.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lamp.common.collector.model.HealthConstants;

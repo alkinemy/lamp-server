@@ -14,4 +14,6 @@ public class SimpleKafkaProducerProperties implements KafkaProducerProperties {
 
 	private String topic;
 
+	private long maxBlockMs = 1000;
+
 }

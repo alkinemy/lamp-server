@@ -1,6 +1,6 @@
-package lamp.metrics.exporter.slf4j;
+package lamp.collector.health.exporter.slf4j;
 
-import lamp.metrics.exporter.HealthExporter;
+import lamp.collector.health.exporter.HealthExporter;
 import lamp.common.collector.model.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

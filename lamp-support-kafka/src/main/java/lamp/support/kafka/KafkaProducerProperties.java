@@ -7,4 +7,6 @@ public interface KafkaProducerProperties {
 
 	String getTopic();
 
+	long getMaxBlockMs();
+
 }

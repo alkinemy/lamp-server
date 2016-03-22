@@ -4,7 +4,7 @@ import lamp.collector.core.model.TargetMetricsType;
 import lamp.common.collector.service.MetricsLoader;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
-import lamp.metrics.loader.rest.SpringBootMetricsLoader;
+import lamp.collector.metrics.loader.rest.SpringBootMetricsLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 

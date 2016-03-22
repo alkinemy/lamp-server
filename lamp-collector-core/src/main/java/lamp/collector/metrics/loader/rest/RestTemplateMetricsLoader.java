@@ -1,4 +1,4 @@
-package lamp.metrics.loader.rest;
+package lamp.collector.metrics.loader.rest;
 
 import lamp.common.collector.service.MetricsLoader;
 import lamp.common.collector.model.MetricsTagConstants;

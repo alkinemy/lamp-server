@@ -1,6 +1,6 @@
-package lamp.metrics.exporter.slf4j;
+package lamp.collector.metrics.exporter.slf4j;
 
-import lamp.metrics.exporter.MetricsExporter;
+import lamp.collector.metrics.exporter.MetricsExporter;
 import lamp.common.collector.model.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

@@ -4,7 +4,7 @@ import lamp.collector.core.model.TargetHealthType;
 import lamp.common.collector.service.HealthLoader;
 import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.TargetHealth;
-import lamp.metrics.loader.rest.SpringBootHealthLoader;
+import lamp.collector.health.loader.rest.SpringBootHealthLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 

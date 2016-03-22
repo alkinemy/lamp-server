@@ -1,7 +1,7 @@
 package lamp.collector.core.service.metrics;
 
 import lamp.common.collector.model.MetricsTarget;
-import lamp.metrics.exporter.MetricsExporter;
+import lamp.collector.metrics.exporter.MetricsExporter;
 import lamp.common.collector.model.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

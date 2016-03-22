@@ -4,6 +4,7 @@ import lamp.common.collector.model.MetricsTarget;
 import lamp.monitoring.core.alert.model.AlertEvent;
 import lamp.monitoring.core.alert.model.AlertRule;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
+import lamp.monitoring.core.alert.service.operator.GreaterThanOperator;
 import lamp.monitoring.core.metrics.service.MetricsAlertRuleProvider;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbAlertRuleExpression;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbMetricsAlertRule;
@@ -26,7 +27,9 @@ public class KairosdbMetricsMonitoringProcessorTest {
 				KairosdbMetricsAlertRule metricsAlarmDefinition = new KairosdbMetricsAlertRule();
 				KairosdbAlertRuleExpression kairosdbAlarmExpression = new KairosdbAlertRuleExpression();
 				kairosdbAlarmExpression.setMetric("server.mem.used");
-				kairosdbAlarmExpression.setTagNames(new String[] {"id"});
+				kairosdbAlarmExpression.setGrouperTagNames(new String[] {"id"});
+				kairosdbAlarmExpression.setOperator(new GreaterThanOperator());
+				kairosdbAlarmExpression.setThreshold("20660962304");
 //				kairosdbAlarmExpression.setFunctions(new KairosdbFunction[] {KairosdbFunction.RATE_SECOND});
 				metricsAlarmDefinition.setExpression(kairosdbAlarmExpression);
 				List<R> rules = new ArrayList<>();

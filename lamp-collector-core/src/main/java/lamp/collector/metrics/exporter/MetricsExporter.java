@@ -1,4 +1,4 @@
-package lamp.metrics.exporter;
+package lamp.collector.metrics.exporter;
 
 import lamp.common.collector.service.MetricsProcessor;
 import lamp.common.collector.model.MetricsTarget;

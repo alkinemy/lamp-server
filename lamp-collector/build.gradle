@@ -26,8 +26,6 @@ jar {
 dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
-    compile project(':lamp-metrics-loader')
-    compile project(':lamp-metrics-exporter')
     compile project(':lamp-collector-core')
 
     compile("org.springframework.boot:spring-boot-starter-data-jpa")

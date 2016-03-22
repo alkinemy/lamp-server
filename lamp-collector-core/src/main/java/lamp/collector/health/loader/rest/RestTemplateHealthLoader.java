@@ -1,4 +1,4 @@
-package lamp.metrics.loader.rest;
+package lamp.collector.health.loader.rest;
 
 import lamp.common.collector.service.HealthLoader;
 import lamp.common.collector.model.HealthTarget;

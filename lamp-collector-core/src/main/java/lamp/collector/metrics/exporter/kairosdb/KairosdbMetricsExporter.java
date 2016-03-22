@@ -1,7 +1,11 @@
-package lamp.metrics.exporter.kairosdb;
+package lamp.collector.metrics.exporter.kairosdb;
 
-import lamp.metrics.exporter.MetricsExporter;
+import lamp.collector.core.model.EventName;
+import lamp.collector.metrics.exporter.MetricsExporter;
 import lamp.common.collector.model.TargetMetrics;
+import lamp.common.event.Event;
+import lamp.common.event.EventLevel;
+import lamp.common.event.EventPublisher;
 import lamp.support.kairosdb.KairosdbProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.kairosdb.client.Client;
@@ -14,11 +18,15 @@ import java.util.Map;
 @Slf4j
 public class KairosdbMetricsExporter extends MetricsExporter {
 
+	private EventPublisher eventPublisher;
+
 	private final KairosdbProperties kairosdbProperties;
 
 	private Client client;
 
-	public KairosdbMetricsExporter(KairosdbProperties kairosdbProperties) throws MalformedURLException {
+	public KairosdbMetricsExporter(EventPublisher eventPublisher, KairosdbProperties kairosdbProperties) throws MalformedURLException {
+		this.eventPublisher = eventPublisher;
+
 		this.kairosdbProperties = kairosdbProperties;
 
 		log.info("Export KairosDB URL : {}", kairosdbProperties.getUrl());
@@ -40,7 +48,7 @@ public class KairosdbMetricsExporter extends MetricsExporter {
 			}
 			client.pushMetrics(metricBuilder);
 		} catch (Exception e) {
-			log.warn("Metrics Export To KairosDB failed", e);
+			eventPublisher.publish(new Event(EventLevel.WARN, EventName.METRICS_EXPORT_TO_KAIROSDB_FAILED, e, metrics));
 		}
 	}
 

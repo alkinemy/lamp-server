@@ -6,9 +6,6 @@ include 'lamp-common-utils'
 include 'lamp-support-kafka'
 include 'lamp-support-kairosdb'
 
-include 'lamp-metrics-loader'
-include 'lamp-metrics-exporter'
-
 include 'lamp-notification'
 
 include 'lamp-admin'

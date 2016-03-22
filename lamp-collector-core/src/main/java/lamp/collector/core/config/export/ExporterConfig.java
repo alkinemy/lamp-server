@@ -1,13 +1,14 @@
 package lamp.collector.core.config.export;
 
 import lamp.collector.core.CollectorConstants;
-import lamp.metrics.exporter.HealthExporter;
-import lamp.metrics.exporter.MetricsExporter;
-import lamp.metrics.exporter.kafka.KafkaHealthExporter;
-import lamp.metrics.exporter.kafka.KafkaMetricsExporter;
-import lamp.metrics.exporter.kairosdb.KairosdbMetricsExporter;
-import lamp.metrics.exporter.slf4j.Slf4jHealthExporter;
-import lamp.metrics.exporter.slf4j.Slf4jMetricsExporter;
+import lamp.collector.health.exporter.HealthExporter;
+import lamp.collector.health.exporter.kafka.KafkaHealthExporter;
+import lamp.collector.health.exporter.slf4j.Slf4jHealthExporter;
+import lamp.collector.metrics.exporter.MetricsExporter;
+import lamp.collector.metrics.exporter.kafka.KafkaMetricsExporter;
+import lamp.collector.metrics.exporter.kairosdb.KairosdbMetricsExporter;
+import lamp.collector.metrics.exporter.slf4j.Slf4jMetricsExporter;
+import lamp.common.event.EventPublisher;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,13 +18,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExporterConfig {
 
-	@ConditionalOnProperty(name = CollectorConstants.EXPORT_HEALTH_KAFKA_PREFIX + ".enabled", havingValue = "true")
+		@ConditionalOnProperty(name = CollectorConstants.EXPORT_HEALTH_KAFKA_PREFIX + ".enabled", havingValue = "true")
 	@EnableConfigurationProperties({ KafkaHealthExporterProperties.class})
 	public static class hKafkaHealtExportConfig {
 
 		@Bean
-		public KafkaHealthExporter kafkaHealthExporter(KafkaHealthExporterProperties properties) {
-			return new KafkaHealthExporter(properties);
+		public KafkaHealthExporter kafkaHealthExporter(EventPublisher eventPublisher, KafkaHealthExporterProperties properties) {
+			return new KafkaHealthExporter(eventPublisher, properties);
 		}
 
 	}
@@ -48,8 +49,8 @@ public class ExporterConfig {
 	@EnableConfigurationProperties({ KafkaMetricsExporterProperties.class})
 	public static class KafkaMetricsExportConfig {
 		@Bean
-		public KafkaMetricsExporter kafkaMetricsExporter(KafkaMetricsExporterProperties properties) {
-			return new KafkaMetricsExporter(properties);
+		public KafkaMetricsExporter kafkaMetricsExporter(EventPublisher eventPublisher, KafkaMetricsExporterProperties properties) {
+			return new KafkaMetricsExporter(eventPublisher, properties);
 		}
 	}
 
@@ -59,8 +60,8 @@ public class ExporterConfig {
 	public static class KairosdbMetricsExportConfig {
 
 		@Bean
-		public KairosdbMetricsExporter kairosdbMetricsExporter(KairosdbMetricsExporterProperties properties) throws Exception {
-			return new KairosdbMetricsExporter(properties);
+		public KairosdbMetricsExporter kairosdbMetricsExporter(EventPublisher eventPublisher, KairosdbMetricsExporterProperties properties) throws Exception {
+			return new KairosdbMetricsExporter(eventPublisher, properties);
 		}
 	}
 

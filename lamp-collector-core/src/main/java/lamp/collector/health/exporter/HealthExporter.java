@@ -1,4 +1,4 @@
-package lamp.metrics.exporter;
+package lamp.collector.health.exporter;
 
 import lamp.common.collector.service.HealthProcessor;
 import lamp.common.collector.model.HealthTarget;

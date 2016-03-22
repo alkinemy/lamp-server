@@ -4,6 +4,7 @@ import com.google.gson.internal.LazilyParsedNumber;
 import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.alert.model.AlertRuleExpression;
 import lamp.monitoring.core.alert.model.AlertState;
+import lamp.monitoring.core.alert.service.operator.RelationalOperator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,10 +22,11 @@ public class KairosdbAlertRuleExpression implements AlertRuleExpression<DataPoin
 
 	private int duration = 10; // sec
 	private String metric;
-	private String[] tagNames;
+	private String[] grouperTagNames;
 
 	private KairosdbFunction[] functions;
 
+	private RelationalOperator operator;
 	private String threshold;
 
 	public QueryBuilder getQueryBuilder(String tagName, String... tagValues) {
@@ -35,7 +37,7 @@ public class KairosdbAlertRuleExpression implements AlertRuleExpression<DataPoin
 		QueryMetric queryMetric = queryBuilder
 			.addMetric(getMetric());
 
-		queryMetric.addGrouper(new TagGrouper(getTagNames()));
+		queryMetric.addGrouper(new TagGrouper(getGrouperTagNames()));
 		if (getFunctions() != null) {
 			for (KairosdbFunction function : getFunctions()) {
 				if (KairosdbFunction.RATE_SECOND.equals(function)) {
@@ -50,12 +52,16 @@ public class KairosdbAlertRuleExpression implements AlertRuleExpression<DataPoin
 	}
 
 	@Override public AlertState evaluate(DataPoint context) {
-		Object value = context.getValue();
-		LazilyParsedNumber number = new LazilyParsedNumber(threshold);
-		Number number1 = 1;
+		LazilyParsedNumber value = (LazilyParsedNumber) context.getValue();
+		LazilyParsedNumber thresholdNumber = new LazilyParsedNumber(threshold);
 
-		System.out.println(context.getValue());
-		System.out.println(context.getValue().getClass());
-		return null;
+		boolean result;
+		if (threshold.indexOf('.') > -1) {
+			result = operator.perform(value.doubleValue(), thresholdNumber.doubleValue());
+		} else {
+			result = operator.perform(value.longValue(), thresholdNumber.longValue());
+		}
+
+		return result ? AlertState.ALERT : AlertState.OK;
 	}
 }

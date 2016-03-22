@@ -1,5 +1,6 @@
 package lamp.common.event;
 
+import lamp.common.monitoring.model.Tenant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,15 +20,19 @@ public class Event {
 	private String name;
 	private String message;
 
-	private String sourceId;
-	private String sourceName;
-	private String sourceHostname;
+	private Tenant tenant;
 
 	private Map<String, String> details;
 
 	public Event(EventLevel level, String name, Throwable e) {
+		this(level, name, e, null);
+	}
+
+	public Event(EventLevel level, String name, Throwable e, Tenant tenant) {
+		this.time = LocalDateTime.now();
 		this.level = level;
 		this.name = name;
 		this.message = e.getMessage();
+		this.tenant = tenant;
 	}
 }
