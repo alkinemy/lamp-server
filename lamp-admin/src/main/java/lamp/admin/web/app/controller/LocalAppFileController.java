@@ -1,9 +1,9 @@
 package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.app.domain.*;
-import lamp.admin.core.app.service.AppRepoService;
-import lamp.admin.core.app.service.LocalAppFileService;
+import lamp.admin.domain.app.model.*;
+import lamp.admin.domain.app.service.AppRepoService;
+import lamp.admin.domain.app.service.LocalAppFileService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;

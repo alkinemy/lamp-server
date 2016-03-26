@@ -1,9 +1,9 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.agent.domain.*;
-import lamp.admin.core.agent.service.SshKeyService;
-import lamp.admin.core.base.exception.FlashMessageException;
+import lamp.admin.domain.agent.model.*;
+import lamp.admin.domain.agent.service.SshKeyService;
+import lamp.admin.domain.base.exception.FlashMessageException;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.config.AgentProperties;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @MenuMapping(MenuConstants.SSH_KEY)
 @Controller
-@RequestMapping("/ssh-key")
+@RequestMapping("/server/ssh-key")
 public class SshKeyController {
 
 	@Autowired
@@ -37,14 +37,14 @@ public class SshKeyController {
 	public String list(Model model, Pageable pageable) {
 		Page<SshKeyDto> page = sshKeyService.getSshKeyDtoList(pageable);
 		model.addAttribute("page", page);
-		return "ssh-key/list";
+		return "server/ssh-key/list";
 	}
 
 	@RequestMapping(path = "/create", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute("editForm") SshKeyCreateForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 
-		return "ssh-key/edit";
+		return "server/ssh-key/edit";
 	}
 
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
@@ -58,7 +58,7 @@ public class SshKeyController {
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 
-		return "redirect:/ssh-key";
+		return "redirect:/server/ssh-key";
 	}
 
 	@RequestMapping(path = "/{id}/update", method = RequestMethod.GET)
@@ -74,7 +74,7 @@ public class SshKeyController {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_UPDATE);
 
 		model.addAttribute("sshAuthTypes", SshAuthType.values());
-		return "ssh-key/edit";
+		return "server/ssh-key/edit";
 	}
 
 	@RequestMapping(path = "/{id}/update", method = RequestMethod.POST)
@@ -89,7 +89,7 @@ public class SshKeyController {
 		sshKeyService.updateSshKey(id, editForm);
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
 
-		return "redirect:/ssh-key";
+		return "redirect:/server/ssh-key";
 	}
 
 	@RequestMapping(path = "/{id}/delete", method = RequestMethod.GET)
@@ -105,7 +105,7 @@ public class SshKeyController {
 		}
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, flashMessage);
 
-		return "redirect:/ssh-key";
+		return "redirect:/server/ssh-key";
 	}
 
 

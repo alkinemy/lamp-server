@@ -1,7 +1,7 @@
 package lamp.admin.web.account.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.base.exception.FlashMessageException;
+import lamp.admin.domain.base.exception.FlashMessageException;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.account.model.UserRegisterForm;
 import lamp.admin.web.account.service.UserRegisterService;

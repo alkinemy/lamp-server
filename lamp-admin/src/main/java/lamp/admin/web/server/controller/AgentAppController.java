@@ -1,12 +1,12 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.agent.domain.AgentDto;
-import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.core.app.AppManagementListener;
-import lamp.admin.core.app.domain.*;
-import lamp.admin.core.app.service.*;
-import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.domain.agent.model.AgentDto;
+import lamp.admin.domain.agent.service.AgentService;
+import lamp.admin.domain.app.AppManagementListener;
+import lamp.admin.domain.app.model.*;
+import lamp.admin.domain.app.service.*;
+import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;

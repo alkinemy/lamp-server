@@ -1,8 +1,8 @@
 package lamp.admin.api;
 
 
-import lamp.admin.core.base.exception.ErrorCode;
-import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.domain.base.exception.ErrorCode;
+import lamp.admin.domain.base.exception.MessageException;
 
 public enum ApiErrorCode implements ErrorCode {
 

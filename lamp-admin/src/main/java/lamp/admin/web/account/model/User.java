@@ -1,7 +1,7 @@
 package lamp.admin.web.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lamp.admin.core.base.domain.AbstractAuditingEntity;
+import lamp.admin.domain.base.model.AbstractAuditingEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;

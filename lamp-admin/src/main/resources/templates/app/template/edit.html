@@ -31,7 +31,7 @@
 									</div>
 								</div>
 
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('repositoryId')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.domain.app.model.AppResourceType).NONE}" th:class="${#fields.hasErrors('repositoryId')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Repository</label>
 									<div class="col-md-9">
 										<select class="form-control" th:field="*{repositoryId}">
@@ -166,7 +166,7 @@
 								</div>
 								<hr />
 								<h4>Install</h4>
-								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
+								<div class="form-group" th:if="${editForm.resourceType != T(lamp.admin.domain.app.model.AppResourceType).NONE}" th:class="${#fields.hasErrors('appFilename')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Install filename</label>
 									<div class="col-md-9">
 										<input type="text" class="form-control" th:field="*{appFilename}" placeholder="Enter text" />

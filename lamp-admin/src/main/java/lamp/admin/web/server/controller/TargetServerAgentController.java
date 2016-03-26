@@ -1,15 +1,15 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.agent.domain.*;
-import lamp.admin.core.agent.service.AgentManagementService;
-import lamp.admin.core.agent.service.TargetServerService;
-import lamp.admin.core.app.domain.AppInstallScriptDto;
-import lamp.admin.core.app.domain.AppTemplateDto;
-import lamp.admin.core.app.service.AppInstallScriptService;
-import lamp.admin.core.app.service.AppRepoService;
-import lamp.admin.core.app.service.AppTemplateService;
-import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.domain.agent.model.*;
+import lamp.admin.domain.agent.service.AgentManagementService;
+import lamp.admin.domain.agent.service.TargetServerService;
+import lamp.admin.domain.app.model.AppInstallScriptDto;
+import lamp.admin.domain.app.model.AppTemplateDto;
+import lamp.admin.domain.app.service.AppInstallScriptService;
+import lamp.admin.domain.app.service.AppRepoService;
+import lamp.admin.domain.app.service.AppTemplateService;
+import lamp.admin.domain.base.exception.MessageException;
 import lamp.common.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;

@@ -1,10 +1,10 @@
 package lamp.admin.web.server.controller;
 
-import lamp.admin.core.agent.domain.AgentDto;
-import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.core.app.domain.AppDto;
-import lamp.admin.core.app.domain.LogFile;
-import lamp.admin.core.app.service.AppFacadeService;
+import lamp.admin.domain.agent.model.AgentDto;
+import lamp.admin.domain.agent.service.AgentService;
+import lamp.admin.domain.app.model.AppDto;
+import lamp.admin.domain.app.model.LogFile;
+import lamp.admin.domain.app.service.AppFacadeService;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,10 @@
 package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.app.domain.AppRepoCreateForm;
-import lamp.admin.core.app.domain.AppRepoUpdateForm;
-import lamp.admin.core.app.service.AppRepoService;
-import lamp.admin.core.base.exception.LampErrorCode;
+import lamp.admin.domain.app.model.AppRepoCreateForm;
+import lamp.admin.domain.app.model.AppRepoUpdateForm;
+import lamp.admin.domain.app.service.AppRepoService;
+import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.support.FlashMessage;
 import lombok.extern.slf4j.Slf4j;

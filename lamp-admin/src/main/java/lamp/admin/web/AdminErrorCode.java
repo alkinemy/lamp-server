@@ -1,9 +1,9 @@
 package lamp.admin.web;
 
 
-import lamp.admin.core.base.exception.ErrorCode;
-import lamp.admin.core.base.exception.FlashMessageException;
-import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.domain.base.exception.ErrorCode;
+import lamp.admin.domain.base.exception.FlashMessageException;
+import lamp.admin.domain.base.exception.MessageException;
 
 public enum AdminErrorCode implements ErrorCode {
 	INTERNAL("에러가 발생하였습니다."),

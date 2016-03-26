@@ -1,8 +1,8 @@
 package lamp.admin.web.server.controller;
 
-import lamp.admin.core.agent.domain.AgentDto;
-import lamp.admin.core.agent.service.AgentService;
-import lamp.admin.core.base.domain.JavaVirtualMachine;
+import lamp.admin.domain.agent.model.AgentDto;
+import lamp.admin.domain.agent.service.AgentService;
+import lamp.admin.domain.base.model.JavaVirtualMachine;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import org.springframework.beans.factory.annotation.Autowired;

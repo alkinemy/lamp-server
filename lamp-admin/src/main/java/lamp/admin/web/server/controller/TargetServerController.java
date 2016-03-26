@@ -1,10 +1,10 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.agent.domain.*;
-import lamp.admin.core.agent.service.SshKeyService;
-import lamp.admin.core.agent.service.TargetServerService;
-import lamp.admin.core.base.exception.FlashMessageException;
+import lamp.admin.domain.agent.model.*;
+import lamp.admin.domain.agent.service.SshKeyService;
+import lamp.admin.domain.agent.service.TargetServerService;
+import lamp.admin.domain.base.exception.FlashMessageException;
 import lamp.common.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;

@@ -1,7 +1,7 @@
 package lamp.admin.web.account.service;
 
 import com.google.common.collect.Sets;
-import lamp.admin.core.base.exception.Exceptions;
+import lamp.admin.domain.base.exception.Exceptions;
 import lamp.common.utils.assembler.SmartAssembler;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.account.model.Authority;

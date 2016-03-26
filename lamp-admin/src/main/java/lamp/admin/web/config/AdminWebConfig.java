@@ -1,9 +1,9 @@
 package lamp.admin.web.config;
 
 
-import lamp.admin.core.support.agent.AgentClient;
-import lamp.admin.core.support.agent.AgentHttpRequestInterceptor;
-import lamp.admin.core.support.agent.AgentResponseErrorHandler;
+import lamp.admin.domain.support.agent.AgentClient;
+import lamp.admin.domain.support.agent.AgentHttpRequestInterceptor;
+import lamp.admin.domain.support.agent.AgentResponseErrorHandler;
 import lamp.common.utils.assembler.SmartAssembler;
 import lamp.admin.web.support.LampMessageInterpolator;
 import lamp.admin.web.support.MenuItemInterceptor;

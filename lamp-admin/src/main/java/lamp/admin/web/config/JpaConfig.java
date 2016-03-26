@@ -1,7 +1,7 @@
 package lamp.admin.web.config;
 
 
-import lamp.admin.core.LampAdminCore;
+import lamp.admin.domain.LampAdminCore;
 import lamp.admin.web.LampAdminWeb;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Configuration;

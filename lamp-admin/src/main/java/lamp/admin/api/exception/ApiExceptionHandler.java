@@ -1,7 +1,7 @@
 package lamp.admin.api.exception;
 
-import lamp.admin.core.base.exception.LampErrorCode;
-import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.domain.base.exception.LampErrorCode;
+import lamp.admin.domain.base.exception.MessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

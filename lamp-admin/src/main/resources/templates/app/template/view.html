@@ -132,7 +132,7 @@
 
 								<hr />
 								<h4>Install</h4>
-								<div class="form-group" th:if="${appTemplate.resourceType != T(lamp.admin.core.app.domain.AppResourceType).NONE}">
+								<div class="form-group" th:if="${appTemplate.resourceType != T(lamp.admin.domain.app.model.AppResourceType).NONE}">
 									<label class="col-md-3 control-label">Install filename</label>
 									<div class="col-md-9">
 										<p class="form-control-static" th:text="${appTemplate.appFilename}"> username </p>

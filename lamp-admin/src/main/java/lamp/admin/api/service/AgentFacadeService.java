@@ -1,9 +1,9 @@
 package lamp.admin.api.service;
 
-import lamp.admin.core.agent.domain.Agent;
-import lamp.admin.core.agent.domain.AgentDto;
-import lamp.admin.core.agent.domain.AgentRegisterForm;
-import lamp.admin.core.agent.service.AgentService;
+import lamp.admin.domain.agent.model.Agent;
+import lamp.admin.domain.agent.model.AgentDto;
+import lamp.admin.domain.agent.model.AgentRegisterForm;
+import lamp.admin.domain.agent.service.AgentService;
 import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

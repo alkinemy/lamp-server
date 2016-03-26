@@ -1,13 +1,13 @@
 package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.app.domain.AppInstallScriptCreateForm;
-import lamp.admin.core.app.domain.AppInstallScriptUpdateForm;
-import lamp.admin.core.app.domain.AppTemplateDto;
-import lamp.admin.core.app.domain.CommandShell;
-import lamp.admin.core.app.service.AppInstallScriptService;
-import lamp.admin.core.app.service.AppTemplateService;
-import lamp.admin.core.script.service.ScriptCommandService;
+import lamp.admin.domain.app.model.AppInstallScriptCreateForm;
+import lamp.admin.domain.app.model.AppInstallScriptUpdateForm;
+import lamp.admin.domain.app.model.AppTemplateDto;
+import lamp.admin.domain.app.model.CommandShell;
+import lamp.admin.domain.app.service.AppInstallScriptService;
+import lamp.admin.domain.app.service.AppTemplateService;
+import lamp.admin.domain.script.service.ScriptCommandService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.service.JsonService;

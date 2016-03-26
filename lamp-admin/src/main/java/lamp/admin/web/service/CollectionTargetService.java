@@ -1,6 +1,6 @@
 package lamp.admin.web.service;
 
-import lamp.admin.core.agent.service.TargetServerService;
+import lamp.admin.domain.agent.service.TargetServerService;
 import lamp.collector.core.service.HealthTargetService;
 import lamp.collector.core.service.MetricsTargetService;
 import lamp.common.collector.model.HealthTarget;

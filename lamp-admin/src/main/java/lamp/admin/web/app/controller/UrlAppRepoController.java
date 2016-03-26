@@ -1,7 +1,7 @@
 package lamp.admin.web.app.controller;
 
-import lamp.admin.core.app.domain.UrlAppRepoCreateForm;
-import lamp.admin.core.app.domain.UrlAppRepoUpdateForm;
+import lamp.admin.domain.app.model.UrlAppRepoCreateForm;
+import lamp.admin.domain.app.model.UrlAppRepoUpdateForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;

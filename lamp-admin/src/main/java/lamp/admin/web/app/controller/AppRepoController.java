@@ -1,7 +1,7 @@
 package lamp.admin.web.app.controller;
 
-import lamp.admin.core.app.domain.AppRepoDto;
-import lamp.admin.core.app.service.AppRepoService;
+import lamp.admin.domain.app.model.AppRepoDto;
+import lamp.admin.domain.app.service.AppRepoService;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;

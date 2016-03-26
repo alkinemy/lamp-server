@@ -1,6 +1,6 @@
 package lamp.admin.web.account.repository;
 
-import lamp.admin.core.base.repository.LampJpaRepository;
+import lamp.admin.domain.base.repository.LampJpaRepository;
 import lamp.admin.web.account.model.User;
 import org.springframework.stereotype.Repository;
 

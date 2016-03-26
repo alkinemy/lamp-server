@@ -2,10 +2,10 @@ package lamp.admin.api.controller;
 
 import lamp.admin.api.service.AgentFacadeService;
 import lamp.admin.api.util.HttpServletRequestUtils;
-import lamp.admin.core.agent.domain.AgentDto;
-import lamp.admin.core.agent.domain.AgentEventForm;
-import lamp.admin.core.agent.domain.AgentRegisterForm;
-import lamp.admin.core.agent.service.AgentEventService;
+import lamp.admin.domain.agent.model.AgentDto;
+import lamp.admin.domain.agent.model.AgentEventForm;
+import lamp.admin.domain.agent.model.AgentRegisterForm;
+import lamp.admin.domain.agent.service.AgentEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

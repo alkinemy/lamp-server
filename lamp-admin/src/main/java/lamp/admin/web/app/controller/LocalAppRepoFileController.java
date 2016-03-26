@@ -1,11 +1,11 @@
 package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.core.app.domain.AppRepo;
-import lamp.admin.core.app.domain.LocalAppFileDto;
-import lamp.admin.core.app.domain.LocalAppFileUploadForm;
-import lamp.admin.core.app.service.AppRepoService;
-import lamp.admin.core.app.service.LocalAppFileService;
+import lamp.admin.domain.app.model.AppRepo;
+import lamp.admin.domain.app.model.LocalAppFileDto;
+import lamp.admin.domain.app.model.LocalAppFileUploadForm;
+import lamp.admin.domain.app.service.AppRepoService;
+import lamp.admin.domain.app.service.LocalAppFileService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;

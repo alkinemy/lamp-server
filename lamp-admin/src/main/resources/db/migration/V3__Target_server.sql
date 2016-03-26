@@ -2,7 +2,7 @@ USE `lamp`;
 
 DROP TABLE IF EXISTS `lamp_ssh_key`;
 DROP TABLE IF EXISTS `lamp_target_server`;
-DROP TABLE IF EXISTS `lamp_collection_target`;
+DROP TABLE IF EXISTS `lamp_watch_target`;
 DROP TABLE IF EXISTS `lamp_target_server_status`;
 DROP TABLE IF EXISTS `lamp_agent`;
 
@@ -63,7 +63,7 @@ CREATE TABLE `lamp_target_server` (
   UNIQUE KEY `lamp_target_server_uk_01` (`hostname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `lamp_collection_target` (
+CREATE TABLE `lamp_watch_target` (
   `id` varchar(100) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
 

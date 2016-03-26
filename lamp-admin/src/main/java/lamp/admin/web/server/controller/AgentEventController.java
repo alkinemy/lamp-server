@@ -1,7 +1,7 @@
 package lamp.admin.web.server.controller;
 
-import lamp.admin.core.agent.domain.AgentEventDto;
-import lamp.admin.core.agent.service.AgentEventService;
+import lamp.admin.domain.agent.model.AgentEventDto;
+import lamp.admin.domain.agent.service.AgentEventService;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @MenuMapping(MenuConstants.AGENT_EVENT)
 @Controller
-@RequestMapping("/agent/event")
+@RequestMapping("/server/agent/event")
 public class AgentEventController {
 
 	@Autowired
@@ -26,7 +26,7 @@ public class AgentEventController {
 	public String list(Model model, @SortDefault(sort = {"agentInstanceId", "agentInstanceEventSequence"}, direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<AgentEventDto> page = agentEventService.getAgentEventDtoList(pageable);
 		model.addAttribute("page", page);
-		return "agent/event/list";
+		return "server/agent/event/list";
 	}
 
 

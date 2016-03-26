@@ -1,8 +1,8 @@
 package lamp.admin.agent.controller;
 
 import lamp.admin.LampAdmin;
-import lamp.admin.core.agent.domain.AgentDto;
-import lamp.admin.core.agent.domain.AgentRegisterForm;
+import lamp.admin.domain.agent.model.AgentDto;
+import lamp.admin.domain.agent.model.AgentRegisterForm;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

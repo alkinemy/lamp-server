@@ -1,7 +1,7 @@
 package lamp.admin.web.support;
 
-import lamp.admin.core.base.exception.ErrorCode;
-import lamp.admin.core.base.exception.MessageException;
+import lamp.admin.domain.base.exception.ErrorCode;
+import lamp.admin.domain.base.exception.MessageException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
