@@ -43,8 +43,12 @@ public enum LampErrorCode implements ErrorCode {
 	, UNSUPPORTED_APP_TEMPLATE_TYPE("지원하지 않는 앱 템플릿 타입입니다.")
 	, UNSUPPORTED_APP_REPOSITORY_TYPE("지원하지 않는 앱 리파지토리 타입입니다.")
 	, AGENT_INSTALL_FAILED("에이전트 설치를 실패하였습니다.")
-	, APP_REPOSITORY_NOT_FOUND("앱 저장소를 찾을 수 없습니다."), TARGET_SERVER_NOT_FOUND("타켓 서버를 찾을 수 없습니다")
+	, APP_REPOSITORY_NOT_FOUND("앱 저장소를 찾을 수 없습니다.")
+	, TARGET_SERVER_NOT_FOUND("타켓 서버를 찾을 수 없습니다")
 	, TARGET_SERVER_DELETE_FAILED_AGENT_EXIST("에이전트가 존재하기 때문에, 타겟 서버를 삭제할 수 없습니다.", FlashMessageException.class)
+	// Monitoring
+	, WATCH_TARGET_NOT_FOUND("타켓를 찾을 수 없습니다")
+	//
 	, DUPLICATED_LOCAL_APP_FILE("이미 등록되어 있습니다.")
 	, LOCAL_APP_FILE_UPLOAD_FAILED("파일 업로드를 실패하였습니다")
 	, INVALID_AUTH_TOKEN("인증 토큰이 유효하지 않습니다")
@@ -52,7 +56,8 @@ public enum LampErrorCode implements ErrorCode {
 	, UNSUPPORTED_SCRIPT_COMMAND_TYPE("지원하지 않는 명령어 타입입니다")
 	, INVALID_SCRIPT_COMMANDS("스크립트 명령어가 잘못되었습니다.")
 	, JSON_PROCESS_FAILED("Json Processing failed")
-	, SCRIPT_COMMAND_EXECUTION_FAILED("스크립트 명령어 실행을 실패하였습니다"), SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다.");
+	, SCRIPT_COMMAND_EXECUTION_FAILED("스크립트 명령어 실행을 실패하였습니다")
+	, SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

@@ -50,6 +50,8 @@ dependencies {
     compile('org.jadira.usertype:usertype.extended:4.0.0.GA')
     compile("com.mysema.querydsl:querydsl-jpa:3.6.3")
     compile("com.mysema.querydsl:querydsl-apt:3.6.3:jpa")
+
+    compile("com.h2database:h2:1.4.191")
     compile("mysql:mysql-connector-java:5.1.31")
     compile("org.flywaydb:flyway-core:3.2.1")
 

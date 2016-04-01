@@ -1,4 +1,4 @@
-package lamp.admin.web.controller;
+package lamp.admin.web.home;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

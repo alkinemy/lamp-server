@@ -21,6 +21,9 @@ public class AgentToTargetServerAssembler extends AbstractListAssembler<Agent, T
 		targetServer.setAgentArtifactId(agent.getArtifactId());
 		targetServer.setAgentVersion(agent.getVersion());
 
+		targetServer.setTargetName(agent.getName());
+		targetServer.setTargetHostname(agent.getHostname());
+		targetServer.setTargetAddress(agent.getAddress());
 		targetServer.setHealthMonitoringEnabled(true);
 		targetServer.setHealthCollectionEnabled(true);
 		targetServer.setHealthType(StringUtils.defaultIfBlank(agent.getHealthType(), TargetHealthType.SPRING_BOOT));

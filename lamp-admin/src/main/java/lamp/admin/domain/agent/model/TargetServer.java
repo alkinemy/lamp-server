@@ -2,8 +2,10 @@ package lamp.admin.domain.agent.model;
 
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
 import lamp.admin.domain.monitoring.model.HealthStatusCode;
+import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.MetricsTarget;
+import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.health.model.MonitoringHealthTarget;
 import lamp.monitoring.core.metrics.model.MonitoringMetricsTarget;
 import lombok.Getter;
@@ -11,6 +13,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Getter
@@ -65,11 +69,14 @@ public class TargetServer extends AbstractAuditingEntity implements HealthTarget
 	@Column(name = "address", table = "lamp_watch_target")
 	private String targetAddress;
 
-	@Column(name = "groupId", table = "lamp_watch_target")
+	@Column(table = "lamp_watch_target")
+	private String targetType;
+
+	@Column(table = "lamp_watch_target")
 	private String groupId;
-	@Column(name = "artifactId", table = "lamp_watch_target")
+	@Column(table = "lamp_watch_target")
 	private String artifactId;
-	@Column(name = "version", table = "lamp_watch_target")
+	@Column(table = "lamp_watch_target")
 	private String version;
 
 	@Column(columnDefinition = "TINYINT", table = "lamp_watch_target")
@@ -94,6 +101,9 @@ public class TargetServer extends AbstractAuditingEntity implements HealthTarget
 	@Column(table = "lamp_watch_target")
 	private String metricsExportPrefix;
 
+	@Column(name = "tags", table = "lamp_watch_target")
+	private String tagsJsonString;
+
 	// lamp_target_server_status
 	@Column(name = "agent_status", table = "lamp_target_server_status")
 	private String agentStatus = HealthStatusCode.UNKNOWN.name();
@@ -101,7 +111,22 @@ public class TargetServer extends AbstractAuditingEntity implements HealthTarget
 	@Column(name = "agent_status_date", table = "lamp_target_server_status")
 	private LocalDateTime agentStatusDate;
 
+	@Column(name = "created_by", table = "lamp_watch_target", nullable = false, length = 100, updatable = false)
+	public String watchTargetCreatedBy = "TargetServer";
+
+	@Column(name = "created_date", table = "lamp_watch_target", nullable = false, updatable = false)
+	private LocalDateTime watchTargetCreatedDate = LocalDateTime.now();
+
+	@Column(name = "last_modified_by", table = "lamp_watch_target", length = 100)
+	private String watchTargetLastModifiedBy = "TargetServer";
+
+	@Column(name = "last_modified_date", table = "lamp_watch_target")
+	private LocalDateTime watchTargetLastModifiedDate = LocalDateTime.now();
+
 	@Override public Map<String, String> getTags() {
-		return null;
+		if (StringUtils.isNotBlank(tagsJsonString)) {
+			return JsonUtils.parse(tagsJsonString, LinkedHashMap.class);
+		}
+		return Collections.emptyMap();
 	}
 }

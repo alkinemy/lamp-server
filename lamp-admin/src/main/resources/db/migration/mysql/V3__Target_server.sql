@@ -66,11 +66,14 @@ CREATE TABLE `lamp_target_server` (
 CREATE TABLE `lamp_watch_target` (
   `id` varchar(100) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
+  `description` varchar(200) DEFAULT NULL,
 
   `hostname` varchar(100) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
 
   `agent_id` varchar(100) DEFAULT NULL,
+
+  `target_type` varchar(100) DEFAULT NULL,
 
   `group_id` varchar(100) DEFAULT NULL,
   `artifact_id` varchar(100) DEFAULT NULL,
@@ -87,6 +90,8 @@ CREATE TABLE `lamp_watch_target` (
   `metrics_type` varchar(100) DEFAULT NULL,
   `metrics_url` varchar(1000) DEFAULT NULL,
   `metrics_export_prefix` varchar(200) DEFAULT NULL,
+
+  `tags` varchar(4000) DEFAULT NULL,
 
   `created_by` varchar(100) DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,

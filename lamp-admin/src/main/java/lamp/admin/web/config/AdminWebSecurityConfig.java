@@ -45,7 +45,11 @@ public class AdminWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.csrf()
-				.ignoringAntMatchers("/websocket/**")
+				.ignoringAntMatchers("/websocket/**", "/h2-console/**")
+			.and()
+				.headers()
+					.frameOptions()
+					.sameOrigin()
 			.and()
 				.rememberMe()
 				.rememberMeServices(rememberMeServices())
@@ -69,6 +73,8 @@ public class AdminWebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.antMatchers("/signup", "/forget").permitAll()
 					.antMatchers("/account/**").hasAuthority(AuthoritiesConstants.ADMIN)
 					.anyRequest().hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
+
+
 		;
 
 

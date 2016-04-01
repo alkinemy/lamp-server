@@ -1,4 +1,4 @@
-package lamp.admin.web.controller;
+package lamp.admin.web.home;
 
 import lamp.admin.LampAdmin;
 import org.junit.Test;
