@@ -37,14 +37,14 @@ public class TargetServerUpdateForm {
 	private String agentStartCommandLine;
 	private String agentStopCommandLine;
 
-	private Boolean healthMonitoringEnabled;
-	private Boolean healthCollectionEnabled;
+	private boolean healthMonitoringEnabled;
+	private boolean healthCollectionEnabled;
 	private String healthType;
 	private String healthUrl;
 	private String healthExportPrefix;
 
-	private Boolean metricsMonitoringEnabled;
-	private Boolean metricsCollectionEnabled;
+	private boolean metricsMonitoringEnabled;
+	private boolean metricsCollectionEnabled;
 	private String metricsType;
 	private String metricsUrl;
 	private String metricsExportPrefix;
