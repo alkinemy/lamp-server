@@ -24,13 +24,6 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 	private int connectionRequestTimeout = 3 * 1000;
 	private int readTimeout = 10 * 1000;
 
-	private Long healthCheckPeriod;
-	private Long metricsCheckPeriod;
-
-	private Integer asyncThreadPoolCorePoolSize = 5;
-	private Integer asyncThreadPoolMaxPoolSize = 10;
-
-
 	private int serverPort = -1;
 	private int managementPort = -1;
 	private String hostname;
