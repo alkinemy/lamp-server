@@ -13,7 +13,9 @@ import javax.persistence.*;
 @PrimaryKeyJoinColumn(name = "id")
 public class FileCreateCommand extends ScriptCommand {
 
+	@Column(length = 255)
 	private String filename;
+	@Column(length = 10000)
 	private String content;
 	private String charset;
 	@Enumerated(EnumType.STRING)

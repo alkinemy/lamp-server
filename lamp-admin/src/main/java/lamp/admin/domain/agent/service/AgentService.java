@@ -100,7 +100,7 @@ public class AgentService {
 	public Agent insert(AgentRegisterForm form) {
 		Agent agent = smartAssembler.assemble(form, Agent.class);
 
-		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
+		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(agent.getId());
 		TargetServer targetServer = upsertTargetServer(agent, targetServerFromDb);
 		agent.setTargetServer(targetServer);
 

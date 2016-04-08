@@ -22,6 +22,7 @@ public class SshKey extends AbstractAuditingEntity {
 	@Column(length = 200)
 	private String description;
 
+	@Column(length = 4096)
 	private String privateKey;
 
 	@Column(length = 100)

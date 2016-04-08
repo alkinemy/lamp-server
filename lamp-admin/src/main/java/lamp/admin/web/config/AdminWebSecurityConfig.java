@@ -45,7 +45,7 @@ public class AdminWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.csrf()
-				.ignoringAntMatchers("/websocket/**", "/h2-console/**")
+				.ignoringAntMatchers("/websocket/**", "/h2-console/**", "/console/**")
 			.and()
 				.headers()
 					.frameOptions()
