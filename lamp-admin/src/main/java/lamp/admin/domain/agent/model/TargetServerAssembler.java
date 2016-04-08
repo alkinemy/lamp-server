@@ -28,14 +28,24 @@ public class TargetServerAssembler extends AbstractAssembler<TargetServerCreateF
 			targetServer.setId(UUID.randomUUID().toString());
 		}
 
-		if ("localhost".equals(targetServer.getHostname())) {
+		if (StringUtils.isBlank(targetServer.getAddress())) {
 			try {
-				InetAddress inetAddress = InetAddress.getLocalHost();
+				InetAddress inetAddress;
+
+				if ("localhost".equals(targetServer.getHostname())) {
+					inetAddress = InetAddress.getLocalHost();
+				} else {
+					inetAddress = InetAddress.getByName(targetServer.getHostname());
+				}
+
 				targetServer.setHostname(inetAddress.getHostName());
+				targetServer.setAddress(inetAddress.getHostAddress());
 			} catch (UnknownHostException e) {
 				log.warn("TargetServer UnknownHost", e);
 			}
+
 		}
+
 
 		if (SshAuthType.KEY.equals(targetServerCreateForm.getSshAuthType())) {
 			SshKey sshKey = sshKeyService.getSshKey(targetServerCreateForm.getSshKeyId());

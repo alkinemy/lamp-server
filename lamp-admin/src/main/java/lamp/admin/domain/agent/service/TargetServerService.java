@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -45,6 +46,10 @@ public class TargetServerService {
 
 	public TargetServer getTargetServer(String id) {
 		return getTargetServerOptional(id).orElseThrow(() -> Exceptions.newException(LampErrorCode.TARGET_SERVER_NOT_FOUND, id));
+	}
+
+	public List<TargetServerDto> getTargetServerDtos(List<String> targetServerIds) {
+		return targetServerRepository.findAllByIdIn(targetServerIds);
 	}
 
 	public Optional<TargetServer> getTargetServerOptional(String id) {
@@ -86,6 +91,7 @@ public class TargetServerService {
 		Exceptions.throwsException(agent.isPresent(), LampErrorCode.TARGET_SERVER_DELETE_FAILED_AGENT_EXIST, id);
 		targetServerRepository.delete(targetServer);
 	}
+
 
 
 }

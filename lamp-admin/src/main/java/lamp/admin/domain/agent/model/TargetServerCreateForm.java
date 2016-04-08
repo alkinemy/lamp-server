@@ -17,7 +17,6 @@ public class TargetServerCreateForm {
 
 	@NotEmpty
 	private String hostname;
-	@NotEmpty
 	private String address;
 
 	private int sshPort = 22;
