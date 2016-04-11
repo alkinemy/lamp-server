@@ -1,4 +1,4 @@
-package lamp.admin.web.service;
+package lamp.admin.web.base.service;
 
 import com.google.common.collect.Lists;
 import lamp.admin.web.account.model.MenuItem;

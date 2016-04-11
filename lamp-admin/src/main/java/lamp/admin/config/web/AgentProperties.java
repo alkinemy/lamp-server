@@ -1,4 +1,4 @@
-package lamp.admin.web.config;
+package lamp.admin.config.web;
 
 import lombok.Getter;
 import lombok.Setter;

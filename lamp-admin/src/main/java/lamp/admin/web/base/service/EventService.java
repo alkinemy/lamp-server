@@ -1,4 +1,4 @@
-package lamp.admin.web.service;
+package lamp.admin.web.base.service;
 
 import lamp.common.event.Event;
 import lamp.common.event.EventPublisher;

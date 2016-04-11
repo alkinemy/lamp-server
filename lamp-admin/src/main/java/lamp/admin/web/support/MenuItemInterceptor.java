@@ -1,7 +1,7 @@
 package lamp.admin.web.support;
 
 import lamp.admin.web.account.model.MenuItem;
-import lamp.admin.web.service.MenuItemService;
+import lamp.admin.web.base.service.MenuItemService;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

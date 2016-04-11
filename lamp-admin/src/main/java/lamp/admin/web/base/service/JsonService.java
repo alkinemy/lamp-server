@@ -1,4 +1,4 @@
-package lamp.admin.web.service;
+package lamp.admin.web.base.service;
 
 import lamp.admin.domain.support.json.JsonUtils;
 import lombok.extern.slf4j.Slf4j;

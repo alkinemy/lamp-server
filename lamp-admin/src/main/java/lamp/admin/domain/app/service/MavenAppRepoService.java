@@ -1,8 +1,8 @@
 package lamp.admin.domain.app.service;
 
+import lamp.admin.config.web.ServerProperties;
 import lamp.admin.domain.app.model.MavenAppRepo;
 import lamp.admin.domain.support.maven.ArtifactRepositoryClient;
-import lamp.admin.web.config.ServerProperties;
 import org.eclipse.aether.resolution.VersionRangeResult;
 import org.eclipse.aether.version.Version;
 import org.springframework.beans.factory.annotation.Autowired;

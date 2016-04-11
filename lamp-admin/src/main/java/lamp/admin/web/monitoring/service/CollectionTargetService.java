@@ -1,4 +1,4 @@
-package lamp.admin.web.service;
+package lamp.admin.web.monitoring.service;
 
 import lamp.admin.domain.agent.service.TargetServerService;
 import lamp.collector.core.service.HealthTargetService;

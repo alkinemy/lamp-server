@@ -1,7 +1,7 @@
 package lamp.admin.web.server.controller;
 
-import lamp.admin.LampAdminConstants;
-import lamp.admin.domain.agent.model.*;
+import lamp.admin.domain.agent.model.MultiAgentInstallForm;
+import lamp.admin.domain.agent.model.TargetServerDto;
 import lamp.admin.domain.agent.service.AgentManagementService;
 import lamp.admin.domain.agent.service.TargetServerService;
 import lamp.admin.domain.app.model.AppInstallScriptDto;
@@ -9,27 +9,19 @@ import lamp.admin.domain.app.model.AppTemplateDto;
 import lamp.admin.domain.app.service.AppInstallScriptService;
 import lamp.admin.domain.app.service.AppRepoService;
 import lamp.admin.domain.app.service.AppTemplateService;
-import lamp.admin.domain.base.exception.MessageException;
-import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
-import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
-import lamp.admin.web.support.security.SecurityUtils;
-import lamp.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 
 @MenuMapping(MenuConstants.AGENT_INSTALL)
@@ -115,6 +107,7 @@ public class TargetServerAgentMultiController {
 //			bindingResult.reject(e.getCode(), e.getArgs(), defaultMessage);
 //			return agentInstall(id, editForm, model);
 //		}
+		return "";
 	}
 
 //	@MenuMapping(MenuConstants.AGENT_START)

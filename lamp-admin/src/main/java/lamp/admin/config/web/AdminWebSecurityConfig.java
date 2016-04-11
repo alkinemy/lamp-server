@@ -1,4 +1,4 @@
-package lamp.admin.web.config;
+package lamp.admin.config.web;
 
 import lamp.admin.web.support.security.AdminUserDetailsService;
 import lamp.admin.web.support.security.AuthoritiesConstants;

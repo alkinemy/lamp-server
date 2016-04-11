@@ -1,16 +1,16 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
+import lamp.admin.config.web.AgentProperties;
 import lamp.admin.domain.agent.model.*;
 import lamp.admin.domain.agent.service.SshKeyService;
 import lamp.admin.domain.agent.service.TargetServerService;
 import lamp.admin.domain.base.exception.FlashMessageException;
-import lamp.common.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
-import lamp.admin.web.config.AgentProperties;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
+import lamp.common.utils.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

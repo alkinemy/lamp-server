@@ -1,4 +1,4 @@
-package lamp.admin.web.service;
+package lamp.admin.web.monitoring.service;
 
 
 import lamp.monitoring.core.alert.model.AlertEvent;

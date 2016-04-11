@@ -1,4 +1,4 @@
-package lamp.admin.api.config;
+package lamp.admin.config.api;
 
 import lamp.admin.api.security.ApiAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
