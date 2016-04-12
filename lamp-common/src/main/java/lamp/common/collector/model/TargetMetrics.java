@@ -16,7 +16,9 @@ public class TargetMetrics implements Tenant {
 
 	private String id;
 	private String name;
+
 	private String groupId;
+	private String artifactId;
 
 	private Map<String, Object> metrics;
 

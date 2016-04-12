@@ -6,4 +6,6 @@ public interface Tenant {
 
     String getGroupId();
 
+    String getArtifactId();
+
 }

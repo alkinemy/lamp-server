@@ -72,6 +72,9 @@ public class KairosdbMetricsMonitoringProcessorTest {
 				return null;
 			}
 
+			@Override public String getArtifactId() {
+				return null;
+			}
 
 			@Override public String getMetricsType() {
 				return null;

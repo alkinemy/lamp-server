@@ -13,4 +13,6 @@ public class AgentProperties {
 	private String startCommandLine;
 	private String stopCommandLine;
 
+	private String groupId = "lamp.agent";
+	private String artifactId = "lamp-agent";
 }

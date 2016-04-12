@@ -66,7 +66,7 @@ public class RestTemplateHealthLoader implements HealthLoader {
 			tags.putAll(healthTarget.getTags());
 		}
 
-		return new TargetHealth(timestamp, healthTarget.getId(), healthTarget.getName(), healthTarget.getGroupId(), assembledHealth, tags);
+		return new TargetHealth(timestamp, healthTarget.getId(), healthTarget.getName(), healthTarget.getGroupId(), healthTarget.getArtifactId(), assembledHealth, tags);
 	}
 
 }
