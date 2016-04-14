@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,11 @@ public class TargetServerService {
 	public Page<TargetServerDto> getTargetServerDtoList(Pageable pageable) {
 		Page<TargetServer> page = targetServerRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, TargetServerDto.class);
+	}
+
+	public List<TargetServerDto> getTargetServerDtoList() {
+		List<TargetServer> list = targetServerRepository.findAll(new Sort("name"));
+		return smartAssembler.assemble(list, TargetServerDto.class);
 	}
 
 	public Collection<TargetServer> getTargetServerList() {

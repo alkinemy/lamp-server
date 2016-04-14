@@ -23,7 +23,7 @@ CREATE TABLE `lamp_app_local_repository` (
   `id` varchar(100) NOT NULL,
   `repository_path` varchar(100) DEFAULT NULL,
   `file_limit_size` bigint(20) NULL,
-  `file_expiration_date` datetime DEFAULT NULL,
+  `file_expiration_time` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -107,6 +107,14 @@ public class AppFacadeService {
 	}
 
 	@Transactional
+	public void registerApp(AppTemplateDeployForm form) {
+		// TODO 개발 에러 발생시 처리 필요
+		for (String targetServerId : form.getTargetServerIds()) {
+			registerApp(targetServerId, form);
+		}
+	}
+
+	@Transactional
 	public void registerManagedApp(ManagedAppRegisterForm editForm) {
 		Agent agent = getAgent(editForm.getAgentId());
 

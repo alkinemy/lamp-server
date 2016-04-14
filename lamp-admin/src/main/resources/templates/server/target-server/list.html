@@ -60,6 +60,13 @@
 												</li>
 												<li class="divider"> </li>
 												<li>
+													<a th:href="@{/server/agent/{id}/app(id=${targetServer.id})}"> App Manager </a>
+												</li>
+												<li>
+													<a th:href="@{/server/agent/{id}/app/create?step=step1(id=${targetServer.id})}"> App Register</a>
+												</li>
+												<li class="divider"> </li>
+												<li>
 													<a th:href="@{/server/target-server/{id}/agent/start(id=${targetServer.id})}"> Agent Start </a>
 												</li>
 												<li>

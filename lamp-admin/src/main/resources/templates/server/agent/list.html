@@ -27,7 +27,7 @@
 									<th> Version </th>
 									<th> Hostname </th>
 									<th> Address </th>
-									<th> Port </th>
+									<th> AgentStatus </th>
 									<th> Action </th>
 								</tr>
 								</thead>
@@ -39,7 +39,12 @@
 									<td th:text="${agent.version}"> Joke </td>
 									<td th:text="${agent.hostname}"> Joke </td>
 									<td th:text="${agent.address}"> Joke </td>
-									<td th:text="${agent.port}"> Joke </td>
+									<td><span th:text="${targetServer?.agentStatus}"
+											  th:class="${targetServer?.agentStatus}? 'label label-sm'
+                                              + (${targetServer.agentStatus == 'UNKNOWN'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'UP'}? ' label-success' : '')
+                                              + (${targetServer.agentStatus == 'OUT_OF_SERVICE'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'DOWN'}? ' label-warning' : '')">Suspended </span></td>
 									<td>
 										<div class="btn-group">
 											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action

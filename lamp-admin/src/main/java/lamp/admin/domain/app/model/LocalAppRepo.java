@@ -13,7 +13,10 @@ import javax.persistence.*;
 @PrimaryKeyJoinColumn(name = "id")
 public class LocalAppRepo extends AppRepo {
 
-	@Column(name = "repository_path")
 	private String repositoryPath;
+
+	private Long fileLimitSize;
+
+	private Long fileExpirationTime;
 
 }

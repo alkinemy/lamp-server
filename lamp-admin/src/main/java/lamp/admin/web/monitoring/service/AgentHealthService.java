@@ -1,8 +1,10 @@
 package lamp.admin.web.monitoring.service;
 
 import lamp.admin.config.web.AgentProperties;
+import lamp.admin.domain.monitoring.model.HealthStatusCode;
 import lamp.collector.health.exporter.HealthExporter;
 import lamp.common.collector.model.HealthConstants;
+import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.TargetHealth;
 import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +23,28 @@ public class AgentHealthService extends HealthExporter {
     @Autowired
     private AgentProperties agentProperties;
 
+
+    @Override
+    public boolean canProcess(HealthTarget healthTarget) {
+        return StringUtils.equals(agentProperties.getGroupId(), healthTarget.getGroupId())
+                && StringUtils.equals(agentProperties.getArtifactId(), healthTarget.getArtifactId());
+    }
+
+
     @Override
     protected void export(TargetHealth targetHealth) {
-        log.error("XXXXXXXX targetHealth = {}", targetHealth);
-        if (StringUtils.equals(agentProperties.getGroupId(), targetHealth.getGroupId())
-                && StringUtils.equals(agentProperties.getArtifactId(), targetHealth.getArtifactId())) {
-            String status = targetHealth.getHealth() != null ? (String) targetHealth.getHealth().get(HealthConstants.STATUS) : "UNKNOWN";
-            agentHealthStatus.put(targetHealth.getId(), status);
+        log.debug("targetHealth = {}", targetHealth);
+
+        String status = targetHealth.getHealth() != null ? (String) targetHealth.getHealth().get(HealthConstants.STATUS) : HealthStatusCode.UNKNOWN.name();
+        agentHealthStatus.put(targetHealth.getId(), status);
+    }
+
+    public String getHealthStatus(String id) {
+        String status = agentHealthStatus.get(id);
+        if (StringUtils.isBlank(status)) {
+            return HealthStatusCode.UNKNOWN.name();
+        } else {
+            return status;
         }
-        log.error("agentHealthStatus = {}", agentHealthStatus);
     }
 }

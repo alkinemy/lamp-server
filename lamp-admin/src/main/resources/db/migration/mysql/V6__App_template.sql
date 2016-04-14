@@ -34,7 +34,6 @@ CREATE TABLE `lamp_app_template` (
   `app_filename` varchar(200) DEFAULT NULL,
   `monitor` tinyint(1) NOT NULL,
 
-  `commands` text DEFAULT NULL,
 
   `parameters_type` varchar(500) DEFAULT NULL,
   `parameters` text DEFAULT NULL,
