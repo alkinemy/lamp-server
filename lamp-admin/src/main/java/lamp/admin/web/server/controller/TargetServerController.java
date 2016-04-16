@@ -66,10 +66,54 @@ public class TargetServerController {
 	public String create(@Valid @ModelAttribute("editForm") TargetServerCreateForm editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {
+
 		if (bindingResult.hasErrors()) {
 			return createForm(editForm, model);
 		}
 		targetServerService.insertTargetServer(editForm);
+		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
+
+
+		return "redirect:/server/target-server";
+	}
+
+	@RequestMapping(path = "/create", method = RequestMethod.POST, params = "multiple=true")
+	public String createMultiple(@Valid @ModelAttribute("editForm") TargetServerCreateForm editForm,
+						 BindingResult bindingResult, Model model,
+						 RedirectAttributes redirectAttributes) {
+
+		String[] ids = StringUtils.split(editForm.getId(), ',');
+		String[] names = StringUtils.split(editForm.getName(), ',');
+		String[] descriptions = StringUtils.split(editForm.getDescription(), ',');
+		String[] hostnames = StringUtils.split(editForm.getHostname(), ',');
+		String[] addresses = StringUtils.split(editForm.getAddress(), ',');
+
+		if (ids.length > 0 && ids.length != names.length) {
+			bindingResult.rejectValue("id", "TargetServerMultipleCreateForm.id", "Id와 Name의 갯수가 일치하지 않습니다");
+		}
+		if (names.length != hostnames.length) {
+			bindingResult.rejectValue("hostname", "TargetServerMultipleCreateForm.hostname", "Name과 Hostname의 갯수가 일치하지 않습니다");
+		}
+		if (hostnames.length != addresses.length) {
+			bindingResult.rejectValue("address", "TargetServerMultipleCreateForm.address", "Hostname과 Address의 갯수가 일치하지 않습니다");
+		}
+
+		if (bindingResult.hasErrors()) {
+			return createForm(editForm, model);
+		}
+		for (int i = 0; i < names.length; i++) {
+			TargetServerCreateForm form = new TargetServerCreateForm();
+			BeanUtils.copyProperties(editForm, form);
+			form.setName(names[i]);
+			if (names.length == descriptions.length) {
+				form.setDescription(descriptions[i]);
+			}
+			form.setHostname(hostnames[i]);
+			form.setAddress(addresses[i]);
+
+			targetServerService.insertTargetServer(form);
+		}
+
 		redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 

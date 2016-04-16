@@ -10,6 +10,8 @@ import lamp.admin.domain.app.service.AppInstallScriptService;
 import lamp.admin.domain.app.service.AppRepoService;
 import lamp.admin.domain.app.service.AppTemplateService;
 import lamp.admin.domain.base.exception.MessageException;
+import lamp.admin.domain.base.model.LogStream;
+import lamp.common.utils.FileUtils;
 import lamp.common.utils.StringUtils;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
@@ -101,12 +103,12 @@ public class TargetServerAgentController {
 		if (bindingResult.hasErrors()) {
 			return agentInstall(id, editForm, model);
 		}
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				PrintStream printStream = new PrintStream(baos)) {
 
-			agentManagementService.installAgent(id, editForm, SecurityUtils.getCurrentUserLogin(), printStream);
 
-			String output = baos.toString("UTF-8");
+		try {
+			LogStream logStream = agentManagementService.installAgent(id, editForm, SecurityUtils.getCurrentUserLogin());
+
+			String output = FileUtils.readFileToString(logStream.getLogFile());
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 			return "redirect:/server/target-server";
