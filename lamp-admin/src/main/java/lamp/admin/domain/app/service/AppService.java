@@ -62,6 +62,7 @@ public class AppService {
 		AgentAppRegisterForm agentAppRegisterForm = new AgentAppRegisterForm();
 		agentAppRegisterForm.setId(editForm.getId());
 		agentAppRegisterForm.setName(editForm.getName());
+
 		agentAppRegisterForm.setGroupId(appTemplate.getGroupId());
 		agentAppRegisterForm.setArtifactId(appTemplate.getArtifactId());
 		agentAppRegisterForm.setArtifactName(appTemplate.getArtifactName());

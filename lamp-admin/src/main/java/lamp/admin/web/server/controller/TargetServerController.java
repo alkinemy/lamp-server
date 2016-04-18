@@ -106,6 +106,9 @@ public class TargetServerController {
 		for (int i = 0; i < names.length; i++) {
 			TargetServerCreateForm form = new TargetServerCreateForm();
 			BeanUtils.copyProperties(editForm, form);
+			if (ids.length == names.length) {
+				form.setId(ids[i]);
+			}
 			form.setName(names[i]);
 			if (names.length == descriptions.length) {
 				form.setDescription(descriptions[i]);

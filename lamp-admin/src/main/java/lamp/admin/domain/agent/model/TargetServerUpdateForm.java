@@ -49,4 +49,6 @@ public class TargetServerUpdateForm {
 	private String metricsUrl;
 	private String metricsExportPrefix;
 
+	private boolean multiple;
+
 }
