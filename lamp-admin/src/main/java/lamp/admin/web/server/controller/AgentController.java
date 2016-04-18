@@ -8,6 +8,8 @@ import lamp.admin.web.support.annotation.MenuMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +27,7 @@ public class AgentController {
 	private AgentService agentService;
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
-	public String list(Model model, Pageable pageable) {
+	public String list(Model model, @SortDefault(value = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 		Page<AgentDto> page = agentService.getAgentDtoList(pageable);
 		model.addAttribute("page", page);
 		return "server/agent/list";

@@ -15,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +45,7 @@ public class TargetServerController {
 
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
-	public String list(Model model, Pageable pageable) {
+	public String list(Model model, @SortDefault(value = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 		Page<TargetServerDto> page = targetServerService.getTargetServerDtoList(pageable);
 		model.addAttribute("page", page);
 		return "server/target-server/list";

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AlertEventService implements AlertEventProducer {
 
 	@Override public void send(AlertEvent alertEvent) {
-		log.info("alarmEvent = {}", alertEvent);
+//		log.info("alarmEvent = {}", alertEvent);
 	}
 
 }
