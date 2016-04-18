@@ -17,6 +17,7 @@ public class TargetServerCreateForm {
 
 	@NotEmpty
 	private String hostname;
+	@NotEmpty
 	private String address;
 
 	private int sshPort = 22;
@@ -44,5 +45,7 @@ public class TargetServerCreateForm {
 	private String metricsType;
 	private String metricsUrl;
 	private String metricsExportPrefix;
+
+	private boolean multiple;
 
 }

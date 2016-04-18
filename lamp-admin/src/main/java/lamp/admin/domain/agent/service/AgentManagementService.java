@@ -12,6 +12,9 @@ import lamp.admin.domain.base.exception.EntityNotFoundException;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.base.exception.MessageException;
+import lamp.admin.domain.agent.model.AgentInstallLogStream;
+import lamp.admin.domain.base.model.LogStream;
+import lamp.admin.domain.base.service.LogEventPrintStream;
 import lamp.admin.domain.script.model.ExecuteCommand;
 import lamp.admin.domain.script.model.FileCreateCommand;
 import lamp.admin.domain.script.model.FileRemoveCommand;
@@ -60,7 +63,21 @@ public class AgentManagementService {
 	@Autowired
 	private ManagedAppService managedAppService;
 
+
 	private ExpressionParser expressionParser = new ExpressionParser();
+
+	@Transactional
+	public LogStream installAgent(String targetServerId, AgentInstallForm installForm, String agentInstalledBy) throws IOException {
+		AgentInstallLogStream logEvent = new AgentInstallLogStream();
+		logEvent.setTargetServerId(targetServerId);
+		logEvent.setInstallForm(installForm);
+		logEvent.setInstalledBy(agentInstalledBy);
+
+		try (LogEventPrintStream printStream = new LogEventPrintStream(logEvent.getLogFile())) {
+			installAgent(targetServerId, installForm, agentInstalledBy, printStream);
+		}
+		return logEvent;
+	}
 
 	@Transactional
 	public void installAgent(String targetServerId, AgentInstallForm installForm, String agentInstalledBy, PrintStream printStream) {
@@ -108,6 +125,7 @@ public class AgentManagementService {
 				targetServer.setAgentInstallPath(agentPath);
 			}
 			String remoteFilename = Paths.get(agentPath, filename).toString();
+
 			sshClient.scpTo(file, remoteFilename, true);
 
 			targetServer.setAgentInstalled(true);

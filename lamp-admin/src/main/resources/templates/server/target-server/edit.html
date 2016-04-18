@@ -79,6 +79,17 @@
 										<span class="help-block" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"> A block of help text. </span>
 									</div>
 								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('multiple')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Multiple Register</label>
+									<div class="col-md-9">
+										<div class="checkbox-list">
+											<label class="checkbox-inline">
+												<span class=""><input type="checkbox" th:field="*{multiple}" /></span>
+												Multiple </label>
+										</div>
+									</div>
+								</div>
+
 								<hr />
 								<h4>SSH Login</h4>
 
