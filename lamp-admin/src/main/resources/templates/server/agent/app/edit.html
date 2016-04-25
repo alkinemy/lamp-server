@@ -13,7 +13,7 @@
 						</div>
 					</div>
 					<div class="portlet-body form">
-						<form class="form-horizontal" role="form"  th:action="@{/server/agent/__${agent.id}__/app/{action}(action=${action})}" th:object="${editForm}" method="post">
+						<form class="form-horizontal" role="form"  th:action="${action} == 'update' ? @{/server/agent/{agentId}/app/{appId}/{action}(agentId=${agent.id},appId=${appId},action=${action})} : @{/server/agent/{agentId}/app/{action}(agentId=${agent.id},action=${action})}" th:object="${editForm}" method="post">
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
 								The daily cronjob has failed.
 							</div>
@@ -22,7 +22,7 @@
 								<div class="form-group" th:class="${#fields.hasErrors('id')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">ID</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{id}" placeholder="Enter text" />
+										<input type="text" class="form-control" th:field="*{id}" placeholder="Enter text" th:readonly="${action == 'update'}" />
 										<span class="help-block" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"> A block of help text. </span>
 									</div>
 								</div>

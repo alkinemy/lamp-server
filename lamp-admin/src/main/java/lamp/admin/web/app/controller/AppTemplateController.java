@@ -82,7 +82,6 @@ public class AppTemplateController {
 			model.addAttribute("appRepositoryList", appRepoList);
 		}
 
-
 		model.addAttribute("commandShellList", CommandShell.values());
 
 		model.addAttribute("parametersTypes", ParametersType.values());

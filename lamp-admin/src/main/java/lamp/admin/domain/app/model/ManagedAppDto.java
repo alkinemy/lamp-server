@@ -24,6 +24,9 @@ public class ManagedAppDto {
 	private String artifactName;
 	private String version;
 
+	private String appTemplateId;
+	private String appTemplateName;
+
 	private String appManagementListener;
 
 	private LocalDateTime registerDate;

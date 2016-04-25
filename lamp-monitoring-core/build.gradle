@@ -7,7 +7,7 @@ buildscript {
 apply plugin: 'idea'
 
 jar {
-    baseName = 'lamp-alarm-core'
+    baseName = 'lamp-monitoring-core'
     version =  '0.0.1-SNAPSHOT'
 
     manifest {

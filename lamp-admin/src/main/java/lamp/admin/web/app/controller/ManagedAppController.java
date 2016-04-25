@@ -89,7 +89,7 @@ public class ManagedAppController {
 
 	@RequestMapping(path = "/{id}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("id") String id,
-						 @ModelAttribute("editForm") AppDeregisterForm editForm,
+						 @ModelAttribute("editForm") AppUndeployForm editForm,
 						 Model model) {
 
 		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
@@ -100,7 +100,7 @@ public class ManagedAppController {
 		return deleteForm(id, editForm, model);
 	}
 
-	protected String deleteForm(String id, AppDeregisterForm editForm, Model model) {
+	protected String deleteForm(String id, AppUndeployForm editForm, Model model) {
 		if (!model.containsAttribute("managedApp")) {
 			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
 			model.addAttribute("managedApp", managedAppDto);
@@ -113,7 +113,7 @@ public class ManagedAppController {
 
 	@RequestMapping(path = "/{id}/delete", method = RequestMethod.POST)
 	public String delete(@PathVariable("id") String id,
-						 @ModelAttribute("editForm") AppDeregisterForm editForm,
+						 @ModelAttribute("editForm") AppUndeployForm editForm,
 						 Model model,
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {

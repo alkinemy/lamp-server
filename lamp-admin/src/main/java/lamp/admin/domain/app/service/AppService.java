@@ -8,7 +8,7 @@ import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.script.model.ScriptCommandDtoAssembler;
 import lamp.admin.domain.support.agent.AgentClient;
 import lamp.admin.domain.support.agent.model.AgentAppRegisterForm;
-import lamp.admin.domain.support.agent.model.AgentAppUpdateFileForm;
+import lamp.admin.domain.support.agent.model.AgentAppFileUpdateForm;
 import lamp.admin.domain.support.agent.model.AgentAppUpdateSpecForm;
 import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -51,14 +51,14 @@ public class AppService {
 		return agentClient.getApp(agent, appId);
 	}
 
-	public AgentAppRegisterForm registerApp(String agentId, AppRegisterForm editForm) {
+	public AgentAppRegisterForm deployApp(String agentId, AppDeployForm editForm) {
 		Agent agent = agentService.getAgent(agentId);
 		String templateId = editForm.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplateOptional(templateId).orElseThrow(() -> Exceptions.newException(LampErrorCode.APP_TEMPLATE_NOT_FOUND, templateId));
-		return registerApp(agent, appTemplate, editForm);
+		return deployApp(agent, appTemplate, editForm);
 	}
 
-	public AgentAppRegisterForm registerApp(Agent agent, AppTemplate appTemplate, AppRegisterForm editForm) {
+	public AgentAppRegisterForm deployApp(Agent agent, AppTemplate appTemplate, AppDeployForm editForm) {
 		AgentAppRegisterForm agentAppRegisterForm = new AgentAppRegisterForm();
 		agentAppRegisterForm.setId(editForm.getId());
 		agentAppRegisterForm.setName(editForm.getName());
@@ -96,7 +96,6 @@ public class AppService {
 
 		agentAppRegisterForm.setMonitor(ObjectUtils.defaultIfNull(editForm.getMonitor(), Boolean.FALSE));
 
-		// FIXME AppTemplate -> Form으로 변경해야함.
 		Long installScriptId = editForm.getInstallScriptId();
 		if (installScriptId != null) {
 			AppInstallScript installScript = appInstallScriptService.getAppInstallScript(installScriptId);
@@ -110,6 +109,30 @@ public class AppService {
 		agentClient.register(agent, agentAppRegisterForm);
 
 		return agentAppRegisterForm;
+	}
+
+	public AgentAppRegisterForm redeployApp(Agent agent, AppTemplate appTemplate, AppRedeployForm appRedeployForm) {
+		agentClient.deregister(agent, appRedeployForm.getId(), appRedeployForm.isForceStop());
+
+		return deployApp(agent, appTemplate, appRedeployForm);
+	}
+
+	public AgentAppFileUpdateForm updateAppFile(Agent agent, ManagedApp managedApp, AppUpdateFileForm editForm) {
+		AppTemplate appTemplate = managedApp.getAppTemplate();
+
+		AgentAppFileUpdateForm agentAppFileUpdateForm = new AgentAppFileUpdateForm();
+		agentAppFileUpdateForm.setId(managedApp.getId());
+		agentAppFileUpdateForm.setVersion(StringUtils.defaultIfBlank(editForm.getVersion(), appTemplate.getVersion()));
+
+		String groupId = managedApp.getGroupId();
+		String artifactId = managedApp.getArtifactId();
+		String version = agentAppFileUpdateForm.getVersion();
+		AppResource appResource = appResourceService.getResource(appTemplate, groupId, artifactId, version);
+		agentAppFileUpdateForm.setVersion(appResource.getVersion());
+		agentAppFileUpdateForm.setInstallFile(appResource);
+
+		agentClient.updateFile(agent, agentAppFileUpdateForm);
+		return agentAppFileUpdateForm;
 	}
 
 	public AgentAppUpdateSpecForm updateAppSpec(Agent agent, AppTemplate appTemplate, AppUpdateSpecForm editForm) {
@@ -127,34 +150,9 @@ public class AppService {
 		return agentAppUpdateSpecForm;
 	}
 
-	public AgentAppUpdateFileForm updateAppFile(Agent agent, ManagedApp managedApp, AppUpdateFileForm editForm) {
-		AppTemplate appTemplate = managedApp.getAppTemplate();
-
-		AgentAppUpdateFileForm agentAppUpdateFileForm = new AgentAppUpdateFileForm();
-		agentAppUpdateFileForm.setId(managedApp.getId());
-		agentAppUpdateFileForm.setGroupId(appTemplate.getGroupId());
-		agentAppUpdateFileForm.setArtifactId(appTemplate.getArtifactId());
-		agentAppUpdateFileForm.setArtifactName(appTemplate.getArtifactName());
-		agentAppUpdateFileForm.setVersion(StringUtils.defaultIfBlank(editForm.getVersion(), appTemplate.getVersion()));
-
-		String groupId = agentAppUpdateFileForm.getGroupId();
-		String artifactId = agentAppUpdateFileForm.getArtifactId();
-		String version = agentAppUpdateFileForm.getVersion();
-		AppResource appResource = appResourceService.getResource(appTemplate, groupId, artifactId, version);
-		agentAppUpdateFileForm.setVersion(appResource.getVersion());
-		agentAppUpdateFileForm.setInstallFile(appResource);
-
-		agentClient.updateFile(agent, agentAppUpdateFileForm);
-		return agentAppUpdateFileForm;
+	public void undeployApp(Agent agent, String appId, boolean forceStop) {
+		agentClient.deregister(agent, appId, forceStop);
 	}
-
-	public void deregisterApp(Agent agent, String appId) {
-		// FIXME 상태 체크해서 작동중이면 삭제 못하도록 변경할것
-
-
-		agentClient.deregister(agent, appId);
-	}
-
 
 	public void startApp(Agent agent, String appId) {
 		agentClient.start(agent, appId);
@@ -171,4 +169,5 @@ public class AppService {
 	public void transferLogFile(Agent agent, String appId, String filename, ServletOutputStream outputStream) {
 		agentClient.transferLogFile(agent, appId, filename, outputStream);
 	}
+
 }

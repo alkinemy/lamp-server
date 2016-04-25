@@ -7,13 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AppUpdateFileForm {
+public class AppUndeployForm {
 
-	private String version;
+    private String appManagementListener;
 
-	private String appManagementListener;
-
-	private Long installScriptId;
-
-
+    private boolean forceStop;
 }

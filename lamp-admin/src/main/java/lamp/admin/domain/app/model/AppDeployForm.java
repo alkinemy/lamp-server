@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-public class AppRegisterForm {
+public class AppDeployForm {
 
 	private String id;
 	private String name;

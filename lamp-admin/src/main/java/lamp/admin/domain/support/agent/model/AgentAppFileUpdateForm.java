@@ -8,16 +8,12 @@ import org.springframework.core.io.Resource;
 @Getter
 @Setter
 @ToString
-public class AgentAppUpdateFileForm {
+public class AgentAppFileUpdateForm {
 
 	private String id;
 
-	private String groupId;
-	private String artifactId;
-	private String artifactName;
 	private String version;
 
 	private Resource installFile;
-	private String commands;
 
 }

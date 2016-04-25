@@ -16,6 +16,7 @@ import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
+import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -75,7 +76,7 @@ public class AppTemplateDeployController {
 		model.addAttribute("targetServers", targetServerDtoList);
 
 		if (httpMethod.equals(HttpMethod.GET)) {
-			editForm.setId(appTemplateDto.getArtifactId());
+			editForm.setId("");
 			editForm.setName(appTemplateDto.getName());
 
 			editForm.setParametersType(appTemplateDto.getParametersType());
@@ -91,13 +92,25 @@ public class AppTemplateDeployController {
 						 Model model,
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
+		int serverSize = editForm.getTargetServerIds() != null ? editForm.getTargetServerIds().size() : 0;
+		if (StringUtils.isNotBlank(editForm.getId())) {
+			String[] ids = StringUtils.split(editForm.getId(), ',');
+			if (ids.length == serverSize) {
+				editForm.setIds(ids);
+			} else {
+				bindingResult.rejectValue("id", "AppTemplateDeployForm.id", "아이디 갯수는 서버 갯수와 일치해야합니다.");
+			}
+		} else {
+			editForm.setIds(new String[serverSize]);
+		}
+
 		if (bindingResult.hasErrors()) {
 			return deploy(templateId, editForm, model, HttpMethod.POST);
 		}
 
 		try {
 			editForm.setTemplateId(templateId);
-			appFacadeService.registerApp(editForm);
+			appFacadeService.deployApp(editForm);
 
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 

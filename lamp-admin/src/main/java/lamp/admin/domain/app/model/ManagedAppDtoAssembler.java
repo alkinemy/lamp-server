@@ -14,6 +14,12 @@ public class ManagedAppDtoAssembler extends AbstractListAssembler<ManagedApp, Ma
 		TargetServer targetServer = managedApp.getTargetServer();
 		dto.setHostname(targetServer.getHostname());
 		dto.setAddress(targetServer.getAddress());
+
+		AppTemplate appTemplate = managedApp.getAppTemplate();
+		if (appTemplate != null) {
+			dto.setAppTemplateId(appTemplate.getId());
+			dto.setAppTemplateName(appTemplate.getName());
+		}
 		return dto;
 	}
 }

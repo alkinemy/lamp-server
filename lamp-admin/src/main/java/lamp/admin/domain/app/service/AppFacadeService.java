@@ -5,7 +5,8 @@ import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.app.model.*;
 import lamp.admin.domain.support.agent.model.AgentAppRegisterForm;
-import lamp.admin.domain.support.agent.model.AgentAppUpdateFileForm;
+import lamp.admin.domain.support.agent.model.AgentAppFileUpdateForm;
+import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,7 @@ import javax.servlet.ServletOutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -78,17 +80,36 @@ public class AppFacadeService {
 		return form;
 	}
 
+
 	@Transactional
-	public void registerApp(String agentId, AppRegisterForm form) {
+	public void deployApp(AppTemplateDeployForm form) {
+		// TODO 개발 에러 발생시 처리 필요
+		for (int i = 0; i < form.getTargetServerIds().size() ; i++) {
+			AppDeployForm appDeployForm = new AppDeployForm();
+			BeanUtils.copyProperties(form, appDeployForm);
+
+			appDeployForm.setId(form.getIds()[i]);
+			deployApp(form.getTargetServerIds().get(i), appDeployForm);
+		}
+	}
+
+
+	@Transactional
+	public void deployApp(String agentId, AppDeployForm form) {
+		log.info("deployApp ({}, {})", agentId, form.getId());
+		if (StringUtils.isBlank(form.getId())) {
+			form.setId(UUID.randomUUID().toString());
+		}
+
 		Agent agent = getAgent(agentId);
 
 		String templateId = form.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId);
 
-		AgentAppRegisterForm agentAppRegisterForm = appService.registerApp(agent, appTemplate, form);
+		AgentAppRegisterForm agentAppRegisterForm = appService.deployApp(agent, appTemplate, form);
 
 		ManagedApp managedApp = new ManagedApp();
-		managedApp.setId(agentAppRegisterForm.getId());
+		managedApp.setId(form.getId());
 		managedApp.setName(agentAppRegisterForm.getName());
 		managedApp.setDescription(agentAppRegisterForm.getDescription());
 		managedApp.setTargetServer(agent.getTargetServer());
@@ -107,11 +128,21 @@ public class AppFacadeService {
 	}
 
 	@Transactional
-	public void registerApp(AppTemplateDeployForm form) {
-		// TODO 개발 에러 발생시 처리 필요
-		for (String targetServerId : form.getTargetServerIds()) {
-			registerApp(targetServerId, form);
-		}
+	public void redeployApp(String agentId, AppRedeployForm form) {
+		Agent agent = getAgent(agentId);
+
+		String templateId = form.getTemplateId();
+		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId);
+
+		AgentAppRegisterForm agentAppRegisterForm = appService.redeployApp(agent, appTemplate, form);
+
+		ManagedApp managedApp = managedAppService.getManagedApp(form.getId());
+		managedApp.setAppTemplate(appTemplate);
+		managedApp.setGroupId(agentAppRegisterForm.getGroupId());
+		managedApp.setArtifactId(agentAppRegisterForm.getArtifactId());
+		managedApp.setArtifactName(agentAppRegisterForm.getArtifactName());
+		managedApp.setVersion(agentAppRegisterForm.getVersion());
+		managedApp.setVersion(form.getVersion());
 	}
 
 	@Transactional
@@ -121,6 +152,9 @@ public class AppFacadeService {
 		String templateId = editForm.getTemplateId();
 		AppTemplate appTemplate = appTemplateService.getAppTemplate(templateId);
 
+		if (StringUtils.isBlank(editForm.getId())) {
+			editForm.setId(UUID.randomUUID().toString());
+		}
 		ManagedApp managedApp = new ManagedApp();
 		BeanUtils.copyProperties(editForm, managedApp);
 		managedApp.setTargetServer(agent.getTargetServer());
@@ -147,30 +181,26 @@ public class AppFacadeService {
 	public void updateAppFile(Agent agent, String appId, AppUpdateFileForm editForm) {
 		ManagedApp managedApp = managedAppService.getManagedApp(appId);
 
-		AgentAppUpdateFileForm agentAppUpdateFileForm = appService.updateAppFile(agent, managedApp, editForm);
+		AgentAppFileUpdateForm agentAppFileUpdateForm = appService.updateAppFile(agent, managedApp, editForm);
 
-		//		managedApp.setAppTemplate(appTemplate);
-		managedApp.setGroupId(agentAppUpdateFileForm.getGroupId());
-		managedApp.setArtifactId(agentAppUpdateFileForm.getArtifactId());
-		managedApp.setArtifactName(agentAppUpdateFileForm.getArtifactName());
-		managedApp.setVersion(agentAppUpdateFileForm.getVersion());
+		managedApp.setVersion(agentAppFileUpdateForm.getVersion());
 		managedApp.setInstallDate(LocalDateTime.now());
 	}
 
 
 
 	@Transactional
-	public void deregisterApp(String agentId, String appId, AppDeregisterForm form) {
+	public void deregisterApp(String agentId, String appId, AppUndeployForm form) {
 		Agent agent = getAgent(agentId);
-		appService.deregisterApp(agent, appId);
+		appService.undeployApp(agent, appId, form.isForceStop());
 
 		managedAppService.getManagedAppOptional(appId).ifPresent(managedAppService::delete);
 	}
 
 	@Transactional
-	public void deregisterApp(String appId, AppDeregisterForm form) {
+	public void deregisterApp(String appId, AppUndeployForm form) {
 		Agent agent = getAgentByAppId(appId);
-		appService.deregisterApp(agent, appId);
+		appService.undeployApp(agent, appId, form.isForceStop());
 
 		managedAppService.getManagedAppOptional(appId).ifPresent(managedAppService::delete);
 	}

@@ -107,14 +107,14 @@ public class TargetServerController {
 			TargetServerCreateForm form = new TargetServerCreateForm();
 			BeanUtils.copyProperties(editForm, form);
 			if (ids.length == names.length) {
-				form.setId(ids[i]);
+				form.setId(StringUtils.trim(ids[i]));
 			}
-			form.setName(names[i]);
+			form.setName(StringUtils.trim(names[i]));
 			if (names.length == descriptions.length) {
-				form.setDescription(descriptions[i]);
+				form.setDescription(StringUtils.trim(descriptions[i]));
 			}
-			form.setHostname(hostnames[i]);
-			form.setAddress(addresses[i]);
+			form.setHostname(StringUtils.trim(hostnames[i]));
+			form.setAddress(StringUtils.trim(addresses[i]));
 
 			targetServerService.insertTargetServer(form);
 		}

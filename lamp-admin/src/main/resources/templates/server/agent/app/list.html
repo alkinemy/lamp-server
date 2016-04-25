@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="portlet-body">
-				<div class="table-scrollable">
+				<div class="table-responsive">
 					<table class="table table-bordered table-hover">
 						<thead>
 						<tr>
@@ -48,16 +48,30 @@
 							<td th:text="${app.pid}"> Joke </td>
 							<td th:text="${app.monitor}"> Joke </td>
 							<td>
-								<a th:href="@{/server/agent/{agentId}/app/{appId}/log(agentId=${agent.id},appId=${app.id})}" class="btn btn-icon-only blue">
-									<i class="fa fa-file-text-o"></i></a>
-								<a th:href="@{/server/agent/__${agent.id}__/app/__${app.id}__/start}" class="btn btn-icon-only blue">
-									<i class="fa fa-play"></i></a>
-								<a th:href="@{/server/agent/__${agent.id}__/app/__${app.id}__/stop}" class="btn btn-icon-only yellow">
-									<i class="fa fa-stop"></i></a>
-								<a th:href="@{/server/agent/__${agent.id}__/app/__${app.id}__/delete}" class="btn btn-icon-only red">
-									<i class="fa fa-eject"></i></a>
-								<a th:href="@{/app/create(agentId=${agent.id},id=${app.id})}" class="btn btn-icon-only blue">
-									<i class="fa fa-object-group"></i></a>
+								<div class="btn-group">
+									<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+										<i class="fa fa-angle-down"></i>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/start(agentId=${agent.id},appId=${app.id})}"> Start </a>
+										</li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/stop(agentId=${agent.id},appId=${app.id})}"> Start </a>
+										</li>
+										<li class="divider"> </li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/update?step=step1(agentId=${agent.id},appId=${app.id})}"> Redeploy </a>
+										</li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/delete(agentId=${agent.id},appId=${app.id})}"> Remove </a>
+										</li>
+										<li class="divider"> </li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/log(agentId=${agent.id},appId=${app.id})}"> Log Files </a>
+										</li>
+									</ul>
+								</div>
 							</td>
 						</tr>
 						</tbody>

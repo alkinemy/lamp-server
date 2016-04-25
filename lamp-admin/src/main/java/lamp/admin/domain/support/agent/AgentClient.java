@@ -5,7 +5,7 @@ import lamp.admin.domain.app.model.AppDto;
 import lamp.admin.domain.app.model.LogFile;
 import lamp.admin.domain.base.model.JavaVirtualMachine;
 import lamp.admin.domain.support.agent.model.AgentAppRegisterForm;
-import lamp.admin.domain.support.agent.model.AgentAppUpdateFileForm;
+import lamp.admin.domain.support.agent.model.AgentAppFileUpdateForm;
 import lamp.admin.domain.support.agent.model.AgentAppUpdateSpecForm;
 import lamp.admin.domain.support.agent.security.AgentRequestUser;
 import lamp.admin.domain.support.agent.security.AgentRequestUserHolder;
@@ -116,7 +116,7 @@ public class AgentClient {
 		}
 	}
 
-	public void updateFile(Agent agent, AgentAppUpdateFileForm form) {
+	public void updateFile(Agent agent, AgentAppFileUpdateForm form) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
@@ -124,11 +124,8 @@ public class AgentClient {
 			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
 
 			parts.add("id", form.getId());
-			parts.add("artifactId", form.getArtifactId());
-			parts.add("artifactName", StringUtils.utf8ToIso88591(form.getArtifactName()));
 			parts.add("version", form.getVersion());
 			parts.add("installFile", form.getInstallFile());
-			parts.add("commands", form.getCommands());
 
 			log.debug("parts = {}", parts);
 
@@ -167,11 +164,11 @@ public class AgentClient {
 	}
 
 
-	public void deregister(Agent agent, String appId) {
+	public void deregister(Agent agent, String appId, boolean forceStop) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
-			restTemplate.delete(baseUrl + "/api/app/" + appId);
+			restTemplate.delete(baseUrl + "/api/app/" + appId + "?forceStop=" + forceStop);
 		} finally {
 			AgentRequestUserHolder.clear();
 		}

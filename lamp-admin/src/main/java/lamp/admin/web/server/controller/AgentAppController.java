@@ -11,6 +11,7 @@ import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
+import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -61,7 +62,7 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.GET, params = {"step=step1"})
 	public String createStep1(@PathVariable("agentId") String agentId,
-			@ModelAttribute("editForm") AppRegisterForm editForm,
+			@ModelAttribute("editForm") AppDeployForm editForm,
 			Model model) {
 		model.addAttribute("action", LampAdminConstants.ACTION_CREATE);
 
@@ -74,7 +75,7 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.POST, params = {"step=step1"})
 	public String createStep1(@PathVariable("agentId") String agentId,
-			@Valid @ModelAttribute("editForm") AppRegisterForm editForm,
+			@Valid @ModelAttribute("editForm") AppDeployForm editForm,
 			Model model,
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -86,7 +87,7 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.GET)
 	public String create(@PathVariable("agentId") String agentId,
-							 @ModelAttribute("editForm") AppRegisterForm editForm,
+							 @ModelAttribute("editForm") AppDeployForm editForm,
 							 Model model, HttpMethod httpMethod) {
 		model.addAttribute("action", LampAdminConstants.ACTION_CREATE);
 
@@ -117,7 +118,7 @@ public class AgentAppController {
 
 	@RequestMapping(path = "/app/create", method = RequestMethod.POST)
 	public String create(@PathVariable("agentId") String agentId,
-						 @Valid @ModelAttribute("editForm") AppRegisterForm editForm,
+						 @Valid @ModelAttribute("editForm") AppDeployForm editForm,
 						 Model model,
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
@@ -126,7 +127,7 @@ public class AgentAppController {
 		}
 
 		try {
-			appFacadeService.registerApp(agentId, editForm);
+			appFacadeService.deployApp(agentId, editForm);
 
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
@@ -138,10 +139,101 @@ public class AgentAppController {
 
 	}
 
+
+	@RequestMapping(path = "/app/{appId}/update", method = RequestMethod.GET, params = {"step=step1"})
+	public String updateStep1(@PathVariable("agentId") String agentId,
+							  @PathVariable("appId") String appId,
+							  @ModelAttribute("editForm") AppRedeployForm editForm,
+							  Model model) {
+		model.addAttribute("action", LampAdminConstants.ACTION_UPDATE);
+
+		if (StringUtils.isBlank(editForm.getTemplateId())) {
+			ManagedAppDto managedApp = appFacadeService.getManagedAppDto(appId);
+			editForm.setTemplateId(managedApp.getAppTemplateId());
+		}
+
+		// TODO Popup이나 Wizard 형식으로 분리하기
+		List<AppTemplateDto> appTemplateList = appTemplateService.getAppTemplateDtoList();
+		model.addAttribute("appTemplateList", appTemplateList);
+
+		return "server/agent/app/edit-step1";
+	}
+
+	@RequestMapping(path = "/app/{appId}/update", method = RequestMethod.POST, params = {"step=step1"})
+	public String updateStep1(@PathVariable("agentId") String agentId,
+							  @PathVariable("appId") String appId,
+							  @Valid @ModelAttribute("editForm") AppRedeployForm editForm,
+							  Model model,
+							  BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return updateStep1(agentId, appId, editForm, model);
+		}
+
+		return update(agentId, appId, editForm, model, HttpMethod.GET);
+	}
+
+	@RequestMapping(path = "/app/{appId}/update", method = RequestMethod.GET)
+	public String update(@PathVariable("agentId") String agentId,
+						 @PathVariable("appId") String appId,
+						 @ModelAttribute("editForm") AppRedeployForm editForm,
+						 Model model, HttpMethod httpMethod) {
+		model.addAttribute("action", LampAdminConstants.ACTION_UPDATE);
+
+		AppTemplateDto appTemplateDto = appTemplateService.getAppTemplateDtoOptional(editForm.getTemplateId());
+		if (appTemplateDto == null) {
+			return updateStep1(agentId, appId, editForm, model);
+		}
+
+		List<AppInstallScriptDto> appInstallScriptDtoList = appInstallScriptService.getAppInstallScriptDtoList(appTemplateDto.getId());
+		model.addAttribute("appInstallScripts", appInstallScriptDtoList);
+
+		model.addAttribute("appTemplate", appTemplateDto);
+		model.addAttribute("parametersTypes", ParametersType.values());
+
+		List<String> versions = appRepoService.getVersions(appTemplateDto.getRepositoryId(), appTemplateDto.getGroupId(), appTemplateDto.getArtifactId());
+		model.addAttribute("versions", versions);
+
+		if (httpMethod.equals(HttpMethod.GET)) {
+			ManagedAppDto managedApp = appFacadeService.getManagedAppDto(appId);
+			editForm.setId(managedApp.getId());
+			editForm.setName(managedApp.getName());
+
+			editForm.setParametersType(appTemplateDto.getParametersType());
+			editForm.setParameters(appTemplateDto.getParameters());
+			editForm.setVersion(versions.stream().findFirst().orElse(null));
+		}
+		return "server/agent/app/edit";
+	}
+
+	@RequestMapping(path = "/app/{appId}/update", method = RequestMethod.POST)
+	public String update(@PathVariable("agentId") String agentId,
+						 @PathVariable("appId") String appId,
+						 @Valid @ModelAttribute("editForm") AppRedeployForm editForm,
+						 Model model,
+						 BindingResult bindingResult,
+						 RedirectAttributes redirectAttributes) {
+		if (bindingResult.hasErrors()) {
+			return update(agentId, appId, editForm, model, HttpMethod.POST);
+		}
+
+		try {
+			editForm.setId(appId);
+			appFacadeService.redeployApp(agentId, editForm);
+
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
+
+			return "redirect:/server/agent/{agentId}/app";
+		} catch (MessageException e) {
+			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
+			return update(agentId, appId, editForm, model, HttpMethod.POST);
+		}
+
+	}
+
 	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("agentId") String agentId,
 						@PathVariable("appId") String appId,
-						@ModelAttribute("editForm") AppDeregisterForm editForm,
+						@ModelAttribute("editForm") AppUndeployForm editForm,
 						Model model) {
 
 		Optional<ManagedAppDto> managedAppDtoOptional = appFacadeService.getManagedAppDtoOptional(appId);
@@ -150,7 +242,7 @@ public class AgentAppController {
 		return deleteForm(agentId, appId, editForm, model);
 	}
 
-	protected String deleteForm(String agentId, String appId, AppDeregisterForm editForm, Model model) {
+	protected String deleteForm(String agentId, String appId, AppUndeployForm editForm, Model model) {
 		AppDto appDto = appFacadeService.getAppDto(agentId, appId);
 		model.addAttribute("app", appDto);
 
@@ -163,7 +255,7 @@ public class AgentAppController {
 	@RequestMapping(path = "/app/{appId}/delete", method = RequestMethod.POST)
 	public String delete(@PathVariable("agentId") String agentId,
 						@PathVariable("appId") String appId,
-						@ModelAttribute("editForm") AppDeregisterForm editForm,
+						@ModelAttribute("editForm") AppUndeployForm editForm,
 						Model model,
 						BindingResult bindingResult,
 						RedirectAttributes redirectAttributes) {

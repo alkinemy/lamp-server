@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 JARFile="lamp-admin.jar"
 PIDFile="lamp-admin.pid"

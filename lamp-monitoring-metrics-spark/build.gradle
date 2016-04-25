@@ -7,7 +7,7 @@ buildscript {
 apply plugin: 'idea'
 
 jar {
-    baseName = 'lamp-alarm-metrics-spark'
+    baseName = 'lamp-monitoring-metrics-spark'
     version =  '0.0.1-SNAPSHOT'
 
     manifest {
