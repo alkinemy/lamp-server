@@ -59,6 +59,8 @@ public class RestTemplateHealthLoader implements HealthLoader {
 
 		Map<String, String> tags = new LinkedHashMap<>();
 		tags.put(MetricsTagConstants.ID, healthTarget.getId());
+		tags.put(MetricsTagConstants.GROUP_ID, healthTarget.getGroupId());
+		tags.put(MetricsTagConstants.ARTIFACT_ID, healthTarget.getArtifactId());
 		tags.put(MetricsTagConstants.HOSTNAME, healthTarget.getHostname());
 		tags.put(MetricsTagConstants.ADDRESS, healthTarget.getAddress());
 

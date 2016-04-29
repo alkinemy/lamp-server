@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,14 +27,19 @@ public class WatchTargetService {
 	@Autowired
 	private SmartAssembler smartAssembler;
 
+	public Collection<WatchTarget> getWatchTargetList() {
+		return watchTargetRepository.findAll();
+	}
+
+	public List<WatchTargetDto> getWatchTargetDtoList() {
+		return smartAssembler.assemble(watchTargetRepository.findAll(), WatchTargetDto.class);
+	}
+
 	public Page<WatchTargetDto> getWatchTargetDtoList(Pageable pageable) {
 		Page<WatchTarget> page = watchTargetRepository.findAll(pageable);
 		return smartAssembler.assemble(pageable, page, WatchTargetDto.class);
 	}
 
-	public Collection<WatchTarget> getWatchTargetList() {
-		return watchTargetRepository.findAll();
-	}
 
 	public WatchTargetDto getWatchTargetDto(String id) {
 		WatchTarget WatchTarget = getWatchTarget(id);

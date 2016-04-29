@@ -16,5 +16,5 @@ include 'lamp-collector-core'
 include 'lamp-monitoring-core'
 include 'lamp-monitoring-metrics-kairosdb'
 include 'lamp-monitoring-metrics-spark'
-
+include 'lamp-watcher'
 

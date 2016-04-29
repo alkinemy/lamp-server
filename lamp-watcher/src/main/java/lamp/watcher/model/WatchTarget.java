@@ -1,17 +1,17 @@
-package lamp.admin.domain.monitoring.model;
+package lamp.watcher.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lamp.common.collector.model.HealthTarget;
+import lamp.common.collector.model.MetricsTarget;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import java.util.Map;
 
 @Getter
 @Setter
 @ToString
-public class WatchTargetDto {
+public class WatchTarget implements HealthTarget, MetricsTarget {
 
 	private String id;
 
@@ -38,6 +38,8 @@ public class WatchTargetDto {
 	private String metricsType;
 	private String metricsUrl;
 	private String metricsExportPrefix;
+
+	private String tagsJsonString;
 
 	private Map<String, String> tags;
 

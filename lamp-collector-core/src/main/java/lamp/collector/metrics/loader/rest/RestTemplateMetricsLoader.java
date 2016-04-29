@@ -59,6 +59,8 @@ public class RestTemplateMetricsLoader implements MetricsLoader {
 
 		Map<String, String> tags = new LinkedHashMap<>();
 		tags.put(MetricsTagConstants.ID, metricsTarget.getId());
+		tags.put(MetricsTagConstants.GROUP_ID, metricsTarget.getGroupId());
+		tags.put(MetricsTagConstants.ARTIFACT_ID, metricsTarget.getArtifactId());
 		tags.put(MetricsTagConstants.HOSTNAME, metricsTarget.getHostname());
 		tags.put(MetricsTagConstants.ADDRESS, metricsTarget.getAddress());
 

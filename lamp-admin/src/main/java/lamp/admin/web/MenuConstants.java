@@ -17,6 +17,9 @@ public abstract class MenuConstants {
 	public static final String LOCAL_APP_FILE = "APP_FILE";
 	public static final String MANAGED_APP = "MANAGED_APP";
 
+	public static final String MONITORING = "MONITORING";
+	public static final String MONITORING_WATCH_TARGET = "MONITORING_WATCH_TARGET";
+
 	public static final String ACCOUNT = "ACCOUNT";
 	public static final String ACCOUNT_APPROVAL = "ACCOUNT_APPROVAL";
 

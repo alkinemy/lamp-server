@@ -14,6 +14,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
-@MenuMapping(MenuConstants.TARGET_SERVER)
+@MenuMapping(MenuConstants.MONITORING_WATCH_TARGET)
 @Controller
 @RequestMapping("/monitoring/watch-target")
 public class WatchTargetController {
@@ -32,7 +34,7 @@ public class WatchTargetController {
 
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
-	public String list(Model model, Pageable pageable) {
+	public String list(Model model, @SortDefault(value = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 		Page<WatchTargetDto> page = watchTargetService.getWatchTargetDtoList(pageable);
 		model.addAttribute("page", page);
 		return "monitoring/watch-target/list";

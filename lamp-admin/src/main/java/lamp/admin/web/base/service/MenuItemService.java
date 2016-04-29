@@ -54,6 +54,12 @@ public class MenuItemService {
 
 				menuItems.add(MenuItem.of("APP", "App", "icon-layers", subMenuItems));
 			}
+			//Monitoring
+			{
+				List<MenuItem> subMenuItems = new ArrayList<>();
+				subMenuItems.add(MenuItem.of(MONITORING_WATCH_TARGET, "Watch Target", "/monitoring/watch-target", "icon-bulb"));
+				menuItems.add(MenuItem.of(MONITORING, "Monitoring", "icon-layers", subMenuItems));
+			}
 			//Account
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();

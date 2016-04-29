@@ -9,7 +9,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="icon-bubble font-dark"></i>
-					<span class="caption-subject font-dark bold uppercase">Managed Apps</span>
+					<span class="caption-subject font-dark bold uppercase">Watch Target</span>
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
@@ -24,11 +24,13 @@
 						<tr>
 							<th> Id </th>
 							<th> Name </th>
-							<th> Description </th>
 							<th> Hostname </th>
 							<th> Group Id </th>
 							<th> Artifact Id </th>
-							<th> Version </th>
+							<th> Health Monitoring </th>
+							<th> Health Collection </th>
+							<th> Metrics Monitoring </th>
+							<th> Metrics Collection </th>
 							<th> Action </th>
 						</tr>
 						</thead>
@@ -36,11 +38,13 @@
 						<tr th:each="target : ${page}">
 							<td th:text="${target.id}"> 2 </td>
 							<td th:text="${target.name}"> Joke </td>
-							<td th:text="${target.description}"> Joke </td>
 							<td th:text="${target.hostname}"> Joke </td>
 							<td th:text="${target.groupId}"> Joke </td>
 							<td th:text="${target.artifactId}"> Joke </td>
-							<td th:text="${target.version}"> Joke </td>
+							<td th:text="${target.healthCollectionEnabled}"> Joke </td>
+							<td th:text="${target.healthMonitoringEnabled}"> Joke </td>
+							<td th:text="${target.metricsCollectionEnabled}"> Joke </td>
+							<td th:text="${target.metricsMonitoringEnabled}"> Joke </td>
 							<td>
 								<div class="btn-group">
 									<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
