@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "lamp.watcher", ignoreUnknownFields = false)
-public class WatcherProperties implements ApplicationListener<ApplicationEvent> {
+public class LampWatcherProperties implements ApplicationListener<ApplicationEvent> {
 
 	private int serverPort = -1;
 	private int managementPort = -1;
@@ -46,7 +46,7 @@ public class WatcherProperties implements ApplicationListener<ApplicationEvent> 
 		hostname = inetAddress.getHostName();
 		address = inetAddress.getHostAddress();
 		if (StringUtils.isBlank(version)) {
-			version = WatcherProperties.class.getPackage().getImplementationVersion();
+			version = LampWatcherProperties.class.getPackage().getImplementationVersion();
 		}
 	}
 

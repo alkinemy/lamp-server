@@ -1,6 +1,6 @@
 package lamp.watcher.support;
 
-import lamp.watcher.config.WatcherProperties;
+import lamp.watcher.config.LampWatcherProperties;
 import lamp.watcher.support.jwt.JwtBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
@@ -16,11 +16,11 @@ import java.util.Collections;
 public class LampHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
 	private final String userAgent;
-	private WatcherProperties clientProperties;
+	private LampWatcherProperties clientProperties;
 
 	private JwtBuilder jwtBuilder = new JwtBuilder();
 
-	public LampHttpRequestInterceptor(WatcherProperties clientProperties) {
+	public LampHttpRequestInterceptor(LampWatcherProperties clientProperties) {
 		this.clientProperties = clientProperties;
 		this.userAgent = clientProperties.getGroupId() + "/" + clientProperties.getArtifactId() + "/" + clientProperties.getVersion();
 	}

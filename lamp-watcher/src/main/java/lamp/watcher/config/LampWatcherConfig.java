@@ -2,7 +2,6 @@ package lamp.watcher.config;
 
 import lamp.collector.core.config.CollectorCoreConfig;
 import lamp.watcher.support.LampHttpRequestInterceptor;
-import org.springframework.boot.autoconfigure.test.ImportAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +16,11 @@ import java.util.List;
 
 @Configuration
 @Import(CollectorCoreConfig.class)
-@EnableConfigurationProperties({ WatcherProperties.class, LampServerProperties.class })
-public class WatcherConfig {
+@EnableConfigurationProperties({ LampWatcherProperties.class, LampServerProperties.class })
+public class LampWatcherConfig {
 
 	@Bean
-	public RestTemplate restTemplate(LampServerProperties serverProperties, WatcherProperties clientProperties) {
+	public RestTemplate restTemplate(LampServerProperties serverProperties, LampWatcherProperties clientProperties) {
 
 		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
 		clientHttpRequestFactory.setConnectTimeout(serverProperties.getConnectTimeout());
