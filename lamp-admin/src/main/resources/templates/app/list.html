@@ -59,6 +59,9 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="row">
+					<div class="text-center" th:include="fragments/pagination :: pagination" th:with="pageUrl='/app',page=${page}"></div>
+				</div>
 			</div>
 		</div>
 		<!-- END BORDERED TABLE PORTLET-->
