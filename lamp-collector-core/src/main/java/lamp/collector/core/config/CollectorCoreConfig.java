@@ -10,6 +10,7 @@ import lamp.collector.core.service.metrics.MetricsLoaderService;
 import lamp.collector.core.service.metrics.MetricsProcessService;
 import lamp.collector.core.service.metrics.MetricsProcessorService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

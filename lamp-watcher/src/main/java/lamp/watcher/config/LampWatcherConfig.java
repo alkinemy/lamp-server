@@ -1,8 +1,7 @@
 package lamp.watcher.config;
 
-import lamp.collector.core.CollectorConstants;
 import lamp.collector.core.config.CollectorCoreConfig;
-import lamp.watcher.service.MetricsKafkaConsumeService;
+import lamp.watcher.service.MetricsKafkaCollectionService;
 import lamp.watcher.support.LampHttpRequestInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @Configuration
 @Import(CollectorCoreConfig.class)
-@EnableConfigurationProperties({ LampWatcherProperties.class, LampServerProperties.class, MetricsKafkaConsumerProperties.class })
+@EnableConfigurationProperties({ LampWatcherProperties.class, LampServerProperties.class})
 public class LampWatcherConfig {
 
 	@Bean
@@ -38,12 +37,6 @@ public class LampWatcherConfig {
 
 		template.setInterceptors(interceptors);
 		return template;
-	}
-
-	@Bean
-	@ConditionalOnProperty(name = "lamp.metrics.kafka.enabled", havingValue = "true")
-	public MetricsKafkaConsumeService metricsKafkaConsumeService(MetricsKafkaConsumerProperties metricsKafkaConsumerProperties) {
-		return new MetricsKafkaConsumeService(metricsKafkaConsumerProperties);
 	}
 
 }

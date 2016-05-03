@@ -3,6 +3,7 @@ package lamp.collector.core.config;
 import lamp.collector.core.CollectorConstants;
 import lamp.collector.core.service.HealthProcessScheduledService;
 import lamp.collector.core.service.MetricsProcessScheduledService;
+import lamp.collector.core.service.metrics.MetricsKafkaCollectionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -55,6 +56,12 @@ public class CollectionSchedulingConfig {
 				metricsCollectionScheduledService().process();
 			}, collectionMetricsProperties.getInterval());
 			log.info("Collection Metrics Enabled (interval={}ms)", collectionMetricsProperties.getInterval());
+		}
+
+		@Bean
+		@ConditionalOnProperty(name = CollectorConstants.COLLECTION_METRICS_PREFIX + ".kafka.enabled", havingValue = "true")
+		public MetricsKafkaCollectionService metricsKafkaCollectionService() {
+			return new MetricsKafkaCollectionService(collectionMetricsProperties.getKafka());
 		}
 	}
 

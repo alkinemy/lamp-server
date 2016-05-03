@@ -1,23 +1,23 @@
-package lamp.watcher.service;
+package lamp.collector.core.service.metrics;
 
+import lamp.collector.core.config.CollectionMetricsKafkaProperties;
 import lamp.collector.core.model.MetricsAndTags;
-import lamp.collector.core.service.metrics.MetricsProcessorService;
 import lamp.common.collector.model.TargetMetrics;
 import lamp.common.utils.StringUtils;
 import lamp.support.kafka.consumer.KafkaConsumer;
-import lamp.watcher.config.MetricsKafkaConsumerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-public class MetricsKafkaConsumeService extends KafkaConsumer<String, MetricsAndTags> {
+public class MetricsKafkaCollectionService extends KafkaConsumer<String, MetricsAndTags> {
 
 	@Autowired
 	private MetricsProcessorService metricsProcessorService;
 
-	public MetricsKafkaConsumeService(MetricsKafkaConsumerProperties kafkaConsumerProperties) {
+	public MetricsKafkaCollectionService(CollectionMetricsKafkaProperties kafkaConsumerProperties) {
 		super(kafkaConsumerProperties, MetricsAndTags.class, StringUtils.split(kafkaConsumerProperties.getTopics(), ","));
+		log.info("MetricsKafkaCollectionService Init");
 	}
 
 	@Override protected void handleConsumerRecord(ConsumerRecord<String, MetricsAndTags> record) {
