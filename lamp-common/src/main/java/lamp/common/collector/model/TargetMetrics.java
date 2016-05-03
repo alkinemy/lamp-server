@@ -24,4 +24,10 @@ public class TargetMetrics implements Tenant {
 
 	private Map<String, String> tags;
 
+	public TargetMetrics(long timestamp, Map<String, Object> metrics, Map<String, String> tags) {
+		this.timestamp = timestamp;
+		this.metrics = metrics;
+		this.tags = tags;
+	}
+
 }

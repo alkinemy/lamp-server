@@ -21,11 +21,19 @@ public class SpringBootMetricsLoader extends RestTemplateMetricsLoader {
 	@Override
 	protected TargetMetrics assemble(long timestamp, MetricsTarget metricsTarget, Map<String, Object> metrics) {
 		for (String memoryMetricName : memoryMetricNames) {
-			metrics.put(memoryMetricName, newMemoryMetric(metrics.get(memoryMetricName)));
+			Object memValue = metrics.get(memoryMetricName);
+			if (memValue != null) {
+				metrics.put(memoryMetricName, newMemoryMetric(memValue));
+			}
 		}
 		return super.assemble(timestamp, metricsTarget, metrics);
 	}
 
+	/**
+	 * KB -> B
+	 * @param o
+	 * @return
+	 */
 	protected Object newMemoryMetric(Object o) {
 		if (o instanceof Long) {
 			return (Long)o * 1024;

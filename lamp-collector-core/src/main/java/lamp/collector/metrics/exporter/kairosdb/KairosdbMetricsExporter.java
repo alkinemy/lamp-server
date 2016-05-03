@@ -43,11 +43,13 @@ public class KairosdbMetricsExporter extends MetricsExporter {
 			for (Map.Entry<String, Object> entry : metrics.getMetrics().entrySet()) {
 				String key = entry.getKey();
 				Object value = entry.getValue();
-
-				metricBuilder.addMetric(key).addDataPoint(timestamp, value).addTags(metrics.getTags());
+				if (value != null) {
+					metricBuilder.addMetric(key).addDataPoint(timestamp, value).addTags(metrics.getTags());
+				}
 			}
 			client.pushMetrics(metricBuilder);
 		} catch (Exception e) {
+			log.warn("Kairosdb Metrics Export Failed", e);
 			eventPublisher.publish(new Event(EventLevel.WARN, EventName.METRICS_EXPORT_TO_KAIROSDB_FAILED, e, metrics));
 		}
 	}

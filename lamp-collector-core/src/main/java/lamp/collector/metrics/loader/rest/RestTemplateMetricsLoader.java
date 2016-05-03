@@ -1,9 +1,9 @@
 package lamp.collector.metrics.loader.rest;
 
-import lamp.common.collector.service.MetricsLoader;
 import lamp.common.collector.model.MetricsTagConstants;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
+import lamp.common.collector.service.TargetMetricsLoader;
 import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class RestTemplateMetricsLoader implements MetricsLoader {
+public class RestTemplateMetricsLoader implements TargetMetricsLoader {
 
 	private final RestTemplate restTemplate;
 
@@ -52,9 +52,7 @@ public class RestTemplateMetricsLoader implements MetricsLoader {
 					.stream()
 					.collect(Collectors.toMap(k -> prefix + k, Map.Entry::getValue));
 		} else {
-			assembledMetrics = metrics.entrySet()
-					.stream()
-					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			assembledMetrics = new LinkedHashMap<>(metrics);
 		}
 
 		Map<String, String> tags = new LinkedHashMap<>();
