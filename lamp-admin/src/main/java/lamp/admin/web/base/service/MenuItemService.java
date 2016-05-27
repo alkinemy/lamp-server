@@ -66,6 +66,13 @@ public class MenuItemService {
 				subMenuItems.add(MenuItem.of(ACCOUNT_APPROVAL, "Approval", "/account/approval", "icon-bulb"));
 				menuItems.add(MenuItem.of(ACCOUNT, "Account", "icon-layers", subMenuItems));
 			}
+
+			// Docker
+			{
+				List<MenuItem> subMenuItems = new ArrayList<>();
+				subMenuItems.add(MenuItem.of(DOCKER_APP, "Application", "/docker/apps", "icon-bulb"));
+				menuItems.add(MenuItem.of(DOCKER, "Docker", "icon-layers", subMenuItems));
+			}
 		}
 		return menuItems;
 	}

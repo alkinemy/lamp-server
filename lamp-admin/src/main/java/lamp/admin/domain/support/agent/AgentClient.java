@@ -4,6 +4,7 @@ import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.app.model.AppDto;
 import lamp.admin.domain.app.model.LogFile;
 import lamp.admin.domain.base.model.JavaVirtualMachine;
+import lamp.admin.domain.docker.model.DockerApp;
 import lamp.admin.domain.support.agent.model.AgentAppRegisterForm;
 import lamp.admin.domain.support.agent.model.AgentAppFileUpdateForm;
 import lamp.admin.domain.support.agent.model.AgentAppUpdateSpecForm;
@@ -240,4 +241,16 @@ public class AgentClient {
 		}
 	}
 
+	public void deployApp(Agent agent, DockerApp dockerApp) {
+		log.info("dockerApp = {}", dockerApp);
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+
+			ResponseEntity<String> responseEntity = restTemplate.postForEntity(baseUrl + "/api/container", dockerApp, String.class);
+			log.info("response : {}", responseEntity.getBody());
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
 }
