@@ -11,12 +11,11 @@ group 'lamp-collector'
 
 jar {
     baseName = 'lamp-core'
-    version =  '0.0.1-SNAPSHOT'
 
     manifest {
         attributes(
                 "Implementation-Title": project.name,
-                "Implementation-Version": version);
+                "Implementation-Version": project.version);
     }
 }
 

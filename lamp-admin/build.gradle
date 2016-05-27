@@ -20,12 +20,11 @@ idea {
 
 jar {
     baseName = 'lamp-admin'
-    version =  '0.0.1-SNAPSHOT'
 
     manifest {
         attributes(
                 "Implementation-Title": project.name,
-                "Implementation-Version": version);
+                "Implementation-Version": project.version);
     }
 }
 
@@ -62,6 +61,8 @@ dependencies {
     compile("org.apache.maven:maven-aether-provider:3.3.3")
 
     compile("com.jcraft:jsch:0.1.53")
+    compile("com.hierynomus:sshj:0.15.0")
+
     compile('org.apache.httpcomponents:httpclient:4.5.1')
 
     compile("org.kairosdb:client:${kairosdbVersion}")

@@ -19,7 +19,7 @@ subprojects {
     apply plugin: 'idea'
 
     project.group = 'lamp.server'
-    project.version = '0.0.1-SNAPSHOT'
+    project.version = '0.1.0-SNAPSHOT'
 
     repositories {
         mavenCentral()
