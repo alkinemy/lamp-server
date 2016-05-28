@@ -1,16 +1,13 @@
 package lamp.admin.domain.host.service;
 
-import lamp.admin.domain.host.model.*;
-
+import lamp.admin.domain.host.model.HostCredentials;
+import lamp.admin.domain.host.model.HostsConfiguration;
+import lamp.admin.domain.host.model.ScannedHost;
 import lamp.common.utils.IOUtils;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import net.schmizz.sshj.userauth.keyprovider.PKCS8KeyFile;
-import net.schmizz.sshj.userauth.method.AuthPublickey;
-import net.schmizz.sshj.userauth.password.PasswordFinder;
-import net.schmizz.sshj.userauth.password.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.StringReader;
@@ -18,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class HostAgentInstallService {
-
 
 
 	public void installAgent(ScannedHost scannedHost, HostCredentials hostCredentials, HostsConfiguration hostsConfiguration) throws Exception {
@@ -31,7 +27,7 @@ public class HostAgentInstallService {
 			} else {
 				PKCS8KeyFile keyFile = new PKCS8KeyFile();
 				keyFile.init(new StringReader(hostCredentials.getPrivateKey()));
-				client.auth(hostCredentials.getUsername(), new AuthPublickey(keyFile));
+				client.authPublickey(hostCredentials.getUsername(), keyFile);
 			}
 
 			try (final Session session = client.startSession()) {

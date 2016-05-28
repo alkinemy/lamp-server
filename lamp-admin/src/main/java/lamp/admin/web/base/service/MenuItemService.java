@@ -70,8 +70,15 @@ public class MenuItemService {
 			// Docker
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
-				subMenuItems.add(MenuItem.of(DOCKER_APP, "Application", "/docker/apps", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(DOCKER_APPS, "Application", "/docker/apps", "icon-bulb"));
 				menuItems.add(MenuItem.of(DOCKER, "Docker", "icon-layers", subMenuItems));
+			}
+
+			// Host
+			{
+				List<MenuItem> subMenuItems = new ArrayList<>();
+				subMenuItems.add(MenuItem.of(HOSTS, "Host", "/hosts", "icon-bulb"));
+				menuItems.add(MenuItem.of(HOST, "Host", "icon-layers", subMenuItems));
 			}
 		}
 		return menuItems;

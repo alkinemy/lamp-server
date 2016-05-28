@@ -24,6 +24,9 @@ public abstract class MenuConstants {
 	public static final String ACCOUNT_APPROVAL = "ACCOUNT_APPROVAL";
 
 	public static final String DOCKER = "DOCKER";
-	public static final String DOCKER_APP = "DOCKER_APP";
+		public static final String DOCKER_APPS = "DOCKER_APPS";
+
+	public static final String HOST = "HOST";
+		public static final String HOSTS = "HOSTS";
 
 }

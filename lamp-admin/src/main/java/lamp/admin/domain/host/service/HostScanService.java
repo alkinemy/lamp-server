@@ -5,10 +5,12 @@ import lamp.common.utils.InetAddressUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Slf4j
+@Service
 public class HostScanService {
 
 	public ScannedHost scanHost(String host, int port) {

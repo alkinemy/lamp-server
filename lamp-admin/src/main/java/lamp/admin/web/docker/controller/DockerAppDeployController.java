@@ -3,10 +3,6 @@ package lamp.admin.web.docker.controller;
 import lamp.admin.LampAdminConstants;
 import lamp.admin.domain.agent.model.TargetServerDto;
 import lamp.admin.domain.agent.service.TargetServerService;
-import lamp.admin.domain.app.model.AppInstallScriptDto;
-import lamp.admin.domain.app.model.AppTemplateDeployForm;
-import lamp.admin.domain.app.model.AppTemplateDto;
-import lamp.admin.domain.app.model.ParametersType;
 import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.docker.model.*;
 import lamp.admin.domain.docker.service.DockerAppDeployService;
@@ -18,7 +14,6 @@ import lamp.admin.web.support.annotation.MenuMapping;
 import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,12 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
-@MenuMapping(MenuConstants.DOCKER_APP)
+@MenuMapping(MenuConstants.DOCKER_APPS)
 @Controller
 @RequestMapping("/docker/apps/{id}")
 public class DockerAppDeployController {

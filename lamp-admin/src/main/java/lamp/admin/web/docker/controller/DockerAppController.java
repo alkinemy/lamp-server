@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@MenuMapping(MenuConstants.DOCKER_APP)
+@MenuMapping(MenuConstants.DOCKER_APPS)
 @Controller
 @RequestMapping("/docker/apps")
 public class DockerAppController {
