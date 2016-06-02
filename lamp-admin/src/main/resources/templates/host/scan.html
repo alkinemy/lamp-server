@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">Add Hosts</span>
+						</div>
+					</div>
+					<div class="portlet-body">
+						<div class="row form">
+						<form class="form-horizontal" role="form"  th:action="@{/hosts/add/scan}" th:object="${editForm}" method="post">
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+								The daily cronjob has failed.
+							</div>
+							<div class="form-body">
+								<div class="form-group" th:class="${#fields.hasErrors('hostnames')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Hostnames</label>
+									<div class="col-md-9">
+										<textarea class="form-control" th:field="*{hostnames}" rows="3"></textarea>
+										<span class="help-block" th:if="${#fields.hasErrors('hostnames')}" th:errors="*{parameters}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('sshPort')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">SSH Port</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{sshPort}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('sshPort')}" th:errors="*{sshPort}"> A block of help text. </span>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Scan</button>
+									</div>
+								</div>
+							</div>
+						</form>
+						</div>
+						<div class="row">
+							<div class="table-responsive">
+								<table class="table table-bordered table-hover">
+									<thead>
+									<tr>
+										<th> <input type="checkbox" name="scannedHostIdAll" value="" /> </th>
+										<th> 쿼리 </th>
+										<th> 호스트 이름 </th>
+										<th> IP 주소 </th>
+										<th> 현재 관리됨 </th>
+										<th> 결과 </th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr th:each="host : ${scannedHosts}">
+										<td> <input type="checkbox" name="scannedHostId" value="" th:disabled="${!host.connected}"/> </td>
+										<td th:text="${host.query}"> 해당 없음 </td>
+										<td th:text="${host.name}"> 해당 없음 </td>
+										<td th:text="${host.address}"> 해당 없음 </td>
+										<td th:text="${host.managed}"> 아니요 </td>
+										<td th:text="${host.connected} ? '호스트 준비: 응답 시간 ' + ${host.responseTime} + 'ms' : '호스트에 연결하지 못했습니다.'"> 호스트에 연결하지 못했습니다. </td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>

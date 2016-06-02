@@ -30,5 +30,8 @@ public class InetAddressUtilsTest {
 		assertThat(result123.get(0)).isEqualTo("10.1.1.1");
 		assertThat(result123.get(47)).isEqualTo("host10.network.com");
 
+		List<String> result0 = InetAddressUtils.getRangeIP4Address("127.0.0.1");
+		assertThat(result0).hasSize(1);
+		assertThat(result0.get(0)).isEqualTo("127.0.0.1");
 	}
 }

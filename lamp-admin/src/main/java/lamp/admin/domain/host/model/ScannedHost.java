@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class ScannedHost {
 
+	private String query;
 	private String name;
 	private String address;
 	private boolean managed;

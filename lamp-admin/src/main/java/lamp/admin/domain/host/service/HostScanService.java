@@ -15,7 +15,8 @@ public class HostScanService {
 
 	public ScannedHost scanHost(String host, int port) {
 		ScannedHost scannedHost = new ScannedHost();
-		scannedHost.setName(InetAddressUtils.getCanonicalHostName(host, host));
+		scannedHost.setQuery(host);
+		scannedHost.setName(InetAddressUtils.getHostName(host, host));
 		scannedHost.setAddress(InetAddressUtils.getHostAddress(host, host));
 
 		long startTimeMillis = System.currentTimeMillis();
@@ -34,8 +35,8 @@ public class HostScanService {
 		boolean connected = false;
 
 		try (SSHClient ssh = new SSHClient()) {
-			ssh.setTimeout(5 * 1000);
-			ssh.setConnectTimeout(5 * 1000);
+			ssh.setTimeout(2 * 1000);
+			ssh.setConnectTimeout(2 * 1000);
 			ssh.addHostKeyVerifier(new PromiscuousVerifier());
 			ssh.connect(host, port);
 			connected = ssh.isConnected();

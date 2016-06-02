@@ -1,15 +1,20 @@
 package lamp.admin.web.host.controller;
 
 import lamp.admin.domain.host.model.Host;
+import lamp.admin.domain.host.model.ScannedHost;
 import lamp.admin.domain.host.service.HostService;
+import lamp.admin.domain.host.service.form.HostScanForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +39,25 @@ public class HostController {
 		return "host/list";
 	}
 
-//	@RequestMapping(path = "/create", method = RequestMethod.GET)
-//	public String create(@ModelAttribute("editForm") DockerApp editForm,
-//						 Model model) {
-//
-//
-//		return createForm(editForm, model);
-//	}
+	@RequestMapping(path = "/add/scan", method = RequestMethod.GET)
+	public String scan(Model model, @ModelAttribute("editForm") HostScanForm editForm) {
+		return "host/scan";
+	}
+
+	@RequestMapping(path = "/add/scan", method = RequestMethod.POST)
+	public String scan(Model model,
+					   @ModelAttribute("editForm") HostScanForm editForm,
+					   BindingResult bindingResult,
+					   RedirectAttributes redirectAttributes) {
+
+		if (bindingResult.hasErrors()) {
+			return scan(model, editForm);
+		}
+
+		List<ScannedHost> scannedHosts = hostService.scanHost(editForm);
+		model.addAttribute("scannedHosts", scannedHosts);
+		return scan(model, editForm);
+	}
 //
 //	protected String createForm(DockerApp editForm, Model model) {
 //

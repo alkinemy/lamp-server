@@ -19,6 +19,6 @@ public class DockerApp {
 	private int diskSpace;
 	private int instances;
 
-	private DockerContainer container;
+	private String container;
 
 }

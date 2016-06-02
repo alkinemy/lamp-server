@@ -48,8 +48,10 @@ public class InetAddressUtils {
 		List<String> addresses = new ArrayList<>();
 		for (String a : addressArray) {
 			Matcher matcher = RANGE_IP4_ADRESS_PATTERN.matcher(a);
+			boolean found = false;
 			while (matcher.find()) {
 				if (matcher.groupCount() == 4) {
+					found = true;
 					String beginStr = matcher.group(2);
 					String endStr = matcher.group(3);
 					int paddingLength = beginStr.length();
@@ -65,6 +67,9 @@ public class InetAddressUtils {
 						addresses.add(address.toString());
 					}
 				}
+			}
+			if (!found) {
+				addresses.add(a);
 			}
 		}
 
