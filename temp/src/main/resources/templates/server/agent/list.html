@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light portlet-fit bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-bubble font-dark"></i>
+							<span class="caption-subject font-dark bold uppercase">Agents</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided">
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+								<tr>
+									<th> # </th>
+									<th> Name </th>
+									<th> ArtifactId </th>
+									<th> Version </th>
+									<th> Hostname </th>
+									<th> Address </th>
+									<th> AgentStatus </th>
+									<th> Action </th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr th:each="agent : ${page}">
+									<td th:text="${agent.id}"> Joke </td>
+									<td th:text="${agent.name}"> Joke </td>
+									<td th:text="${agent.artifactId}"> Joke </td>
+									<td th:text="${agent.version}"> Joke </td>
+									<td th:text="${agent.hostname}"> Joke </td>
+									<td th:text="${agent.address}"> Joke </td>
+									<td><span th:text="${targetServer?.agentStatus}"
+											  th:class="${targetServer?.agentStatus}? 'label label-sm'
+                                              + (${targetServer.agentStatus == 'UNKNOWN'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'UP'}? ' label-success' : '')
+                                              + (${targetServer.agentStatus == 'OUT_OF_SERVICE'}? ' label-danger' : '')
+                                              + (${targetServer.agentStatus == 'DOWN'}? ' label-warning' : '')">Suspended </span></td>
+									<td>
+										<div class="btn-group">
+											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+												<i class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<a th:href="@{/server/agent/{id}(id=${agent.id})}"> View </a>
+												</li>
+												<li>
+													<a th:href="@{/server/agent/{id}/app(id=${agent.id})}"> Managed Apps </a>
+												</li>
+												<li class="divider"> </li>
+												<li>
+													<a th:href="@{/server/agent/{id}/vm(id=${agent.id})}"> Java VM </a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+
+</body>
+</html>

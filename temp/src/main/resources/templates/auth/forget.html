@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/auth">
+<body>
+<!-- BEGIN LOGIN -->
+<div class="content" layout:fragment="content">
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+    <form class="forget-form" action="/forget" method="post">
+        <h3 class="font-green">Forget Password ?</h3>
+        <p> Enter your e-mail address below to reset your password. </p>
+        <div class="form-group">
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" /> </div>
+        <div class="form-actions">
+            <a href="/login" alt="back">
+                <button type="button" id="back-btn" class="btn btn-default">Back</button>
+            </a>
+            <button type="submit" class="btn btn-success uppercase pull-right">Submit</button>
+        </div>
+    </form>
+    <!-- END FORGOT PASSWORD FORM -->
+</div>
+
+</body>
+</html>

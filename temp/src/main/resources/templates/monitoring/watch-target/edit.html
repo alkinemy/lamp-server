@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-settings font-dark"></i>
+					<span class="caption-subject font-dark sbold uppercase">App Template Form</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form class="form-horizontal" role="form"  th:action="${action} == 'update' ? @{/monitoring/watch-target/{id}/update(id=${id})} : @{/monitoring/watch-target/create}" th:object="${editForm}" method="post">
+					<div class="form-body">
+						<div class="form-group" th:class="${#fields.hasErrors('id')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Id</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{id}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('id')}" th:errors="*{name}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Description</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{description}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<hr />
+						<h4>Server</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('hostname')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">hostname</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{hostname}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('hostname')}" th:errors="*{hostname}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('address')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">address</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{address}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('address')}" th:errors="*{description}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<div class="form-group" th:class="${#fields.hasErrors('targetType')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">targetType</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{targetType}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('targetType')}" th:errors="*{description}"> A block of help text. </span>
+							</div>
+						</div>
+
+
+						<hr />
+						<h4>App</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('groupId')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Group Id (groupId)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{groupId}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('artifactId')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Artifact Id (artifactId)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{artifactId}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('artifactId')}" th:errors="*{artifactId}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('version')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Version (version)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{version}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('version')}" th:errors="*{version}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<hr />
+						<h4>Monitoring</h4>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Health Collection</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{healthCollectionEnabled}" /></span>
+										Enabled </label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Health Monitoring</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{healthMonitoringEnabled}" /></span>
+										Enabled </label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('healthType')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Health Type</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{healthType}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('healthType')}" th:errors="*{healthType}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('healthUrl')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Health Endpoint</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{healthUrl}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('healthUrl')}" th:errors="*{healthUrl}"> A block of help text. </span>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Metrics Collection</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{metricsCollectionEnabled}" /></span>
+										Enabled </label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Metrics Monitoring</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{metricsMonitoringEnabled}" /></span>
+										Enabled </label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('metricsType')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Metrics Type</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{metricsType}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('metricsType')}" th:errors="*{metricsType}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('metricsUrl')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Metrics Endpoint</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{metricsUrl}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('metricsUrl')}" th:errors="*{metricsUrl}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<hr />
+						<h4>Tags</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('tagsJsonString')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Tags(json)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{tagsJsonString}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('tagsJsonString')}" th:errors="*{tagsJsonString}"> A block of help text. </span>
+							</div>
+						</div>
+
+
+					</div>
+					<div class="form-actions">
+						<div class="row">
+							<div class="col-md-offset-3 col-md-9">
+								<button type="submit" class="btn green">Submit</button>
+								<button type="button" class="btn default">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
+
+</body>
+</html>

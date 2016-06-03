@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">Agent Start</span>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="@{/server/target-server/{id}/agent/start(id=${targetServer.id})}" th:object="${startForm}" method="post">
+							<div class="form-body">
+								<h4>SSH Login</h4>
+								<div class="form-group">
+									<label class="col-md-3 control-label">AuthType</label>
+									<div class="col-md-9">
+										<p class="form-control-static" th:text="${targetServer.sshAuthType}"> authType </p>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">Username</label>
+									<div class="col-md-9">
+										<p class="form-control-static" th:text="${targetServer.sshUsername}"> username </p>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Password</label>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input type="password" class="form-control" th:field="*{sshPassword}" placeholder="Password" />
+											<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<h4>Start Command</h4>
+								<div class="form-group" th:class="${#fields.hasErrors('commandLine')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Command Line</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{commandLine}" placeholder="Enter CommandLine" />
+										<span class="help-block" th:if="${#fields.hasErrors('commandLine')}" th:errors="*{commandLine}"> A block of help text. </span>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>

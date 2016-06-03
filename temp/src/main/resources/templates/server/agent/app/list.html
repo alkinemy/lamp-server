@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+<body>
+
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light portlet-fit bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-bubble font-dark"></i>
+					<span class="caption-subject font-dark bold uppercase" th:text="${agent.name}">App List</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group btn-group-devided">
+						<a th:href="@{/server/agent/{id}/app/create(id=${agent.id},step=step1)}" class="btn btn-sm default">등록</a>
+					</div>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+						<tr>
+							<th> Id </th>
+							<th> Name </th>
+							<th> Description </th>
+							<th> Process Type </th>
+							<th> Group Id </th>
+							<th> Artifact Id </th>
+							<th> Version </th>
+							<th> Status </th>
+							<th> PID </th>
+							<th> Monitor </th>
+							<th> Action </th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="app : ${appList}">
+							<td th:text="${app.id}"> 2 </td>
+							<td th:text="${app.name}"> Joke </td>
+							<td th:text="${app.description}"> Joke </td>
+							<td th:text="${app.processType}"> Joke </td>
+							<td th:text="${app.groupId}"> Joke </td>
+							<td th:text="${app.artifactId}"> Joke </td>
+							<td th:text="${app.version}"> Joke </td>
+							<td th:text="${app.status}"> Joke </td>
+							<td th:text="${app.pid}"> Joke </td>
+							<td th:text="${app.monitor}"> Joke </td>
+							<td>
+								<div class="btn-group">
+									<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+										<i class="fa fa-angle-down"></i>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/start(agentId=${agent.id},appId=${app.id})}"> Start </a>
+										</li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/stop(agentId=${agent.id},appId=${app.id})}"> Start </a>
+										</li>
+										<li class="divider"> </li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/update?step=step1(agentId=${agent.id},appId=${app.id})}"> Redeploy </a>
+										</li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/delete(agentId=${agent.id},appId=${app.id})}"> Remove </a>
+										</li>
+										<li class="divider"> </li>
+										<li>
+											<a th:href="@{/server/agent/{agentId}/app/{appId}/log(agentId=${agent.id},appId=${app.id})}"> Log Files </a>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
+
+
+</body>
+</html>

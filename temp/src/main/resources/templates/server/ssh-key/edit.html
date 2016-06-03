@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">SSH Key Form</span>
+						</div>
+						<div class="actions">
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="${action} == 'update' ? @{/server/ssh-key/{id}/update(id=${id})} : @{/server/ssh-key/create}" th:object="${editForm}" method="post">
+							<div class="form-body">
+								<h4>Server</h4>
+								<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Name</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{name}" placeholder="Enter name" />
+										<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Description</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{description}" placeholder="Enter description" />
+										<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('privateKey')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">PrivateKey</label>
+									<div class="col-md-9">
+										<textarea class="form-control" th:field="*{privateKey}" rows="4"></textarea>
+										<span class="help-block" th:if="${#fields.hasErrors('privateKey')}" th:errors="*{privateKey}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('username')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Username</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{username}" placeholder="Enter username" />
+										<span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">Password</label>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input type="password" class="form-control" th:field="*{password}" placeholder="Password" />
+											<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+
+</body>
+</html>

@@ -2,9 +2,6 @@ package lamp.admin.web.docker.controller;
 
 import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.docker.model.DockerApp;
-import lamp.admin.domain.docker.model.Parameter;
-import lamp.admin.domain.docker.model.PortMapping;
-import lamp.admin.domain.docker.model.Volume;
 import lamp.admin.domain.docker.service.DockerAppService;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
@@ -64,7 +61,7 @@ public class DockerAppController {
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
 
-		List<Parameter> parameters = editForm.getContainer()
+		List<KeyValue> parameters = editForm.getContainer()
 			.getParameters().stream().filter(p -> StringUtils.isNotBlank(p.getKey()) && StringUtils.isNotBlank(p.getValue())).collect(Collectors.toList());
 		editForm.getContainer().setParameters(parameters);
 

@@ -1,0 +1,12 @@
+
+DROP DATABASE IF EXISTS lamp;
+CREATE DATABASE IF NOT EXISTS lamp DEFAULT CHARACTER SET utf8 ;
+
+CREATE USER 'lamp'@'localhost' IDENTIFIED BY 'aladin';
+
+use mysql;
+
+
+INSERT INTO db (HOST,Db,USER,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv,Index_priv, Alter_priv) VALUES('localhost','lamp','lamp','Y','Y','Y','Y','Y','Y','Y','Y');
+
+FLUSH PRIVILEGES;

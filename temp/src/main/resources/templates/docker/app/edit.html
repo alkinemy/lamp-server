@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject font-dark sbold uppercase">Create Application</span>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form class="form-horizontal" role="form"  th:action="@{/docker/apps/create}" th:object="${editForm}" method="post">
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+								The daily cronjob has failed.
+							</div>
+							<div class="form-body">
+								<div class="form-group" th:class="${#fields.hasErrors('id')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">ID</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{id}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"> A block of help text. </span>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('container.image')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Image</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" th:field="*{container.image}" placeholder="Enter text" />
+										<span class="help-block" th:if="${#fields.hasErrors('container.image')}" th:errors="*{container.image}"> A block of help text. </span>
+									</div>
+								</div>
+								<div class="form-group" th:class="${#fields.hasErrors('container.network')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Network</label>
+									<div class="col-md-9">
+										<select class="form-control" th:field="*{container.network}">
+											<option th:each="network : ${networkList}"
+													th:value="${network}" th:text="${network}">Option 1</option>
+										</select>
+										<span class="help-block" th:if="${#fields.hasErrors('container.network')}" th:errors="*{container.network}"> A block of help text. </span>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-md-3 control-label">PullImage</label>
+									<div class="col-md-9">
+										<div class="checkbox-list">
+											<label class="checkbox-inline">
+												<span class=""><input type="checkbox" th:field="*{container.forcePullImage}" /></span>
+												Force pull image on every launch </label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('container.portMappings')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Port Mappings</label>
+									<div class="col-md-9">
+										<div class="row">
+											<div class="col-md-4">
+												Container Port
+											</div>
+											<div class="col-md-4">
+												Host Port
+											</div>
+										</div>
+										<div class="row" th:each="portMapping,status : ${editForm.container?.portMappings}">
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.portMappings[__${status.index}__].containerPort}" placeholder="Enter text" />
+											</div>
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.portMappings[__${status.index}__].hostPort}" placeholder="Enter text" />
+											</div>
+										</div>
+
+										<div class="row" th:with="index=${#lists.size(editForm.container?.portMappings)}">
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.portMappings[__${index}__].containerPort}" placeholder="Enter text" />
+											</div>
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.portMappings[__${index}__].hostPort}" placeholder="Enter text" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('container.parameters')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Parameters</label>
+									<div class="col-md-9">
+										<div class="row">
+											<div class="col-md-4">
+												Key
+											</div>
+											<div class="col-md-4">
+												Value
+											</div>
+										</div>
+										<div class="row" th:each="parameter,status : ${editForm.container?.parameters}">
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.parameters[__${status.index}__].key}" placeholder="Enter text" />
+											</div>
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.parameters[__${status.index}__].value}" placeholder="Enter text" />
+											</div>
+										</div>
+
+										<div class="row" th:with="index=${#lists.size(editForm.container?.parameters)}">
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.parameters[__${index}__].key}" placeholder="Enter text" />
+											</div>
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.parameters[__${index}__].value}" placeholder="Enter text" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group" th:class="${#fields.hasErrors('container.volumes')} ? 'form-group has-error' : 'form-group'">
+									<label class="col-md-3 control-label">Volumes</label>
+									<div class="col-md-9">
+										<div class="row">
+											<div class="col-md-4">
+												Container Path
+											</div>
+											<div class="col-md-4">
+												Host Path
+											</div>
+										</div>
+										<div class="row" th:each="volume,status : ${editForm.container?.volumes}">
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.volumes[__${status.index}__].containerPath}" placeholder="Enter text" />
+											</div>
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.volumes[__${status.index}__].hostPath}" placeholder="Enter text" />
+											</div>
+										</div>
+
+										<div class="row" th:with="index=${#lists.size(editForm.container?.volumes)}">
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.volumes[__${index}__].containerPath}" placeholder="Enter text" />
+											</div>
+											<div class="col-md-4">
+												<input type="text" class="form-control" th:field="*{container.volumes[__${index}__].hostPath}" placeholder="Enter text" />
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+
+							</div>
+							<div class="form-actions">
+								<div class="row">
+									<div class="col-md-offset-3 col-md-9">
+										<button type="submit" class="btn green">Submit</button>
+										<button type="button" class="btn default">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+</body>
+</html>
