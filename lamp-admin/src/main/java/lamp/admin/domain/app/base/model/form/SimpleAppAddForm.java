@@ -2,7 +2,6 @@ package lamp.admin.domain.app.base.model.form;
 
 import lamp.admin.core.app.simple.AppProcessType;
 import lamp.admin.core.app.simple.resource.AppResourceType;
-import lamp.admin.domain.old.app.model.ParametersType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

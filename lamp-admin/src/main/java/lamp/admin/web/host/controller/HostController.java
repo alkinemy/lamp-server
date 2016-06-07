@@ -1,8 +1,9 @@
 package lamp.admin.web.host.controller;
 
-import lamp.admin.domain.host.model.Host;
-import lamp.admin.domain.host.model.ScannedHost;
+import lamp.admin.core.host.Host;
+import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.host.service.HostService;
+import lamp.admin.domain.host.service.form.HostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,11 +30,7 @@ public class HostController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model) {
-		Host host = new Host();
-		host.setName("helllo");
-		List<Host> hosts = new ArrayList();
-		hosts.add(host);
-		hosts.add(host);
+		List<Host> hosts = hostService.getHosts("");
 		model.addAttribute("hosts", hosts);
 		return "host/list";
 	}
@@ -57,6 +53,28 @@ public class HostController {
 		List<ScannedHost> scannedHosts = hostService.scanHost(editForm);
 		model.addAttribute("scannedHosts", scannedHosts);
 		return scan(model, editForm);
+	}
+
+	@RequestMapping(path = "/add/credentials", method = RequestMethod.POST)
+	public String credentials(Model model,
+					   @ModelAttribute("editForm") HostCredentialsForm editForm,
+					   BindingResult bindingResult,
+					   RedirectAttributes redirectAttributes) {
+
+		return "host/credentials";
+	}
+
+	@RequestMapping(path = "/add", method = RequestMethod.POST)
+	public String add(Model model,
+							  @ModelAttribute("editForm") HostCredentialsForm editForm,
+							  BindingResult bindingResult,
+							  RedirectAttributes redirectAttributes) throws Exception {
+
+		log.info("editForm = {}", editForm);
+		String clusterId = "1234";
+		hostService.installAgents(clusterId, editForm);
+
+		return "redirect:/hosts";
 	}
 //
 //	protected String createForm(DockerApp editForm, Model model) {

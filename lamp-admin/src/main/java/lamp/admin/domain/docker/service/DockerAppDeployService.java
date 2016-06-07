@@ -1,5 +1,6 @@
 package lamp.admin.domain.docker.service;
 
+import lamp.admin.core.agent.AgentClient;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.model.TargetServer;
 import lamp.admin.domain.agent.model.TargetServerDto;
@@ -10,7 +11,6 @@ import lamp.admin.domain.docker.model.DockerApp;
 import lamp.admin.domain.docker.model.DockerAppDeployForm;
 import lamp.admin.domain.docker.model.DockerAppEntity;
 import lamp.admin.domain.docker.repository.DockerAppEntityRepository;
-import lamp.admin.domain.support.agent.AgentClient;
 import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.assembler.SmartAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class DockerAppDeployService {
 
 
 	public void deployApp(DockerApp dockerApp, Agent agent) {
-		agentClient.deployApp(agent, dockerApp);
+//		agentClient.deployApp(agent, dockerApp);
 	}
 
 	public void deployApp(String appId, DockerAppDeployForm editForm) {

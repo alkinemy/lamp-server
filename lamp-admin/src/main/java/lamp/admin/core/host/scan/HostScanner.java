@@ -1,6 +1,6 @@
 package lamp.admin.core.host.scan;
 
-import lamp.admin.domain.host.model.ScannedHost;
+import lamp.admin.core.host.ScannedHost;
 import lamp.common.utils.InetAddressUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.schmizz.sshj.SSHClient;

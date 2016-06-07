@@ -1,11 +1,7 @@
 package lamp.admin.domain.host.service;
 
-import lamp.admin.domain.host.model.ScannedHost;
 import lamp.common.utils.InetAddressUtils;
-import lamp.common.utils.InetAddressUtilsTest;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class HostServiceTest {
 

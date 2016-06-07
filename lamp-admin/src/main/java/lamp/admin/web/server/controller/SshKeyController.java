@@ -1,7 +1,6 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.config.web.AgentProperties;
 import lamp.admin.domain.agent.model.SshAuthType;
 import lamp.admin.domain.agent.model.SshKeyCreateForm;
 import lamp.admin.domain.agent.model.SshKeyDto;
@@ -31,9 +30,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/server/ssh-key")
 public class SshKeyController {
-
-	@Autowired
-	private AgentProperties agentProperties;
 
 	@Autowired
 	private SshKeyService sshKeyService;

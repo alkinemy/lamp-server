@@ -48,5 +48,4 @@ public class Host {
 	private long swapUsed;
 	private long swapFree;
 
-
 }

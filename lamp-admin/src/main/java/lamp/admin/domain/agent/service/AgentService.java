@@ -9,7 +9,6 @@ import lamp.admin.domain.agent.repository.AgentRepository;
 import lamp.admin.domain.base.model.JavaVirtualMachine;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
-import lamp.admin.domain.support.agent.AgentClient;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +33,6 @@ public class AgentService {
 	private AgentRepository agentRepository;
 	@Autowired
 	private TargetServerService targetServerService;
-	@Autowired
-	private AgentClient agentClient;
 
 	public Agent getAgent(String id) {
 		Optional<Agent> agentOptional = getAgentOptional(id);
@@ -75,7 +72,8 @@ public class AgentService {
 
 	public List<JavaVirtualMachine> getJavaVmList(String id) {
 		Agent agent = getAgent(id);
-		return agentClient.getVmList(agent);
+//		return agentClient.getVmList(agent);
+		return null;
 	}
 
 	@Transactional

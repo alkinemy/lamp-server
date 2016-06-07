@@ -1,9 +1,10 @@
 package lamp.admin.config.web;
 
 
-import lamp.admin.domain.support.agent.AgentClient;
-import lamp.admin.domain.support.agent.AgentHttpRequestInterceptor;
-import lamp.admin.domain.support.agent.AgentResponseErrorHandler;
+import lamp.admin.core.agent.AgentClient;
+import lamp.admin.core.agent.AgentHttpRequestInterceptor;
+import lamp.admin.core.agent.AgentResponseErrorHandler;
+import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.common.utils.assembler.SmartAssembler;
 import lamp.admin.web.support.LampMessageInterpolator;
 import lamp.admin.web.support.MenuItemInterceptor;
@@ -16,6 +17,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -27,7 +29,7 @@ import org.thymeleaf.dialect.IDialect;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 @Configuration
-@EnableConfigurationProperties({ ServerProperties.class, AgentProperties.class})
+@EnableConfigurationProperties({ ServerProperties.class, AgentInstallProperties.class})
 public class AdminWebConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired

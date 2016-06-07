@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,17 +18,19 @@ import java.util.stream.Collectors;
 @Service
 public class CollectionTargetService implements HealthTargetService, MetricsTargetService {
 
-    @Autowired
-    private TargetServerService targetServerService;
+//    @Autowired
+//    private TargetServerService targetServerService;
 
     @Override
     public List<HealthTarget> getHealthTargets() {
-        return targetServerService.getTargetServerList().stream().filter(s -> BooleanUtils.isTrue(s.isHealthCollectionEnabled())).collect(Collectors.toList());
+//        return targetServerService.getTargetServerList().stream().filter(s -> BooleanUtils.isTrue(s.isHealthCollectionEnabled())).collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     @Override
     public List<MetricsTarget> getMetricsTargets() {
-        return targetServerService.getTargetServerList().stream().filter(s -> BooleanUtils.isTrue(s.isMetricsCollectionEnabled())).collect(Collectors.toList());
+//        return targetServerService.getTargetServerList().stream().filter(s -> BooleanUtils.isTrue(s.isMetricsCollectionEnabled())).collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
 }

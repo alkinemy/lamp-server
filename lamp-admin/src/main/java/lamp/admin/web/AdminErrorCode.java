@@ -43,8 +43,8 @@ public enum AdminErrorCode implements ErrorCode {
 	, USER_DUPLICATED_LOGIN("중복된 아이디입니다.")
 	, USER_DUPLICATED_EMAIL("중복된 이메일주소입니다.")
 	, USER_NOT_EXIST("존재하지 않는 유저입니다.")
-	, DOCKER_APP_NOT_FOUND("앱을 찾을 수 없습니다.")
-	;
+	, DOCKER_APP_NOT_FOUND("앱을 찾을 수 없습니다."),
+	AGENT_INSTALL_FAILED("에이전트를 설치하는 중 에러가 발생하였습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

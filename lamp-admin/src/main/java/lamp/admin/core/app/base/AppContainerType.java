@@ -1,24 +1,18 @@
 package lamp.admin.core.app.base;
 
-import lamp.admin.core.app.docker.DockerAppContainer;
-import lamp.admin.core.app.jar.JarAppContainer;
-import lamp.admin.core.app.simple.SimpleAppContainer;
 import lombok.Getter;
 
 public enum AppContainerType {
 
-	SIMPLE(Names.SIMPLE, Values.SIMPLE),
-	JAR(Names.JAR, Values.JAR),
-	DOCKER(Names.DOCKER, Values.DOCKER);
+	SIMPLE(Names.SIMPLE),
+	JAR(Names.JAR),
+	DOCKER(Names.DOCKER);
 
 	@Getter
 	private String typeName;
-	@Getter
-	private Class<?> typeValue;
 
-	AppContainerType(String typeName, Class<?> typeValue) {
+	AppContainerType(String typeName) {
 		this.typeName = typeName;
-		this.typeValue = typeValue;
 	}
 
 	public String getTypeName() {
@@ -34,13 +28,5 @@ public enum AppContainerType {
 		}
 	}
 
-	public static final class Values {
-		public static final Class<?> SIMPLE = SimpleAppContainer.class;
-		public static final Class<?> JAR = JarAppContainer.class;
-		public static final Class<?> DOCKER = DockerAppContainer.class;
-
-		private Values() {
-		}
-	}
 
 }

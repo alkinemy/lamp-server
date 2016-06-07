@@ -1,27 +1,47 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.admin.domain.host.model.HostCredentials;
-import lamp.admin.domain.host.model.HostsConfiguration;
-import lamp.admin.domain.host.model.ScannedHost;
+import lamp.admin.domain.host.model.HostConfiguration;
+import lamp.admin.domain.host.service.form.HostAgentFile;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
-import static org.junit.Assert.*;
-
-
+@RunWith(MockitoJUnitRunner.class)
 public class HostAgentInstallServiceTest {
+
+	@InjectMocks HostAgentInstallService hostAgentInstallService;
+	@Spy AgentInstallProperties agentInstallProperties = new AgentInstallProperties();
 
 	@Test
 	public void testInstallAgent() throws Exception {
-		HostAgentInstallService hostAgentInstallService = new HostAgentInstallService();
-		ScannedHost scannedHost = new ScannedHost();
-		scannedHost.setAddress("127.0.0.1");
+		String address = System.getProperty("scannedHost.address", "127.0.0.1");
+		String username = System.getProperty("hostCredentials.username");
+		String password = System.getProperty("hostCredentials.password");
+
+		ResourceLoader resourceLoader = new DefaultResourceLoader();
+		agentInstallProperties.setResourceLoader(resourceLoader);
 
 		HostCredentials hostCredentials = new HostCredentials();
-		hostCredentials.setUsePassword(false);
-		hostCredentials.setUsername("ubuntu");
-		hostCredentials.setPrivateKey("");
+		hostCredentials.setUsePassword(true);
+		hostCredentials.setUsername(username);
+		hostCredentials.setPassword(password);
 
-		HostsConfiguration hostsConfiguration = new HostsConfiguration();
-		hostAgentInstallService.installAgent(scannedHost, hostCredentials, hostsConfiguration);
+		String agentInstallFilename = "lamp-agent.jar";
+		String agentFile = "classpath:agent/lamp-agent.jar";
+		String agentInstallDirectory = "/lamp/agent/2";
+
+		HostConfiguration hostConfiguration = new HostConfiguration();
+		hostAgentInstallService.installAgent(address, hostCredentials,
+											 agentFile,
+											 agentInstallDirectory,
+											 agentInstallFilename,
+											 hostConfiguration,
+											 System.out);
 	}
 }

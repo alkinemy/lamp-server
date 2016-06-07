@@ -1,11 +1,11 @@
 package lamp.admin.web.server.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.config.web.AgentProperties;
 import lamp.admin.domain.agent.model.*;
 import lamp.admin.domain.agent.service.SshKeyService;
 import lamp.admin.domain.agent.service.TargetServerService;
 import lamp.admin.domain.base.exception.FlashMessageException;
+import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
@@ -35,7 +35,7 @@ import java.util.List;
 public class TargetServerController {
 
 	@Autowired
-	private AgentProperties agentProperties;
+	private AgentInstallProperties agentInstallProperties;
 
 	@Autowired
 	private TargetServerService targetServerService;
@@ -55,7 +55,7 @@ public class TargetServerController {
 	public String createForm(@ModelAttribute("editForm") TargetServerCreateForm editForm, Model model) {
 		model.addAttribute("action", "create");
 		if (StringUtils.isBlank(editForm.getAgentInstallPath())) {
-			editForm.setAgentInstallPath(agentProperties.getInstallPath());
+			editForm.setAgentInstallPath(agentInstallProperties.getAgentInstallDirectory());
 		}
 
 		model.addAttribute("sshAuthTypes", SshAuthType.values());

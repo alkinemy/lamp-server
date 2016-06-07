@@ -61,17 +61,17 @@ public class DockerAppController {
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
 
-		List<KeyValue> parameters = editForm.getContainer()
-			.getParameters().stream().filter(p -> StringUtils.isNotBlank(p.getKey()) && StringUtils.isNotBlank(p.getValue())).collect(Collectors.toList());
-		editForm.getContainer().setParameters(parameters);
-
-		List<PortMapping> portMappings = editForm.getContainer()
-			.getPortMappings().stream().filter(p -> p.getContainerPort() != null || p.getHostPort() != null).collect(Collectors.toList());
-		editForm.getContainer().setPortMappings(portMappings);
-
-		List<Volume> volumes = editForm.getContainer()
-			.getVolumes().stream().filter(p -> StringUtils.isNotBlank(p.getContainerPath()) || StringUtils.isNotBlank(p.getHostPath())).collect(Collectors.toList());
-		editForm.getContainer().setVolumes(volumes);
+//		List<KeyValue> parameters = editForm.getContainer()
+//			.getParameters().stream().filter(p -> StringUtils.isNotBlank(p.getKey()) && StringUtils.isNotBlank(p.getValue())).collect(Collectors.toList());
+//		editForm.getContainer().setParameters(parameters);
+//
+//		List<PortMapping> portMappings = editForm.getContainer()
+//			.getPortMappings().stream().filter(p -> p.getContainerPort() != null || p.getHostPort() != null).collect(Collectors.toList());
+//		editForm.getContainer().setPortMappings(portMappings);
+//
+//		List<Volume> volumes = editForm.getContainer()
+//			.getVolumes().stream().filter(p -> StringUtils.isNotBlank(p.getContainerPath()) || StringUtils.isNotBlank(p.getHostPath())).collect(Collectors.toList());
+//		editForm.getContainer().setVolumes(volumes);
 
 		try {
 			dockerAppService.createDockerApp(editForm);

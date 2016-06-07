@@ -1,7 +1,7 @@
 package lamp.admin.domain.host.service.form;
 
+import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.host.model.HostCredentials;
-import lamp.admin.domain.host.model.ScannedHost;
 import lombok.Getter;
 import lombok.Setter;
 

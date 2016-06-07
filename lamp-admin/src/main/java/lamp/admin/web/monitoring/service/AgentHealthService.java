@@ -1,6 +1,6 @@
 package lamp.admin.web.monitoring.service;
 
-import lamp.admin.config.web.AgentProperties;
+import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.admin.domain.monitoring.model.HealthStatusCode;
 import lamp.collector.health.exporter.HealthExporter;
 import lamp.common.collector.model.HealthConstants;
@@ -21,13 +21,13 @@ public class AgentHealthService extends HealthExporter {
     private ConcurrentMap<String, String> agentHealthStatus = new ConcurrentHashMap<>();
 
     @Autowired
-    private AgentProperties agentProperties;
+    private AgentInstallProperties agentInstallProperties;
 
 
     @Override
     public boolean canProcess(HealthTarget healthTarget) {
-        return StringUtils.equals(agentProperties.getGroupId(), healthTarget.getGroupId())
-                && StringUtils.equals(agentProperties.getArtifactId(), healthTarget.getArtifactId());
+        return StringUtils.equals(agentInstallProperties.getGroupId(), healthTarget.getGroupId())
+                && StringUtils.equals(agentInstallProperties.getArtifactId(), healthTarget.getArtifactId());
     }
 
 

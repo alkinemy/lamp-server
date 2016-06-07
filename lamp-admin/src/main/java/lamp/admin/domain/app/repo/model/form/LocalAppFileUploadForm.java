@@ -1,6 +1,6 @@
 package lamp.admin.domain.app.repo.model.form;
 
-import lamp.admin.domain.old.app.validation.MultipartFileNotEmpty;
+import lamp.admin.domain.base.model.validation.MultipartFileNotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

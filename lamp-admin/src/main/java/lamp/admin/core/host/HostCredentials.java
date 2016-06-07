@@ -14,11 +14,9 @@ public class HostCredentials {
 	private boolean usePassword = true;
 
 	private String password;
-	private String passwordConfirm;
 
 	private String privateKey;
 	private String passphrase;
-	private String passphraseConfirm;
 
 	private int sshPort = 22;
 

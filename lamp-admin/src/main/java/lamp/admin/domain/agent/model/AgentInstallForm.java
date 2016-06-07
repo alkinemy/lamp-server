@@ -1,6 +1,6 @@
 package lamp.admin.domain.agent.model;
 
-import lamp.admin.domain.old.app.model.ParametersType;
+import lamp.admin.domain.app.base.model.form.ParametersType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
