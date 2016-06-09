@@ -62,6 +62,8 @@ dependencies {
 
     compile("com.jcraft:jsch:0.1.53")
     compile("com.hierynomus:sshj:0.15.0")
+    compile("net.sf.expectit:expectit-core:0.8.1")
+
 
     compile('org.apache.httpcomponents:httpclient:4.5.1')
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+<body>
+
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light portlet-fit bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-bubble font-dark"></i>
+					<span class="caption-subject font-dark bold uppercase">Applications</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group btn-group-devided">
+						<a th:href="@{/apps/{path}(path=${path},action=create-group)}" class="btn btn-sm default">Create Group</a>
+						<a th:href="@{/apps/{path}(path=${path},action=create-app)}" class="btn btn-sm default">Create Application</a>
+					</div>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table-scrollable">
+					<table class="table table-bordered table-hover">
+						<thead>
+						<tr>
+							<th> Name </th>
+							<th> Description </th>
+							<th> CPU </th>
+							<th> Memory </th>
+							<th> Status </th>
+							<th> Running Instances </th>
+							<th> Health</th>
+							<th> Action </th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr th:each="app : ${apps}">
+							<td th:text="${app.name}"> Joke </td>
+							<td th:text="${app.description}"> Joke </td>
+							<td th:text="${app.cpu}"> Joke </td>
+							<td th:text="${app.memory}"> Joke </td>
+							<td th:text="${app.status}"> Joke </td>
+							<td th:text="${app.instances}"> Joke </td>
+							<td th:text="${app.health}"> Joke </td>
+							<td>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
+
+
+</body>
+</html>

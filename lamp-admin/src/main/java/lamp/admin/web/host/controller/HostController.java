@@ -2,6 +2,7 @@ package lamp.admin.web.host.controller;
 
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.ScannedHost;
+import lamp.admin.domain.host.model.AgentInstallResult;
 import lamp.admin.domain.host.service.HostService;
 import lamp.admin.domain.host.service.form.HostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
@@ -70,11 +71,11 @@ public class HostController {
 							  BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes) throws Exception {
 
-		log.info("editForm = {}", editForm);
 		String clusterId = "1234";
-		hostService.installAgents(clusterId, editForm);
+		List<AgentInstallResult> installResults = hostService.installAgents(clusterId, editForm);
+		model.addAttribute("installResults", installResults);
 
-		return "redirect:/hosts";
+		return "host/add-result";
 	}
 //
 //	protected String createForm(DockerApp editForm, Model model) {

@@ -17,6 +17,8 @@ import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import net.schmizz.sshj.userauth.keyprovider.PKCS8KeyFile;
 import net.schmizz.sshj.xfer.FileSystemFile;
+import net.sf.expectit.Expect;
+import net.sf.expectit.ExpectBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -29,6 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static net.sf.expectit.matcher.Matchers.anyOf;
+import static net.sf.expectit.matcher.Matchers.contains;
+import static net.sf.expectit.matcher.Matchers.regexp;
 
 @Slf4j
 @Service
@@ -46,40 +52,48 @@ public class HostAgentInstallService {
 	private HostEntityService hostEntityService;
 
 	@Transactional
-	public void installAgent(TargetHost targetHost,
+	public AgentInstallResult installAgent(TargetHost targetHost,
 							 HostCredentials hostCredentials,
 							 String agentFilePath,
 							 HostConfiguration hostConfiguration) {
 		PrintStream printStream = System.out;
 
+		AgentInstall agentInstall = new AgentInstall();
+		agentInstall.setAgentId(UUID.randomUUID().toString());
+		agentInstall.setAddress(targetHost.getHostname());
+		agentInstall.setHostCredentials(hostCredentials);
+		agentInstall.setHostConfiguration(hostConfiguration);
+		agentInstall.setAgentInstallDirectory(agentInstallProperties.getAgentInstallDirectory());
+		agentInstall.setAgentInstallFilename(agentInstallProperties.getAgentInstallFilename());
+		agentInstall.setAgentFile(StringUtils.defaultIfBlank(agentFilePath, agentInstallProperties.getAgentFile()));
+
+		AgentInstallResult result = installAgent(agentInstall, printStream);
+
 		HostEntity hostEntity = new HostEntity();
-		hostEntity.setId(UUID.randomUUID().toString());
+		hostEntity.setId(agentInstall.getAgentId());
 		hostEntity.setClusterId(targetHost.getClusterId());
-		hostEntity.setHostname(targetHost.getHostname());
+		hostEntity.setName(result.getHostname());
 		hostEntity.setAddress(targetHost.getAddress());
+		hostEntity.setAgentInstallDirectory(agentInstall.getAgentInstallDirectory());
+		hostEntity.setAgentInstallFilename(agentInstall.getAgentInstallFilename());
+		hostEntity.setAgentFile(agentInstall.getAgentFile());
 
-		hostEntity.setAgentInstallDirectory(agentInstallProperties.getAgentInstallDirectory());
-		hostEntity.setAgentInstallFilename(agentInstallProperties.getAgentInstallFilename());
-		hostEntity.setAgentFile(StringUtils.defaultIfBlank(agentFilePath, agentInstallProperties.getAgentFile()));
-
-		installAgent(hostEntity.getAddress(),
-					 hostCredentials,
-					 hostEntity.getAgentFile(),
-					 hostEntity.getAgentInstallDirectory(),
-					 hostEntity.getAgentInstallFilename(),
-					 hostConfiguration,
-					 printStream);
 
 		hostEntityService.addHostEntity(hostEntity);
+
+		return result;
 	}
 
-	public void installAgent(String address,
-							 HostCredentials hostCredentials,
-							 String agentFile,
-							 String agentInstallDirectory,
-							 String agentInstallFilename,
-							 HostConfiguration hostConfiguration,
-							 PrintStream printStream) {
+	public AgentInstallResult installAgent(AgentInstall agentInstall, PrintStream printStream) {
+
+		String address = agentInstall.getAddress();
+		HostCredentials hostCredentials = agentInstall.getHostCredentials();
+		String agentFile = agentInstall.getAgentFile();
+		String agentInstallDirectory = agentInstall.getAgentInstallDirectory();
+		String agentInstallFilename = agentInstall.getAgentInstallFilename();
+
+		AgentInstallResult result = new AgentInstallResult();
+		result.setAddress(address);
 
 		try (final SSHClient client = new SSHClient()) {
 			client.addHostKeyVerifier(new PromiscuousVerifier());
@@ -93,6 +107,14 @@ public class HostAgentInstallService {
 				client.authPublickey(hostCredentials.getUsername(), keyFile);
 			}
 
+			// hostname
+			try (final Session session = client.startSession()) {
+				final Session.Command sessionCommand = session.exec("hostname");
+				String response = IOUtils.toString(sessionCommand.getInputStream());
+				sessionCommand.join(10, TimeUnit.SECONDS);
+				printStream.println(response);
+				result.setHostname(StringUtils.trim(response));
+			}
 			// File Copy
 			try (final Session session = client.startSession()) {
 				final Session.Command sessionCommand = session.exec("mkdir -p " + agentInstallDirectory);
@@ -107,22 +129,46 @@ public class HostAgentInstallService {
 
 			// ScriptCommands
 			Map<String, Object> parameters = agentInstallProperties.getParameters();
+			parameters.put("agentId", agentInstall.getAgentId());
+			parameters.put("agentPort", agentInstallProperties.getAgentPort());
+
+
+
 			List<ScriptCommand> scriptCommands = agentInstallProperties.getInstallScriptCommands();
 			executeScriptCommands(client, agentInstallDirectory, scriptCommands, parameters, printStream);
 
 
-			// Start - Expect 로 변경 https://github.com/Alexey1Gavrilov/expectit
 			try (final Session session = client.startSession()) {
-				final Session.Command sessionCommand = session.exec("cd " + agentInstallDirectory + ";./lamp-agent.sh start");
-				String response = IOUtils.toString(sessionCommand.getInputStream());
-				sessionCommand.join(10, TimeUnit.SECONDS);
-				printStream.println(response);
-				log.error("response = {}", response);
+				try (Session.Shell shell = session.startShell()) {
+					try (Expect expect = new ExpectBuilder()
+						.withOutput(shell.getOutputStream())
+						.withInputs(shell.getInputStream(), shell.getErrorStream())
+						.withEchoOutput(System.out)
+						.withEchoInput(System.err)
+						//        .withInputFilters(removeColors(), removeNonPrintable())
+						.withExceptionOnFailure()
+						.build()) {
+						expect.sendLine("cd " + agentInstallDirectory);
+//						expect.expect(anyOf(contains("#"), contains("$")));
+						expect.sendLine("./lamp-agent.sh start");
+//						expect.expect();
+					}
+				}
 			}
+
+//			// Start - Expect 로 변경 https://github.com/Alexey1Gavrilov/expectit
+//			try (final Session session = client.startSession()) {
+//				final Session.Command sessionCommand = session.exec("cd " + agentInstallDirectory + ";./lamp-agent.sh start");
+//				String response = IOUtils.toString(sessionCommand.getInputStream());
+//				sessionCommand.join(10, TimeUnit.SECONDS);
+//				printStream.println(response);
+//				log.error("response = {}", response);
+//			}
 		} catch (Exception e) {
 			log.error("Agent install failed", e);
-			throw Exceptions.newException(AdminErrorCode.AGENT_INSTALL_FAILED, e);
+			result.setError(ExceptionUtils.getStackTrace(e));
 		}
+		return result;
 	}
 
 	protected void executeScriptCommands(SSHClient client, String workDirectory,
@@ -177,6 +223,7 @@ public class HostAgentInstallService {
 				}
 				String remoteFilename = Paths.get(workDirectory, filename).toString();
 				client.newSCPFileTransfer().upload(new FileSystemFile(localFile), remoteFilename);
+
 				if (fileCreateCommand.isExecutable()) {
 					try (final Session session = client.startSession()) {
 						final Session.Command sessionCommand = session.exec("chmod +x " + remoteFilename);

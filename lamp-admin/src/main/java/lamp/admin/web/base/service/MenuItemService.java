@@ -47,10 +47,7 @@ public class MenuItemService {
 			//App
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
-				subMenuItems.add(MenuItem.of(MANAGED_APP, "Managed App", "/app", "icon-bulb"));
-				subMenuItems.add(MenuItem.of(APP_REPO, "App Repository", "/app/repository", "icon-bulb"));
-				subMenuItems.add(MenuItem.of(APP_TEMPLATE, "App Template", "/app/template", "icon-bulb"));
-				subMenuItems.add(MenuItem.of(LOCAL_APP_FILE, "Local App File", "/app/file/LOCAL", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(APP, "Applications", "/apps", "icon-bulb"));
 
 				menuItems.add(MenuItem.of("APP", "App", "icon-layers", subMenuItems));
 			}
@@ -79,6 +76,15 @@ public class MenuItemService {
 				List<MenuItem> subMenuItems = new ArrayList<>();
 				subMenuItems.add(MenuItem.of(HOSTS, "Host", "/hosts", "icon-bulb"));
 				menuItems.add(MenuItem.of(HOST, "Host", "icon-layers", subMenuItems));
+			}
+
+			// Resource
+			{
+				List<MenuItem> subMenuItems = new ArrayList<>();
+				subMenuItems.add(MenuItem.of(APP_REPO, "App Repository", "/resource/repository", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(LOCAL_APP_FILE, "Local App File", "/resource/file/LOCAL", "icon-bulb"));
+
+				menuItems.add(MenuItem.of(RESOURCE, "Resource", "icon-layers", subMenuItems));
 			}
 		}
 		return menuItems;

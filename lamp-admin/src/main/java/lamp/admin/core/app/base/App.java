@@ -12,12 +12,16 @@ public class App {
 	private String id;
 	private String name;
 	private String description;
-	private String groupId;
+	private String path;
 
 	private int cpu;
 	private int memory;
 	private int diskSpace;
 	private int instances;
+	private int runningInstances;
+
+	private String status;
+	private String health;
 
 	private AppContainer container;
 

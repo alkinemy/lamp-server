@@ -1,0 +1,23 @@
+package lamp.admin.web.resource.controller;
+
+
+
+import lamp.admin.domain.resource.repo.model.form.LocalAppRepoCreateForm;
+import lamp.admin.domain.resource.repo.model.form.LocalAppRepoUpdateForm;
+import lamp.admin.web.MenuConstants;
+import lamp.admin.web.support.annotation.MenuMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Slf4j
+@MenuMapping(MenuConstants.APP_REPO)
+@Controller
+@RequestMapping(value = "/resource/repository/LOCAL")
+public class LocalAppRepoController extends GenericAppRepoController<LocalAppRepoCreateForm, LocalAppRepoUpdateForm> {
+
+	@Override protected String getCreateViewName() {
+		return "resource/repository/local/edit";
+	}
+
+}

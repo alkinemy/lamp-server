@@ -4,9 +4,7 @@ import lamp.admin.domain.base.model.AbstractAuditingEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -16,15 +14,18 @@ public class AppEntity extends AbstractAuditingEntity {
 
 	@Id
 	private String id;
+	@Enumerated(EnumType.STRING)
+	private AppType type;
+
 	private String name;
 	private String description;
 
-	private String groupId;
+	private String path;
 
-	private int cpu;
-	private int memory;
-	private int diskSpace;
-	private int instances;
+	private long cpu;
+	private long memory;
+	private long diskSpace;
+	private long instances;
 
 	private String data;
 

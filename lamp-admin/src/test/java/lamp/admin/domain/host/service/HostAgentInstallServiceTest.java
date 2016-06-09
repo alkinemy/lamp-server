@@ -1,9 +1,11 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.domain.host.model.AgentInstall;
 import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.admin.domain.host.model.HostCredentials;
 import lamp.admin.domain.host.model.HostConfiguration;
 import lamp.admin.domain.host.service.form.HostAgentFile;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,16 +34,22 @@ public class HostAgentInstallServiceTest {
 		hostCredentials.setUsername(username);
 		hostCredentials.setPassword(password);
 
+		HostConfiguration hostConfiguration = new HostConfiguration();
+
+		String agentInstallDirectory = "/lamp/agent/2";
 		String agentInstallFilename = "lamp-agent.jar";
 		String agentFile = "classpath:agent/lamp-agent.jar";
-		String agentInstallDirectory = "/lamp/agent/2";
 
-		HostConfiguration hostConfiguration = new HostConfiguration();
-		hostAgentInstallService.installAgent(address, hostCredentials,
-											 agentFile,
-											 agentInstallDirectory,
-											 agentInstallFilename,
-											 hostConfiguration,
-											 System.out);
+		AgentInstall agentInstall = new AgentInstall();
+		agentInstall.setAgentId("test");
+		agentInstall.setAddress(address);
+		agentInstall.setHostCredentials(hostCredentials);
+		agentInstall.setHostConfiguration(hostConfiguration);
+		agentInstall.setAgentInstallDirectory(agentInstallDirectory);
+		agentInstall.setAgentInstallFilename(agentInstallFilename);
+		agentInstall.setAgentFile(agentFile);
+
+
+		hostAgentInstallService.installAgent(agentInstall, System.out);
 	}
 }

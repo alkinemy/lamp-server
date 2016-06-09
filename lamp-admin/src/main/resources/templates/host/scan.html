@@ -61,7 +61,7 @@
 									</thead>
 									<tbody>
 									<tr th:each="host : ${scannedHosts}">
-										<td> <input type="checkbox" name="scannedHostAddress" th:value="${host.address}" th:disabled="${host.managed}"/> </td>
+										<td> <input type="checkbox" name="scannedHostAddress" th:value="${host.address}" th:disabled="${host.managed || !host.connected}"/> </td>
 										<td th:text="${host.query}"> 해당 없음 </td>
 										<td th:text="${host.name}"> 해당 없음 </td>
 										<td th:text="${host.address}"> 해당 없음 </td>

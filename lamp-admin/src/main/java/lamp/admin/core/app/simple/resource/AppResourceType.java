@@ -4,27 +4,23 @@ import lombok.Getter;
 
 public enum AppResourceType {
 
-	LOCAL(Names.LOCAL),
-	MAVEN(Names.MAVEN),
-	URL(Names.URL);
+	LOCAL(Values.LOCAL),
+	MAVEN(Values.MAVEN),
+	URL(Values.URL);
 
 	@Getter
-	private String typeName;
+	private String value;
 
-	AppResourceType(String typeName) {
-		this.typeName = typeName;
+	AppResourceType(String value) {
+		this.value = value;
 	}
 
-	public String getTypeName() {
-		return typeName;
-	}
+	public static final class Values {
+		public static final String LOCAL = "LOCAL";
+		public static final String MAVEN = "MAVEN";
+		public static final String URL = "URL";
 
-	public static final class Names {
-		public static final String LOCAL = "local";
-		public static final String MAVEN = "maven";
-		public static final String URL = "url";
-
-		private Names() {
+		private Values() {
 		}
 	}
 

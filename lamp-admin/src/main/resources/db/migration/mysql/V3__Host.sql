@@ -10,11 +10,9 @@ DROP TABLE IF EXISTS `lamp_agent`;
 
 CREATE TABLE `lamp_host` (
   `id` VARCHAR(100) NOT NULL,
-  `name` VARCHAR(200) DEFAULT NULL,
+  `name` VARCHAR(255) DEFAULT NULL,
+  `address` VARCHAR(255) DEFAULT NULL,
   `description` VARCHAR(200) DEFAULT NULL,
-
-  `hostname` VARCHAR(255) NOT NULL,
-  `address` VARCHAR(255) NOT NULL,
 
   `cluster_id` VARCHAR(100) DEFAULT NULL,
   `rack` VARCHAR(255) DEFAULT NULL,
@@ -54,8 +52,7 @@ CREATE TABLE `lamp_host` (
   `created_date` DATETIME NOT NULL,
   `last_modified_by` VARCHAR(255) DEFAULT NULL,
   `last_modified_date` DATETIME,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `lamp_host_uk_01` (`hostname`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_host_status` (

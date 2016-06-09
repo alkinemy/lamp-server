@@ -33,7 +33,7 @@ public class DockerAppService {
 
 	public DockerApp getDockerApp(String id) {
 		DockerAppEntity entity = dockerAppEntityRepository.getOne(id);
-		Exceptions.throwsException(entity == null, AdminErrorCode.DOCKER_APP_NOT_FOUND, id);
+		Exceptions.throwsException(entity == null, AdminErrorCode.APP_NOT_FOUND, id);
 		return smartAssembler.assemble(entity, DockerAppEntity.class, DockerApp.class);
 	}
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light portlet-fit bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-bubble font-dark"></i>
+							<span class="caption-subject font-dark bold uppercase">Local App File</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided">
+
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+								<tr>
+									<th> Repository </th>
+									<th> GroupId </th>
+									<th> ArtifactId </th>
+									<th> Version </th>
+									<th> File Size </th>
+									<th> Upload Date </th>
+									<th> Action </th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr th:each="appFile : ${page}">
+									<td th:text="${appFile.repositoryName}"> Joke </td>
+									<td th:text="${appFile.groupId}"> Joke </td>
+									<td th:text="${appFile.artifactId}"> Joke </td>
+									<td th:text="${appFile.baseVersion}"> Joke </td>
+									<td th:text="${appFile.fileSize}"> Joke </td>
+									<td th:text="${appFile.fileDate != null} ? ${#temporals.format(appFile.fileDate, 'yyyy-MM-dd HH:mm:ss')}"> Joke </td>
+									<td>
+										<div class="btn-group">
+											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+												<i class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<a th:href="@{/resource/file/LOCAL/create?refId={id}(id=${appFile.id})}"> Update </a>
+												</li>
+												<li>
+													<a th:href="@{/resource/file/LOCAL/{id}/delete(id=${appFile.id})}"> Delete </a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+
+</body>
+</html>

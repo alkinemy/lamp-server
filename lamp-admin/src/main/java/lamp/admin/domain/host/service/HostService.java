@@ -47,7 +47,7 @@ public class HostService {
 		return scannedHosts;
 	}
 
-	public void installAgents(String clusterId, HostCredentialsForm editForm) throws IOException {
+	public List<AgentInstallResult> installAgents(String clusterId, HostCredentialsForm editForm) throws IOException {
 		HostCredentials hostCredentials = new HostCredentials();
 		hostCredentials.setUsername(editForm.getUsername());
 		hostCredentials.setUsePassword(editForm.isUsePassword());
@@ -64,6 +64,7 @@ public class HostService {
 			hostCredentials.setPassphrase(editForm.getPassphrase());
 		}
 
+		List<AgentInstallResult> results = new ArrayList<>();
 		for (String address : editForm.getScannedHostAddress()) {
 			TargetHost targetHost = new TargetHost();
 			targetHost.setId(UUID.randomUUID().toString());
@@ -71,8 +72,11 @@ public class HostService {
 			targetHost.setHostname(InetAddressUtils.getHostName(address, address));
 			targetHost.setAddress(address);
 
-			hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
+			// TODO Async
+			AgentInstallResult result = hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
+			results.add(result);
 		}
+		return results;
 	}
 
 }

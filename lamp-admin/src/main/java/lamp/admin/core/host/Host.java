@@ -13,6 +13,7 @@ import java.util.Map;
 public class Host {
 
 	private Long id;
+	private String description;
 
 	private String name;
 	private String address;

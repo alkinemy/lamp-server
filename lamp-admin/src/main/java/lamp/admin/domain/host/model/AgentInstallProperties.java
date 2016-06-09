@@ -40,7 +40,6 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 
 	public Map<String, Object> getParameters() {
 		Map<String, Object> parameters = new LinkedHashMap<>();
-		parameters.put("agentPort", agentPort);
 		return parameters;
 	}
 

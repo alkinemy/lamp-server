@@ -21,7 +21,6 @@ public class HostEntity extends AbstractAuditingEntity {
 	private String name;
 	private String description;
 
-	private String hostname;
 	private String address;
 
 	private String clusterId;

@@ -12,10 +12,9 @@ public abstract class MenuConstants {
 		public static final String SSH_KEY = "SSH_KEY";
 		public static final String AGENT_EVENT = "AGENT_EVENT";
 
-	public static final String APP_REPO = "APP_REPO";
-	public static final String APP_TEMPLATE = "APP_TEMPLATE";
-	public static final String LOCAL_APP_FILE = "APP_FILE";
-	public static final String MANAGED_APP = "MANAGED_APP";
+
+
+	public static final String APP = "APP";
 
 	public static final String MONITORING = "MONITORING";
 	public static final String MONITORING_WATCH_TARGET = "MONITORING_WATCH_TARGET";
@@ -29,4 +28,7 @@ public abstract class MenuConstants {
 	public static final String HOST = "HOST";
 		public static final String HOSTS = "HOSTS";
 
+	public static final String RESOURCE = "RESOURCE";
+		public static final String APP_REPO = "APP_REPO";
+		public static final String LOCAL_APP_FILE = "APP_FILE";
 }

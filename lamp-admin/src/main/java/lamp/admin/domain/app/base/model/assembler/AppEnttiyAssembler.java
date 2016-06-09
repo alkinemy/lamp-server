@@ -14,7 +14,7 @@ public class AppEnttiyAssembler extends AbstractListAssembler <App, AppEntity> {
 		entity.setId(app.getId());
 		entity.setName(app.getName());
 		entity.setDescription(app.getDescription());
-		entity.setGroupId(app.getGroupId());
+		entity.setPath(app.getPath());
 
 		entity.setCpu(app.getCpu());
 		entity.setMemory(app.getMemory());
