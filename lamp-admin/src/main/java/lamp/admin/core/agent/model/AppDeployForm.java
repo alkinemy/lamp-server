@@ -16,9 +16,5 @@ public class AppDeployForm {
 
 	private App app;
 
-	private boolean monitor;
-
-	private String commands;
-	private String parameters;
 
 }

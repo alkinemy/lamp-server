@@ -1,8 +1,6 @@
 package lamp.admin.domain.resource.repo.service;
 
 
-import lamp.admin.core.app.simple.resource.AppResource;
-
 import lamp.admin.domain.resource.repo.model.entity.MavenAppRepoEntity;
 import lamp.admin.domain.support.maven.ArtifactRepositoryClient;
 import org.eclipse.aether.artifact.Artifact;

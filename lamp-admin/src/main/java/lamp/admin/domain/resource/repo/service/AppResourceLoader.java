@@ -2,39 +2,31 @@ package lamp.admin.domain.resource.repo.service;
 
 
 import lamp.admin.core.app.simple.resource.AppResource;
-import lamp.admin.domain.resource.repo.model.entity.AppRepoEntity;
-import lamp.admin.domain.resource.repo.model.entity.LocalAppRepoEntity;
-import lamp.admin.domain.resource.repo.model.entity.MavenAppRepoEntity;
-import lamp.admin.domain.resource.repo.model.entity.UrlAppRepoEntity;
+import lamp.admin.core.app.simple.resource.ArtifactAppResource;
+import lamp.admin.core.app.simple.resource.UrlAppResource;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AppResourceLoader {
 
 	@Autowired
-	private LocalAppResourceLoader localAppResourceLoader;
+	private ArtifactAppResourceLoader artifactAppResourceLoader;
 
 	@Autowired
-	private MavenAppResourceLoader mavenAppResourceLoader;
+	private UrlAppResourceLoader urlAppResourceLoader;
 
+	public Resource getResource(AppResource appResource) {
+		if (appResource instanceof ArtifactAppResource) {
+			return artifactAppResourceLoader.getResource((ArtifactAppResource) appResource);
+		} else if (appResource instanceof UrlAppResource) {
+			return urlAppResourceLoader.getResource((UrlAppResource) appResource);
+		}
 
-	public AppResource getResource(AppRepoEntity appRepoEntity) {
-//		if (appRepoEntity instanceof LocalAppRepoEntity) {
-//			return localAppResourceLoader.getResource((LocalAppRepoEntity) appRepoEntity, groupId, artifactId, version);
-//		} else if (appRepoEntity instanceof MavenAppRepoEntity) {
-//			return mavenAppResourceLoader.getResource((MavenAppRepoEntity) appRepoEntity, groupId, artifactId, version);
-//		} else if (appRepoEntity instanceof UrlAppRepoEntity) {
-//
-//		}
-//		throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_TEMPLATE_TYPE, appTemplate.getResourceType());
-		return null;
+		throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_RESOURCE_TYPE, appResource.getClass());
 	}
-
-
-
 
 }

@@ -2,11 +2,8 @@ package lamp.admin.core.app.simple.resource;
 
 import lombok.Getter;
 
-public enum AppResourceType {
-
-	LOCAL(Values.LOCAL),
-	MAVEN(Values.MAVEN),
-	URL(Values.URL);
+public enum  AppResourceType {
+	ARTIFACT(Values.ARTIFACT), URL(Values.URL);
 
 	@Getter
 	private String value;
@@ -16,12 +13,10 @@ public enum AppResourceType {
 	}
 
 	public static final class Values {
-		public static final String LOCAL = "LOCAL";
-		public static final String MAVEN = "MAVEN";
+		public static final String ARTIFACT = "ARTIFACT";
 		public static final String URL = "URL";
 
 		private Values() {
 		}
 	}
-
 }

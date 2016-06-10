@@ -1,6 +1,7 @@
 package lamp.admin.domain.resource.repo.model.form;
 
 import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +22,6 @@ public class AppRepoUpdateForm {
 
 	private String description;
 
-	private AppResourceType repositoryType;
+	private AppRepoType repositoryType;
 
 }

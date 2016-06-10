@@ -17,11 +17,12 @@ public class AppEntity extends AbstractAuditingEntity {
 	@Enumerated(EnumType.STRING)
 	private AppType type;
 
+	private String path;
 	private String name;
+
 	private String description;
 
-	private String path;
-
+	private String clusterId;
 	private long cpu;
 	private long memory;
 	private long diskSpace;

@@ -9,10 +9,6 @@ import lombok.ToString;
 @ToString
 public class UrlAppResource implements AppResource {
 
-	private String groupId;
-
-	private String artifactId;
-
-	private String version;
+	private String resourceUrl;
 
 }

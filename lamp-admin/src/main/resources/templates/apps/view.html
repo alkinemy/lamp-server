@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+
+				<div>
+					<div class="portlet light bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="icon-social-dribbble font-purple"></i>
+								<span class="caption-subject font-purple bold" th:text="${app.name}">Name</span>
+							</div>
+							<div class="actions">
+								<a class="btn btn-primary" th:href="@{/apps/{path}(path=${path},action=deploy)}">
+									Deploy
+								</a>
+								<a class="btn default">
+									Restart
+								</a>
+								<a class="btn default">
+									Stop
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<h3>Running (0 of 0 instances)</h3>
+							<div class="well">
+								<h4 th:text="${app.name}">Default well</h4> <span th:text="${app.description}"></span> </div>
+							<div class="well well-large">
+								<h4>Large Well</h4> Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet. Integer molestie lorem at massa Integer molestie lorem at massa Integer molestie lorem at massa </div>
+							<div class="tabbable-line">
+								<ul class="nav nav-tabs ">
+									<li class="active">
+										<a href="#tab_15_1" data-toggle="tab"> Instances </a>
+									</li>
+									<li>
+										<a href="#tab_15_2" data-toggle="tab"> Configuration </a>
+									</li>
+									<li>
+										<a href="#tab_15_3" data-toggle="tab"> Debug </a>
+									</li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="tab_15_1">
+										<p> I'm in Section 1. </p>
+										<p> Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
+											consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. </p>
+									</div>
+									<div class="tab-pane" id="tab_15_2">
+										<p> Howdy, I'm in Section 2. </p>
+										<p> Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
+											consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation. </p>
+										<p>
+											<a class="btn green" href="ui_tabs_accordions_navs.html#tab_15_2" target="_blank"> Activate this tab via URL </a>
+										</p>
+									</div>
+									<div class="tab-pane" id="tab_15_3">
+										<p> Howdy, I'm in Section 3. </p>
+										<p> Duis autem vel eum iriure dolor in hendrerit in vulputate. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum
+											iriure dolor in hendrerit in vulputate velit esse molestie consequat </p>
+										<p>
+											<a class="btn yellow" href="ui_tabs_accordions_navs.html#tab_15_3" target="_blank"> Activate this tab via URL </a>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+
+		</div>
+
+</body>
+</html>

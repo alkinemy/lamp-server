@@ -4,7 +4,10 @@ import lamp.admin.core.agent.model.AppDeployForm;
 import lamp.admin.core.agent.security.AgentRequestUser;
 import lamp.admin.core.agent.security.AgentRequestUserHolder;
 import lamp.admin.core.app.base.App;
+import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppInstance;
+import lamp.admin.core.app.simple.SimpleAppContainer;
+import lamp.admin.core.app.simple.resource.AppResource;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.StringUtils;
@@ -65,20 +68,15 @@ public class AgentClient {
 		}
 	}
 
-	public void deployApp(Agent agent, AppDeployForm form, Resource resource) {
+	public void deployApp(Agent agent, String appId, AppContainer appContainer, Resource resource)  {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
 
-			App app = form.getApp();
-
 			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
 
-			parts.add("id", form.getId());
-			parts.add("name", StringUtils.utf8ToIso88591(form.getName()));
-			parts.add("description", StringUtils.utf8ToIso88591(form.getDescription()));
-
-			parts.add("manifest", StringUtils.utf8ToIso88591(JsonUtils.stringify(form)));
+			parts.add("appId", appId);
+			parts.add("appContainer", StringUtils.utf8ToIso88591(JsonUtils.stringify(appContainer)));
 
 			if (resource != null) {
 				parts.add("resource", resource);
@@ -86,10 +84,11 @@ public class AgentClient {
 
 			log.debug("parts = {}", parts);
 
-			ResponseEntity<Void> responseEntity = restTemplate.postForEntity(baseUrl + "/api/apps/instances", parts, Void.class);
+			ResponseEntity<Void> responseEntity = restTemplate.postForEntity(baseUrl + "/api/app", parts, Void.class);
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
+
 	}
 
 

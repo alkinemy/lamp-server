@@ -14,7 +14,8 @@
 				<div class="actions">
 					<div class="btn-group btn-group-devided">
 						<a th:href="@{/apps/{path}(path=${path},action=create-group)}" class="btn btn-sm default">Create Group</a>
-						<a th:href="@{/apps/{path}(path=${path},action=create-app)}" class="btn btn-sm default">Create Application</a>
+						<a th:href="@{/apps/{path}(path=${path},action=create-simple-app)}" class="btn btn-sm default">Create Simple Application</a>
+						<a th:href="@{/apps/{path}(path=${path},action=create-spring-boot-app)}" class="btn btn-sm default">Create SpringBoot Application</a>
 					</div>
 				</div>
 			</div>
@@ -23,6 +24,7 @@
 					<table class="table table-bordered table-hover">
 						<thead>
 						<tr>
+							<th> Type </th>
 							<th> Name </th>
 							<th> Description </th>
 							<th> CPU </th>
@@ -35,7 +37,8 @@
 						</thead>
 						<tbody>
 						<tr th:each="app : ${apps}">
-							<td th:text="${app.name}"> Joke </td>
+							<td th:text="${app.type}"> Joke </td>
+							<td> <a th:href="@{/apps/{id}(id=${app.id})}" th:text="${app.name}">name</a> </td>
 							<td th:text="${app.description}"> Joke </td>
 							<td th:text="${app.cpu}"> Joke </td>
 							<td th:text="${app.memory}"> Joke </td>

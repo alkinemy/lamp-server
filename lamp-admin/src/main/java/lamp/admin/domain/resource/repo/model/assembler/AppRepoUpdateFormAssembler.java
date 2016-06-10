@@ -1,6 +1,6 @@
 package lamp.admin.domain.resource.repo.model.assembler;
 
-import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lamp.admin.domain.resource.repo.model.entity.AppRepoEntity;
 import lamp.admin.domain.resource.repo.model.form.AppRepoUpdateForm;
 import lamp.admin.domain.resource.repo.model.form.LocalAppRepoUpdateForm;
@@ -17,12 +17,12 @@ public class AppRepoUpdateFormAssembler extends AbstractAssembler<AppRepoEntity,
 
 	@Override protected AppRepoUpdateForm doAssemble(AppRepoEntity appRepo) {
 		AppRepoUpdateForm updateForm;
-		AppResourceType repository = appRepo.getRepositoryType();
-		if (AppResourceType.LOCAL.equals(repository)) {
+		AppRepoType repository = appRepo.getRepositoryType();
+		if (AppRepoType.LOCAL.equals(repository)) {
 			updateForm = new LocalAppRepoUpdateForm();
-		} else if (AppResourceType.MAVEN.equals(repository)) {
+		} else if (AppRepoType.MAVEN.equals(repository)) {
 			updateForm = new MavenAppRepoUpdateForm();
-		} else if (AppResourceType.URL.equals(repository)) {
+		} else if (AppRepoType.URL.equals(repository)) {
 			updateForm = new UrlAppRepoUpdateForm();
 		} else {
 			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_REPOSITORY_TYPE, repository);

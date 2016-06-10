@@ -50,7 +50,7 @@
 												</li>
 												<li class="divider"> </li>
 												<li>
-													<a th:if="${repository.repositoryType == T(lamp.admin.core.app.simple.resource.AppResourceType).LOCAL}" th:href="@{/resource/repository/{resourceType}/{repositoryId}/file(repositoryId=${repository.id},resourceType=${repository.repositoryType})}"> File Upload </a>
+													<a th:if="${repository.repositoryType == T(lamp.admin.domain.resource.repo.model.AppRepoType).LOCAL}" th:href="@{/resource/repository/{resourceType}/{repositoryId}/file(repositoryId=${repository.id},resourceType=${repository.repositoryType})}"> File Upload </a>
 												</li>
 											</ul>
 										</div>

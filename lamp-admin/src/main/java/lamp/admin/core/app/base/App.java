@@ -1,19 +1,26 @@
 package lamp.admin.core.app.base;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lamp.admin.domain.app.base.model.entity.AppType;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class App {
 
+	@NonNull
 	private String id;
+	@NonNull
+	private AppType type;
+	@NonNull
 	private String name;
-	private String description;
+	@NonNull
 	private String path;
+	private String description;
 
+	private String clusterId;
 	private int cpu;
 	private int memory;
 	private int diskSpace;

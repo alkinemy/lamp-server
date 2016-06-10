@@ -23,10 +23,6 @@ public class Agent extends AbstractAuditingEntity {
 	private String artifactId;
 	private String version;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "target_server_id")
-	private TargetServer targetServer;
-
 	private String protocol;
 	private String hostname;
 	private String address;

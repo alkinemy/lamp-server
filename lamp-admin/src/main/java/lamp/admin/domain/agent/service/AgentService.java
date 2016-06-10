@@ -4,11 +4,10 @@ package lamp.admin.domain.agent.service;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.model.AgentDto;
 import lamp.admin.domain.agent.model.AgentRegisterForm;
-import lamp.admin.domain.agent.model.TargetServer;
 import lamp.admin.domain.agent.repository.AgentRepository;
-import lamp.admin.domain.base.model.JavaVirtualMachine;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
+import lamp.admin.domain.base.model.JavaVirtualMachine;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +30,6 @@ public class AgentService {
 	private SmartAssembler smartAssembler;
 	@Autowired
 	private AgentRepository agentRepository;
-	@Autowired
-	private TargetServerService targetServerService;
 
 	public Agent getAgent(String id) {
 		Optional<Agent> agentOptional = getAgentOptional(id);
@@ -41,15 +38,6 @@ public class AgentService {
 
 	public Optional<Agent> getAgentOptional(String id) {
 		return Optional.ofNullable(agentRepository.findOne(id));
-	}
-
-	public Agent getAgentByTargetServerId(String id) {
-		Optional<Agent> agentOptional = getAgentByTargetServerIdOptional(id);
-		return agentOptional.orElseThrow(() -> Exceptions.newException(LampErrorCode.AGENT_NOT_FOUND_BY_TARGET_SERVER, id));
-	}
-
-	public Optional<Agent> getAgentByTargetServerIdOptional(String id) {
-		return Optional.ofNullable(agentRepository.findOneByTargetServerId(id));
 	}
 
 	public AgentDto getAgentDto(String id) {
@@ -98,10 +86,6 @@ public class AgentService {
 	public Agent insert(AgentRegisterForm form) {
 		Agent agent = smartAssembler.assemble(form, Agent.class);
 
-		Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerOptional(agent.getId());
-		TargetServer targetServer = upsertTargetServer(agent, targetServerFromDb);
-		agent.setTargetServer(targetServer);
-
 		return agentRepository.save(agent);
 	}
 
@@ -110,23 +94,7 @@ public class AgentService {
 	public Agent update(AgentRegisterForm form, Agent agent) {
 		BeanUtils.copyProperties(form, agent, "id", "secretKey");
 
-		if (!agent.getTargetServer().getHostname().equals(agent.getHostname())) {
-			Optional<TargetServer> targetServerFromDb = targetServerService.getTargetServerByHostname(agent.getHostname());
-			TargetServer targetServer = upsertTargetServer(agent, targetServerFromDb);
-			agent.setTargetServer(targetServer);
-		}
 		return agent;
-	}
-
-	private TargetServer upsertTargetServer(Agent agent, Optional<TargetServer> targetServerFromDb) {
-		TargetServer targetServer;
-		if (targetServerFromDb.isPresent()) {
-			targetServer = targetServerFromDb.get();
-			smartAssembler.populate(agent, targetServer);
-		} else {
-			targetServer = targetServerService.insertTargetServer(smartAssembler.assemble(agent, TargetServer.class));
-		}
-		return targetServer;
 	}
 
 	@Transactional

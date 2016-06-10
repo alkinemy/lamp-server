@@ -3,6 +3,7 @@ package lamp.admin.domain.resource.repo.model.assembler;
 
 
 import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lamp.admin.domain.resource.repo.model.entity.AppRepoEntity;
 import lamp.admin.domain.resource.repo.model.entity.LocalAppRepoEntity;
 import lamp.admin.domain.resource.repo.model.entity.MavenAppRepoEntity;
@@ -25,12 +26,12 @@ public class AppRepoAssembler extends AbstractAssembler<AppRepoCreateForm, AppRe
 
 	@Override protected AppRepoEntity doAssemble(AppRepoCreateForm appRepoCreateForm) {
 		AppRepoEntity appRepo;
-		AppResourceType repository = appRepoCreateForm.getRepositoryType();
-		if (AppResourceType.LOCAL.equals(repository)) {
+		AppRepoType repository = appRepoCreateForm.getRepositoryType();
+		if (AppRepoType.LOCAL.equals(repository)) {
 			appRepo = new LocalAppRepoEntity();
-		} else if (AppResourceType.MAVEN.equals(repository)) {
+		} else if (AppRepoType.MAVEN.equals(repository)) {
 			appRepo = new MavenAppRepoEntity();
-		} else if (AppResourceType.URL.equals(repository)) {
+		} else if (AppRepoType.URL.equals(repository)) {
 			appRepo = new UrlAppRepoEntity();
 		} else {
 			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_APP_REPOSITORY_TYPE, repository);

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 public class AppAssembler extends AbstractListAssembler <AppEntity, App> {
 
 	@Override protected App doAssemble(AppEntity entity) {
-		return JsonUtils.parse(entity.getData(), App.class);
+		App app = JsonUtils.parse(entity.getData(), App.class);
+		app.setId(entity.getId());
+		return app;
 	}
 
 }

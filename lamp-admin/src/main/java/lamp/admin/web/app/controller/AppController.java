@@ -2,17 +2,23 @@ package lamp.admin.web.app.controller;
 
 import lamp.admin.api.util.HttpServletRequestUtils;
 import lamp.admin.core.app.base.App;
+import lamp.admin.domain.app.base.model.entity.AppType;
+import lamp.admin.domain.app.base.model.form.GroupCreateForm;
+import lamp.admin.domain.app.base.model.form.SimpleAppCreateForm;
+import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
 import lamp.admin.domain.app.base.service.AppService;
+import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.AntPathMatcher;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -36,28 +42,31 @@ public class AppController {
 //	private AppManagementListenerService appManagementListenerService;
 //
 //
-	@RequestMapping(path = "/**", method = RequestMethod.GET)
-	public String list(HttpServletRequest request, Model model) {
-		String path = HttpServletRequestUtils.getRestPath(request);
 
-		log.error("PATH = {}", path);
-		List<App> apps = appService.getApps(path);
-		model.addAttribute("path", path);
-		model.addAttribute("apps", apps);
-		return "apps/list";
+	@RequestMapping(path = "/**", method = RequestMethod.GET)
+	public String list(Model model,
+					   @ModelAttribute("path") String path) {
+		App app = appService.getApp(path);
+		if (AppType.GROUP.equals(app.getType())) {
+			List<App> apps = appService.getAppsByPath(path);
+			model.addAttribute("apps", apps);
+			return "apps/list";
+		} else {
+			model.addAttribute("app", app);
+			return "apps/view";
+		}
+
+	}
+
+	@ModelAttribute("path")
+	protected String getPath(HttpServletRequest request) {
+		String path = HttpServletRequestUtils.getRestPath(request);
+		return path;
 	}
 
 
 	//
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=create-app"})
-	public String create(HttpServletRequest request, Model model) {
-		String path = HttpServletRequestUtils.getRestPath(request);
-
-		log.error("PATH = {}", path);
-		model.addAttribute("path", path);
-		return "apps/edit";
-	}
 
 //	protected String createForm(ManagedAppRegisterForm editForm, Model model) {
 //

@@ -12,7 +12,7 @@ import java.util.Map;
 @ToString
 public class Host {
 
-	private Long id;
+	private String id;
 	private String description;
 
 	private String name;
@@ -21,6 +21,8 @@ public class Host {
 	private String status;
 	private long lastHealthCheck;
 	private String agentVersion;
+	private String agentAccessKey;
+	private String agentSecretKey;
 
 	private Long clusterId;
 	private String rack;

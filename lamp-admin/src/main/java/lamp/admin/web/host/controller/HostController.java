@@ -31,14 +31,14 @@ public class HostController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model) {
-		List<Host> hosts = hostService.getHosts("");
+		List<Host> hosts = hostService.getHostsByClusterId("");
 		model.addAttribute("hosts", hosts);
-		return "host/list";
+		return "hosts/list";
 	}
 
 	@RequestMapping(path = "/add/scan", method = RequestMethod.GET)
 	public String scan(Model model, @ModelAttribute("editForm") HostScanForm editForm) {
-		return "host/scan";
+		return "hosts/scan";
 	}
 
 	@RequestMapping(path = "/add/scan", method = RequestMethod.POST)
@@ -62,7 +62,7 @@ public class HostController {
 					   BindingResult bindingResult,
 					   RedirectAttributes redirectAttributes) {
 
-		return "host/credentials";
+		return "hosts/credentials";
 	}
 
 	@RequestMapping(path = "/add", method = RequestMethod.POST)
@@ -75,7 +75,7 @@ public class HostController {
 		List<AgentInstallResult> installResults = hostService.installAgents(clusterId, editForm);
 		model.addAttribute("installResults", installResults);
 
-		return "host/add-result";
+		return "hosts/add-result";
 	}
 //
 //	protected String createForm(DockerApp editForm, Model model) {

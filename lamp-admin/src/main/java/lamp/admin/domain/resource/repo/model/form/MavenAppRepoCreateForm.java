@@ -1,6 +1,6 @@
 package lamp.admin.domain.resource.repo.model.form;
 
-import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +11,7 @@ import lombok.ToString;
 public class MavenAppRepoCreateForm extends AppRepoCreateForm {
 
 	public MavenAppRepoCreateForm() {
-		setRepositoryType(AppResourceType.MAVEN);
+		setRepositoryType(AppRepoType.MAVEN);
 	}
 
 	private String url;

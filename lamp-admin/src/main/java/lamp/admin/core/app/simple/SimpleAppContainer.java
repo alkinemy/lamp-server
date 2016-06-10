@@ -12,12 +12,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @ToString
 @JsonTypeName(AppContainerType.Names.SIMPLE)
 public class SimpleAppContainer implements AppContainer {
+
+	private String id;
 
 	private AppResource appResource;
 
@@ -35,8 +38,14 @@ public class SimpleAppContainer implements AppContainer {
 
 	private String commandShell;
 	private String startCommandLine;
+	private Long startTimeout = -1L;
 	private String stopCommandLine;
+	private Long stopTimeout = -1L;
 
-	private List<KeyValuePair> parameters;
+	private boolean preInstalled = false;
+	private String installFilename;
+
+
+	private Map<String, Object> parameters;
 
 }

@@ -18,32 +18,7 @@ public class MenuItemService {
 	public List<MenuItem> getMenuItemList() {
 		List<MenuItem> menuItems = new ArrayList<>();
 		{
-			//Agent
-			{
-				List<MenuItem> subMenuItems = new ArrayList<>();
 
-				{
-					MenuItem agentInstall  = MenuItem.of(AGENT_INSTALL, "Agent Install", null);
-					MenuItem agentStart  = MenuItem.of(AGENT_START, "Agent Start", null);
-					MenuItem agentStop  = MenuItem.of(AGENT_STOP, "Agent Stop", null);
-
-					MenuItem targetServer = MenuItem.of(TARGET_SERVER, "Target Server", "/server/target-server", "icon-bulb");
-					targetServer.setSubMenuItems(Lists.newArrayList(agentInstall, agentStart, agentStop));
-					subMenuItems.add(targetServer);
-				}
-				{
-
-					MenuItem agentAppMenuItem  = MenuItem.of(AGENT_APP, "Agent App", null);
-					MenuItem availableAgentMenuItem = MenuItem.of(AGENT, "Agent", "/server/agent", "icon-bulb");
-					availableAgentMenuItem.setSubMenuItems(Lists.newArrayList(agentAppMenuItem));
-					subMenuItems.add(availableAgentMenuItem);
-
-				}
-				subMenuItems.add(MenuItem.of(SSH_KEY, "SSH Key", "/server/ssh-key", "icon-bulb"));
-				subMenuItems.add(MenuItem.of(AGENT_EVENT, "Agent Event", "/server/agent/event", "icon-bulb"));
-
-				menuItems.add(MenuItem.of(SERVER, "Server", "icon-layers", subMenuItems));
-			}
 			//App
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
@@ -57,12 +32,6 @@ public class MenuItemService {
 				subMenuItems.add(MenuItem.of(MONITORING_WATCH_TARGET, "Watch Target", "/monitoring/watch-target", "icon-bulb"));
 				menuItems.add(MenuItem.of(MONITORING, "Monitoring", "icon-layers", subMenuItems));
 			}
-			//Account
-			{
-				List<MenuItem> subMenuItems = new ArrayList<>();
-				subMenuItems.add(MenuItem.of(ACCOUNT_APPROVAL, "Approval", "/account/approval", "icon-bulb"));
-				menuItems.add(MenuItem.of(ACCOUNT, "Account", "icon-layers", subMenuItems));
-			}
 
 			// Docker
 			{
@@ -75,6 +44,7 @@ public class MenuItemService {
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
 				subMenuItems.add(MenuItem.of(HOSTS, "Host", "/hosts", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(AGENT, "Agent", "/agents", "icon-bulb"));
 				menuItems.add(MenuItem.of(HOST, "Host", "icon-layers", subMenuItems));
 			}
 
@@ -86,6 +56,14 @@ public class MenuItemService {
 
 				menuItems.add(MenuItem.of(RESOURCE, "Resource", "icon-layers", subMenuItems));
 			}
+
+			//Account
+			{
+				List<MenuItem> subMenuItems = new ArrayList<>();
+				subMenuItems.add(MenuItem.of(ACCOUNT_APPROVAL, "Approval", "/account/approval", "icon-bulb"));
+				menuItems.add(MenuItem.of(ACCOUNT, "Account", "icon-layers", subMenuItems));
+			}
+
 		}
 		return menuItems;
 	}

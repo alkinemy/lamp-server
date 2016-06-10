@@ -1,6 +1,6 @@
 package lamp.admin.domain.resource.repo.model.entity;
 
-import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue(value = AppResourceType.Values.LOCAL)
+@DiscriminatorValue(value = AppRepoType.Values.LOCAL)
 @Table(name = "lamp_app_local_repository")
 @PrimaryKeyJoinColumn(name = "id")
 public class LocalAppRepoEntity extends AppRepoEntity {

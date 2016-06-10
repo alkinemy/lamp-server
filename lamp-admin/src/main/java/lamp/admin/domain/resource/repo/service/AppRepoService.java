@@ -2,6 +2,7 @@ package lamp.admin.domain.resource.repo.service;
 
 
 import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lamp.admin.domain.resource.repo.model.dto.AppRepoDto;
 import lamp.admin.domain.resource.repo.model.entity.AppRepoEntity;
 import lamp.admin.domain.resource.repo.model.entity.LocalAppRepoEntity;
@@ -41,7 +42,12 @@ public class AppRepoService {
 		return smartAssembler.assemble(pageable, page, AppRepoEntity.class, AppRepoDto.class);
 	}
 
-	public List<AppRepoDto> getAppRepoListByType(AppResourceType repositoryType) {
+	public List<AppRepoDto> getAppRepoList() {
+		List<AppRepoEntity> list = appRepoEntityRepository.findAll();
+		return smartAssembler.assemble(list, AppRepoEntity.class, AppRepoDto.class);
+	}
+
+	public List<AppRepoDto> getAppRepoListByType(AppRepoType repositoryType) {
 		List<AppRepoEntity> list = appRepoEntityRepository.findAllByRepositoryType(repositoryType);
 		return smartAssembler.assemble(list, AppRepoEntity.class, AppRepoDto.class);
 	}

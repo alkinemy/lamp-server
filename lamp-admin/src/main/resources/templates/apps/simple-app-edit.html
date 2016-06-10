@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-settings font-dark"></i>
+					<span class="caption-subject font-dark sbold uppercase">Simple Application Form</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form class="form-horizontal" role="form"  th:action="@{/apps/{path}(path=${path})}" th:object="${editForm}" method="post">
+					<input type="hidden" name="action" th:value="${param.action[0]}" />
+					<input type="hidden" th:field="*{id}" />
+					<input type="hidden" th:field="*{resourceType}" />
+					<div class="form-body">
+						<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Description</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{description}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<div class="form-group" th:class="${#fields.hasErrors('repositoryId')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Repository</label>
+							<div class="col-md-9">
+								<select class="form-control" th:field="*{repositoryId}">
+									<option th:each="appRepo : ${appRepositoryList}"
+											th:value="${appRepo.id}" th:text="${appRepo.name}">Option 1</option>
+								</select>
+								<span class="help-block" th:if="${#fields.hasErrors('repositoryId')}" th:errors="*{repositoryId}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<div class="form-group" th:class="${#fields.hasErrors('groupId')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Group Id (groupId)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{groupId}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('artifactId')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Artifact Id (artifactId)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{artifactId}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('artifactId')}" th:errors="*{artifactId}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('version')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Version (version)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{version}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('version')}" th:errors="*{version}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<div class="form-group" th:class="${#fields.hasErrors('processType')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Process Type</label>
+							<div class="col-md-9">
+								<div class="radio-list">
+									<label class="radio-inline">
+										<div class="radio" id="uniform-optionsRadios4">
+											<input type="radio" name="optionsRadios" th:field="*{processType}" value="DEFAULT" checked="checked" />
+										</div> DEFAULT
+									</label>
+									<label class="radio-inline">
+										<div class="radio" id="uniform-optionsRadios5">
+											<input type="radio" name="optionsRadios" th:field="*{processType}" value="DAEMON" />
+										</div> DAEMON
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('appDirectory')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">App Directory (appDirectory)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{appDirectory}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('appDirectory')}" th:errors="*{appDirectory}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('workDirectory')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Working Directory (workDirectory)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{workDirectory}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('workDirectory')}" th:errors="*{workDirectory}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('logDirectory')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Log Directory (logDirectory)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{logDirectory}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('logDirectory')}" th:errors="*{logDirectory}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('pidFile')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">PID file (pidFile)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{pidFile}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('pidFile')}" th:errors="*{pidFile}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('ptql')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label"><a href="https://support.hyperic.com/display/SIGAR/PTQL" target="_blank">PTQL</a> (Process Table Query Language)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{ptql}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('ptql')}" th:errors="*{ptql}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('stdOutFile')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Standard Out File (stdOutFile)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{stdOutFile}" placeholder="Standard Out File" />
+								<span class="help-block" th:if="${#fields.hasErrors('stdOutFile')}" th:errors="*{stdOutFile}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('stdErrFile')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Standard Error File (stdErrFile)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{stdErrFile}" placeholder="Enter Standard Error File" />
+								<span class="help-block" th:if="${#fields.hasErrors('stdErrFile')}" th:errors="*{stdErrFile}"> A block of help text. </span>
+							</div>
+						</div>
+						<hr />
+						<h4>Command</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('commandShell')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Command Shell</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{commandShell}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('commandShell')}" th:errors="*{commandShell}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('startCommandLine')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Start Command Line</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{startCommandLine}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('startCommandLine')}" th:errors="*{startCommandLine}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('stopCommandLine')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Stop Command Line</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{stopCommandLine}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('stopCommandLine')}" th:errors="*{stopCommandLine}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Monitor</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{monitor}" /></span>
+										Enable </label>
+								</div>
+							</div>
+						</div>
+
+						<hr />
+						<h4>Parameters</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('parametersType')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Parameters Type</label>
+							<div class="col-md-9">
+								<select class="form-control" th:field="*{parametersType}">
+									<option th:each="type : ${parametersTypes}"
+											th:value="${type.name()}" th:text="${type.name()}">Option 1</option>
+								</select>
+								<span class="help-block" th:if="${#fields.hasErrors('parametersType')}" th:errors="*{parametersType}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('parameters')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Parameters</label>
+							<div class="col-md-9">
+								<textarea class="form-control" th:field="*{parameters}" rows="3"></textarea>
+								<span class="help-block" th:if="${#fields.hasErrors('parameters')}" th:errors="*{parameters}"> A block of help text. </span>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-actions">
+						<div class="row">
+							<div class="col-md-offset-3 col-md-9">
+								<button type="submit" class="btn green">Submit</button>
+								<button type="button" class="btn default">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
+
+</body>
+</html>

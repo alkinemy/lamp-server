@@ -2,6 +2,7 @@ package lamp.admin.domain.resource.repo.model.entity;
 
 import lamp.admin.core.app.simple.resource.AppResourceType;
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +25,7 @@ public abstract class AppRepoEntity extends AbstractAuditingEntity {
 
 	@Column(name = "repository_type", insertable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
-	private AppResourceType repositoryType;
+	private AppRepoType repositoryType;
 
 	@Column(name = "deleted", columnDefinition = "TINYINT", nullable = false)
 	private Boolean deleted;

@@ -4,6 +4,7 @@ import lamp.admin.LampAdminConstants;
 
 import lamp.admin.core.app.simple.resource.AppResourceType;
 
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lamp.admin.domain.resource.repo.model.dto.AppRepoDto;
 import lamp.admin.domain.resource.repo.model.dto.LocalAppFileDto;
 import lamp.admin.domain.resource.repo.model.form.LocalAppFileUploadForm;
@@ -59,7 +60,7 @@ public class LocalAppFileController {
 			editForm.setVersion(localAppFileDto.getBaseVersion());
 		}
 
-		List<AppRepoDto> appRepoList = appRepoService.getAppRepoListByType(AppResourceType.LOCAL);
+		List<AppRepoDto> appRepoList = appRepoService.getAppRepoListByType(AppRepoType.LOCAL);
 		model.addAttribute("appRepositoryList", appRepoList);
 
 		return "resource/file/local/edit";

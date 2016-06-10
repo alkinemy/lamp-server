@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -12,11 +11,6 @@ import java.util.List;
 @ToString
 public class AppDeployForm {
 
-	@NotNull
-	private String appId;
+	private List<String> hostIds;
 
-	private String instanceId;
-	private String[] instanceIds;
-
-	private List<String> targetServerIds;
 }

@@ -158,7 +158,6 @@ CREATE TABLE `lamp_agent` (
   `group_id` varchar(200) DEFAULT NULL,
   `artifact_id` varchar(200) DEFAULT NULL,
   `version` varchar(100) DEFAULT NULL,
-  `target_server_id` varchar(100) NOT NULL,
   `protocol` varchar(100) DEFAULT NULL,
   `hostname` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,

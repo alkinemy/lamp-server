@@ -1,6 +1,6 @@
 package lamp.admin.domain.resource.repo.model.entity;
 
-import lamp.admin.core.app.simple.resource.AppResourceType;
+import lamp.admin.domain.resource.repo.model.AppRepoType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue(value = AppResourceType.Values.MAVEN)
+@DiscriminatorValue(value = AppRepoType.Values.MAVEN)
 @Table(name = "lamp_app_maven_repository")
 @PrimaryKeyJoinColumn(name = "id")
 public class MavenAppRepoEntity extends AppRepoEntity {

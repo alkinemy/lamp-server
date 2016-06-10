@@ -33,8 +33,12 @@ public class HostService {
 	@Autowired
 	private SmartAssembler smartAssembler;
 
-	public List<Host> getHosts(String clusterId) {
+	public List<Host> getHostsByClusterId(String clusterId) {
 		return smartAssembler.assemble(hostEntityService.getHostEntityList(clusterId), HostEntity.class, Host.class);
+	}
+
+	public Host getHost(String id) {
+		return smartAssembler.assemble(hostEntityService.getHostEntity(id), HostEntity.class, Host.class);
 	}
 
 	public List<ScannedHost> scanHost(HostScanForm form) {
@@ -78,6 +82,7 @@ public class HostService {
 		}
 		return results;
 	}
+
 
 }
 

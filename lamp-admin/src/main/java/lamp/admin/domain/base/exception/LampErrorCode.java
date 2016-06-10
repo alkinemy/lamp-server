@@ -40,11 +40,11 @@ public enum LampErrorCode implements ErrorCode {
 	, AGENT_NOT_FOUND_BY_TARGET_SERVER("에이전트가 존재하지 않습니다.")
 	, APP_TEMPLATE_NOT_FOUND("앱 템플릿이 존재하지 않습니다.")
 	, APP_RESOURCE_NOT_FOUND("앱 리소스를 찾을 수 없습니다.")
-	, UNSUPPORTED_APP_TEMPLATE_TYPE("지원하지 않는 앱 템플릿 타입입니다.")
+	, UNSUPPORTED_APP_RESOURCE_TYPE("지원하지 않는 앱 템플릿 타입입니다.")
 	, UNSUPPORTED_APP_REPOSITORY_TYPE("지원하지 않는 앱 리파지토리 타입입니다.")
 	, AGENT_INSTALL_FAILED("에이전트 설치를 실패하였습니다.")
 	, APP_REPOSITORY_NOT_FOUND("앱 저장소를 찾을 수 없습니다.")
-	, TARGET_SERVER_NOT_FOUND("타켓 서버를 찾을 수 없습니다")
+	, HOST_NOT_FOUND("타켓 서버를 찾을 수 없습니다")
 	, TARGET_SERVER_DELETE_FAILED_AGENT_EXIST("에이전트가 존재하기 때문에, 타겟 서버를 삭제할 수 없습니다.", FlashMessageException.class)
 	// Monitoring
 	, WATCH_TARGET_NOT_FOUND("타켓를 찾을 수 없습니다")
@@ -57,7 +57,7 @@ public enum LampErrorCode implements ErrorCode {
 	, INVALID_SCRIPT_COMMANDS("스크립트 명령어가 잘못되었습니다.")
 	, JSON_PROCESS_FAILED("Json Processing failed")
 	, SCRIPT_COMMAND_EXECUTION_FAILED("스크립트 명령어 실행을 실패하였습니다")
-	, SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다.");
+	, SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다."), INVALID_PARAMETERS("유효하지 않은 파라메터 입니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

@@ -9,7 +9,4 @@ import java.util.Optional;
 @Repository
 public interface AgentRepository extends LampJpaRepository<Agent, String> {
 
-	Optional<Agent> findOneByHostname(String hostname);
-
-	Agent findOneByTargetServerId(String id);
 }
