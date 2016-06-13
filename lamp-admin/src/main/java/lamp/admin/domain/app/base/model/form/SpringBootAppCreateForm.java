@@ -10,7 +10,9 @@ import lombok.ToString;
 public class SpringBootAppCreateForm extends SimpleAppCreateForm {
 
 	private String jvmOpts = "-Xms256m -Xmx2048m";
-	private String springOpts;
+	private String springOpts = "--spring.pidfile=${artifactId}.pid --spring.config.name=${artifactId}";
 
 
+	private String properties;
+	private String shellFilePath = "classpath:app/spring-boot/spring-boot.sh";
 }

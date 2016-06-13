@@ -14,4 +14,6 @@ import lamp.admin.core.app.simple.SimpleAppContainer;
 })
 public interface AppContainer {
 
+	String getId();
+
 }

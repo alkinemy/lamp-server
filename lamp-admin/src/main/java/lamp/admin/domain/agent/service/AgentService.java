@@ -54,7 +54,7 @@ public class AgentService {
 		return smartAssembler.assemble(pageable, page, AgentDto.class);
 	}
 
-	public Collection<Agent> getAgentList() {
+	public Collection<Agent> getAgents() {
 		return agentRepository.findAll();
 	}
 

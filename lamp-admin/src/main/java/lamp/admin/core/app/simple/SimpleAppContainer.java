@@ -4,9 +4,9 @@ package lamp.admin.core.app.simple;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppContainerType;
-import lamp.admin.core.app.base.KeyValuePair;
 
 import lamp.admin.core.app.simple.resource.AppResource;
+import lamp.admin.core.script.ScriptCommand;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +21,7 @@ import java.util.Map;
 public class SimpleAppContainer implements AppContainer {
 
 	private String id;
+	private String name;
 
 	private AppResource appResource;
 
@@ -45,7 +46,7 @@ public class SimpleAppContainer implements AppContainer {
 	private boolean preInstalled = false;
 	private String installFilename;
 
-
+	private List<ScriptCommand> scriptCommands;
 	private Map<String, Object> parameters;
 
 }

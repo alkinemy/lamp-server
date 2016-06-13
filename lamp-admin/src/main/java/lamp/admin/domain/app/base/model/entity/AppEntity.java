@@ -16,6 +16,7 @@ public class AppEntity extends AbstractAuditingEntity {
 	private String id;
 	@Enumerated(EnumType.STRING)
 	private AppType type;
+	private String version;
 
 	private String path;
 	private String name;

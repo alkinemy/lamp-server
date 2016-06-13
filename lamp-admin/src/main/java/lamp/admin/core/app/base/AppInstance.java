@@ -1,5 +1,6 @@
 package lamp.admin.core.app.base;
 
+import lamp.admin.core.host.Host;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +12,17 @@ public class AppInstance {
 	private String name;
 	private String description;
 
-	private App app;
+	private String appId;
+	private String appVersion;
+	private String hostId;
 
 	private String pid;
-	private String status;
-	private String correctStatus;
+	private AppInstanceStatus status;
+	private String statusMessage;
 
-	private boolean isMonitor;
+	private boolean monitored;
 
+	//
+	private App app;
+	private Host host;
 }

@@ -1,15 +1,15 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.core.script.ScriptCommand;
+import lamp.admin.core.script.ScriptExecuteCommand;
+import lamp.admin.core.script.ScriptFileCreateCommand;
+import lamp.admin.core.script.ScriptFileRemoveCommand;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.host.model.*;
 import lamp.admin.domain.host.model.entity.HostEntity;
-import lamp.admin.domain.script.model.ExecuteCommand;
-import lamp.admin.domain.script.model.FileCreateCommand;
-import lamp.admin.domain.script.model.FileRemoveCommand;
-import lamp.admin.domain.script.model.ScriptCommand;
+
 import lamp.admin.domain.support.el.ExpressionParser;
-import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import net.schmizz.sshj.SSHClient;
@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static net.sf.expectit.matcher.Matchers.anyOf;
-import static net.sf.expectit.matcher.Matchers.contains;
 import static net.sf.expectit.matcher.Matchers.regexp;
 
 @Slf4j
@@ -134,8 +132,8 @@ public class HostAgentInstallService {
 
 
 
-			List<ScriptCommand> scriptCommands = agentInstallProperties.getInstallScriptCommands();
-			executeScriptCommands(client, agentInstallDirectory, scriptCommands, parameters, printStream);
+			List<ScriptCommand> scriptCommandEntities = agentInstallProperties.getInstallScriptCommands();
+			executeScriptCommands(client, agentInstallDirectory, scriptCommandEntities, parameters, printStream);
 
 
 			try (final Session session = client.startSession()) {
@@ -172,14 +170,14 @@ public class HostAgentInstallService {
 	}
 
 	protected void executeScriptCommands(SSHClient client, String workDirectory,
-										 List<ScriptCommand> scriptCommands,
+										 List<ScriptCommand> scriptCommandEntities,
 										 Map<String, Object> parameters,
 										 PrintStream printStream) throws IOException {
-		if (CollectionUtils.isEmpty(scriptCommands)) {
+		if (CollectionUtils.isEmpty(scriptCommandEntities)) {
 			return;
 		}
 
-		for (ScriptCommand scriptCommand : scriptCommands) {
+		for (ScriptCommand scriptCommand : scriptCommandEntities) {
 			executeScriptCommand(client, workDirectory, scriptCommand, parameters, printStream);
 		}
 	}
@@ -190,16 +188,16 @@ public class HostAgentInstallService {
 										PrintStream printStream)
 		throws IOException {
 
-		if (scriptCommand instanceof ExecuteCommand) {
+		if (scriptCommand instanceof ScriptExecuteCommand) {
 			try (final Session session = client.startSession()) {
-				String commandLine = expressionParser.getValue(((ExecuteCommand) scriptCommand).getCommandLine(), parameters);
+				String commandLine = expressionParser.getValue(((ScriptExecuteCommand) scriptCommand).getCommandLine(), parameters);
 				final Session.Command sessionCommand = session.exec(commandLine);
 				String response = IOUtils.toString(sessionCommand.getInputStream());
 				sessionCommand.join(10, TimeUnit.SECONDS);
 				printStream.println(response);
 			}
-		} else if (scriptCommand instanceof FileCreateCommand) {
-			FileCreateCommand fileCreateCommand = (FileCreateCommand) scriptCommand;
+		} else if (scriptCommand instanceof ScriptFileCreateCommand) {
+			ScriptFileCreateCommand fileCreateCommand = (ScriptFileCreateCommand) scriptCommand;
 			String filename = fileCreateCommand.getFilename();
 			String localFilename = FilenameUtils.getName(filename);
 			File localFile = null;
@@ -239,11 +237,11 @@ public class HostAgentInstallService {
 				FileUtils.deleteQuietly(localFile);
 			}
 
-		} else if (scriptCommand instanceof FileRemoveCommand) {
+		} else if (scriptCommand instanceof ScriptFileRemoveCommand) {
 			// FIXME 구현바람
-			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, scriptCommand.getType());
+			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, scriptCommand.getClass());
 		} else {
-			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, scriptCommand.getType());
+			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, scriptCommand.getClass());
 		}
 
 	}

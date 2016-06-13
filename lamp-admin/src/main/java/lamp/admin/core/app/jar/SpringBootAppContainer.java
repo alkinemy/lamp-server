@@ -14,6 +14,8 @@ import lombok.ToString;
 @JsonTypeName(AppContainerType.Names.SPRING_BOOT)
 public class SpringBootAppContainer extends SimpleAppContainer {
 
+	private String properties;
+
 	private String jvmOpts;
 	private String springOpts;
 

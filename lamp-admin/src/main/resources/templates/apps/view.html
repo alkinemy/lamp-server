@@ -45,9 +45,56 @@
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="tab_15_1">
-										<p> I'm in Section 1. </p>
-										<p> Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-											consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. </p>
+										<div class="row">
+											<div class="table-responsive">
+												<table class="table table-bordered table-hover">
+													<thead>
+													<tr>
+														<th> <input type="checkbox" name="appInstanceIdsAll" value="" /> </th>
+														<th> Instance Id </th>
+														<th> Version </th>
+														<th> Hostname </th>
+														<th> Address </th>
+														<th> Status </th>
+														<th> Error Log </th>
+														<th> Output Log </th>
+														<th> Action </th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr th:each="appInstance : ${appInstances}">
+														<td> <input type="checkbox" name="appInstanceIds" th:value="${appInstance.id}" /> </td>
+														<td th:text="${appInstance.id}"> 해당 없음 </td>
+														<td th:text="${appInstance.appVersion}"> 해당 없음 </td>
+														<td th:text="${appInstance.host?.name}"> 해당 없음 </td>
+														<td th:text="${appInstance.host?.address}"> 해당 없음 </td>
+														<td th:text="${appInstance.status}"> 해당 없음 </td>
+														<td> <a href=""><i class="fa fa-file-text"></i> stderr </a></td>
+														<td> <a href=""><i class="fa fa-file-text"></i> stdout </a></td>
+														<td>
+															<div class="btn-group">
+																<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+																	<i class="fa fa-angle-down"></i>
+																</a>
+																<ul class="dropdown-menu" role="menu">
+																	<li>
+																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=start)}"> Start </a>
+																	</li>
+																	<li>
+																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stop)}"> Stop </a>
+																	</li>
+																	<li class="divider"> </li>
+																	<li>
+																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=destory)}"> Destory </a>
+																	</li>
+																</ul>
+															</div>
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
 									</div>
 									<div class="tab-pane" id="tab_15_2">
 										<p> Howdy, I'm in Section 2. </p>

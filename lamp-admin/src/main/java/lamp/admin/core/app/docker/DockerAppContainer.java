@@ -17,6 +17,7 @@ import java.util.Map;
 @JsonTypeName(AppContainerType.Names.DOCKER)
 public class DockerAppContainer implements AppContainer {
 
+	private String id;
 	private String image;
 	private String network;
 

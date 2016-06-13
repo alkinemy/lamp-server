@@ -1,44 +1,53 @@
 package lamp.admin.domain.app.base.service;
 
+import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.App;
-import lamp.admin.core.app.base.KeyValuePair;
 import lamp.admin.core.app.jar.SpringBootAppContainer;
 import lamp.admin.core.app.simple.AppProcessType;
 import lamp.admin.core.app.simple.resource.AppResource;
 import lamp.admin.core.app.simple.resource.AppResourceType;
 import lamp.admin.core.app.simple.resource.ArtifactAppResource;
 import lamp.admin.core.app.simple.resource.UrlAppResource;
+import lamp.admin.core.script.ScriptCommand;
+import lamp.admin.core.script.ScriptFileCreateCommand;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.model.form.ParametersType;
 import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
+
 import lamp.admin.domain.support.json.JsonUtils;
+import lamp.common.utils.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.http.client.utils.DateUtils;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.function.Function;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class SpringBootAppService {
+public class SpringBootAppService implements ResourceLoaderAware {
+
+	private ResourceLoader resourceLoader;
 
 	public App newApp(String path, SpringBootAppCreateForm editForm) {
 		App app = new App();
 		app.setType(AppType.APP);
+		app.setVersion(Instant.now().toString());
 		app.setPath(path);
 		app.setName(editForm.getName());
 		app.setDescription(editForm.getDescription());
 
 		SpringBootAppContainer container = new SpringBootAppContainer();
+		container.setName(app.getName());
 
 		String artifactId = StringUtils.defaultIfBlank(editForm.getArtifactId(), editForm.getName());
 
@@ -47,7 +56,7 @@ public class SpringBootAppService {
 		container.setWorkDirectory(StringUtils.defaultIfBlank(editForm.getWorkDirectory(), "${appDirectory}"));
 		container.setLogDirectory(editForm.getLogDirectory());
 
-		container.setPidFile(StringUtils.defaultIfBlank(editForm.getPidFile(), artifactId + ".pid"));
+		container.setPidFile(StringUtils.defaultIfBlank(editForm.getPidFile(), "${workDirectory}/" + artifactId + ".pid"));
 		container.setStdOutFile(StringUtils.defaultIfBlank(editForm.getStdOutFile(), "stdout.log"));
 		container.setStdErrFile(StringUtils.defaultIfBlank(editForm.getStdErrFile(), "stderr.log"));
 
@@ -58,31 +67,38 @@ public class SpringBootAppService {
 		container.setAppResource(getAppResource(editForm));
 		container.setInstallFilename(artifactId + ".jar");
 
-		container.setParameters(getParameters(editForm));
+		container.setParameters(getParameters(editForm, artifactId));
+		List<ScriptCommand> scriptCommands = getInstallScriptCommands(artifactId, editForm.getProperties(), editForm.getShellFilePath());
+		container.setScriptCommands(scriptCommands);
 
 		app.setContainer(container);
 
 		return app;
 	}
 
-	protected Map<String, Object> getParameters(SpringBootAppCreateForm editForm) {
+	protected Map<String, Object> getParameters(SpringBootAppCreateForm editForm, String artifactId) {
+		Map<String, Object> parameters = new LinkedHashMap<>();
+		parameters.put("artifactId", artifactId);
+		parameters.put("jvmOpts", editForm.getJvmOpts());
+		parameters.put("springOpts", editForm.getSpringOpts());
+
 		if (StringUtils.isNotBlank(editForm.getParameters())) {
 			if (ParametersType.JSON == editForm.getParametersType()) {
-								return JsonUtils.parse(editForm.getParameters(), LinkedHashMap.class);
+				parameters.putAll(JsonUtils.parse(editForm.getParameters(), LinkedHashMap.class));
 			} else {
 				Properties properties = new Properties();
 				try (Reader reader = new StringReader(editForm.getParameters())) {
 					properties.load(reader);
 
-					return properties.stringPropertyNames().stream()
-						.collect(Collectors.toMap(key -> key, key -> properties.getProperty(key)));
+					parameters.putAll(properties.stringPropertyNames().stream()
+						.collect(Collectors.toMap(key -> key, key -> properties.getProperty(key))));
 
 				} catch (IOException e) {
 					throw Exceptions.newException(LampErrorCode.INVALID_PARAMETERS);
 				}
 			}
 		}
-		return null;
+		return parameters;
 	}
 
 	protected AppResource getAppResource(SpringBootAppCreateForm editForm) {
@@ -104,4 +120,36 @@ public class SpringBootAppService {
 		return null;
 	}
 
+	protected List<ScriptCommand> getInstallScriptCommands(String artifactId,
+														   String properties,
+														   String shellFilePath) {
+		List<ScriptCommand> scriptCommandEntities = new ArrayList<>();
+		if (StringUtils.isNotBlank(properties)){
+			String content = properties;
+
+			ScriptFileCreateCommand fileCreateCommandDto = new ScriptFileCreateCommand();
+			fileCreateCommandDto.setFilename(artifactId + ".properties");
+			fileCreateCommandDto.setContent(content);
+
+			scriptCommandEntities.add(fileCreateCommandDto);
+		}
+		try {
+			Resource resource = resourceLoader.getResource(shellFilePath);
+			String content = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
+
+			ScriptFileCreateCommand fileCreateCommandDto = new ScriptFileCreateCommand();
+			fileCreateCommandDto.setFilename(artifactId + ".sh");
+			fileCreateCommandDto.setContent(content);
+			fileCreateCommandDto.setExecutable(true);
+
+			scriptCommandEntities.add(fileCreateCommandDto);
+		} catch (IOException e) {
+			throw Exceptions.newException(LampErrorCode.SHELL_FILE_NOT_FOUND, e);
+		}
+		return scriptCommandEntities;
+	}
+
+	@Override public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
 }

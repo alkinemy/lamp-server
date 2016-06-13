@@ -13,6 +13,11 @@
 			<span th:if="${#strings.isEmpty(menuItem.href)}" th:text="${menuItem.title}">Title</span>
 			<i class="fa fa-circle" th:if="${menuItem != SELECTED_MENU_ITEM}"></i>
 		</li>
+		<li th:each="menuItem : ${breadcrumb}">
+			<i class="fa fa-circle"></i>
+			<a href="#" th:if="${!#strings.isEmpty(menuItem.href)}" th:href="@{${menuItem.href}}" th:text="${menuItem.title}">Title</a>
+			<span th:if="${#strings.isEmpty(menuItem.href)}" th:text="${menuItem.title}">Title</span>
+		</li>
 	</ul>
 </div>
 

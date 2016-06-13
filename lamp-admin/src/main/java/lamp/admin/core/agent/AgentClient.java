@@ -1,13 +1,9 @@
 package lamp.admin.core.agent;
 
-import lamp.admin.core.agent.model.AppDeployForm;
 import lamp.admin.core.agent.security.AgentRequestUser;
 import lamp.admin.core.agent.security.AgentRequestUserHolder;
-import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppInstance;
-import lamp.admin.core.app.simple.SimpleAppContainer;
-import lamp.admin.core.app.simple.resource.AppResource;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.StringUtils;
@@ -22,7 +18,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class AgentClient {
@@ -44,13 +42,13 @@ public class AgentClient {
 		}
 	}
 
-	public List<AppInstance> getAppInsntaces(Agent agent) {
+	public List<AppInstance> getAppInstances(Agent agent) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
-			ResponseEntity<List<AppInstance>> responseEntity = restTemplate.exchange(baseUrl + "/api/apps/instances", HttpMethod.GET, null, new ParameterizedTypeReference<List<AppInstance>>() {});
+			ResponseEntity<List<AppInstance>> responseEntity = restTemplate.exchange(baseUrl + "/api/app", HttpMethod.GET, null, new ParameterizedTypeReference<List<AppInstance>>() {});
 
-			return responseEntity.getBody();
+			return Optional.ofNullable(responseEntity.getBody()).orElse(Collections.emptyList());
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
@@ -60,7 +58,7 @@ public class AgentClient {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
-			ResponseEntity<AppInstance> responseEntity = restTemplate.getForEntity(baseUrl + "/api/apps/instances/{instanceId}", AppInstance.class, instanceId);
+			ResponseEntity<AppInstance> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/{instanceId}", AppInstance.class, instanceId);
 
 			return responseEntity.getBody();
 		} finally {
@@ -91,13 +89,11 @@ public class AgentClient {
 
 	}
 
-
-
-	public void undeploy(Agent agent, String instanceId) {
+	public void undeployApp(Agent agent, String instanceId, boolean forceStop) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
-			restTemplate.delete(baseUrl + "/api/apps/instances/{instanceId}", instanceId);
+			restTemplate.delete(baseUrl + "/api/app/{instanceId}?forceStop={forceStop}", instanceId, forceStop);
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
@@ -107,7 +103,7 @@ public class AgentClient {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
-			ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/apps/instances/{instanceId}/start", Void.class, instanceId);
+			ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/{instanceId}/start", Void.class, instanceId);
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
@@ -117,7 +113,7 @@ public class AgentClient {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
-			ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/apps/instances/{instanceId}/stop", Void.class, instanceId);
+			ResponseEntity<Void> responseEntity = restTemplate.getForEntity(baseUrl + "/api/app/{instanceId}/stop", Void.class, instanceId);
 		} finally {
 			AgentRequestUserHolder.clear();
 		}

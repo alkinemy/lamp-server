@@ -1,13 +1,13 @@
 package lamp.admin.domain.host.model;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.domain.script.model.FileCreateCommand;
-import lamp.admin.domain.script.model.ScriptCommand;
+
+import lamp.admin.core.script.ScriptCommand;
+import lamp.admin.core.script.ScriptFileCreateCommand;
 import lamp.common.utils.IOUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -48,29 +48,29 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 	}
 
 	public List<ScriptCommand> getInstallScriptCommands() throws IOException {
-		List<ScriptCommand> scriptCommands = new ArrayList<>();
+		List<ScriptCommand> scriptCommandEntities = new ArrayList<>();
 		{
 			Resource resource = resourceLoader.getResource(agentPropertiesFilePath);
 			String content = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
 
-			FileCreateCommand fileCreateCommand = new FileCreateCommand();
+			ScriptFileCreateCommand fileCreateCommand = new ScriptFileCreateCommand();
 			fileCreateCommand.setFilename("lamp-agent.properties");
 			fileCreateCommand.setContent(content);
 
-			scriptCommands.add(fileCreateCommand);
+			scriptCommandEntities.add(fileCreateCommand);
 		}
 		{
 			Resource resource = resourceLoader.getResource(agentShellFilePath);
 			String content = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
 
-			FileCreateCommand fileCreateCommand = new FileCreateCommand();
+			ScriptFileCreateCommand fileCreateCommand = new ScriptFileCreateCommand();
 			fileCreateCommand.setFilename("lamp-agent.sh");
 			fileCreateCommand.setContent(content);
 			fileCreateCommand.setExecutable(true);
 
-			scriptCommands.add(fileCreateCommand);
+			scriptCommandEntities.add(fileCreateCommand);
 		}
-		return scriptCommands;
+		return scriptCommandEntities;
 	}
 
 	@Override public void setResourceLoader(ResourceLoader resourceLoader) {

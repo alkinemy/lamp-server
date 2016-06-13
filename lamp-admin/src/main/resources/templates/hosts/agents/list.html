@@ -52,10 +52,7 @@
 											</a>
 											<ul class="dropdown-menu" role="menu">
 												<li>
-													<a th:href="@{/server/agent/{id}(id=${agent.id})}"> View </a>
-												</li>
-												<li>
-													<a th:href="@{/server/agent/{id}/app(id=${agent.id})}"> Managed Apps </a>
+													<a th:href="@{/agents/{id}/apps(id=${agent.id})}"> Managed Apps </a>
 												</li>
 												<li class="divider"> </li>
 												<li>

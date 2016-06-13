@@ -2,6 +2,10 @@ package lamp.admin.domain.script.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lamp.admin.core.script.ScriptCommand;
+import lamp.admin.core.script.ScriptExecuteCommand;
+import lamp.admin.core.script.ScriptFileCreateCommand;
+import lamp.admin.core.script.ScriptFileRemoveCommand;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.common.utils.assembler.AbstractListAssembler;
@@ -11,18 +15,18 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ScriptCommandDtoAssembler extends AbstractListAssembler<ScriptCommand, ScriptCommandDto> {
+public class ScriptCommandDtoAssembler extends AbstractListAssembler<ScriptCommandEntity, ScriptCommand> {
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
-	@Override protected ScriptCommandDto doAssemble(ScriptCommand appInstallCommand) {
-		ScriptCommandDto appInstallCommandDto;
-		if (appInstallCommand instanceof ExecuteCommand) {
-			appInstallCommandDto = new ScriptExecuteCommandDto();
-		} else if (appInstallCommand instanceof FileCreateCommand) {
-			appInstallCommandDto = new ScriptFileCreateCommandDto();
-		} else if (appInstallCommand instanceof FileRemoveCommand) {
-			appInstallCommandDto = new ScriptFileRemoveCommandDto();
+	@Override protected ScriptCommand doAssemble(ScriptCommandEntity appInstallCommand) {
+		ScriptCommand appInstallCommandDto;
+		if (appInstallCommand instanceof ExecuteCommandEntity) {
+			appInstallCommandDto = new ScriptExecuteCommand();
+		} else if (appInstallCommand instanceof FileCreateCommandEntity) {
+			appInstallCommandDto = new ScriptFileCreateCommand();
+		} else if (appInstallCommand instanceof FileRemoveCommandEntity) {
+			appInstallCommandDto = new ScriptFileRemoveCommand();
 		} else {
 			throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE);
 		}
@@ -31,14 +35,14 @@ public class ScriptCommandDtoAssembler extends AbstractListAssembler<ScriptComma
 	}
 
 
-	public String stringify(List<ScriptCommand> scriptCommands) {
-		if (scriptCommands == null) {
+	public String stringify(List<ScriptCommandEntity> scriptCommandEntities) {
+		if (scriptCommandEntities == null) {
 			return null;
 		}
 
-		List<ScriptCommandDto> scriptCommandDtoList = assemble(scriptCommands);
+		List<ScriptCommand> scriptCommandList = assemble(scriptCommandEntities);
 		try {
-			return objectMapper.writeValueAsString(scriptCommandDtoList);
+			return objectMapper.writeValueAsString(scriptCommandList);
 		} catch (JsonProcessingException e) {
 			throw Exceptions.newException(LampErrorCode.INVALID_SCRIPT_COMMANDS, e);
 		}

@@ -32,4 +32,6 @@ public class App {
 
 	private AppContainer container;
 
+	private String version;
+
 }

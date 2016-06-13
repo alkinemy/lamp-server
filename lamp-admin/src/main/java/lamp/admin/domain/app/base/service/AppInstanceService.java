@@ -1,0 +1,78 @@
+package lamp.admin.domain.app.base.service;
+
+import lamp.admin.core.agent.AgentClient;
+import lamp.admin.core.app.base.AppInstance;
+import lamp.admin.domain.agent.model.Agent;
+import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
+import lamp.admin.domain.base.exception.Exceptions;
+import lamp.admin.domain.base.exception.LampErrorCode;
+import lamp.common.utils.assembler.SmartAssembler;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
+@Service
+public class AppInstanceService {
+
+	@Autowired
+	private SmartAssembler smartAssembler;
+	@Autowired
+	private AppInstanceEntityService appInstanceEntityService;
+	@Autowired
+	private AgentClient agentClient;
+
+	public List<AppInstance> getAppInstances(String appId) {
+		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getListByAppId(appId);
+		return smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
+	}
+
+	public List<AppInstance> getAppInstancesByAgent(Agent agent) {
+		return agentClient.getAppInstances(agent);
+	}
+
+	public AppInstance getAppInstance(String id) {
+		Optional<AppInstance> appInstance = getAppInstanceOptional(id);
+		Exceptions.throwsException(!appInstance.isPresent(), LampErrorCode.APP_INSTANCE_NOT_FOUND, id);
+		return appInstance.get();
+	}
+
+	public Optional<AppInstance> getAppInstanceOptional(String id) {
+		AppInstanceEntity entity = appInstanceEntityService.get(id);
+		AppInstance appInstance = smartAssembler.assemble(entity, AppInstanceEntity.class, AppInstance.class);
+		return Optional.ofNullable(appInstance);
+	}
+
+	@Transactional
+	public AppInstance create(AppInstance appInstance) {
+		AppInstanceEntity appInstanceEntity = smartAssembler.assemble(appInstance, AppInstance.class, AppInstanceEntity.class);
+		return smartAssembler.assemble(appInstanceEntityService.create(appInstanceEntity), AppInstanceEntity.class,
+									   AppInstance.class);
+	}
+
+	@Transactional
+	public AppInstance update(AppInstance appInstance) {
+		AppInstanceEntity appInstanceEntity = appInstanceEntityService.get(appInstance.getId());
+		smartAssembler.populate(appInstance, appInstanceEntity, AppInstance.class, AppInstanceEntity.class);
+		return smartAssembler.assemble(appInstanceEntity, AppInstanceEntity.class, AppInstance.class);
+	}
+
+	@Transactional
+	public AppInstance updateStatus(AppInstance appInstance) {
+		AppInstanceEntity appInstanceEntity = appInstanceEntityService.get(appInstance.getId());
+		appInstanceEntity.setStatus(appInstance.getStatus());
+		appInstanceEntity.setStatusMessage(appInstance.getStatusMessage());
+		log.info("AppInstanceEntity : {}", appInstanceEntity);
+		return smartAssembler.assemble(appInstanceEntity, AppInstanceEntity.class, AppInstance.class);
+	}
+
+	@Transactional
+	public void delete(AppInstance appInstance) {
+		appInstanceEntityService.delete(appInstance.getId());
+	}
+}
+

@@ -22,46 +22,46 @@ public class ScriptCommandsParser {
 		objectMapper = new ObjectMapper();
 	}
 
-	public List<ScriptCommand> parse(String commandsStr) {
+	public List<ScriptCommandEntity> parse(String commandsStr) {
 		log.info("commandsStr = {}", commandsStr);
-		List<ScriptCommand> scriptCommands = new ArrayList<>();
+		List<ScriptCommandEntity> scriptCommandEntities = new ArrayList<>();
 		if (StringUtils.isNotBlank(commandsStr)) {
 			try {
 				log.info("commands = {}", commandsStr);
 				Map<String, Object>[] commandMaps = objectMapper.readValue(commandsStr, Map[].class);
 				for (Map<String, Object> command : commandMaps) {
 					ScriptCommandType type = ScriptCommandType.valueOf((String) command.get("type"));
-					ScriptCommand scriptCommand;
+					ScriptCommandEntity scriptCommandEntity;
 					switch (type) {
 						case EXECUTE:
-							scriptCommand = new ExecuteCommand();
-							((ExecuteCommand)scriptCommand).setCommandShell((String) command.get("commandShell"));
-							((ExecuteCommand)scriptCommand).setCommandLine((String) command.get("commandLine"));
+							scriptCommandEntity = new ExecuteCommandEntity();
+							((ExecuteCommandEntity) scriptCommandEntity).setCommandShell((String) command.get("commandShell"));
+							((ExecuteCommandEntity) scriptCommandEntity).setCommandLine((String) command.get("commandLine"));
 							break;
 						case FILE_CREATE:
-							scriptCommand = new FileCreateCommand();
-							((FileCreateCommand)scriptCommand).setFilename((String) (command.get("filename")));
-							((FileCreateCommand)scriptCommand).setContent((String) command.get("content"));
+							scriptCommandEntity = new FileCreateCommandEntity();
+							((FileCreateCommandEntity) scriptCommandEntity).setFilename((String) (command.get("filename")));
+							((FileCreateCommandEntity) scriptCommandEntity).setContent((String) command.get("content"));
 //							((ScriptFileCreateCommand)scriptCommand).setReadable(BooleanUtils.toBoolean(command.get("readable")));
 //							((ScriptFileCreateCommand)scriptCommand).setWritable(BooleanUtils.toBoolean(command.get("writable")));
-							((FileCreateCommand)scriptCommand).setExecutable(BooleanUtils.toBoolean(String.valueOf(command.get("executable"))));
+							((FileCreateCommandEntity) scriptCommandEntity).setExecutable(BooleanUtils.toBoolean(String.valueOf(command.get("executable"))));
 							break;
 						case FILE_REMOVE:
-							scriptCommand = new FileRemoveCommand();
-							((FileRemoveCommand)scriptCommand).setFilename((String) command.get("filename"));
+							scriptCommandEntity = new FileRemoveCommandEntity();
+							((FileRemoveCommandEntity) scriptCommandEntity).setFilename((String) command.get("filename"));
 							break;
 						default:
 							throw Exceptions.newException(LampErrorCode.UNSUPPORTED_SCRIPT_COMMAND_TYPE, type);
 					}
-					scriptCommand.setName((String) command.get("name"));
-					scriptCommand.setDescription((String) command.get("description"));
-					scriptCommands.add(scriptCommand);
+					scriptCommandEntity.setName((String) command.get("name"));
+					scriptCommandEntity.setDescription((String) command.get("description"));
+					scriptCommandEntities.add(scriptCommandEntity);
 				}
 			} catch (Exception e) {
 				log.warn("INVALID_SCRIPT_COMMANDS (" + commandsStr + ")", e);
 				throw Exceptions.newException(LampErrorCode.INVALID_SCRIPT_COMMANDS, e);
 			}
 		}
-		return scriptCommands;
+		return scriptCommandEntities;
 	}
 }

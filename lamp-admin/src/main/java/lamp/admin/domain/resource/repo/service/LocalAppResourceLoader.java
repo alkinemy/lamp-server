@@ -9,6 +9,7 @@ import lamp.admin.domain.resource.repo.model.entity.LocalAppRepoEntity;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.resource.repo.repository.LocalAppFileEntityRepository;
+import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -40,6 +41,9 @@ public class LocalAppResourceLoader {
 	protected String getLastVersion(String repositoryId, String groupId, String artifactId) {
 		// TODO 정상적으로 작동하도록 수정 바람
 		Page<LocalAppFileEntity> resourceList = localAppFileEntityRepository.findAllByRepositoryIdAndGroupIdAndArtifactIdOrderByVersionDesc(repositoryId, groupId, artifactId, new PageRequest(0, 1));
+		if (CollectionUtils.isEmpty(resourceList.getContent())) {
+			throw Exceptions.newException(LampErrorCode.APP_RESOURCE_NOT_FOUND, repositoryId, groupId, artifactId);
+		}
 		LocalAppFileEntity lastVersionResource = Iterables.getFirst(resourceList.getContent(), null);
 		return lastVersionResource.getBaseVersion();
 	}

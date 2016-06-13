@@ -21,6 +21,7 @@ public class AppEntityAssembler extends AbstractListAssembler <App, AppEntity> {
 		AppEntity entity = new AppEntity();
 		entity.setId(app.getId());
 		entity.setType(app.getType());
+		entity.setVersion(app.getVersion());
 		entity.setPath(path);
 		entity.setName(app.getName());
 		entity.setDescription(app.getDescription());

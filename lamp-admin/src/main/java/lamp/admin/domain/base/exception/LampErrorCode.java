@@ -57,7 +57,10 @@ public enum LampErrorCode implements ErrorCode {
 	, INVALID_SCRIPT_COMMANDS("스크립트 명령어가 잘못되었습니다.")
 	, JSON_PROCESS_FAILED("Json Processing failed")
 	, SCRIPT_COMMAND_EXECUTION_FAILED("스크립트 명령어 실행을 실패하였습니다")
-	, SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다."), INVALID_PARAMETERS("유효하지 않은 파라메터 입니다.");
+	, SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다.")
+	, INVALID_PARAMETERS("유효하지 않은 파라메터 입니다.")
+	, SHELL_FILE_NOT_FOUND("쉘 파일을 찾을 수 없습니다.")
+	, APP_CONTAINER_CREATE_FAILED("앱 컨테이서를 생성할 수 없습니다."), APP_INSTANCE_NOT_FOUND("앱 인스턴스를 찾을 수 없습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

@@ -1,14 +1,21 @@
 package lamp.admin.web.app.controller;
 
+import lamp.admin.LampAdminConstants;
 import lamp.admin.api.util.HttpServletRequestUtils;
 import lamp.admin.core.app.base.App;
+import lamp.admin.core.app.base.AppInstance;
+import lamp.admin.core.host.Host;
 import lamp.admin.domain.app.base.model.entity.AppType;
-import lamp.admin.domain.app.base.model.form.GroupCreateForm;
-import lamp.admin.domain.app.base.model.form.SimpleAppCreateForm;
-import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
+import lamp.admin.domain.app.base.model.form.AppCreateForm;
+import lamp.admin.domain.app.base.service.AppInstanceDeployService;
+import lamp.admin.domain.app.base.service.AppInstanceService;
 import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.base.exception.MessageException;
+import lamp.admin.domain.host.service.HostService;
+import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
+import lamp.admin.web.account.model.MenuItem;
+import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,230 +25,65 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @MenuMapping(MenuConstants.APP)
 @Controller
 @RequestMapping("/apps")
-public class AppController {
+public class AppController extends AbstractAppController {
 
 	@Autowired
-	private AppService appService;
-//
-//	@Autowired
-//	private AppFacadeService appFacadeService;
-//
-//	@Autowired
-//	private AppTemplateService appTemplateService;
-//
-//	@Autowired
-//	private AppManagementListenerService appManagementListenerService;
-//
-//
+	private AppInstanceService appInstanceService;
+
+	@Autowired
+	public AppController(AppService appService) {
+		super(appService);
+	}
 
 	@RequestMapping(path = "/**", method = RequestMethod.GET)
 	public String list(Model model,
 					   @ModelAttribute("path") String path) {
 		App app = appService.getApp(path);
+		model.addAttribute("breadcrumb", getBreadcrumb(app));
 		if (AppType.GROUP.equals(app.getType())) {
 			List<App> apps = appService.getAppsByPath(path);
 			model.addAttribute("apps", apps);
 			return "apps/list";
 		} else {
 			model.addAttribute("app", app);
+			List<AppInstance> appInstances = appInstanceService.getAppInstances(app.getId());
+			model.addAttribute("appInstances", appInstances);
 			return "apps/view";
 		}
-
 	}
 
-	@ModelAttribute("path")
-	protected String getPath(HttpServletRequest request) {
-		String path = HttpServletRequestUtils.getRestPath(request);
-		return path;
+	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=destroy"})
+	public String destroy(Model model,
+						  @ModelAttribute("path") String path,
+						  @RequestParam(name = "forceDestroy", defaultValue = "false") boolean forceDestroy,
+						  RedirectAttributes redirectAttributes) {
+		try {
+			App app = appService.getApp(path);
+
+			appService.destroy(app, forceDestroy);
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.DELETE_SUCCESS));
+
+			redirectAttributes.addAttribute("path", path);
+			return "redirect:/apps/" + path;
+		} catch (MessageException e) {
+			log.warn("app destroy failed", e);
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofError(e));
+			redirectAttributes.addAttribute("path", path);
+
+			return "redirect:/apps/" + path;
+		}
 	}
-
-
-	//
-
-
-//	protected String createForm(ManagedAppRegisterForm editForm, Model model) {
-//
-//		List<AppTemplateDto> appTemplateDtoList = appTemplateService.getAppTemplateDtoListByProcessTypeAndGroupIdAndArtifactId(editForm.getProcessType(), editForm.getGroupId(), editForm.getArtifactId());
-//		model.addAttribute("appTemplateList", appTemplateDtoList);
-//
-//		return "app/edit";
-//	}
-//
-//	@RequestMapping(path = "/create", method = RequestMethod.POST)
-//	public String create(@ModelAttribute("editForm") ManagedAppRegisterForm editForm,
-//						 Model model,
-//						 BindingResult bindingResult,
-//						 RedirectAttributes redirectAttributes) {
-//		try {
-//			appFacadeService.registerManagedApp(editForm);
-//			return "redirect:/app";
-//		} catch (MessageException e) {
-//			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-//			return createForm(editForm, model);
-//		}
-//	}
-//
-//	@RequestMapping(path = "/{id}/delete", method = RequestMethod.GET)
-//	public String delete(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppUndeployForm editForm,
-//						 Model model) {
-//
-//		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//		model.addAttribute("managedApp", managedAppDto);
-//
-//		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
-//
-//		return deleteForm(id, editForm, model);
-//	}
-//
-//	protected String deleteForm(String id, AppUndeployForm editForm, Model model) {
-//		if (!model.containsAttribute("managedApp")) {
-//			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//			model.addAttribute("managedApp", managedAppDto);
-//		}
-//		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
-//		model.addAttribute("appManagementListeners", appManagementListeners);
-//
-//		return "app/delete";
-//	}
-//
-//	@RequestMapping(path = "/{id}/delete", method = RequestMethod.POST)
-//	public String delete(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppUndeployForm editForm,
-//						 Model model,
-//						 BindingResult bindingResult,
-//						 RedirectAttributes redirectAttributes) {
-//		try {
-//			appFacadeService.deregisterApp(id, editForm);
-//			return "redirect:/agent/{agentId}/app";
-//		} catch (MessageException e) {
-//			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-//			return deleteForm(id, editForm, model);
-//		}
-//	}
-//
-//
-//	@RequestMapping(path = "/{id}/start", method = RequestMethod.GET)
-//	public String start(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppStartForm editForm,
-//						 Model model) {
-//
-//		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//		model.addAttribute("managedApp", managedAppDto);
-//
-//		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
-//
-//		return startForm(id, editForm, model);
-//	}
-//
-//	protected String startForm(String id, AppStartForm editForm, Model model) {
-//		if (!model.containsAttribute("managedApp")) {
-//			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//			model.addAttribute("managedApp", managedAppDto);
-//		}
-//
-//		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
-//		model.addAttribute("appManagementListeners", appManagementListeners);
-//
-//		return "app/start";
-//	}
-//
-//	@RequestMapping(path = "/{id}/start", method = RequestMethod.POST)
-//	public String start(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppStartForm editForm,
-//						 Model model,
-//						 BindingResult bindingResult,
-//						 RedirectAttributes redirectAttributes) {
-//		try {
-//			appFacadeService.startApp(id, editForm);
-//			return "redirect:/app";
-//		} catch (MessageException e) {
-//			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-//			return startForm(id, editForm, model);
-//		}
-//	}
-//
-//
-//	@RequestMapping(path = "/{id}/stop", method = RequestMethod.GET)
-//	public String stop(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppStopForm editForm,
-//						 Model model) {
-//
-//		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//		model.addAttribute("managedApp", managedAppDto);
-//
-//		editForm.setAppManagementListener(managedAppDto.getAppManagementListener());
-//
-//		return stopForm(id, editForm, model);
-//	}
-//
-//	protected String stopForm(String id, AppStopForm editForm, Model model) {
-//		if (!model.containsAttribute("managedApp")) {
-//			ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//			model.addAttribute("managedApp", managedAppDto);
-//		}
-//
-//		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
-//		model.addAttribute("appManagementListeners", appManagementListeners);
-//
-//		return "app/stop";
-//	}
-//
-//	@RequestMapping(path = "/{id}/stop", method = RequestMethod.POST)
-//	public String stop(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppStopForm editForm,
-//						 Model model,
-//						 BindingResult bindingResult,
-//						 RedirectAttributes redirectAttributes) {
-//		try {
-//			appFacadeService.stopApp(id, editForm);
-//			return "redirect:/app";
-//		} catch (MessageException e) {
-//			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-//			return stopForm(id, editForm, model);
-//		}
-//	}
-//
-//	@RequestMapping(path = "/{id}/file", method = RequestMethod.GET)
-//	public String update(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppUpdateFileForm editForm, Model model) {
-//
-//		ManagedAppDto managedAppDto = appFacadeService.getManagedAppDto(id);
-//		model.addAttribute("managedApp", managedAppDto);
-//
-//		return "app/file";
-//	}
-//
-//	@RequestMapping(path = "/{id}/file", method = RequestMethod.POST)
-//	public String update(@PathVariable("id") String id,
-//						 @ModelAttribute("editForm") AppUpdateFileForm editForm,
-//			BindingResult bindingResult, Model model,
-//			RedirectAttributes redirectAttributes) {
-//		if (bindingResult.hasErrors()) {
-//			return update(id, editForm, model);
-//		}
-//
-//		try {
-//			appFacadeService.updateAppFile(id, editForm);
-//
-//			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
-//			return "redirect:/app";
-//		} catch (MessageException e) {
-//			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-//			return update(id, editForm, model);
-//		}
-//	}
-
-
 
 
 }

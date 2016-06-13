@@ -4,10 +4,12 @@ package lamp.admin.domain.host.service;
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.ScannedHost;
+import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.host.model.*;
 import lamp.admin.domain.host.model.entity.HostEntity;
 import lamp.admin.domain.host.service.form.HostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
+import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.InetAddressUtils;
 import lamp.common.utils.assembler.SmartAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,7 +41,15 @@ public class HostService {
 	}
 
 	public Host getHost(String id) {
-		return smartAssembler.assemble(hostEntityService.getHostEntity(id), HostEntity.class, Host.class);
+		Optional<Host> hostOptional = getHostOptional(id);
+		Exceptions.throwsException(!hostOptional.isPresent(), AdminErrorCode.HOST_NOT_FOUND, id);
+		return hostOptional.get();
+	}
+
+	public Optional<Host> getHostOptional(String id) {
+		HostEntity hostEntity = hostEntityService.getHostEntity(id);
+		Host host =  smartAssembler.assemble(hostEntity, HostEntity.class, Host.class);
+		return Optional.ofNullable(host);
 	}
 
 	public List<ScannedHost> scanHost(HostScanForm form) {
