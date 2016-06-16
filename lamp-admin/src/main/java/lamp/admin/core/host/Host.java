@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class Host {
 	private String agentAccessKey;
 	private String agentSecretKey;
 
-	private Long clusterId;
+	private String clusterId;
 	private String rack;
 
 	private List<String> roles;
@@ -50,5 +51,66 @@ public class Host {
 	private long swapTotal;
 	private long swapUsed;
 	private long swapFree;
+
+
+	public int getDiskUsedPercentage() {
+		if (diskTotal == 0) {
+			return 0;
+		}
+
+		return (int) ((diskUsed * 1.0d) / diskTotal * 100);
+	}
+
+	public String getDiskUsedPercentageLevel() {
+		int p = getDiskUsedPercentage();
+		if (p > 80) {
+			return "danger";
+		} else if (p > 60) {
+			return "warn";
+		} else {
+			return "info";
+		}
+	}
+
+	public int getMemUsedPercentage() {
+		if (memTotal == 0) {
+			return 0;
+		}
+		return (int) ((memUsed * 1.0d) / memTotal * 100);
+	}
+
+	public String getMemUsedPercentageLevel() {
+		int p = getMemUsedPercentage();
+		if (p > 80) {
+			return "danger";
+		} else if (p > 60) {
+			return "warn";
+		} else {
+			return "info";
+		}
+	}
+	
+	public String getReadableDiskTotal() {
+		return readableFileSize(getDiskTotal());
+	}
+
+	public String getReadableDiskUsed() {
+		return readableFileSize(getDiskUsed());
+	}
+
+	public String getReadableMemTotal() {
+		return readableFileSize(getMemTotal());
+	}
+
+	public String getReadableMemUsed() {
+		return readableFileSize(getMemUsed());
+	}
+	
+	public static String readableFileSize(long size) {
+		if(size <= 0) return "0";
+		final String[] units = new String[] { "B", "KiB", "MiB", "GiB", "TiB" };
+		int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+	}
 
 }

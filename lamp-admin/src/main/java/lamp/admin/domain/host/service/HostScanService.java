@@ -30,7 +30,7 @@ public class HostScanService {
 	}
 
 	protected boolean scanHostManaged(String address) {
-		Optional<HostEntity> hostEntityOptional = hostEntityService.getHostEntityOptionalByAddress(address);
+		Optional<HostEntity> hostEntityOptional = hostEntityService.getOptionalByAddress(address);
 		if (hostEntityOptional.isPresent()) {
 			// FIXME 제대로 구현 바람
 			return true;
@@ -38,7 +38,7 @@ public class HostScanService {
 
 		}
 		//
-		agentInstallProperties.getAgentPort();
+		agentInstallProperties.getPort();
 		return false;
 	}
 

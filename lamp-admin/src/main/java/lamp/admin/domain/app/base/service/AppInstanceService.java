@@ -36,13 +36,12 @@ public class AppInstanceService {
 	}
 
 	public AppInstance getAppInstance(String id) {
-		Optional<AppInstance> appInstance = getAppInstanceOptional(id);
-		Exceptions.throwsException(!appInstance.isPresent(), LampErrorCode.APP_INSTANCE_NOT_FOUND, id);
-		return appInstance.get();
+		AppInstanceEntity entity = appInstanceEntityService.get(id);
+		return smartAssembler.assemble(entity, AppInstanceEntity.class, AppInstance.class);
 	}
 
 	public Optional<AppInstance> getAppInstanceOptional(String id) {
-		AppInstanceEntity entity = appInstanceEntityService.get(id);
+		AppInstanceEntity entity = appInstanceEntityService.getOptional(id).orElse(null);
 		AppInstance appInstance = smartAssembler.assemble(entity, AppInstanceEntity.class, AppInstance.class);
 		return Optional.ofNullable(appInstance);
 	}
@@ -63,11 +62,18 @@ public class AppInstanceService {
 
 	@Transactional
 	public AppInstance updateStatus(AppInstance appInstance) {
-		AppInstanceEntity appInstanceEntity = appInstanceEntityService.get(appInstance.getId());
-		appInstanceEntity.setStatus(appInstance.getStatus());
-		appInstanceEntity.setStatusMessage(appInstance.getStatusMessage());
-		log.info("AppInstanceEntity : {}", appInstanceEntity);
-		return smartAssembler.assemble(appInstanceEntity, AppInstanceEntity.class, AppInstance.class);
+		Optional<AppInstanceEntity> appInstanceEntityOptional = appInstanceEntityService.getOptional(appInstance.getId());
+		if (appInstanceEntityOptional.isPresent()) {
+			AppInstanceEntity appInstanceEntity = appInstanceEntityOptional.get();
+			appInstanceEntity.setStatus(appInstance.getStatus());
+			appInstanceEntity.setStatusMessage(appInstance.getStatusMessage());
+			log.info("AppInstanceEntity : {}", appInstanceEntity);
+			return smartAssembler.assemble(appInstanceEntity, AppInstanceEntity.class, AppInstance.class);
+		} else {
+			// FIXME 수정 바람
+			log.warn("AppInstance not exist : instanceId={}, hostId={}", appInstance.getId(), appInstance.getHostId());
+			return appInstance;
+		}
 	}
 
 	@Transactional

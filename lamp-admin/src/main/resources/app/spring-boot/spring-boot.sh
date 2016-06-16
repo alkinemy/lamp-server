@@ -8,13 +8,15 @@ SPRING_OPTS="${springOpts}"
 function check_if_pid_file_exists {
     if [ ! -f $PIDFile ]
     then
- echo "PID file not found: $PIDFile"
-        exit 1
+        return 1
+    else
+        PID=$(print_process)
+        return 0
     fi
 }
 
 function check_if_process_is_running {
- if ps -p $(print_process) > /dev/null
+ if ps -p $PID > /dev/null
  then
      return 0
  else
@@ -28,26 +30,24 @@ function print_process {
 
 case "$1" in
   status)
-    check_if_pid_file_exists
-    if check_if_process_is_running
+    if check_if_pid_file_exists && check_if_process_is_running
     then
-      echo $(print_process)" is running"
+      echo $PID" is running"
     else
-      echo "Process not running: $(print_process)"
+      echo "Process not running"
     fi
     ;;
   stop)
-    check_if_pid_file_exists
-    if ! check_if_process_is_running
+    if ! check_if_pid_file_exists || ! check_if_process_is_running
     then
-      echo "Process $(print_process) already stopped"
+      echo "Process $PID already stopped"
       exit 0
     fi
-    kill -TERM $(print_process)
+    kill -TERM $PID
     echo -ne "Waiting for process to stop"
     NOT_KILLED=1
     for i in {1..20}; do
-      if [ ! -f $PIDFile ] && check_if_process_is_running
+      if  check_if_process_is_running
       then
         echo -ne "."
         sleep 1
@@ -58,15 +58,15 @@ case "$1" in
     echo
     if [ $NOT_KILLED = 1 ]
     then
-      echo "Cannot kill process $(print_process)"
+      echo "Cannot kill process $PID"
       exit 1
     fi
     echo "Process stopped"
     ;;
   start)
-    if [ -f $PIDFile ] && check_if_process_is_running
+    if check_if_pid_file_exists && check_if_process_is_running
     then
-      echo "Process $(print_process) already running"
+      echo "Process $PID already running"
       exit 1
     fi
     nohup java $JVM_OPTS -jar $JARFile $SPRING_OPTS 1>stdout.log 2>stderr.log &

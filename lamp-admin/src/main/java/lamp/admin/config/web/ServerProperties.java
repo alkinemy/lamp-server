@@ -30,6 +30,9 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 	private String address;
 	private String version;
 
+	private long hostMetricsMonitoringInterval = 10 * 1000;
+	private long appInstanceStatusUpdateInterval = 10 * 1000;
+
 	@PostConstruct
 	public void init() throws UnknownHostException {
 		try {

@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -30,8 +28,9 @@ public class HostController {
 	private HostService hostService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String list(Model model) {
-		List<Host> hosts = hostService.getHostsByClusterId("");
+	public String list(Model model,
+					   @RequestParam(name = "clusterId", required = false) String clusterId) {
+		List<Host> hosts = hostService.getHostsByClusterId(clusterId);
 		model.addAttribute("hosts", hosts);
 		return "hosts/list";
 	}
@@ -71,11 +70,21 @@ public class HostController {
 							  BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes) throws Exception {
 
-		String clusterId = "1234";
-		List<AgentInstallResult> installResults = hostService.installAgents(clusterId, editForm);
+		List<AgentInstallResult> installResults = hostService.installAgents(editForm);
 		model.addAttribute("installResults", installResults);
 
 		return "hosts/add-result";
+	}
+
+	@RequestMapping(path = "/{hostId}/remove", method = RequestMethod.GET)
+	public String remove(Model model,
+					 	@PathVariable("hostId") String hostId,
+					  	RedirectAttributes redirectAttributes) throws Exception {
+
+
+		hostService.remove(hostId);
+
+		return "redirect:/hosts";
 	}
 //
 //	protected String createForm(DockerApp editForm, Model model) {

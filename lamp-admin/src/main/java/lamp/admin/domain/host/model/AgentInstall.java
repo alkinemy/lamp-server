@@ -1,5 +1,6 @@
 package lamp.admin.domain.host.model;
 
+import lamp.admin.core.host.HostCredentials;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

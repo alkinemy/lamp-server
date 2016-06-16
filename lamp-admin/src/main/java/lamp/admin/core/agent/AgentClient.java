@@ -6,6 +6,9 @@ import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.support.json.JsonUtils;
+import lamp.common.collector.model.MetricsTagConstants;
+import lamp.common.collector.model.MetricsTarget;
+import lamp.common.collector.model.TargetMetrics;
 import lamp.common.utils.StringUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +21,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class AgentClient {
@@ -121,6 +123,32 @@ public class AgentClient {
 
 	protected String getBaseUrl(Agent agent) {
 		return agent.getProtocol() + "://" + agent.getAddress() + ":" + agent.getPort();
+	}
+
+	public void shutdown(Agent agent) {
+		// FIXME 구현 바람
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			ResponseEntity<Map> responseEntity = restTemplate.postForEntity(baseUrl + "/shutdown", Void.class, Map.class);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
+
+	// Metrics
+	public Map<String, Object> getMetrics(Agent agent) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String url = agent.getMetricsUrl();
+			Map<String, Object> metrics = restTemplate.getForObject(url, LinkedHashMap.class);
+
+			return metrics;
+
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
 	}
 
 

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class HostScanForm {
 
-	private Long clusterId = 1L;
+	private String clusterId;
 
 	@NotEmpty
 	private String hostnames;

@@ -31,6 +31,16 @@
 					<div class="portlet-body">
 						<div class="table-responsive">
 							<table class="table table-bordered table-hover">
+								<colgroup>
+									<col width="100" />
+									<col width="100" />
+									<col width="100" />
+									<col width="50" />
+									<col width="100" />
+									<col width="100" />
+									<col width="100" />
+									<col width="50" />
+								</colgroup>
 								<thead>
 								<tr>
 									<th> Name </th>
@@ -40,21 +50,52 @@
 									<th> CPU Load </th>
 									<th> Disk </th>
 									<th> Memory </th>
+									<th> Action </th>
 								</tr>
 								</thead>
 								<tbody>
 								<tr th:each="host : ${hosts}">
-									<td th:text="${host.name}"> Joke </td>
-									<td th:text="${host.address}"> Joke </td>
-									<td th:text="${host.clusterId}"> Joke </td>
-									<td th:text="${host.status}"> Joke </td>
+									<td th:text="${host.name}"> name </td>
+									<td th:text="${host.address}"> address </td>
+									<td th:text="${host.clusterId}"> clusterId </td>
+									<td th:text="${host.status}"> status </td>
 									<td>
-										<div>
-										<input class="knob" data-width="30" data-min="0" data-max="100" data-displayinput="false" value="35" />
+										<span th:text="${#numbers.formatDecimal(host.cpuUser, 1, 2) + '%us'}"></span>
+										<span th:text="${#numbers.formatDecimal(host.cpuSys,  1, 2) + '%sy'}"></span>
+										<span th:text="${#numbers.formatDecimal(host.cpuNice, 1, 2) + '%ni'}"></span>
+									</td>
+									<td>
+										<div class="progress-info">
+											<div class="progress">
+												<div th:style="'width: ' + ${host.diskUsedPercentage} + '%;'" th:class="'progress-bar progress-bar-' + ${host.diskUsedPercentageLevel}">
+													<span th:text="${host.readableDiskUsed} + '/' + ${host.readableDiskTotal}">1/1</span>
+												</div>
+												<!--<span th:text="${host.readableDiskUsed} + '/' + ${host.readableDiskTotal}">1/1</span>-->
+											</div>
 										</div>
 									</td>
-									<td th:text="${host.diskTotal}"> Joke </td>
-									<td th:text="${host.memTotal}"> Joke </td>
+									<td>
+										<div class="progress-info">
+											<div class="progress">
+												<div th:style="'width: ' + ${host.memUsedPercentage} + '%;'" th:class="'progress-bar progress-bar-' + ${host.memUsedPercentageLevel}">
+													<span th:text="${host.readableMemUsed} + '/' + ${host.readableMemTotal}">1/1</span>
+													<!--<span th:text="${host.memUsedPercentage} + '% used'">76% used</span>-->
+												</div>
+											</div>
+										</div>
+									</td>
+									<td>
+										<div class="btn-group">
+											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+												<i class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<a th:href="@{/hosts/{hostId}/remove(hostId=${host.id})}"> Remove </a>
+												</li>
+											</ul>
+										</div>
+									</td>
 								</tr>
 								</tbody>
 							</table>

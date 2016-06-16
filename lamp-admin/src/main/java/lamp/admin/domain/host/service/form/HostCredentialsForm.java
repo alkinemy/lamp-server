@@ -13,6 +13,8 @@ import java.util.List;
 @ToString
 public class HostCredentialsForm {
 
+	private String clusterId;
+
 	private List<String> scannedHostAddress;
 
 	private String username;

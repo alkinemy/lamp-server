@@ -27,13 +27,13 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 	private String groupId = "lamp.agent";
 	private String artifactId = "lamp-agent";
 
-	private String agentInstallDirectory = "/lamp/agent/2";
-	private String agentInstallFilename = "lamp-agent.jar";
+	private String installDirectory = "/lamp/agent";
+	private String installFilename = "lamp-agent.jar";
 
-	private int agentPort = 9090;
-	private String agentFile = "classpath:agent/lamp-agent.jar";
-	private String agentPropertiesFilePath = "classpath:agent/lamp-agent.properties";
-	private String agentShellFilePath = "classpath:agent/lamp-agent.sh";
+	private int port = 9090;
+	private String file = "classpath*:agent/lamp-agent.jar";
+	private String propertiesFilePath = "classpath*:agent/lamp-agent.properties";
+	private String shellFilePath = "classpath*:agent/lamp-agent.sh";
 
 	private String startCommandLine = "./lamp-agent.sh start";
 	private String stopCommandLine = "./lamp-agent.sh stop";
@@ -50,7 +50,7 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 	public List<ScriptCommand> getInstallScriptCommands() throws IOException {
 		List<ScriptCommand> scriptCommandEntities = new ArrayList<>();
 		{
-			Resource resource = resourceLoader.getResource(agentPropertiesFilePath);
+			Resource resource = resourceLoader.getResource(propertiesFilePath);
 			String content = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
 
 			ScriptFileCreateCommand fileCreateCommand = new ScriptFileCreateCommand();
@@ -60,7 +60,7 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 			scriptCommandEntities.add(fileCreateCommand);
 		}
 		{
-			Resource resource = resourceLoader.getResource(agentShellFilePath);
+			Resource resource = resourceLoader.getResource(shellFilePath);
 			String content = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
 
 			ScriptFileCreateCommand fileCreateCommand = new ScriptFileCreateCommand();

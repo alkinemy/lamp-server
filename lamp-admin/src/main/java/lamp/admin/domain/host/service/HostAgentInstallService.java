@@ -1,5 +1,6 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.core.host.HostCredentials;
 import lamp.admin.core.script.ScriptCommand;
 import lamp.admin.core.script.ScriptExecuteCommand;
 import lamp.admin.core.script.ScriptFileCreateCommand;
@@ -61,9 +62,9 @@ public class HostAgentInstallService {
 		agentInstall.setAddress(targetHost.getHostname());
 		agentInstall.setHostCredentials(hostCredentials);
 		agentInstall.setHostConfiguration(hostConfiguration);
-		agentInstall.setAgentInstallDirectory(agentInstallProperties.getAgentInstallDirectory());
-		agentInstall.setAgentInstallFilename(agentInstallProperties.getAgentInstallFilename());
-		agentInstall.setAgentFile(StringUtils.defaultIfBlank(agentFilePath, agentInstallProperties.getAgentFile()));
+		agentInstall.setAgentInstallDirectory(agentInstallProperties.getInstallDirectory());
+		agentInstall.setAgentInstallFilename(agentInstallProperties.getInstallFilename());
+		agentInstall.setAgentFile(StringUtils.defaultIfBlank(agentFilePath, agentInstallProperties.getFile()));
 
 		AgentInstallResult result = installAgent(agentInstall, printStream);
 
@@ -77,7 +78,7 @@ public class HostAgentInstallService {
 		hostEntity.setAgentFile(agentInstall.getAgentFile());
 
 
-		hostEntityService.addHostEntity(hostEntity);
+		hostEntityService.create(hostEntity);
 
 		return result;
 	}
@@ -128,7 +129,7 @@ public class HostAgentInstallService {
 			// ScriptCommands
 			Map<String, Object> parameters = agentInstallProperties.getParameters();
 			parameters.put("agentId", agentInstall.getAgentId());
-			parameters.put("agentPort", agentInstallProperties.getAgentPort());
+			parameters.put("agentPort", agentInstallProperties.getPort());
 
 
 

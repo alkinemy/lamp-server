@@ -1,11 +1,9 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.core.host.HostCredentials;
 import lamp.admin.domain.host.model.AgentInstall;
 import lamp.admin.domain.host.model.AgentInstallProperties;
-import lamp.admin.domain.host.model.HostCredentials;
 import lamp.admin.domain.host.model.HostConfiguration;
-import lamp.admin.domain.host.service.form.HostAgentFile;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
