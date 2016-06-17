@@ -102,7 +102,30 @@ CREATE TABLE `lamp_host_auth` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
+CREATE TABLE `lamp_agent` (
+  `id` varchar(100) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `group_id` varchar(200) DEFAULT NULL,
+  `artifact_id` varchar(200) DEFAULT NULL,
+  `version` varchar(100) DEFAULT NULL,
+  `protocol` varchar(100) DEFAULT NULL,
+  `hostname` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `port` int NOT NULL,
+  `app_directory` varchar(1000) NULL,
+  `work_directory` varchar(1000) NULL,
+  `secret_key` varchar(255) DEFAULT NULL,
+  `agent_time` datetime DEFAULT NULL,
+  `health_type` varchar(100) DEFAULT NULL,
+  `health_path` varchar(200) DEFAULT NULL,
+  `metrics_type` varchar(100) DEFAULT NULL,
+  `metrics_path` varchar(200) DEFAULT NULL,
+  `created_by` varchar(100) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `last_modified_by` varchar(100) DEFAULT NULL,
+  `last_modified_date` datetime,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `lamp_watch_target` (
@@ -152,28 +175,3 @@ CREATE TABLE `lamp_target_server_status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `lamp_agent` (
-  `id` varchar(100) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `group_id` varchar(200) DEFAULT NULL,
-  `artifact_id` varchar(200) DEFAULT NULL,
-  `version` varchar(100) DEFAULT NULL,
-  `protocol` varchar(100) DEFAULT NULL,
-  `hostname` varchar(100) NOT NULL,
-  `address` varchar(100) NOT NULL,
-  `port` int NOT NULL,
-  `app_directory` varchar(1000) NULL,
-  `work_directory` varchar(1000) NULL,
-  `secret_key` varchar(255) DEFAULT NULL,
-  `agent_time` datetime DEFAULT NULL,
-  `health_type` varchar(100) DEFAULT NULL,
-  `health_path` varchar(200) DEFAULT NULL,
-  `metrics_type` varchar(100) DEFAULT NULL,
-  `metrics_path` varchar(200) DEFAULT NULL,
-  `created_by` varchar(100) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `last_modified_by` varchar(100) DEFAULT NULL,
-  `last_modified_date` datetime,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `lamp_agent_uk_01` (`hostname`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

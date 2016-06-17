@@ -1,7 +1,6 @@
 package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
-import lamp.admin.api.util.HttpServletRequestUtils;
 import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.host.Host;
@@ -13,7 +12,6 @@ import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.host.service.HostService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
-import lamp.admin.web.account.model.MenuItem;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -61,7 +57,7 @@ public class AppInstanceController extends AbstractAppController {
 	}
 
 	protected String deployForm(Model model, String path, AppCreateForm editForm) {
-		App app = appService.getApp(path);
+		App app = appService.getAppByPath(path);
 		model.addAttribute("app", app);
 		List<Host> hosts = hostService.getHostsByClusterId(app.getClusterId());
 		model.addAttribute("hosts", hosts);
@@ -91,7 +87,7 @@ public class AppInstanceController extends AbstractAppController {
 	public String undeploy(Model model,
 						   @ModelAttribute("path") String path,
 						   @RequestParam("instanceId") String instanceId,
-						   @RequestParam("forceStop") boolean forceStop,
+						   @RequestParam(name = "forceStop", defaultValue = "false") boolean forceStop,
 						   RedirectAttributes redirectAttributes) {
 		try {
 			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
@@ -132,9 +128,9 @@ public class AppInstanceController extends AbstractAppController {
 
 	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=stop"})
 	public String stop(Model model,
-						@ModelAttribute("path") String path,
-						@RequestParam("instanceId") String instanceId,
-						RedirectAttributes redirectAttributes) {
+					   @ModelAttribute("path") String path,
+					   @RequestParam("instanceId") String instanceId,
+					   RedirectAttributes redirectAttributes) {
 		try {
 			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
 
@@ -149,5 +145,7 @@ public class AppInstanceController extends AbstractAppController {
 			return "redirect:/apps/" + path;
 		}
 	}
+
+
 
 }

@@ -1,11 +1,10 @@
 package lamp.admin.domain.host.model.entity;
 
-import lamp.admin.domain.base.model.AbstractAuditingEntity;
+import lamp.admin.domain.host.model.HostStatusCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -16,6 +15,10 @@ public class HostStatusEntity {
 
 	@Id
 	private String id;
+
+	@Enumerated(EnumType.STRING)
+	private HostStatusCode status;
+	private Date lastStatusTime;
 
 	// 로드 평균
 	private double cpuUser;
@@ -36,7 +39,5 @@ public class HostStatusEntity {
 	private long swapTotal;
 	private long swapUsed;
 	private long swapFree;
-
-	private Date lastStatusTime;
 
 }

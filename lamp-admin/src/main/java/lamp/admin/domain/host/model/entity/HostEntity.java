@@ -1,6 +1,7 @@
 package lamp.admin.domain.host.model.entity;
 
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
+import lamp.admin.domain.host.model.HostStatusCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,6 +60,10 @@ public class HostEntity extends AbstractAuditingEntity {
 	private String agentPidFile;
 	private String agentStartCommandLine;
 	private String agentStopCommandLine;
+
+	@Enumerated(EnumType.STRING)
+	@Column(table = "lamp_host_status")
+	private HostStatusCode status;
 
 	// 로드 평균
 	@Column(table = "lamp_host_status")

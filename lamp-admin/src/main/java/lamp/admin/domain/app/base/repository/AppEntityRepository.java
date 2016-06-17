@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface AppEntityRepository extends LampJpaRepository<AppEntity, String> {
 
-	List<AppEntity> findAllByPath(String path);
+	List<AppEntity> findAllByParentPath(String path);
 
+	AppEntity findOneByPath(String path);
 }

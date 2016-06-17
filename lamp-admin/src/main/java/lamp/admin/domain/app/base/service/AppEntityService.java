@@ -1,6 +1,5 @@
 package lamp.admin.domain.app.base.service;
 
-import lamp.admin.core.app.base.App;
 import lamp.admin.domain.app.base.model.entity.AppEntity;
 import lamp.admin.domain.app.base.repository.AppEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,12 @@ public class AppEntityService {
 	@Autowired
 	private AppEntityRepository appEntityRepository;
 
-	public List<AppEntity> getAppEntityListByPath(String path) {
-		return appEntityRepository.findAllByPath(path);
+	public List<AppEntity> getListByParentPath(String parentPath) {
+		return appEntityRepository.findAllByParentPath(parentPath);
 	}
 
-	public AppEntity getAppEntity(String id) {
-		return appEntityRepository.findOne(id);
+	public AppEntity getByPath(String path) {
+		return appEntityRepository.findOneByPath(path);
 	}
 
 	public AppEntity createAppEntity(AppEntity entity) {

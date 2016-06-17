@@ -58,7 +58,13 @@
 									<td th:text="${host.name}"> name </td>
 									<td th:text="${host.address}"> address </td>
 									<td th:text="${host.clusterId}"> clusterId </td>
-									<td th:text="${host.status}"> status </td>
+									<td><span th:text="${host.status}"
+											  th:class="${host.status}? 'label label-sm'
+                                              + (${host.status.name() == 'UNKNOWN'}? ' label-danger' : '')
+                                              + (${host.status.name() == 'UP'}? ' label-success' : '')
+                                              + (${host.status.name() == 'OUT_OF_SERVICE'}? ' label-danger' : '')
+                                              + (${host.status.name() == 'DOWN'}? ' label-warning' : '')">Suspended </span>
+									</td>
 									<td>
 										<span th:text="${#numbers.formatDecimal(host.cpuUser, 1, 2) + '%us'}"></span>
 										<span th:text="${#numbers.formatDecimal(host.cpuSys,  1, 2) + '%sy'}"></span>

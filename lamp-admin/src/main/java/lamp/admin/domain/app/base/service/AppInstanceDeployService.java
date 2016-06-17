@@ -41,7 +41,7 @@ public class AppInstanceDeployService {
 	private AppResourceLoader appResourceLoader;
 
 	public List<AppInstance> deploy(String appId, List<String> hostsIds) {
-		App app = appService.getApp(appId);
+		App app = appService.getAppByPath(appId);
 		Resource resource = null;
 		if (app.getContainer() instanceof SimpleAppContainer) {
 			resource = appResourceLoader.getResource(((SimpleAppContainer) app.getContainer()).getAppResource());
@@ -50,7 +50,7 @@ public class AppInstanceDeployService {
 		List<AppInstance> appInstances = new ArrayList<>();
 		List<String> hostIds = hostsIds;
 		for (String hostId : hostIds) {
-			String instanceId = UUID.randomUUID().toString();
+			String instanceId = app.getName() + "-" + UUID.randomUUID().toString();
 
 			AppInstance appInstance = newAppInstance(app, instanceId, hostId);
 			appInstance.setStatus(AppInstanceStatus.DEPLOYING);
@@ -82,6 +82,9 @@ public class AppInstanceDeployService {
 		return appInstances;
 	}
 
+	public void undeploy(String instanceId, boolean forceStop) {
+		undeploy(appInstanceService.getAppInstance(instanceId), forceStop);
+	}
 
 	public void undeploy(AppInstance appInstance, boolean forceStop) {
 		Agent agent = agentService.getAgent(appInstance.getHostId());

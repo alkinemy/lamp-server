@@ -11,9 +11,6 @@ import java.util.List;
 public class HostScheduledService {
 
 	@Autowired
-	private AgentService agentService;
-
-	@Autowired
 	private HostMonitoringService hostMonitoringService;
 
 	@Autowired

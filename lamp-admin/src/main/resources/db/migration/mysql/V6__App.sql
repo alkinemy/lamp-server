@@ -5,13 +5,14 @@ DROP TABLE IF EXISTS `lamp_app_history`;
 DROP TABLE IF EXISTS `lamp_app_instance`;
 
 CREATE TABLE `lamp_app` (
-  `id` VARCHAR(255) NOT NULL,
-  `type` VARCHAR(200) NOT NULL,
+  `id` VARCHAR(100) NOT NULL,
   `version` VARCHAR(100) DEFAULT NULL,
+  `type` VARCHAR(200) NOT NULL,
 
   `name` VARCHAR(100) DEFAULT NULL,
   `description` VARCHAR(255) DEFAULT NULL,
   `path` VARCHAR(255) DEFAULT NULL,
+  `parent_path` VARCHAR(255) DEFAULT NULL,
 
   `data` MEDIUMTEXT DEFAULT NULL,
 
@@ -25,17 +26,19 @@ CREATE TABLE `lamp_app` (
   `created_date` DATETIME NOT NULL,
   `last_modified_by` VARCHAR(255) DEFAULT NULL,
   `last_modified_date` DATETIME,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lamp_app_uk01` (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_app_history` (
-  `id` VARCHAR(255) NOT NULL,
-  `type` VARCHAR(200) NOT NULL,
+  `id` VARCHAR(100) NOT NULL,
   `version` VARCHAR(100) DEFAULT NULL,
+  `type` VARCHAR(200) NOT NULL,
 
   `name` VARCHAR(100) DEFAULT NULL,
   `description` VARCHAR(255) DEFAULT NULL,
   `path` VARCHAR(255) DEFAULT NULL,
+  `parent_path` VARCHAR(255) DEFAULT NULL,
 
   `data` MEDIUMTEXT DEFAULT NULL,
 

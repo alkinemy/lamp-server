@@ -6,23 +6,27 @@ import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.FilenameUtils;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractListAssembler;
+import lamp.common.utils.assembler.Populater;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.UUID;
 
 @Component
-public class AppEntityAssembler extends AbstractListAssembler <App, AppEntity> {
+public class AppEntityAssembler extends AbstractListAssembler<App, AppEntity> implements Populater<App, AppEntity> {
 
 	@Override protected AppEntity doAssemble(App app) {
-		String path = FilenameUtils.normalizeNoEndSeparator(app.getPath());
-		app.setId((StringUtils.isBlank(path) ? app.getName() : path  + "/" + app.getName()));
+		app.setId(UUID.randomUUID().toString());
+		String parentPath = FilenameUtils.normalizeNoEndSeparator(app.getParentPath());
+		app.setParentPath(parentPath);
+		String path = (StringUtils.isBlank(parentPath) ? app.getName() : parentPath + "/" + app.getName());
+		app.setPath(path);
 
 		AppEntity entity = new AppEntity();
 		entity.setId(app.getId());
-		entity.setType(app.getType());
 		entity.setVersion(app.getVersion());
-		entity.setPath(path);
+		entity.setType(app.getType());
+		entity.setPath(app.getPath());
+		entity.setParentPath(app.getParentPath());
 		entity.setName(app.getName());
 		entity.setDescription(app.getDescription());
 
@@ -35,4 +39,20 @@ public class AppEntityAssembler extends AbstractListAssembler <App, AppEntity> {
 		return entity;
 	}
 
+	@Override public void populate(App app, AppEntity entity) {
+//		entity.setId(app.getId());
+		entity.setVersion(app.getVersion());
+//		entity.setType(app.getType());
+//		entity.setPath(app.getPath());
+//		entity.setParentPath(parentPath);
+		entity.setName(app.getName());
+		entity.setDescription(app.getDescription());
+
+		entity.setCpu(app.getCpu());
+		entity.setMemory(app.getMemory());
+		entity.setDiskSpace(app.getDiskSpace());
+		entity.setInstances(app.getInstances());
+
+		entity.setData(JsonUtils.stringify(app));
+	}
 }

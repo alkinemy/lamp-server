@@ -1,8 +1,10 @@
 package lamp.admin.domain.app.base.service;
 
 import lamp.admin.core.agent.AgentClient;
+import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.agent.model.Agent;
+import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
@@ -23,6 +25,8 @@ public class AppInstanceService {
 	private SmartAssembler smartAssembler;
 	@Autowired
 	private AppInstanceEntityService appInstanceEntityService;
+	@Autowired
+	private AgentService agentService;
 	@Autowired
 	private AgentClient agentClient;
 
@@ -80,5 +84,6 @@ public class AppInstanceService {
 	public void delete(AppInstance appInstance) {
 		appInstanceEntityService.delete(appInstance.getId());
 	}
+
 }
 

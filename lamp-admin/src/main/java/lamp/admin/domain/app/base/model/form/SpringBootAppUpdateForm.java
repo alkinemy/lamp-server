@@ -7,8 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SpringBootAppUpdateForm extends SimpleAppUpdateForm {
+public class SpringBootAppUpdateForm extends SpringBootAppCreateForm {
 
-	private String appFilename;
 
 }

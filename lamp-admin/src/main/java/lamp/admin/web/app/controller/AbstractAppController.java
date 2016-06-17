@@ -31,7 +31,7 @@ public abstract class AbstractAppController {
 		List<MenuItem> breadcrumb = new ArrayList<>();
 		List<App> apps = appService.getAppsWithParentAll(currentApp);
 		for (App app : apps) {
-			breadcrumb.add(MenuItem.of(MenuConstants.APP, app.getName(), "/apps/" + app.getId()));
+			breadcrumb.add(MenuItem.of(MenuConstants.APP, app.getName(), "/apps/" + app.getPath()));
 		}
 		return breadcrumb;
 	}

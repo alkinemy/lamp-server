@@ -14,6 +14,7 @@ import java.util.List;
 public class HostCredentialsForm {
 
 	private String clusterId;
+	private String agentFile;
 
 	private List<String> scannedHostAddress;
 

@@ -38,7 +38,7 @@
 						<tbody>
 						<tr th:each="app : ${apps}">
 							<td th:text="${app.type}"> Joke </td>
-							<td> <a th:href="@{/apps/{id}(id=${app.id})}" th:text="${app.name}">name</a> </td>
+							<td> <a th:href="@{/apps/{path}(path=${app.path})}" th:text="${app.name}">name</a> </td>
 							<td th:text="${app.description}"> Joke </td>
 							<td th:text="${app.cpu}"> Joke </td>
 							<td th:text="${app.memory}"> Joke </td>
@@ -52,7 +52,7 @@
 									</a>
 									<ul class="dropdown-menu" role="menu">
 										<li>
-											<a th:href="@{/apps/{id}(id=${app.id},action=destroy)}"> Destory </a>
+											<a th:href="@{/apps/{path}(path=${app.path},action=destroy)}"> Destory </a>
 										</li>
 									</ul>
 								</div>

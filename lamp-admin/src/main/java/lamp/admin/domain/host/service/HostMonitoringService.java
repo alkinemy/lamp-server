@@ -2,11 +2,13 @@ package lamp.admin.domain.host.service;
 
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.Host;
+import lamp.admin.core.host.HostStatus;
 import lamp.admin.domain.agent.model.Agent;
-import lamp.admin.domain.agent.service.AgentAppInstanceStatusService;
 import lamp.admin.domain.agent.service.AgentService;
+import lamp.admin.domain.host.model.HostStatusCode;
 import lamp.admin.domain.host.model.entity.HostStatusEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -29,13 +31,26 @@ public class HostMonitoringService {
 	@Async
 	public void metricsMonitoring(Host host) {
 		Optional<Agent> agentOptional = agentService.getAgentOptional(host.getId());
+		HostStatusEntity hostStatusEntity = new HostStatusEntity();
+		hostStatusEntity.setId(host.getId());
 		if (agentOptional.isPresent()) {
 			Agent agent = agentOptional.get();
-			Map<String, Object> metrics = agentClient.getMetrics(agent);
 
-			HostStatusEntity hostStatus = new HostStatusEntity();
-			hostStatus.setId(host.getId());
-			hostStatus.setLastStatusTime(new Date());
+			HostStatus hostStatus = getHostStatus(agent);
+			BeanUtils.copyProperties(hostStatus, hostStatusEntity);
+		} else {
+			hostStatusEntity.setStatus(HostStatusCode.OUT_OF_SERVICE);
+			hostStatusEntity.setLastStatusTime(new Date());
+		}
+		hostStatusEntityService.update(hostStatusEntity);
+	}
+
+	protected HostStatus getHostStatus(Agent agent) {
+		HostStatus hostStatus = new HostStatus();
+		hostStatus.setLastStatusTime(new Date());
+
+		try {
+			Map<String, Object> metrics = agentClient.getMetrics(agent);
 
 			hostStatus.setCpuUser(getDoubleValue(metrics.get("server.cpu.user")));
 			hostStatus.setCpuNice(getDoubleValue(metrics.get("server.cpu.nice")));
@@ -53,12 +68,21 @@ public class HostMonitoringService {
 			hostStatus.setSwapUsed(getLongValue(metrics.get("server.swap.used")));
 			hostStatus.setSwapFree(getLongValue(metrics.get("server.swap.free")));
 
-			hostStatusEntityService.update(hostStatus);
+			log.debug("metrics = {}", metrics);
 
-			log.error("metrics = {}, {}", host.getName(), metrics);
-		} else {
-			log.warn("Host({})의 Agent를 찾을 수 없습니다.", host.getName());
+			if (hostStatus.getDiskUsedPercentage() > 70
+				|| hostStatus.getMemUsedPercentage() > 70) {
+				hostStatus.setStatus(HostStatusCode.DOWN);
+			} else {
+				hostStatus.setStatus(HostStatusCode.UP);
+			}
+
+		} catch (Exception e) {
+			log.error("Agent metrics load failed", e);
+			hostStatus.setStatus(HostStatusCode.UNKNOWN);
 		}
+
+		return hostStatus;
 	}
 
 	protected Double getDoubleValue(Object object) {

@@ -90,7 +90,7 @@ public class HostService {
 
 		HostConfiguration hostConfiguration = new HostConfiguration();
 
-		String agentFile = "classpath:agent/lamp-agent.jar";
+		String agentFile = editForm.getAgentFile();
 
 		if (editForm.isUsePassword()) {
 			hostCredentials.setPassword(editForm.getPassword());

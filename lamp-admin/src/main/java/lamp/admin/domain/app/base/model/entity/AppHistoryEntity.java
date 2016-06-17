@@ -3,19 +3,22 @@ package lamp.admin.domain.app.base.model.entity;
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@ToString
 @Entity
-@Table(name = "lamp_app")
-public class AppEntity extends AbstractAuditingEntity {
+@IdClass(AppHistoryId.class)
+@Table(name = "lamp_app_history")
+public class AppHistoryEntity extends AbstractAuditingEntity {
 
 	@Id
 	private String id;
+	@Id
 	private String version;
-
 	@Enumerated(EnumType.STRING)
 	private AppType type;
 

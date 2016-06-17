@@ -84,12 +84,12 @@ public class HostAgentInstallService {
 	}
 
 	public AgentInstallResult installAgent(AgentInstall agentInstall, PrintStream printStream) {
-
+		log.info("AgentInstall = {}", agentInstall);
 		String address = agentInstall.getAddress();
 		HostCredentials hostCredentials = agentInstall.getHostCredentials();
 		String agentFile = agentInstall.getAgentFile();
-		String agentInstallDirectory = agentInstall.getAgentInstallDirectory();
-		String agentInstallFilename = agentInstall.getAgentInstallFilename();
+		String remoteInstallDirectory = agentInstall.getAgentInstallDirectory();
+		String remoteInstallFilename = agentInstall.getAgentInstallFilename();
 
 		AgentInstallResult result = new AgentInstallResult();
 		result.setAddress(address);
@@ -116,13 +116,13 @@ public class HostAgentInstallService {
 			}
 			// File Copy
 			try (final Session session = client.startSession()) {
-				final Session.Command sessionCommand = session.exec("mkdir -p " + agentInstallDirectory);
+				final Session.Command sessionCommand = session.exec("mkdir -p " + remoteInstallDirectory);
 				String response = IOUtils.toString(sessionCommand.getInputStream());
 				sessionCommand.join(10, TimeUnit.SECONDS);
 				printStream.println(response);
 			}
 
-			String remoteFilename = Paths.get(agentInstallDirectory, agentInstallFilename).toString();
+			String remoteFilename = Paths.get(remoteInstallDirectory, remoteInstallFilename).toString();
 			Resource agentResource = agentInstallProperties.getResource(agentFile);
 			client.newSCPFileTransfer().upload(new FileSystemFile(agentResource.getFile()), remoteFilename);
 
@@ -134,7 +134,7 @@ public class HostAgentInstallService {
 
 
 			List<ScriptCommand> scriptCommandEntities = agentInstallProperties.getInstallScriptCommands();
-			executeScriptCommands(client, agentInstallDirectory, scriptCommandEntities, parameters, printStream);
+			executeScriptCommands(client, remoteInstallDirectory, scriptCommandEntities, parameters, printStream);
 
 
 			try (final Session session = client.startSession()) {
@@ -147,7 +147,7 @@ public class HostAgentInstallService {
 						//        .withInputFilters(removeColors(), removeNonPrintable())
 						.withExceptionOnFailure()
 						.build()) {
-						expect.sendLine("cd " + agentInstallDirectory);
+						expect.sendLine("cd " + remoteInstallDirectory);
 //						expect.expect(anyOf(contains("#"), contains("$")));
 						expect.sendLine("./lamp-agent.sh start");
 //						expect.expect();

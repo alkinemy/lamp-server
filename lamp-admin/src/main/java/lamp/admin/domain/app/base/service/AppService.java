@@ -3,14 +3,18 @@ package lamp.admin.domain.app.base.service;
 import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.app.base.model.entity.AppEntity;
+import lamp.admin.domain.app.base.model.entity.AppHistoryEntity;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.model.form.GroupCreateForm;
 import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
+import lamp.admin.domain.app.base.model.form.SpringBootAppUpdateForm;
 import lamp.admin.domain.base.exception.Exceptions;
+import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +31,8 @@ public class AppService {
 	@Autowired
 	private AppEntityService appEntityService;
 	@Autowired
+	private AppHistoryEntityService appHistoryEntityService;
+	@Autowired
 	private SpringBootAppService springBootAppService;
 	@Autowired
 	private AppInstanceService appInstanceService;
@@ -35,9 +41,9 @@ public class AppService {
 
 	private App rootGroup = new App("", AppType.GROUP, "", "");
 
-	public List<App> getAppsByPath(String path) {
-		List<AppEntity> appEntities = appEntityService.getAppEntityListByPath(path);
-		return smartAssembler.assemble(appEntities, App.class);
+	public List<App> getAppsByParentPath(String parentPath) {
+		List<AppEntity> appEntities = appEntityService.getListByParentPath(parentPath);
+		return smartAssembler.assemble(appEntities, AppEntity.class, App.class);
 	}
 
 	public List<App> getAppsWithParentAll(App currentApp) {
@@ -45,58 +51,90 @@ public class AppService {
 		apps.add(currentApp);
 
 		App app = currentApp;
-		while (!rootGroup.getPath().equals(app.getPath())) {
-			app = getApp(app.getPath());
+		while (!rootGroup.getParentPath().equals(app.getParentPath())) {
+			app = getAppByPath(app.getParentPath());
 			apps.add(0, app);
 		}
 
 		return apps;
 	}
 
-	public App getApp(String id) {
-		if (StringUtils.isBlank(id)) {
+	public App getAppByPath(String path) {
+		if (StringUtils.isBlank(path)) {
 			return rootGroup;
 		}
-		Optional<App> appOptional = getAppOptional(id);
-		Exceptions.throwsException(!appOptional.isPresent(), AdminErrorCode.APP_NOT_FOUND, id);
+		Optional<App> appOptional = getAppByPathOptional(path);
+		Exceptions.throwsException(!appOptional.isPresent(), AdminErrorCode.APP_NOT_FOUND, path);
 		return appOptional.get();
 	}
 
-	public Optional<App> getAppOptional(String id) {
-		AppEntity appEntity = appEntityService.getAppEntity(id);
+	public Optional<App> getAppByPathOptional(String id) {
+		AppEntity appEntity = appEntityService.getByPath(id);
 		App app = smartAssembler.assemble(appEntity, AppEntity.class, App.class);
 		return Optional.ofNullable(app);
-	}
-
-	public App createApp(App app) {
-		AppEntity entity = smartAssembler.assemble(app, AppEntity.class);
-		AppEntity saved = appEntityService.createAppEntity(entity);
-		return smartAssembler.assemble(saved, App.class);
 	}
 
 	public App createGroup(String path, GroupCreateForm editForm) {
 		App group = new App();
 		group.setType(AppType.GROUP);
 		group.setName(editForm.getName());
-		group.setPath(path);
+		group.setParentPath(path);
 		group.setDescription(editForm.getDescription());
 		return createApp(group);
 	}
 
 	@Transactional
-	public App createApp(String path, SpringBootAppCreateForm editForm) {
-		return createApp(springBootAppService.newApp(path, editForm));
+	public App createApp(App app) {
+		AppEntity entity = smartAssembler.assemble(app, App.class, AppEntity.class);
+		AppEntity saved = appEntityService.createAppEntity(entity);
+		return smartAssembler.assemble(saved, App.class);
 	}
 
+	@Transactional
+	public App createApp(String parentPath, SpringBootAppCreateForm editForm) {
+		return createApp(springBootAppService.newApp(null, parentPath, editForm));
+	}
+
+	public SpringBootAppUpdateForm getSpringBootAppUpdateForm(String path) {
+		return springBootAppService.getSpringBootAppUpdateForm(getAppByPath(path));
+	}
+
+	@Transactional
+	public App updateApp(App app) {
+		AppEntity entity = appEntityService.getByPath(app.getPath());
+		AppHistoryEntity appHistoryEntity = newAppHistoryEntity(entity);
+		smartAssembler.populate(app, entity, App.class, AppEntity.class);
+
+		appHistoryEntityService.create(appHistoryEntity);
+
+		return smartAssembler.assemble(entity, App.class);
+	}
+
+	protected AppHistoryEntity newAppHistoryEntity(AppEntity appEntity) {
+		AppHistoryEntity appHistoryEntity = new AppHistoryEntity();
+		BeanUtils.copyProperties(appEntity, appHistoryEntity);
+		return appHistoryEntity;
+	}
+
+	@Transactional
+	public App updateApp(String path, SpringBootAppUpdateForm editForm) {
+		return updateApp(springBootAppService.newApp(path, null, editForm));
+	}
 
 	public void destroy(App app, boolean forceDestroy) {
-		List<AppInstance> appInstances = appInstanceService.getAppInstances(app.getId());
-		if (CollectionUtils.isNotEmpty(appInstances)) {
-			for (AppInstance appInstance : appInstances) {
-				appInstanceDeployService.undeploy(appInstance, forceDestroy);
+		if (AppType.GROUP.equals(app.getType())) {
+			List<AppEntity> children = appEntityService.getListByParentPath(app.getId());
+			Exceptions.throwsException(CollectionUtils.isNotEmpty(children), LampErrorCode.APP_GROUP_NOT_EMPTY, app.getId());
+			appEntityService.deleteAppEntity(app.getId());
+		} else if (AppType.APP.equals(app.getType())) {
+			List<AppInstance> appInstances = appInstanceService.getAppInstances(app.getId());
+			if (CollectionUtils.isNotEmpty(appInstances)) {
+				for (AppInstance appInstance : appInstances) {
+					appInstanceDeployService.undeploy(appInstance, forceDestroy);
+				}
 			}
+			appEntityService.deleteAppEntity(app.getId());
 		}
-		appEntityService.deleteAppEntity(app.getId());
 	}
 
 

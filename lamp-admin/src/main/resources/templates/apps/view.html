@@ -17,6 +17,9 @@
 								<a class="btn btn-primary" th:href="@{/apps/{path}(path=${path},action=deploy)}">
 									Deploy
 								</a>
+								<a class="btn default" th:href="@{/apps/{path}(path=${path},action=update-spring-boot-app)}">
+									Edit
+								</a>
 								<a class="btn default">
 									Restart
 								</a>
@@ -28,9 +31,9 @@
 						<div class="portlet-body">
 							<h3>Running (0 of 0 instances)</h3>
 							<div class="well">
-								<h4 th:text="${app.name}">Default well</h4> <span th:text="${app.description}"></span> </div>
-							<div class="well well-large">
-								<h4>Large Well</h4> Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet. Integer molestie lorem at massa Integer molestie lorem at massa Integer molestie lorem at massa </div>
+								<h4 th:text="${app.name}">Default well</h4> <span th:text="${app.description}"></span>
+							</div>
+
 							<div class="tabbable-line">
 								<ul class="nav nav-tabs ">
 									<li class="active">
@@ -85,7 +88,7 @@
 																	</li>
 																	<li class="divider"> </li>
 																	<li>
-																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=destory)}"> Destory </a>
+																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=undeploy)}"> Undeploy </a>
 																	</li>
 																</ul>
 															</div>

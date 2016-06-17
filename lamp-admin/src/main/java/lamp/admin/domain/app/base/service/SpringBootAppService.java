@@ -13,6 +13,7 @@ import lamp.admin.core.script.ScriptFileCreateCommand;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.model.form.ParametersType;
 import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
+import lamp.admin.domain.app.base.model.form.SpringBootAppUpdateForm;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 
@@ -20,7 +21,6 @@ import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.http.client.utils.DateUtils;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -38,13 +38,21 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 	private ResourceLoader resourceLoader;
 
-	public App newApp(String path, SpringBootAppCreateForm editForm) {
+	public App newApp(String path, String parentPath, SpringBootAppCreateForm editForm) {
 		App app = new App();
-		app.setType(AppType.APP);
+
 		app.setVersion(Instant.now().toString());
+		app.setType(AppType.APP);
 		app.setPath(path);
+		app.setParentPath(parentPath);
 		app.setName(editForm.getName());
 		app.setDescription(editForm.getDescription());
+
+		Map<String, Object> parameters = new LinkedHashMap<>();
+		parameters.put("parametersType", editForm.getParametersType());
+		parameters.put("parameters", editForm.getParameters());
+		parameters.put("properties", editForm.getProperties());
+		app.setParameters(parameters);
 
 		SpringBootAppContainer container = new SpringBootAppContainer();
 		container.setName(app.getName());
@@ -65,15 +73,50 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		container.setStopCommandLine(StringUtils.defaultIfBlank(editForm.getStopCommandLine(), "./" + artifactId + ".sh stop"));
 
 		container.setAppResource(getAppResource(editForm));
-		container.setInstallFilename(artifactId + ".jar");
+		container.setInstallFilename(artifactId + ".jar"); // FIXME 수정과 불일치
 
-		container.setParameters(getParameters(editForm, artifactId));
+		container.setParameters(getParameters(editForm, artifactId)); // FIXME 수정과 불일치
 		List<ScriptCommand> scriptCommands = getInstallScriptCommands(artifactId, editForm.getProperties(), editForm.getShellFilePath());
 		container.setScriptCommands(scriptCommands);
 
 		app.setContainer(container);
 
 		return app;
+	}
+
+	public SpringBootAppUpdateForm getSpringBootAppUpdateForm(App app) {
+		SpringBootAppUpdateForm editForm = new SpringBootAppUpdateForm();
+		SpringBootAppContainer container = (SpringBootAppContainer) app.getContainer();
+
+		editForm.setName(app.getName());
+		editForm.setDescription(app.getDescription());
+
+
+		editForm.setProcessType(container.getProcessType());
+		editForm.setAppDirectory(container.getAppDirectory());
+		editForm.setWorkDirectory(container.getWorkDirectory());
+		editForm.setLogDirectory(container.getLogDirectory());
+
+		editForm.setPidFile(container.getPidFile());
+		editForm.setStdOutFile(container.getStdOutFile());
+		editForm.setStdErrFile(container.getStdErrFile());
+
+		editForm.setCommandShell(container.getCommandShell());
+		editForm.setStartCommandLine(container.getStartCommandLine());
+		editForm.setStopCommandLine(container.getStopCommandLine());
+
+		populateAppResource(editForm, container.getAppResource());
+
+		editForm.setAppFilename(container.getInstallFilename());
+
+		Map<String, Object> parameters = app.getParameters();
+		if (parameters != null) {
+			editForm.setParametersType((ParametersType) parameters.get("parametersType"));
+			editForm.setParameters((String) parameters.get("parameters"));
+			editForm.setProperties((String) parameters.get("properties"));
+		}
+
+		return editForm;
 	}
 
 	protected Map<String, Object> getParameters(SpringBootAppCreateForm editForm, String artifactId) {
@@ -120,6 +163,19 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		return null;
 	}
 
+	protected void populateAppResource(SpringBootAppUpdateForm editForm, AppResource appResource) {
+		if (appResource instanceof ArtifactAppResource) {
+			ArtifactAppResource artifactAppResource = (ArtifactAppResource) appResource;
+			editForm.setRepositoryId(artifactAppResource.getRepositoryId());
+			editForm.setGroupId(artifactAppResource.getGroupId());
+			editForm.setArtifactId(artifactAppResource.getArtifactId());
+			editForm.setVersion(artifactAppResource.getVersion());
+		} else if (appResource instanceof UrlAppResource) {
+			UrlAppResource urlAppResource = (UrlAppResource) appResource;
+			editForm.setResourceUrl(urlAppResource.getResourceUrl());
+		}
+	}
+
 	protected List<ScriptCommand> getInstallScriptCommands(String artifactId,
 														   String properties,
 														   String shellFilePath) {
@@ -152,4 +208,6 @@ public class SpringBootAppService implements ResourceLoaderAware {
 	@Override public void setResourceLoader(ResourceLoader resourceLoader) {
 		this.resourceLoader = resourceLoader;
 	}
+
+
 }

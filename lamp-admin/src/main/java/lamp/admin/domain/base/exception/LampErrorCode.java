@@ -60,7 +60,9 @@ public enum LampErrorCode implements ErrorCode {
 	, SSH_KEY_NOT_FOUND("SSH Key를 찾을 수 없습니다.")
 	, INVALID_PARAMETERS("유효하지 않은 파라메터 입니다.")
 	, SHELL_FILE_NOT_FOUND("쉘 파일을 찾을 수 없습니다.")
-	, APP_CONTAINER_CREATE_FAILED("앱 컨테이서를 생성할 수 없습니다."), APP_INSTANCE_NOT_FOUND("앱 인스턴스를 찾을 수 없습니다.");
+	, APP_CONTAINER_CREATE_FAILED("앱 컨테이서를 생성할 수 없습니다.")
+	, APP_INSTANCE_NOT_FOUND("앱 인스턴스를 찾을 수 없습니다.")
+	, APP_GROUP_NOT_EMPTY("App Group not empty");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

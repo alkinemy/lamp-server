@@ -139,22 +139,12 @@
 						</div>
 
 						<hr />
-						<h4>Parameters</h4>
-						<div class="form-group" th:class="${#fields.hasErrors('parametersType')} ? 'form-group has-error' : 'form-group'">
-							<label class="col-md-3 control-label">Parameters Type</label>
+						<h4>Properties</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('properties')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Properties</label>
 							<div class="col-md-9">
-								<select class="form-control" th:field="*{parametersType}">
-									<option th:each="type : ${parametersTypes}"
-											th:value="${type.name()}" th:text="${type.name()}">Option 1</option>
-								</select>
-								<span class="help-block" th:if="${#fields.hasErrors('parametersType')}" th:errors="*{parametersType}"> A block of help text. </span>
-							</div>
-						</div>
-						<div class="form-group" th:class="${#fields.hasErrors('parameters')} ? 'form-group has-error' : 'form-group'">
-							<label class="col-md-3 control-label">Parameters</label>
-							<div class="col-md-9">
-								<textarea class="form-control" th:field="*{parameters}" rows="3"></textarea>
-								<span class="help-block" th:if="${#fields.hasErrors('parameters')}" th:errors="*{parameters}"> A block of help text. </span>
+								<textarea class="form-control" th:field="*{properties}" rows="5"></textarea>
+								<span class="help-block" th:if="${#fields.hasErrors('properties')}" th:errors="*{properties}"> A block of help text. </span>
 							</div>
 						</div>
 

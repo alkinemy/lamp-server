@@ -1,6 +1,6 @@
 package lamp.admin.web.app.controller;
 
-import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
+import lamp.admin.domain.app.base.model.form.SpringBootAppUpdateForm;
 import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.resource.repo.model.dto.AppRepoDto;
@@ -8,6 +8,7 @@ import lamp.admin.domain.resource.repo.service.AppRepoService;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,43 +23,44 @@ import java.util.List;
 @Slf4j
 @MenuMapping(MenuConstants.APP)
 @Controller
-@RequestMapping(path = "/apps", params = {"action=create-spring-boot-app"})
-public class SpringBootAppController extends AbstractAppController {
+@RequestMapping(path = "/apps", params = {"action=update-spring-boot-app"})
+public class SpringBootAppUpdateController extends AbstractAppController {
 
 	@Autowired
 	private AppRepoService appRepoService;
 
 	@Autowired
-	public SpringBootAppController(AppService appService) {
+	public SpringBootAppUpdateController(AppService appService) {
 		super(appService);
 	}
 
 	@RequestMapping(path = "/**", method = RequestMethod.GET)
-	public String create(Model model,
+	public String update(Model model,
 						 @ModelAttribute("path") String path,
-						 @ModelAttribute("editForm") SpringBootAppCreateForm editForm) {
-		return createForm(model, editForm);
+						 @ModelAttribute("editForm") SpringBootAppUpdateForm editForm) {
+		SpringBootAppUpdateForm form = appService.getSpringBootAppUpdateForm(path);
+		BeanUtils.copyProperties(form, editForm);
+		return updateForm(model, editForm);
 	}
 
-	protected String createForm(Model model, SpringBootAppCreateForm editForm) {
+	protected String updateForm(Model model, SpringBootAppUpdateForm editForm) {
 		List<AppRepoDto> appRepoList = appRepoService.getAppRepoList();
 		model.addAttribute("appRepositoryList", appRepoList);
 		return "apps/spring-boot-app-edit";
 	}
 
 	@RequestMapping(path = "/**", method = RequestMethod.POST)
-	public String create(Model model,
+	public String update(Model model,
 						 @ModelAttribute("path") String path,
-						 @ModelAttribute("editForm") SpringBootAppCreateForm editForm,
-						 BindingResult bindingResult,
-						 RedirectAttributes redirectAttributes) {
+						 @ModelAttribute("editForm") SpringBootAppUpdateForm editForm,
+						 BindingResult bindingResult) {
 		try {
-			appService.createApp(path, editForm);
-			redirectAttributes.addAttribute("path", path);
-			return "redirect:/apps/{path}";
+			appService.updateApp(path, editForm);
+
+			return "redirect:/apps/" + path;
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
-			return createForm(model, editForm);
+			return updateForm(model, editForm);
 		}
 	}
 
