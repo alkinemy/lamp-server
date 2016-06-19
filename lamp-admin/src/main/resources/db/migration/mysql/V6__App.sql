@@ -32,7 +32,7 @@ CREATE TABLE `lamp_app` (
 
 CREATE TABLE `lamp_app_history` (
   `id` VARCHAR(100) NOT NULL,
-  `version` VARCHAR(100) DEFAULT NULL,
+  `version` VARCHAR(100) NOT NULL,
   `type` VARCHAR(200) NOT NULL,
 
   `name` VARCHAR(100) DEFAULT NULL,

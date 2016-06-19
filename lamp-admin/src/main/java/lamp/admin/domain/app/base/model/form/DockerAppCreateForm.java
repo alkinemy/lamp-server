@@ -1,8 +1,9 @@
-package lamp.admin.core.app.docker;
+package lamp.admin.domain.app.base.model.form;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lamp.admin.core.app.base.AppContainer;
-import lamp.admin.core.app.base.AppContainerType;
+import lamp.admin.core.app.docker.Parameter;
+import lamp.admin.core.app.docker.PortDefinition;
+import lamp.admin.core.app.docker.PortMapping;
+import lamp.admin.core.app.docker.Volume;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,11 +15,11 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-@JsonTypeName(AppContainerType.Names.DOCKER)
-public class DockerAppContainer implements AppContainer {
+public class DockerAppCreateForm {
 
 	private String id;
 	private String name;
+	private String description;
 
 	private String image;
 	private String network;

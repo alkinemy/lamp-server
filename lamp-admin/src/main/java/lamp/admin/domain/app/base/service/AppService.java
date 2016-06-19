@@ -5,9 +5,7 @@ import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.app.base.model.entity.AppEntity;
 import lamp.admin.domain.app.base.model.entity.AppHistoryEntity;
 import lamp.admin.domain.app.base.model.entity.AppType;
-import lamp.admin.domain.app.base.model.form.GroupCreateForm;
-import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
-import lamp.admin.domain.app.base.model.form.SpringBootAppUpdateForm;
+import lamp.admin.domain.app.base.model.form.*;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.web.AdminErrorCode;
@@ -34,6 +32,8 @@ public class AppService {
 	private AppHistoryEntityService appHistoryEntityService;
 	@Autowired
 	private SpringBootAppService springBootAppService;
+	@Autowired
+	private DockerAppService dockerAppService;
 	@Autowired
 	private AppInstanceService appInstanceService;
 	@Autowired
@@ -95,8 +95,17 @@ public class AppService {
 		return createApp(springBootAppService.newApp(null, parentPath, editForm));
 	}
 
+	@Transactional
+	public App createApp(String parentPath, DockerAppCreateForm editForm) {
+		return createApp(dockerAppService.newApp(null, parentPath, editForm));
+	}
+
 	public SpringBootAppUpdateForm getSpringBootAppUpdateForm(String path) {
 		return springBootAppService.getSpringBootAppUpdateForm(getAppByPath(path));
+	}
+
+	public DockerAppUpdateForm getDockerAppUpdateForm(String path) {
+		return dockerAppService.getDockerAppUpdateForm(getAppByPath(path));
 	}
 
 	@Transactional
@@ -120,6 +129,12 @@ public class AppService {
 	public App updateApp(String path, SpringBootAppUpdateForm editForm) {
 		return updateApp(springBootAppService.newApp(path, null, editForm));
 	}
+
+	@Transactional
+	public App updateApp(String path, DockerAppUpdateForm editForm) {
+		return updateApp(dockerAppService.newApp(path, null, editForm));
+	}
+
 
 	public void destroy(App app, boolean forceDestroy) {
 		if (AppType.GROUP.equals(app.getType())) {
