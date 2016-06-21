@@ -27,14 +27,15 @@ public class DockerAppCreateForm {
 	private boolean forcePullImage;
 //	private boolean privileged;
 
-	private List<PortDefinition> portDefinitions;
+//	private List<PortDefinition> portDefinitions;
+//	private List<PortMapping> portMappings;
+//	private List<Volume> volumes;
+//	private Map<String, String> env;
 
-	private List<PortMapping> portMappings;
 
-	private List<Volume> volumes;
-
-	private Map<String, String> env;
-
+	private String portMappings;
+	private String volumes;
+	private String env;
 
 	private List<Parameter> parameters = new ArrayList<>();
 

@@ -5,10 +5,15 @@ import lamp.admin.core.app.docker.DockerAppContainer;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.model.form.DockerAppCreateForm;
 import lamp.admin.domain.app.base.model.form.DockerAppUpdateForm;
+import lamp.common.utils.ArrayUtils;
+import lamp.common.utils.CollectionUtils;
+import lamp.common.utils.StringUtils;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DockerAppService {
@@ -35,14 +40,34 @@ public class DockerAppService {
 		container.setName(app.getName());
 		container.setImage(editForm.getImage());
 		container.setForcePullImage(editForm.isForcePullImage());
-		container.setPortDefinitions(editForm.getPortDefinitions());
-		container.setPortMappings(editForm.getPortMappings());
-		container.setVolumes(editForm.getVolumes());
-		container.setEnv(editForm.getEnv());
+//		container.setPortDefinitions(editForm.getPortDefinitions());
+		container.setPortMappings(split(editForm.getPortMappings()));
+		container.setVolumes(split(editForm.getVolumes()));
+		container.setEnv(split(editForm.getEnv()));
 
 		app.setContainer(container);
 
 		return app;
+	}
+
+	protected List<String> split(String str) {
+		List<String> list = new ArrayList<>();
+		String[] lines = StringUtils.split(str, '\n');
+		if (ArrayUtils.isNotEmpty(lines)) {
+			for (String line : lines) {
+				if (StringUtils.isNotBlank(line)) {
+					list.add(StringUtils.trim(line));
+				}
+			}
+		}
+		return list;
+	}
+
+	protected String join(List<String> list) {
+		if (CollectionUtils.isNotEmpty(list)) {
+			return "";
+		}
+		return StringUtils.join(list.toArray(new String[list.size()]), '\n');
 	}
 
 	public DockerAppUpdateForm getDockerAppUpdateForm(App app) {
@@ -55,10 +80,10 @@ public class DockerAppService {
 
 		editForm.setImage(container.getImage());
 		editForm.setForcePullImage(container.isForcePullImage());
-		editForm.setPortDefinitions(container.getPortDefinitions());
-		editForm.setPortMappings(container.getPortMappings());
-		editForm.setVolumes(container.getVolumes());
-		editForm.setEnv(container.getEnv());
+//		editForm.setPortDefinitions(container.getPortDefinitions());
+		editForm.setPortMappings(join(container.getPortMappings()));
+		editForm.setVolumes(join(container.getVolumes()));
+		editForm.setEnv(join(container.getEnv()));
 
 		return editForm;
 	}

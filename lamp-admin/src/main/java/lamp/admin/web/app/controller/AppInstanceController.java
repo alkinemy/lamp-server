@@ -98,10 +98,9 @@ public class AppInstanceController extends AbstractAppController {
 			return "redirect:/apps/" + path;
 		} catch (MessageException e) {
 			log.warn("app destroy failed", e);
-			redirectAttributes.addFlashAttribute("path", path);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofError(e));
 
-			return "redirect:/apps/{path}";
+			return "redirect:/apps/" + path;
 		}
 	}
 

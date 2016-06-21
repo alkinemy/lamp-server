@@ -1,10 +1,8 @@
 package lamp.admin.domain.app.base.model.assembler;
 
-import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
-import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.host.service.HostService;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,6 @@ import java.util.Optional;
 @Component
 public class AppInstanceAssembler extends AbstractListAssembler <AppInstanceEntity, AppInstance> {
 
-	@Autowired
-	private AppService appService;
 	@Autowired
 	private HostService hostService;
 

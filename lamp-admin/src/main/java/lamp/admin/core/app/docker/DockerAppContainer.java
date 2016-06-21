@@ -26,15 +26,13 @@ public class DockerAppContainer implements AppContainer {
 	private boolean forcePullImage;
 //	private boolean privileged;
 
-	private List<PortDefinition> portDefinitions;
+	private List<String> portMappings;
 
-	private List<PortMapping> portMappings;
+	private List<String> volumes;
 
-	private List<Volume> volumes;
-
-	private Map<String, String> env;
+	private List<String> env;
 
 
-	private List<Parameter> parameters = new ArrayList<>();
+//	private List<Parameter> parameters = new ArrayList<>();
 
 }

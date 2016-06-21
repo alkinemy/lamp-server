@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,7 +34,10 @@ public class AppInstanceService {
 
 	public List<AppInstance> getAppInstances(String appId) {
 		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getListByAppId(appId);
-		return smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
+		List<AppInstance> appInstances = smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
+
+		// TODO host null 처리
+		return appInstances.stream().sorted((e1, e2) -> e1.getHost().getName().compareTo(e2.getHost().getName())).collect(Collectors.toList());
 	}
 
 	public List<AppInstance> getAppInstancesByAgent(Agent agent) {
