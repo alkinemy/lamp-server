@@ -2,8 +2,8 @@ package lamp.admin.domain.app.base.service;
 
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.App;
-import lamp.admin.core.app.jar.SpringBootAppContainer;
 import lamp.admin.core.app.simple.AppProcessType;
+import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.core.app.simple.resource.AppResource;
 import lamp.admin.core.app.simple.resource.AppResourceType;
 import lamp.admin.core.app.simple.resource.ArtifactAppResource;
@@ -16,7 +16,6 @@ import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
 import lamp.admin.domain.app.base.model.form.SpringBootAppUpdateForm;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
-
 import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -54,7 +53,7 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		parameters.put("properties", editForm.getProperties());
 		app.setParameters(parameters);
 
-		SpringBootAppContainer container = new SpringBootAppContainer();
+		SimpleAppContainer container = new SimpleAppContainer();
 		container.setName(app.getName());
 
 		String artifactId = StringUtils.defaultIfBlank(editForm.getArtifactId(), editForm.getName());
@@ -86,7 +85,7 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 	public SpringBootAppUpdateForm getSpringBootAppUpdateForm(App app) {
 		SpringBootAppUpdateForm editForm = new SpringBootAppUpdateForm();
-		SpringBootAppContainer container = (SpringBootAppContainer) app.getContainer();
+		SimpleAppContainer container = (SimpleAppContainer) app.getContainer();
 
 		editForm.setName(app.getName());
 		editForm.setDescription(app.getDescription());

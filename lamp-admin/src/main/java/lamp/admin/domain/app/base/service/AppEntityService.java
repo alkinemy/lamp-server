@@ -17,6 +17,10 @@ public class AppEntityService {
 		return appEntityRepository.findAllByParentPath(parentPath);
 	}
 
+	public AppEntity get(String id) {
+		return appEntityRepository.findOne(id);
+	}
+
 	public AppEntity getByPath(String path) {
 		return appEntityRepository.findOneByPath(path);
 	}
@@ -28,4 +32,6 @@ public class AppEntityService {
 	public void deleteAppEntity(String id) {
 		appEntityRepository.delete(id);
 	}
+
+
 }

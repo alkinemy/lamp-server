@@ -59,6 +59,23 @@ public class AppService {
 		return apps;
 	}
 
+	public App getApp(String path) {
+		if (StringUtils.isBlank(path)) {
+			return rootGroup;
+		}
+		Optional<App> appOptional = getAppOptional(path);
+		Exceptions.throwsException(!appOptional.isPresent(), AdminErrorCode.APP_NOT_FOUND, path);
+		return appOptional.get();
+	}
+
+	public Optional<App> getAppOptional(String id) {
+		AppEntity appEntity = appEntityService.get(id);
+		App app = smartAssembler.assemble(appEntity, AppEntity.class, App.class);
+		return Optional.ofNullable(app);
+	}
+
+
+
 	public App getAppByPath(String path) {
 		if (StringUtils.isBlank(path)) {
 			return rootGroup;
@@ -68,8 +85,8 @@ public class AppService {
 		return appOptional.get();
 	}
 
-	public Optional<App> getAppByPathOptional(String id) {
-		AppEntity appEntity = appEntityService.getByPath(id);
+	public Optional<App> getAppByPathOptional(String path) {
+		AppEntity appEntity = appEntityService.getByPath(path);
 		App app = smartAssembler.assemble(appEntity, AppEntity.class, App.class);
 		return Optional.ofNullable(app);
 	}

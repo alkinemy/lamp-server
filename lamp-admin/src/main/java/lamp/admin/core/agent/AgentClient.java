@@ -2,13 +2,10 @@ package lamp.admin.core.agent;
 
 import lamp.admin.core.agent.security.AgentRequestUser;
 import lamp.admin.core.agent.security.AgentRequestUserHolder;
-import lamp.admin.core.app.base.AppContainer;
+import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.support.json.JsonUtils;
-import lamp.common.collector.model.MetricsTagConstants;
-import lamp.common.collector.model.MetricsTarget;
-import lamp.common.collector.model.TargetMetrics;
 import lamp.common.utils.StringUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +19,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class AgentClient {
@@ -68,15 +64,16 @@ public class AgentClient {
 		}
 	}
 
-	public void deployApp(Agent agent, String appId, AppContainer appContainer, Resource resource)  {
+	public void deployApp(Agent agent, App app, AppInstance appInstance, Resource resource)  {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
 
 			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
 
-			parts.add("appId", appId);
-			parts.add("appContainer", StringUtils.utf8ToIso88591(JsonUtils.stringify(appContainer)));
+			parts.add("id", appInstance.getId());
+			parts.add("appId", app.getId());
+			parts.add("appContainer", StringUtils.utf8ToIso88591(JsonUtils.stringify(app.getContainer())));
 
 			if (resource != null) {
 				parts.add("resource", resource);
@@ -88,8 +85,32 @@ public class AgentClient {
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
-
 	}
+
+	public void reployApp(Agent agent, App app, AppInstance appInstance, Resource resource) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+
+			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+
+			parts.add("id", appInstance.getId());
+			parts.add("appId", app.getId());
+			parts.add("appContainer", StringUtils.utf8ToIso88591(JsonUtils.stringify(app.getContainer())));
+
+			if (resource != null) {
+				parts.add("resource", resource);
+			}
+
+			log.debug("parts = {}", parts);
+
+			ResponseEntity<Void> responseEntity = restTemplate.postForEntity(baseUrl + "/api/app/{id}", parts, Void.class, appInstance.getId());
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
+
 
 	public void undeployApp(Agent agent, String instanceId, boolean forceStop) {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
