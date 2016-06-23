@@ -97,7 +97,28 @@ public class AppInstanceController extends AbstractAppController {
 
 			return "redirect:/apps/" + path;
 		} catch (MessageException e) {
-			log.warn("app destroy failed", e);
+			log.warn("app undeploy failed", e);
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofError(e));
+
+			return "redirect:/apps/" + path;
+		}
+	}
+
+	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=redeploy"})
+	public String redeploy(Model model,
+						   @ModelAttribute("path") String path,
+						   @RequestParam("instanceId") String instanceId,
+						   @RequestParam(name = "forceStop", defaultValue = "false") boolean forceStop,
+						   RedirectAttributes redirectAttributes) {
+		try {
+			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
+
+			appInstanceDeployService.redeploy(appInstance.getId(), forceStop);
+			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
+
+			return "redirect:/apps/" + path;
+		} catch (MessageException e) {
+			log.warn("app redeploy failed", e);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofError(e));
 
 			return "redirect:/apps/" + path;

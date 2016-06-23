@@ -1,5 +1,6 @@
 package lamp.admin.core.app.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 @Setter
 @ToString
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class App {
 
 	private String id;

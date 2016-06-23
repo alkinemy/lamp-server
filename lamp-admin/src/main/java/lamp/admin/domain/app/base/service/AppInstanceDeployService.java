@@ -3,22 +3,18 @@ package lamp.admin.domain.app.base.service;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.agent.AgentResponseErrorException;
 import lamp.admin.core.app.base.App;
-import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.app.base.AppInstanceStatus;
-import lamp.admin.core.app.docker.DockerAppContainer;
 import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
-import lamp.admin.domain.base.exception.Exceptions;
-import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.resource.repo.service.AppResourceLoader;
 import lamp.common.utils.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +36,8 @@ public class AppInstanceDeployService {
 	@Autowired
 	private AppResourceLoader appResourceLoader;
 
-	public List<AppInstance> deploy(String appId, List<String> hostsIds) {
-		App app = appService.getAppByPath(appId);
+	public List<AppInstance> deploy(String path, List<String> hostsIds) {
+		App app = appService.getAppByPath(path);
 		Resource resource = null;
 		if (app.getContainer() instanceof SimpleAppContainer) {
 			resource = appResourceLoader.getResource(((SimpleAppContainer) app.getContainer()).getAppResource());
@@ -58,9 +54,8 @@ public class AppInstanceDeployService {
 			appInstanceService.create(appInstance);
 			try {
 				Agent agent = agentService.getAgent(hostId);
-				AppContainer appContainer = newAppContainer(app, instanceId);
 
-				agentClient.deployApp(agent, app.getId(), appContainer, resource);
+				agentClient.deployApp(agent, app, appInstance, resource);
 
 				appInstance.setStatus(AppInstanceStatus.STARTING);
 				try {
@@ -82,6 +77,38 @@ public class AppInstanceDeployService {
 		return appInstances;
 	}
 
+	@Transactional
+	public void redeploy(String instanceId, boolean forceStop) {
+		AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
+		appInstance.setStatus(AppInstanceStatus.DEPLOYING);
+
+		try {
+			App app = appService.getApp(appInstance.getAppId());
+			Resource resource = null;
+			if (app.getContainer() instanceof SimpleAppContainer) {
+				resource = appResourceLoader.getResource(((SimpleAppContainer) app.getContainer()).getAppResource());
+			}
+
+			Agent agent = agentService.getAgent(appInstance.getHostId());
+
+			agentClient.reployApp(agent, app, appInstance, resource);
+
+			appInstance.setStatus(AppInstanceStatus.STARTING);
+			try {
+				agentClient.start(agent, instanceId);
+			} catch (Exception e) {
+				log.warn("App start failed", e);
+				appInstance.setStatus(AppInstanceStatus.START_FAILED);
+				appInstance.setStatusMessage(ExceptionUtils.getStackTrace(e));
+			}
+		} catch (Exception e) {
+			log.warn("App redeploy failed", e);
+			appInstance.setStatus(AppInstanceStatus.DEPLOY_FAILED);
+			appInstance.setStatusMessage(ExceptionUtils.getStackTrace(e));
+		}
+
+	}
+
 	public void undeploy(String instanceId, boolean forceStop) {
 		undeploy(appInstanceService.getAppInstance(instanceId), forceStop);
 	}
@@ -92,14 +119,17 @@ public class AppInstanceDeployService {
 			agentClient.undeployApp(agent, appInstance.getId(), forceStop);
 			appInstanceService.delete(appInstance);
 		} catch (AgentResponseErrorException e) {
-			if ("APP_INSTANCE_NOT_FOUND".equals(e.getAgentError().getCode())) {
-				log.debug("undeploy : APP_INSTANCE_NOT_FOUND =", e);
+			if ("APP_NOT_FOUND".equals(e.getAgentError().getCode())) {
+				log.debug("undeploy : APP_NOT_FOUND =", e);
 				appInstanceService.delete(appInstance);
 			} else {
 				throw e;
 			}
 		}
 	}
+
+
+
 
 	public void start(AppInstance appInstance) {
 		Agent agent = agentService.getAgent(appInstance.getHostId());
@@ -111,21 +141,6 @@ public class AppInstanceDeployService {
 		agentClient.stop(agent, appInstance.getId());
 	}
 
-	protected AppContainer newAppContainer(App app, String instanceId) {
-		try {
-			AppContainer appContainer = app.getContainer().getClass().newInstance();
-			BeanUtils.copyProperties(app.getContainer(), appContainer);
-			if (appContainer instanceof SimpleAppContainer) {
-				((SimpleAppContainer)appContainer).setId(instanceId);
-			} else if (appContainer instanceof DockerAppContainer) {
-				((DockerAppContainer)appContainer).setId(instanceId);
-			}
-			return appContainer;
-		} catch (Exception e) {
-			throw Exceptions.newException(LampErrorCode.APP_CONTAINER_CREATE_FAILED, app.getId());
-		}
-
-	}
 
 	protected AppInstance newAppInstance(App app, String instanceId, String hostId) {
 

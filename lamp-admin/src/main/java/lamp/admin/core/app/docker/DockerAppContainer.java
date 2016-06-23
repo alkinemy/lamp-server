@@ -1,5 +1,6 @@
 package lamp.admin.core.app.docker;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppContainerType;
@@ -15,9 +16,9 @@ import java.util.Map;
 @Setter
 @ToString
 @JsonTypeName(AppContainerType.Names.DOCKER)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DockerAppContainer implements AppContainer {
 
-	private String id;
 	private String name;
 
 	private String image;
