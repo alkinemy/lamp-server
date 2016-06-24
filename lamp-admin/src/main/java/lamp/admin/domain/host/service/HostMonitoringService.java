@@ -7,6 +7,10 @@ import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.host.model.HostStatusCode;
 import lamp.admin.domain.host.model.entity.HostStatusEntity;
+import lamp.collector.metrics.exporter.MetricsExporter;
+import lamp.common.collector.model.TargetMetrics;
+import lamp.common.collector.service.MetricsProcessor;
+import lamp.common.utils.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,9 @@ public class HostMonitoringService {
 	@Autowired
 	private HostStatusEntityService hostStatusEntityService;
 
+	@Autowired(required = false)
+	private List<MetricsExporter> metricsExporters;
+
 	@Async
 	public void metricsMonitoring(Host host) {
 		Optional<Agent> agentOptional = agentService.getAgentOptional(host.getId());
@@ -36,22 +43,55 @@ public class HostMonitoringService {
 		if (agentOptional.isPresent()) {
 			Agent agent = agentOptional.get();
 
-			HostStatus hostStatus = getHostStatus(agent);
+			TargetMetrics targetMetrics = getTargetMetrics(host, agent);
+			HostStatus hostStatus = getHostStatus(targetMetrics);
 			BeanUtils.copyProperties(hostStatus, hostStatusEntity);
+
+			hostStatusEntityService.update(hostStatusEntity);
+			if (CollectionUtils.isNotEmpty(metricsExporters)) {
+				metricsExporters.stream().forEach(metricsExporter -> metricsExporter.export(targetMetrics));
+			}
 		} else {
 			hostStatusEntity.setStatus(HostStatusCode.OUT_OF_SERVICE);
 			hostStatusEntity.setLastStatusTime(new Date());
+
+			hostStatusEntityService.update(hostStatusEntity);
 		}
-		hostStatusEntityService.update(hostStatusEntity);
 	}
 
-	protected HostStatus getHostStatus(Agent agent) {
-		HostStatus hostStatus = new HostStatus();
-		hostStatus.setLastStatusTime(new Date());
-
+	protected TargetMetrics getTargetMetrics(Host host, Agent agent) {
+		Map<String, Object> metrics = null;
 		try {
-			Map<String, Object> metrics = agentClient.getMetrics(agent);
+			metrics = agentClient.getMetrics(agent);
 
+			log.debug("metrics = {}", metrics);
+		} catch (Exception e) {
+			log.error("Agent metrics load failed", e);
+		}
+
+		return getTargetMetrics(host, metrics);
+	}
+
+	protected TargetMetrics getTargetMetrics(Host host, Map<String, Object> metrics) {
+		Map<String, String> tags = new LinkedHashMap<>();
+		tags.put("targetType", "host");
+		tags.put("hostId", host.getId());
+		tags.put("hostName", host.getName());
+		tags.put("clusterId", host.getClusterId());
+
+		TargetMetrics targetMetrics = new TargetMetrics();
+		targetMetrics.setTimestamp(System.currentTimeMillis());
+		targetMetrics.setMetrics(metrics);
+		targetMetrics.setTags(tags);
+		return targetMetrics;
+	}
+
+	protected HostStatus getHostStatus(TargetMetrics targetMetrics) {
+		HostStatus hostStatus = new HostStatus();
+		hostStatus.setLastStatusTime(new Date(targetMetrics.getTimestamp()));
+
+		Map<String, Object> metrics = targetMetrics.getMetrics();
+		if (metrics != null && !metrics.isEmpty()) {
 			hostStatus.setCpuUser(getDoubleValue(metrics.get("server.cpu.user")));
 			hostStatus.setCpuNice(getDoubleValue(metrics.get("server.cpu.nice")));
 			hostStatus.setCpuSys(getDoubleValue(metrics.get("server.cpu.sys")));
@@ -68,17 +108,14 @@ public class HostMonitoringService {
 			hostStatus.setSwapUsed(getLongValue(metrics.get("server.swap.used")));
 			hostStatus.setSwapFree(getLongValue(metrics.get("server.swap.free")));
 
-			log.debug("metrics = {}", metrics);
-
 			if (hostStatus.getDiskUsedPercentage() > 70
-				|| hostStatus.getMemUsedPercentage() > 70) {
+				|| hostStatus.getMemUsedPercentage() > 80) {
 				hostStatus.setStatus(HostStatusCode.DOWN);
 			} else {
 				hostStatus.setStatus(HostStatusCode.UP);
 			}
 
-		} catch (Exception e) {
-			log.error("Agent metrics load failed", e);
+		} else {
 			hostStatus.setStatus(HostStatusCode.UNKNOWN);
 		}
 

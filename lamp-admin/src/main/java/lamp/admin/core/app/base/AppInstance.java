@@ -25,4 +25,6 @@ public class AppInstance {
 	//
 	private App app;
 	private Host host;
+	private HealthCheck healthCheck;
+
 }

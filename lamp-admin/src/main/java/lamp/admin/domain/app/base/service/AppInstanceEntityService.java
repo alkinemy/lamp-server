@@ -20,6 +20,11 @@ public class AppInstanceEntityService {
 		return appInstanceEntityRepository.findAllByAppId(appId);
 	}
 
+
+	public List<AppInstanceEntity> getListByHostId(String hostId) {
+		return appInstanceEntityRepository.findAllByHostId(hostId);
+	}
+
 	public AppInstanceEntity get(String id) {
 		Optional<AppInstanceEntity> optional = getOptional(id);
 		Exceptions.throwsException(!optional.isPresent(), LampErrorCode.APP_INSTANCE_NOT_FOUND, id);
@@ -37,4 +42,5 @@ public class AppInstanceEntityService {
 	public void delete(String id) {
 		appInstanceEntityRepository.delete(id);
 	}
+
 }

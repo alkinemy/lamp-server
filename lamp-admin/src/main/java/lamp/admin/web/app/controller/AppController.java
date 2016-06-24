@@ -48,7 +48,7 @@ public class AppController extends AbstractAppController {
 			return "apps/list";
 		} else {
 			model.addAttribute("app", app);
-			List<AppInstance> appInstances = appInstanceService.getAppInstances(app.getId());
+			List<AppInstance> appInstances = appInstanceService.getAppInstancesByAppId(app.getId());
 			model.addAttribute("appInstances", appInstances);
 			return "apps/view";
 		}

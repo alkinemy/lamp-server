@@ -3,6 +3,7 @@ package lamp.admin.domain.app.base.service;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
+import lamp.admin.core.app.base.AppInstanceStatusResult;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
@@ -32,11 +33,18 @@ public class AppInstanceService {
 	@Autowired
 	private AgentClient agentClient;
 
-	public List<AppInstance> getAppInstances(String appId) {
+	public List<AppInstance> getAppInstancesByAppId(String appId) {
 		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getListByAppId(appId);
 		List<AppInstance> appInstances = smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
 
 		// TODO host null 처리
+		return appInstances.stream().sorted((e1, e2) -> e1.getHost().getName().compareTo(e2.getHost().getName())).collect(Collectors.toList());
+	}
+
+	public List<AppInstance> getAppInstancesByHostId(String hostId) {
+		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getListByHostId(hostId);
+		List<AppInstance> appInstances = smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
+
 		return appInstances.stream().sorted((e1, e2) -> e1.getHost().getName().compareTo(e2.getHost().getName())).collect(Collectors.toList());
 	}
 
@@ -86,9 +94,24 @@ public class AppInstanceService {
 	}
 
 	@Transactional
+	public void updateStatus(String id, AppInstanceStatusResult statusResult) {
+		Optional<AppInstanceEntity> appInstanceEntityOptional = appInstanceEntityService.getOptional(id);
+		if (appInstanceEntityOptional.isPresent()) {
+			AppInstanceEntity appInstanceEntity = appInstanceEntityOptional.get();
+			appInstanceEntity.setStatus(statusResult.getStatus());
+			appInstanceEntity.setStatusMessage(statusResult.getStatusMessage());
+			log.info("AppInstanceEntity : {}", appInstanceEntity);
+		} else {
+			// FIXME 수정 바람
+			log.warn("AppInstance not exist : instanceId={}", id);
+		}
+	}
+
+	@Transactional
 	public void delete(AppInstance appInstance) {
 		appInstanceEntityService.delete(appInstance.getId());
 	}
+
 
 }
 

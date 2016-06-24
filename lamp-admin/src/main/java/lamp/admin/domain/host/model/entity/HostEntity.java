@@ -41,6 +41,7 @@ public class HostEntity extends AbstractAuditingEntity {
 	private boolean metricsMonitoringEnabled = false;
 	@Column(columnDefinition = "TINYINT")
 	private boolean metricsCollectionEnabled = false;
+
 	private String metricsType;
 	private String metricsPath;
 

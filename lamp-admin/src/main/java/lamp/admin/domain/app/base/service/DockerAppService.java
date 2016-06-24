@@ -24,7 +24,7 @@ public class DockerAppService {
 		App app = new App();
 
 		app.setVersion(Instant.now().toString());
-		app.setType(AppType.APP);
+		app.setType(AppType.DOCKER_APP);
 		app.setPath(path);
 		app.setParentPath(parentPath);
 		app.setName(editForm.getName());
@@ -64,7 +64,7 @@ public class DockerAppService {
 	}
 
 	protected String join(List<String> list) {
-		if (CollectionUtils.isNotEmpty(list)) {
+		if (CollectionUtils.isEmpty(list)) {
 			return "";
 		}
 		return StringUtils.join(list.toArray(new String[list.size()]), '\n');

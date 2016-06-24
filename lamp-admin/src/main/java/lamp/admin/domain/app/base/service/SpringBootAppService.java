@@ -41,7 +41,7 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		App app = new App();
 
 		app.setVersion(Instant.now().toString());
-		app.setType(AppType.APP);
+		app.setType(AppType.SPRING_BOOT_APP);
 		app.setPath(path);
 		app.setParentPath(parentPath);
 		app.setName(editForm.getName());

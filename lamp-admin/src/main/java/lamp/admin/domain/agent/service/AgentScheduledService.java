@@ -13,12 +13,11 @@ public class AgentScheduledService {
 	private AgentService agentService;
 
 	@Autowired
-	private AgentAppInstanceStatusService agentAppInstanceStatusService;
-
+	private AgentAppInstanceHealthCheckService agentAppInstanceHealthCheckService;
 
 	public void appInstanceStatusUpdate() {
 		Collection<Agent> agents = agentService.getAgents();
-		agents.forEach(agentAppInstanceStatusService::appInstancesStatusUpdate);
+		agents.forEach(agentAppInstanceHealthCheckService::healthCheck);
 	}
 
 }

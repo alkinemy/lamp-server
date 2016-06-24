@@ -158,8 +158,8 @@ public class AppService {
 			List<AppEntity> children = appEntityService.getListByParentPath(app.getId());
 			Exceptions.throwsException(CollectionUtils.isNotEmpty(children), LampErrorCode.APP_GROUP_NOT_EMPTY, app.getId());
 			appEntityService.deleteAppEntity(app.getId());
-		} else if (AppType.APP.equals(app.getType())) {
-			List<AppInstance> appInstances = appInstanceService.getAppInstances(app.getId());
+		} else {
+			List<AppInstance> appInstances = appInstanceService.getAppInstancesByAppId(app.getId());
 			if (CollectionUtils.isNotEmpty(appInstances)) {
 				for (AppInstance appInstance : appInstances) {
 					appInstanceDeployService.undeploy(appInstance, forceDestroy);

@@ -63,4 +63,5 @@ public class Agent extends AbstractAuditingEntity {
 		url.append(getMetricsPath());
 		return url.toString();
 	}
+
 }

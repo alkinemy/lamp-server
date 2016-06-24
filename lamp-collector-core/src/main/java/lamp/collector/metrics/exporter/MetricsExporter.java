@@ -22,5 +22,5 @@ public abstract class MetricsExporter implements MetricsProcessor {
 		}
 	}
 
-	protected abstract void export(TargetMetrics targetMetrics);
+	public abstract void export(TargetMetrics targetMetrics);
 }

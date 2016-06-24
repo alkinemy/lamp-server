@@ -10,4 +10,7 @@ import java.util.List;
 public interface AppInstanceEntityRepository extends LampJpaRepository<AppInstanceEntity, String> {
 
 	List<AppInstanceEntity> findAllByAppId(String appId);
+
+	List<AppInstanceEntity> findAllByHostId(String hostId);
+
 }
