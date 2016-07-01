@@ -137,22 +137,20 @@ public class HostAgentInstallService {
 				String localFile = agentInstall.getJdkFile();
 				String remoteInstallDirectory = agentInstall.getJdkInstallDirectory();
 				String remoteInstallFilename = FilenameUtils.getName(localFile);
+				String remoteInstallFullPath = Paths.get(remoteInstallDirectory, remoteInstallFilename).toString();
 				List<ScriptCommand> scriptCommands = agentInstall.getJdkInstallScriptCommands();
 
 				install(agentInstall, printStream, client, localFile, remoteInstallDirectory, remoteInstallFilename, scriptCommands, parameters);
 
 				ScriptExecuteCommand unTarCommand = new ScriptExecuteCommand();
-				unTarCommand.setCommandLine("tar -xvf " + remoteInstallFilename + " -C " + remoteInstallDirectory);
+				unTarCommand.setCommandLine("tar -xvf " + remoteInstallFullPath + " -C " + remoteInstallDirectory);
 
 				String unTarResponse = executeScriptCommand(client, remoteInstallDirectory, unTarCommand, parameters, printStream);
 				String javaHome = null;
 				String[] lines = StringUtils.split(unTarResponse, '\n');
 				if (ArrayUtils.isNotEmpty(lines)) {
 					String firstLine = lines[0];
-					javaHome = remoteInstallDirectory + "/" + StringUtils.trim(firstLine);
-					if (javaHome.endsWith("/")) {
-						javaHome = javaHome.substring(0, javaHome.length() - 1);
-					}
+					javaHome = Paths.get(remoteInstallDirectory, StringUtils.trim(firstLine)).toString();
 				}
 				log.info("JAVA_HOME = {}", javaHome);
 				parameters.put("JAVA_HOME", javaHome);
