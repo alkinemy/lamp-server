@@ -52,47 +52,63 @@ public class HostAgentInstallService {
 
 	@Transactional
 	public AgentInstallResult installAgent(TargetHost targetHost,
-							 HostCredentials hostCredentials,
-							 String agentFilePath,
-							 HostConfiguration hostConfiguration) {
+										   HostCredentials hostCredentials,
+										   String agentFilePath,
+										   HostConfiguration hostConfiguration) {
 		PrintStream printStream = System.out;
 
-		AgentInstall agentInstall = new AgentInstall();
-		agentInstall.setAgentId(UUID.randomUUID().toString());
-		agentInstall.setAddress(targetHost.getHostname());
-		agentInstall.setHostCredentials(hostCredentials);
-		agentInstall.setHostConfiguration(hostConfiguration);
-		agentInstall.setAgentInstallDirectory(agentInstallProperties.getInstallDirectory());
-		agentInstall.setAgentInstallFilename(agentInstallProperties.getInstallFilename());
-		agentInstall.setAgentFile(StringUtils.defaultIfBlank(agentFilePath, agentInstallProperties.getFile()));
-
-		AgentInstallResult result = installAgent(agentInstall, printStream);
+		String agentId = UUID.randomUUID().toString();
+		AgentInstallResult result;
 
 		HostEntity hostEntity = new HostEntity();
-		hostEntity.setId(agentInstall.getAgentId());
+		hostEntity.setId(agentId);
 		hostEntity.setClusterId(targetHost.getClusterId());
-		hostEntity.setName(result.getHostname());
+		hostEntity.setName(targetHost.getAddress());
 		hostEntity.setAddress(targetHost.getAddress());
-		hostEntity.setAgentInstallDirectory(agentInstall.getAgentInstallDirectory());
-		hostEntity.setAgentInstallFilename(agentInstall.getAgentInstallFilename());
-		hostEntity.setAgentFile(agentInstall.getAgentFile());
 
+
+		try {
+			AgentInstall agentInstall = new AgentInstall();
+			agentInstall.setAgentId(agentId);
+			agentInstall.setAddress(targetHost.getHostname());
+			agentInstall.setHostCredentials(hostCredentials);
+			agentInstall.setHostConfiguration(hostConfiguration);
+			agentInstall.setAgentInstallDirectory(agentInstallProperties.getInstallDirectory());
+			agentInstall.setAgentInstallFilename(agentInstallProperties.getInstallFilename());
+			agentInstall.setAgentFile(StringUtils.defaultIfBlank(agentFilePath, agentInstallProperties.getFile()));
+			agentInstall.setAgentInstallScriptCommands(agentInstallProperties.getAgentInstallScriptCommands());
+
+			agentInstall.setJdkFile(agentInstallProperties.getJdkFilePath());
+			agentInstall.setJdkInstallDirectory(agentInstallProperties.getJdkInstallDirectory());
+			agentInstall.setJdkInstallScriptCommands(null);
+
+			result = install(agentInstall, printStream);
+
+			hostEntity.setName(result.getHostname());
+			hostEntity.setAgentInstallDirectory(agentInstall.getAgentInstallDirectory());
+			hostEntity.setAgentInstallFilename(agentInstall.getAgentInstallFilename());
+			hostEntity.setAgentFile(agentInstall.getAgentFile());
+		} catch (Exception e) {
+			log.error("Agent install failed", e);
+			result = new AgentInstallResult();
+			result.setError(ExceptionUtils.getStackTrace(e));
+		}
 
 		hostEntityService.create(hostEntity);
 
 		return result;
 	}
 
-	public AgentInstallResult installAgent(AgentInstall agentInstall, PrintStream printStream) {
+	public AgentInstallResult install(AgentInstall agentInstall, PrintStream printStream) {
 		log.info("AgentInstall = {}", agentInstall);
 		String address = agentInstall.getAddress();
 		HostCredentials hostCredentials = agentInstall.getHostCredentials();
-		String agentFile = agentInstall.getAgentFile();
-		String remoteInstallDirectory = agentInstall.getAgentInstallDirectory();
-		String remoteInstallFilename = agentInstall.getAgentInstallFilename();
-
 		AgentInstallResult result = new AgentInstallResult();
 		result.setAddress(address);
+
+		Map<String, Object> parameters = agentInstallProperties.getParameters();
+		parameters.put("agentId", agentInstall.getAgentId());
+		parameters.put("agentPort", agentInstallProperties.getPort());
 
 		try (final SSHClient client = new SSHClient()) {
 			client.addHostKeyVerifier(new PromiscuousVerifier());
@@ -114,43 +130,60 @@ public class HostAgentInstallService {
 				printStream.println(response);
 				result.setHostname(StringUtils.trim(response));
 			}
-			// File Copy
-			try (final Session session = client.startSession()) {
-				final Session.Command sessionCommand = session.exec("mkdir -p " + remoteInstallDirectory);
-				String response = IOUtils.toString(sessionCommand.getInputStream());
-				sessionCommand.join(10, TimeUnit.SECONDS);
-				printStream.println(response);
+
+			// JDK Install
+			if (StringUtils.isNotBlank(agentInstall.getJdkFile())) {
+				log.info("JDK Installing...");
+				String localFile = agentInstall.getJdkFile();
+				String remoteInstallDirectory = agentInstall.getJdkInstallDirectory();
+				String remoteInstallFilename = FilenameUtils.getName(localFile);
+				List<ScriptCommand> scriptCommands = agentInstall.getJdkInstallScriptCommands();
+
+				install(agentInstall, printStream, client, localFile, remoteInstallDirectory, remoteInstallFilename, scriptCommands, parameters);
+
+				ScriptExecuteCommand unTarCommand = new ScriptExecuteCommand();
+				unTarCommand.setCommandLine("tar -xvf " + remoteInstallFilename + " -C " + remoteInstallDirectory);
+
+				String unTarResponse = executeScriptCommand(client, remoteInstallDirectory, unTarCommand, parameters, printStream);
+				String javaHome = null;
+				String[] lines = StringUtils.split(unTarResponse, '\n');
+				if (ArrayUtils.isNotEmpty(lines)) {
+					String firstLine = lines[0];
+					javaHome = remoteInstallDirectory + "/" + StringUtils.trim(firstLine);
+					if (javaHome.endsWith("/")) {
+						javaHome = javaHome.substring(0, javaHome.length() - 1);
+					}
+				}
+				log.info("JAVA_HOME = {}", javaHome);
+				parameters.put("JAVA_HOME", javaHome);
 			}
 
-			String remoteFilename = Paths.get(remoteInstallDirectory, remoteInstallFilename).toString();
-			Resource agentResource = agentInstallProperties.getResource(agentFile);
-			client.newSCPFileTransfer().upload(new FileSystemFile(agentResource.getFile()), remoteFilename);
+			// Agent Install
+			{
+				log.info("Agent Installing...");
+				String localFile = agentInstall.getAgentFile();
+				String remoteInstallDirectory = agentInstall.getAgentInstallDirectory();
+				String remoteInstallFilename = agentInstall.getAgentInstallFilename();
+				List<ScriptCommand> scriptCommands = agentInstall.getAgentInstallScriptCommands();
 
-			// ScriptCommands
-			Map<String, Object> parameters = agentInstallProperties.getParameters();
-			parameters.put("agentId", agentInstall.getAgentId());
-			parameters.put("agentPort", agentInstallProperties.getPort());
+				install(agentInstall, printStream, client, localFile, remoteInstallDirectory, remoteInstallFilename, scriptCommands, parameters);
 
-
-
-			List<ScriptCommand> scriptCommandEntities = agentInstallProperties.getInstallScriptCommands();
-			executeScriptCommands(client, remoteInstallDirectory, scriptCommandEntities, parameters, printStream);
-
-
-			try (final Session session = client.startSession()) {
-				try (Session.Shell shell = session.startShell()) {
-					try (Expect expect = new ExpectBuilder()
-						.withOutput(shell.getOutputStream())
-						.withInputs(shell.getInputStream(), shell.getErrorStream())
-						.withEchoOutput(System.out)
-						.withEchoInput(System.err)
-						//        .withInputFilters(removeColors(), removeNonPrintable())
-						.withExceptionOnFailure()
-						.build()) {
-						expect.sendLine("cd " + remoteInstallDirectory);
-//						expect.expect(anyOf(contains("#"), contains("$")));
-						expect.sendLine("./lamp-agent.sh start");
-//						expect.expect();
+				// Start
+				try (final Session session = client.startSession()) {
+					try (Session.Shell shell = session.startShell()) {
+						try (Expect expect = new ExpectBuilder()
+							.withOutput(shell.getOutputStream())
+							.withInputs(shell.getInputStream(), shell.getErrorStream())
+							.withEchoOutput(System.out)
+							.withEchoInput(System.err)
+							//        .withInputFilters(removeColors(), removeNonPrintable())
+							.withExceptionOnFailure()
+							.build()) {
+							expect.sendLine("cd " + remoteInstallDirectory);
+							//						expect.expect(anyOf(contains("#"), contains("$")));
+							expect.sendLine("./lamp-agent.sh start");
+							//						expect.expect();
+						}
 					}
 				}
 			}
@@ -170,6 +203,28 @@ public class HostAgentInstallService {
 		return result;
 	}
 
+	protected void install(AgentInstall agentInstall, PrintStream printStream,
+						   SSHClient client,
+						   String localFile, String remoteInstallDirectory,
+						   String remoteInstallFilename,
+						   List<ScriptCommand> scriptCommands,
+						   Map<String, Object> parameters) throws IOException {
+		// File Copy
+		try (final Session session = client.startSession()) {
+			final Session.Command sessionCommand = session.exec("mkdir -p " + remoteInstallDirectory);
+			String response = IOUtils.toString(sessionCommand.getInputStream());
+			sessionCommand.join(10, TimeUnit.SECONDS);
+			printStream.println(response);
+		}
+
+		String remoteFilename = Paths.get(remoteInstallDirectory, remoteInstallFilename).toString();
+		Resource agentResource = agentInstallProperties.getResource(localFile);
+		client.newSCPFileTransfer().upload(new FileSystemFile(agentResource.getFile()), remoteFilename);
+
+
+		executeScriptCommands(client, remoteInstallDirectory, scriptCommands, parameters, printStream);
+	}
+
 	protected void executeScriptCommands(SSHClient client, String workDirectory,
 										 List<ScriptCommand> scriptCommandEntities,
 										 Map<String, Object> parameters,
@@ -183,7 +238,7 @@ public class HostAgentInstallService {
 		}
 	}
 
-	protected void executeScriptCommand(SSHClient client, String workDirectory,
+	protected String executeScriptCommand(SSHClient client, String workDirectory,
 										ScriptCommand scriptCommand,
 										Map<String, Object> parameters,
 										PrintStream printStream)
@@ -196,6 +251,7 @@ public class HostAgentInstallService {
 				String response = IOUtils.toString(sessionCommand.getInputStream());
 				sessionCommand.join(10, TimeUnit.SECONDS);
 				printStream.println(response);
+				return response;
 			}
 		} else if (scriptCommand instanceof ScriptFileCreateCommand) {
 			ScriptFileCreateCommand fileCreateCommand = (ScriptFileCreateCommand) scriptCommand;
@@ -229,8 +285,10 @@ public class HostAgentInstallService {
 						String response = IOUtils.toString(sessionCommand.getInputStream());
 						sessionCommand.join(10, TimeUnit.SECONDS);
 						printStream.println(response);
+						return response;
 					}
 				}
+				return null;
 			} catch (Exception e) {
 				log.warn("FileCreateCommand Failed", e);
 				throw Exceptions.newException(LampErrorCode.SCRIPT_COMMAND_EXECUTION_FAILED, e);

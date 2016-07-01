@@ -72,8 +72,8 @@
 														<td th:text="${appInstance.host?.name}"> 해당 없음 </td>
 														<td th:text="${appInstance.host?.address}"> 해당 없음 </td>
 														<td th:text="${appInstance.status}"> 해당 없음 </td>
-														<td> <a href=""><i class="fa fa-file-text"></i> stderr </a></td>
-														<td> <a href=""><i class="fa fa-file-text"></i> stdout </a></td>
+														<td> <a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stdout)}"><i class="fa fa-file-text"></i> stderr </a></td>
+														<td> <a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stderr)}"><i class="fa fa-file-text"></i> stdout </a></td>
 														<td>
 															<div class="btn-group">
 																<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action

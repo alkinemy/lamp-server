@@ -16,6 +16,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -140,6 +142,18 @@ public class AppInstanceDeployService {
 		Agent agent = agentService.getAgent(appInstance.getHostId());
 		agentClient.stop(agent, appInstance.getId());
 	}
+
+
+	public void transferStdOutStream(AppInstance appInstance, OutputStream outputStream) {
+		Agent agent = agentService.getAgent(appInstance.getHostId());
+		agentClient.transferLogStream(agent, appInstance.getId(), "stdout", outputStream);
+	}
+
+	public void transferStdErrStream(AppInstance appInstance, OutputStream outputStream) {
+		Agent agent = agentService.getAgent(appInstance.getHostId());
+		agentClient.transferLogStream(agent, appInstance.getId(), "stderr", outputStream);
+	}
+
 
 
 	protected AppInstance newAppInstance(App app, String instanceId, String hostId) {

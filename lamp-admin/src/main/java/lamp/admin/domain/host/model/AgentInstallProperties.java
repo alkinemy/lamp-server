@@ -38,6 +38,10 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 	private String startCommandLine = "./lamp-agent.sh start";
 	private String stopCommandLine = "./lamp-agent.sh stop";
 
+	private String jdkFilePath;
+	private String jdkInstallDirectory;
+
+
 	public Map<String, Object> getParameters() {
 		Map<String, Object> parameters = new LinkedHashMap<>();
 		return parameters;
@@ -47,7 +51,7 @@ public class AgentInstallProperties implements ResourceLoaderAware {
 		return resourceLoader.getResource(location);
 	}
 
-	public List<ScriptCommand> getInstallScriptCommands() throws IOException {
+	public List<ScriptCommand> getAgentInstallScriptCommands() throws IOException {
 		List<ScriptCommand> scriptCommandEntities = new ArrayList<>();
 		{
 			Resource resource = resourceLoader.getResource(propertiesFilePath);

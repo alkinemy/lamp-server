@@ -6,6 +6,7 @@ import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.support.json.JsonUtils;
+import lamp.common.utils.IOUtils;
 import lamp.common.utils.StringUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.OutputStream;
 import java.util.*;
 
 @Slf4j
@@ -199,21 +203,21 @@ public class AgentClient {
 //		}
 //	}
 //
-//	public void transferLogFile(Agent agent, String appId, String filename, final OutputStream outputStream) {
-//		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
-//		try {
-//			String baseUrl = getBaseUrl(agent);
-//			RequestCallback requestCallback = request -> {};
-//			ResponseExtractor<Void> responseExtractor = response -> {
-//				IOUtils.copy(response.getBody(), outputStream);
-//				return null;
-//			};
-//			restTemplate.execute(baseUrl + "/api/app/{appId}/log/{filename}", HttpMethod.GET, requestCallback, responseExtractor, appId, filename);
-//		} finally {
-//			AgentRequestUserHolder.clear();
-//		}
-//	}
-//
+	public void transferLogStream(Agent agent, String appId, String name, final OutputStream outputStream) {
+		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
+		try {
+			String baseUrl = getBaseUrl(agent);
+			RequestCallback requestCallback = request -> {};
+			ResponseExtractor<Void> responseExtractor = response -> {
+				IOUtils.copy(response.getBody(), outputStream);
+				return null;
+			};
+			restTemplate.execute(baseUrl + "/api/app/{appId}/{name}", HttpMethod.GET, requestCallback, responseExtractor, appId, name);
+		} finally {
+			AgentRequestUserHolder.clear();
+		}
+	}
+
 //	public void deployApp(Agent agent, DockerApp dockerApp) {
 //		log.info("dockerApp = {}", dockerApp);
 //		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));

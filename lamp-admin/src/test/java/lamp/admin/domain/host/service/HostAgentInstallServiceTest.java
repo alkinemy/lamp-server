@@ -48,6 +48,6 @@ public class HostAgentInstallServiceTest {
 		agentInstall.setAgentFile(agentFile);
 
 
-		hostAgentInstallService.installAgent(agentInstall, System.out);
+		hostAgentInstallService.install(agentInstall, System.out);
 	}
 }
