@@ -24,7 +24,7 @@ public class HostScanService {
 
 	public ScannedHost scanHost(String host, int port) {
 		ScannedHost scannedHost = hostScanner.scanHost(host, port);
-		boolean managed = scanHostManaged(host);
+		boolean managed = scanHostManaged(scannedHost.getAddress());
 		scannedHost.setManaged(managed);
 		return scannedHost;
 	}
