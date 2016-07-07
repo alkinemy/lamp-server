@@ -1,6 +1,5 @@
 package lamp.common.collector.model;
 
-import lamp.common.monitoring.model.Tenant;
 import lombok.*;
 
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Map;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetMetrics implements Tenant {
+public class TargetMetrics implements CollectionTarget {
 
 	private long timestamp;
 

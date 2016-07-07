@@ -1,5 +1,6 @@
 package lamp.admin.domain.host.service;
 
+import com.google.common.collect.Lists;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.HostStatus;
@@ -7,21 +8,27 @@ import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.host.model.HostStatusCode;
 import lamp.admin.domain.host.model.entity.HostStatusEntity;
+import lamp.admin.domain.monitoring.service.AlertEventService;
 import lamp.collector.metrics.exporter.MetricsExporter;
 import lamp.common.collector.model.TargetMetrics;
-import lamp.common.collector.service.MetricsProcessor;
+import lamp.common.monitoring.model.MonitoringTargetMetrics;
 import lamp.common.utils.CollectionUtils;
+import lamp.monitoring.core.metrics.model.TargetMetricsAlertRule;
+import lamp.monitoring.core.metrics.model.TargetMetricsAlertRuleExpression;
+import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
+import lamp.monitoring.core.metrics.service.TargetMetricsMonitoringProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
 @Service
-public class HostMonitoringService {
+public class HostMetricsProcessService {
 
 	@Autowired
 	private AgentService agentService;
@@ -35,15 +42,46 @@ public class HostMonitoringService {
 	@Autowired(required = false)
 	private List<MetricsExporter> metricsExporters;
 
+	@Autowired
+	private AlertEventService alertEventService;
+
+	private TargetMetricsMonitoringProcessor targetMetricsMonitoringProcessor;
+
+	@PostConstruct
+	public void init() {
+		TargetMetricsAlertRuleProvider targetMetricsAlertRuleProvider = new TargetMetricsAlertRuleProvider() {
+			@Override public List<TargetMetricsAlertRule> getAlertRules() {
+				TargetMetricsAlertRule targetMetricsAlertRule = new TargetMetricsAlertRule();
+				TargetMetricsAlertRuleExpression targetMetricsAlertRuleExpression = new TargetMetricsAlertRuleExpression();
+				targetMetricsAlertRuleExpression.setRuleExpression("#{metrics.threads > 20}");
+				targetMetricsAlertRuleExpression.setValueExpression("#{metrics.threads}");
+				targetMetricsAlertRule.setId("test");
+				targetMetricsAlertRule.setName("Thread Count");
+				targetMetricsAlertRule.setRuleExpression(targetMetricsAlertRuleExpression);
+				targetMetricsAlertRule.setAlertActions(Lists.newArrayList("1"));
+				targetMetricsAlertRule.setUndeterminedActions(Lists.newArrayList("1"));
+				targetMetricsAlertRule.setOkActions(Lists.newArrayList("1"));
+				return Lists.newArrayList(targetMetricsAlertRule);
+			}
+		};
+
+
+		targetMetricsMonitoringProcessor = new TargetMetricsMonitoringProcessor(targetMetricsAlertRuleProvider, alertEventService);
+	}
+
+
 	@Async
-	public void metricsMonitoring(Host host) {
+	public void processMetrics(Host host) {
 		Optional<Agent> agentOptional = agentService.getAgentOptional(host.getId());
 		HostStatusEntity hostStatusEntity = new HostStatusEntity();
 		hostStatusEntity.setId(host.getId());
 		if (agentOptional.isPresent()) {
 			Agent agent = agentOptional.get();
 
-			TargetMetrics targetMetrics = getTargetMetrics(host, agent);
+			MonitoringTargetMetrics targetMetrics = getTargetMetrics(host, agent);
+
+			monitoring(targetMetrics);
+
 			HostStatus hostStatus = getHostStatus(targetMetrics);
 			BeanUtils.copyProperties(hostStatus, hostStatusEntity);
 
@@ -52,6 +90,8 @@ public class HostMonitoringService {
 				metricsExporters.stream().forEach(metricsExporter -> metricsExporter.export(targetMetrics));
 			}
 		} else {
+			monitoring(newTargetMetrics(host, null));
+
 			hostStatusEntity.setStatus(HostStatusCode.OUT_OF_SERVICE);
 			hostStatusEntity.setLastStatusTime(new Date());
 
@@ -59,7 +99,15 @@ public class HostMonitoringService {
 		}
 	}
 
-	protected TargetMetrics getTargetMetrics(Host host, Agent agent) {
+	protected void monitoring(MonitoringTargetMetrics targetMetrics) {
+		try {
+			targetMetricsMonitoringProcessor.monitoring(targetMetrics);
+		} catch (Exception e) {
+			log.error("HostAlertRuleCheck failed", e);
+		}
+	}
+
+	protected MonitoringTargetMetrics getTargetMetrics(Host host, Agent agent) {
 		Map<String, Object> metrics = null;
 		try {
 			metrics = agentClient.getMetrics(agent);
@@ -69,17 +117,23 @@ public class HostMonitoringService {
 			log.error("Agent metrics load failed", e);
 		}
 
-		return getTargetMetrics(host, metrics);
+		return newTargetMetrics(host, metrics);
 	}
 
-	protected TargetMetrics getTargetMetrics(Host host, Map<String, Object> metrics) {
+	protected MonitoringTargetMetrics newTargetMetrics(Host host, Map<String, Object> metrics) {
 		Map<String, String> tags = new LinkedHashMap<>();
 		tags.put("targetType", "host");
 		tags.put("hostId", host.getId());
 		tags.put("hostName", host.getName());
 		tags.put("clusterId", host.getClusterId());
+		if (host.getTags() != null) {
+			tags.putAll(host.getTags());
+		}
 
-		TargetMetrics targetMetrics = new TargetMetrics();
+		MonitoringTargetMetrics targetMetrics = new MonitoringTargetMetrics();
+		targetMetrics.setId(host.getId());
+		targetMetrics.setName(host.getName());
+		targetMetrics.setTenantId(host.getTenantId());
 		targetMetrics.setTimestamp(System.currentTimeMillis());
 		targetMetrics.setMetrics(metrics);
 		targetMetrics.setTags(tags);

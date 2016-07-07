@@ -1,16 +1,13 @@
 package lamp.monitoring.core.health.service;
 
+import lamp.monitoring.core.alert.AlertEventProducer;
 import lamp.monitoring.core.alert.model.AlertRule;
-import lamp.monitoring.core.alert.model.AlertRuleExpression;
-import lamp.monitoring.core.alert.model.AlertState;
-import lamp.monitoring.core.alert.model.event.AlertRuleExpressionEvaluationEvent;
-import lamp.monitoring.core.alert.service.AlertEventProducer;
 import lamp.common.collector.model.TargetHealth;
-import lamp.common.utils.ExceptionUtils;
 
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 public class SimpleHealthMonitoringProcessor extends HealthMonitoringProcessor {
 
 	private HealthAlertRuleProvider healthAlertRuleProvider;
@@ -26,22 +23,22 @@ public class SimpleHealthMonitoringProcessor extends HealthMonitoringProcessor {
 		Date stateTime = new Date();
 		List<AlertRule> alertRules = healthAlertRuleProvider.getHealthAlertRules();
 		for (AlertRule alertRule : alertRules) {
-			AlertRuleExpression expression = alertRule.getExpression();
-
-			AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
-			event.setTenant(targetHealth);
-			event.setAlertRule(alertRule);
-			event.setReasonData(targetHealth.getHealth());
-			event.setTimestamp(stateTime);
-			try {
-				AlertState state = expression.evaluate(targetHealth);
-				event.setState(state);
-			} catch (Throwable t) {
-				event.setState(AlertState.UNDETERMINED);
-				event.setReason(ExceptionUtils.getStackTrace(t));
-			}
-
-			alertEventProducer.send(event);
+//			AlertRuleExpression expression = alertRule.getRuleExpression();
+//
+//			AlertRuleMatchedEvent event = new AlertRuleMatchedEvent();
+////			event.setTenant(targetHealth);
+//			event.setAlertRule(alertRule);
+//			event.setReasonData(targetHealth.getHealth());
+//			event.setTimestamp(stateTime);
+//			try {
+//				AlertState state = expression.evaluate(targetHealth);
+//				event.setState(state.getType());
+//			} catch (Throwable t) {
+//				event.setState(AlertStateType.UNDETERMINED);
+//				event.setReason(ExceptionUtils.getStackTrace(t));
+//			}
+//
+//			alertEventProducer.send(event);
 		}
 	}
 

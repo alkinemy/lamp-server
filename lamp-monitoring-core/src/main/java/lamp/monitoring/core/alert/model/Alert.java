@@ -1,11 +1,9 @@
 package lamp.monitoring.core.alert.model;
 
-import lamp.common.monitoring.model.Tenant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
 
 @Getter
 @Setter
@@ -14,12 +12,13 @@ public class Alert {
 
     private String id;
 
-    private Tenant tenant;
-    private AlertRule<?> rule;
+    private String ruleId;
+    private String targetId;
 
-    private AlertState oldState;
-    private AlertState newState;
-    private Date timestamp;
+    private AlertCondition condition;
 
+    private long firstEventTime;
+
+    private long lastEventTime;
 
 }

@@ -3,14 +3,15 @@ package lamp.monitoring.core.metrics.service;
 import lamp.common.collector.service.MetricsProcessor;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
-import lamp.monitoring.core.metrics.model.MonitoringMetricsTarget;
+import lamp.monitoring.core.metrics.model.MonitoringAlertTarget;
 
+@Deprecated
 public abstract class MetricsMonitoringProcessor implements MetricsProcessor {
 
     @Override
     public boolean canProcess(MetricsTarget metricsTarget) {
-        if (metricsTarget instanceof MonitoringMetricsTarget) {
-            return ((MonitoringMetricsTarget) metricsTarget).isMetricsMonitoringEnabled();
+        if (metricsTarget instanceof MonitoringAlertTarget) {
+            return ((MonitoringAlertTarget) metricsTarget).isMetricsMonitoringEnabled();
         }
         return false;
     }

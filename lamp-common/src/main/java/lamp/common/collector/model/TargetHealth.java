@@ -10,7 +10,7 @@ import java.util.Map;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetHealth implements Tenant {
+public class TargetHealth implements CollectionTarget {
 
 	private long timestamp;
 

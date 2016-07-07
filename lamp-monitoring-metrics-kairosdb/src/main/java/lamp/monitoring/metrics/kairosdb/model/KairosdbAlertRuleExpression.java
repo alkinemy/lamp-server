@@ -4,6 +4,7 @@ import com.google.gson.internal.LazilyParsedNumber;
 import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.alert.model.AlertRuleExpression;
 import lamp.monitoring.core.alert.model.AlertState;
+import lamp.monitoring.core.alert.model.AlertStateCode;
 import lamp.monitoring.core.alert.service.operator.RelationalOperator;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,6 +63,6 @@ public class KairosdbAlertRuleExpression implements AlertRuleExpression<DataPoin
 			result = operator.perform(value.longValue(), thresholdNumber.longValue());
 		}
 
-		return result ? AlertState.ALERT : AlertState.OK;
+		return result ? new AlertState(AlertStateCode.ALERT, value) :  new AlertState(AlertStateCode.OK, value);
 	}
 }

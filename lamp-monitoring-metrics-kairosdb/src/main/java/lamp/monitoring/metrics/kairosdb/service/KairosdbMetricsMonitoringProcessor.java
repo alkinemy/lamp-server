@@ -4,10 +4,10 @@ import lamp.common.collector.model.MetricsTagConstants;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.ExceptionUtils;
-import lamp.monitoring.core.alert.model.AlertState;
-import lamp.monitoring.core.alert.model.event.AlertRuleExpressionEvaluationEvent;
+import lamp.monitoring.core.alert.model.AlertStateCode;
+import lamp.monitoring.core.alert.model.event.AlertEvent;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
-import lamp.monitoring.core.metrics.service.MetricsAlertRuleProvider;
+import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
 import lamp.monitoring.core.metrics.service.MetricsMonitoringProcessor;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbAlertRuleExpression;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbMetricsAlertRule;
@@ -24,11 +24,11 @@ import java.util.Map;
 
 public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcessor {
 
-	private MetricsAlertRuleProvider metricsAlertRuleProvider;
+	private TargetMetricsAlertRuleProvider metricsAlertRuleProvider;
 	private KairosdbClient kairosdbClient;
 	private AlertEventProducer alertEventProducer;
 
-	public KairosdbMetricsMonitoringProcessor(MetricsAlertRuleProvider metricsAlertRuleProvider,
+	public KairosdbMetricsMonitoringProcessor(TargetMetricsAlertRuleProvider metricsAlertRuleProvider,
 											  KairosdbClient kairosdbClient,
 											  AlertEventProducer alertEventProducer) {
 		this.metricsAlertRuleProvider = metricsAlertRuleProvider;
@@ -42,7 +42,7 @@ public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcess
 		Date stateTime = new Date();
 		List<KairosdbMetricsAlertRule> alertRules = metricsAlertRuleProvider.getMetricsAlertRules(KairosdbMetricsAlertRule.class);
 		for (KairosdbMetricsAlertRule alertRule : alertRules) {
-			AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
+			AlertEvent event = new AlertEvent();
 			event.setTenant(metricsTarget);
 			event.setAlertRule(alertRule);
 			event.setTimestamp(stateTime);
@@ -63,10 +63,10 @@ public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcess
 						event.setReasonData(dimension);
 					}
 
-					AlertState state = expression.evaluate(dataPoint);
+					AlertStateCode state = expression.evaluate(dataPoint);
 					event.setState(state);
 				} else {
-					event.setState(AlertState.UNDETERMINED);
+					event.setState(AlertStateCode.UNDETERMINED);
 					if (CollectionUtils.isNotEmpty(response.getErrors())) {
 						event.setReason(response.getErrors().get(0));
 					} else {
@@ -74,7 +74,7 @@ public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcess
 					}
 				}
 			} catch (Throwable t) {
-				event.setState(AlertState.UNDETERMINED);
+				event.setState(AlertStateCode.UNDETERMINED);
 				event.setReason(ExceptionUtils.getStackTrace(t));
 			}
 

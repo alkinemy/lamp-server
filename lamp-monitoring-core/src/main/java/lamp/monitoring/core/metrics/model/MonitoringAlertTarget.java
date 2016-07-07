@@ -2,7 +2,8 @@ package lamp.monitoring.core.metrics.model;
 
 import lamp.common.monitoring.model.Tenant;
 
-public interface MonitoringMetricsTarget extends Tenant {
+@Deprecated
+public interface MonitoringAlertTarget extends Tenant {
 
     boolean isMetricsMonitoringEnabled();
 

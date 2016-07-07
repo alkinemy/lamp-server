@@ -1,7 +1,6 @@
 package lamp.admin.domain.host.service;
 
 import lamp.admin.core.host.Host;
-import lamp.admin.domain.agent.service.AgentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,14 +10,14 @@ import java.util.List;
 public class HostScheduledService {
 
 	@Autowired
-	private HostMonitoringService hostMonitoringService;
+	private HostMetricsProcessService hostMetricsProcessService;
 
 	@Autowired
 	private HostService hostService;
 
 	public void hostMetricsMonitoring() {
 		List<Host> hosts = hostService.getHosts();
-		hosts.stream().forEach(hostMonitoringService::metricsMonitoring);
+		hosts.stream().forEach(hostMetricsProcessService::processMetrics);
 	}
 
 }

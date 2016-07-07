@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class HealthAlertRule implements AlertRule {
+public abstract class HealthAlertRule implements AlertRule {
 
 	private String id;
 	private String name;

@@ -10,14 +10,15 @@ import java.util.List;
 
 
 @Service
+@Deprecated
 public class AlarmService implements HealthAlertRuleProvider {
 
 	@Override public List<AlertRule> getHealthAlertRules() {
 		List<AlertRule> alertRules = new ArrayList<>();
-		HealthAlertRule alarmDefinition = new HealthAlertRule();
-		alarmDefinition.setId("health");
-		alarmDefinition.setName("Health Alert");
-		alertRules.add(alarmDefinition);
+//		HealthAlertRule alarmDefinition = new HealthAlertRule();
+//		alarmDefinition.setId("health");
+//		alarmDefinition.setName("Health Alert");
+//		alertRules.add(alarmDefinition);
 
 		return alertRules;
 	}

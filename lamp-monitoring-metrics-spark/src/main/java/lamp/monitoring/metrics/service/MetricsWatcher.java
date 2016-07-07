@@ -2,23 +2,15 @@ package lamp.alarm.metrics.service;
 
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
-import lamp.common.utils.ExceptionUtils;
-import lamp.monitoring.core.alert.model.AlertEvent;
-import lamp.monitoring.core.alert.model.AlertRule;
-import lamp.monitoring.core.alert.model.AlertRuleExpression;
-import lamp.monitoring.core.alert.model.AlertState;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
-import lamp.monitoring.core.metrics.service.MetricsAlertRuleProvider;
-
-import java.util.Date;
-import java.util.List;
+import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
 
 public class MetricsWatcher {
 
-	private MetricsAlertRuleProvider metricsAlertRuleProvider;
+	private TargetMetricsAlertRuleProvider metricsAlertRuleProvider;
 	private AlertEventProducer alertEventProducer;
 
-	public MetricsWatcher(MetricsAlertRuleProvider metricsAlertRuleProvider, AlertEventProducer alertEventProducer) {
+	public MetricsWatcher(TargetMetricsAlertRuleProvider metricsAlertRuleProvider, AlertEventProducer alertEventProducer) {
 		this.metricsAlertRuleProvider = metricsAlertRuleProvider;
 		this.alertEventProducer = alertEventProducer;
 	}

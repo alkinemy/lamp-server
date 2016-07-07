@@ -1,10 +1,12 @@
 USE `lamp`;
 
-DROP TABLE IF EXISTS `docker_app`;
+DROP TABLE IF EXISTS `lamp_alert_rule`;
 
-CREATE TABLE `docker_app` (
+CREATE TABLE `lamp_alert_rule` (
   `id` varchar(255) NOT NULL,
-  `group_id` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
   `data` mediumtext DEFAULT NULL,
 
   `created_by` varchar(100) NOT NULL,

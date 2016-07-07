@@ -6,7 +6,7 @@ import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.health.model.MonitoringHealthTarget;
-import lamp.monitoring.core.metrics.model.MonitoringMetricsTarget;
+import lamp.monitoring.core.metrics.model.MonitoringAlertTarget;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 @Setter
 @Entity
 @Table(name = "lamp_watch_target")
-public class WatchTarget extends AbstractAuditingEntity implements HealthTarget, MetricsTarget, MonitoringHealthTarget, MonitoringMetricsTarget {
+public class WatchTarget extends AbstractAuditingEntity implements HealthTarget, MetricsTarget, MonitoringHealthTarget, MonitoringAlertTarget {
 
 	@Id
 	private String id;

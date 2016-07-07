@@ -2,11 +2,11 @@ package lamp.monitoring.core.alert.model;
 
 import java.util.List;
 
-public interface AlertRule<E extends AlertRuleExpression> {
+public interface AlertRule<T, E extends AlertRuleExpression> {
 
     String getId();
     String getName();
-    String getType();
+//    String getType();
 
     AlertSeverity getSeverity();
 
@@ -14,6 +14,7 @@ public interface AlertRule<E extends AlertRuleExpression> {
     List<String> getUndeterminedActions();
     List<String> getOkActions();
 
-    E getExpression();
+    boolean isAlertTarget(T target);
+    E getRuleExpression();
 
 }

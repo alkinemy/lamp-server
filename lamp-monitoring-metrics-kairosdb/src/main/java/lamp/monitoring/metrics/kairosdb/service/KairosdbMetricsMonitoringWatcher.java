@@ -5,11 +5,11 @@ import lamp.common.collector.model.MetricsTagConstants;
 import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.ExceptionUtils;
 import lamp.common.utils.StringUtils;
-import lamp.monitoring.core.alert.model.AlertState;
-import lamp.monitoring.core.alert.model.event.AlertRuleExpressionEvaluationEvent;
+import lamp.monitoring.core.alert.model.AlertStateCode;
+import lamp.monitoring.core.alert.model.event.AlertEvent;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
-import lamp.monitoring.core.metrics.model.MonitoringMetricsTarget;
-import lamp.monitoring.core.metrics.service.MetricsAlertRuleProvider;
+import lamp.monitoring.core.metrics.model.MonitoringAlertTarget;
+import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
 import lamp.monitoring.core.metrics.service.MonitoringMetricsTargetProvider;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbAlertRuleExpression;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbMetricsAlertRule;
@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 
 public class KairosdbMetricsMonitoringWatcher {
 
-	private MetricsAlertRuleProvider metricsAlertRuleProvider;
+	private TargetMetricsAlertRuleProvider metricsAlertRuleProvider;
 	private MonitoringMetricsTargetProvider monitoringMetricsTargetProvider;
 	private KairosdbClient kairosdbClient;
 	private AlertEventProducer alertEventProducer;
 
-	public KairosdbMetricsMonitoringWatcher(MetricsAlertRuleProvider metricsAlertRuleProvider,
+	public KairosdbMetricsMonitoringWatcher(TargetMetricsAlertRuleProvider metricsAlertRuleProvider,
 											MonitoringMetricsTargetProvider monitoringMetricsTargetProvider,
 											KairosdbClient kairosdbClient,
 											AlertEventProducer alertEventProducer) {
@@ -72,9 +72,9 @@ public class KairosdbMetricsMonitoringWatcher {
 
 	protected void expressionEvaluate(Date stateTime,
 									  KairosdbMetricsAlertRule alertRule,
-									  MonitoringMetricsTarget metricsTarget,
+									  MonitoringAlertTarget metricsTarget,
 									  DataPoint dataPoint) {
-		AlertRuleExpressionEvaluationEvent event = new AlertRuleExpressionEvaluationEvent();
+		AlertEvent event = new AlertEvent();
 		event.setTenant(metricsTarget);
 		event.setAlertRule(alertRule);
 		event.setTimestamp(stateTime);
@@ -87,10 +87,10 @@ public class KairosdbMetricsMonitoringWatcher {
 			}
 
 			KairosdbAlertRuleExpression expression = alertRule.getExpression();
-			AlertState state = expression.evaluate(dataPoint);
+			AlertStateCode state = expression.evaluate(dataPoint);
 			event.setState(state);
 		} catch (Throwable t) {
-			event.setState(AlertState.UNDETERMINED);
+			event.setState(AlertStateCode.UNDETERMINED);
 			event.setReason(ExceptionUtils.getStackTrace(t));
 		}
 

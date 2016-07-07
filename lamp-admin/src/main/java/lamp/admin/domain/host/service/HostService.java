@@ -5,6 +5,7 @@ import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.HostCredentials;
+import lamp.admin.core.host.HostStatus;
 import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
@@ -18,6 +19,7 @@ import lamp.common.utils.FileUtils;
 import lamp.common.utils.InetAddressUtils;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class HostService {
 
@@ -124,12 +127,19 @@ public class HostService {
 
 	public void remove(String hostId) {
 		HostEntity hostEntity = hostEntityService.get(hostId);
+		HostStatusCode hostStatusCode = hostEntity.getStatus();
 		Optional<Agent> agentOptional = agentService.getAgentOptional(hostEntity.getId());
+		boolean hostManaged = HostStatusCode.UP.equals(hostStatusCode)
+			|| HostStatusCode.DOWN.equals(hostStatusCode);
 		if (agentOptional.isPresent()) {
 			Agent agent = agentOptional.get();
-			agentClient.shutdown(agent);
+
+			if (hostManaged) {
+				agentClient.shutdown(agent);
+			}
 			agentService.deregister(agent.getId());
 		}
+
 		hostEntityService.delete(hostEntity.getId());
 	}
 }

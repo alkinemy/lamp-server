@@ -26,6 +26,8 @@ public class Host extends HostStatus {
 	private String clusterId;
 	private String rack;
 
+	private String tenantId;
+
 	private List<String> roles;
 
 	private Map<String, String> tags;
