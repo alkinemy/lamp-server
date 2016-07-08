@@ -1,0 +1,1 @@
+package lamp.admin.domain.alert;

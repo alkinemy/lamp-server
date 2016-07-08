@@ -1,5 +1,10 @@
-package lamp.admin.domain.notification;
+package lamp.admin.domain.alert;
 
+import lamp.admin.domain.alert.model.MmsNotificationAction;
+import lamp.common.monitoring.model.Tenant;
+import lamp.common.monitoring.model.TenantUser;
+import lamp.common.utils.CollectionUtils;
+import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.alert.AlertActionExecutor;
 import lamp.monitoring.core.alert.model.Alert;
 import lamp.monitoring.core.alert.model.AlertActionContext;
@@ -15,8 +20,8 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -39,16 +44,40 @@ public class MmsNotificationActionExecutor implements AlertActionExecutor<MmsNot
 		if (lastNotificationTime == null || (lastNotificationTime + (action.getNotificationIntervalSeconds() * 1000)) <= currentTime) {
 			lastNotificationTimeMap.put(alert.getId(), currentTime);
 
-			String phoneNumber = "000-0000-0000";
+			List<String> mobilePhoneNumbers = new ArrayList<>();
+
 			String subject = getRenderedString(action.getSubject(), alertEvent);
 			String message = getRenderedString(action.getMessage(), alertEvent);
 
-			try {
-				MmsMessage mmsMessage = new MmsMessage(phoneNumber, subject, message);
-				mmsHttpNotifier.send(mmsMessage);
-			} catch (Exception e) {
-				log.warn("MmsNotificationActionExecutor execute failed", e);
+			Tenant tenant = alertEvent.getTenant();
+			if (tenant != null) {
+				Optional<List<TenantUser>> usersOptional = Optional.ofNullable(tenant.getUsers());
+				mobilePhoneNumbers.addAll(
+					usersOptional.orElse(Collections.emptyList()).stream()
+						.map(TenantUser::getMobilePhoneNumber)
+						.filter(StringUtils::isNotBlank)
+						.collect(Collectors.toList())
+				);
 			}
+
+			if (StringUtils.isNotBlank(action.getPhoneNumbers())) {
+				mobilePhoneNumbers.addAll(
+					Arrays.stream(StringUtils.split(action.getPhoneNumbers(), ","))
+						.map(StringUtils::trim)
+						.filter(StringUtils::isNotBlank)
+						.collect(Collectors.toList())
+				);
+			}
+
+			for (String mobilePhoneNumber : mobilePhoneNumbers) {
+				try {
+					MmsMessage mmsMessage = new MmsMessage(mobilePhoneNumber, subject, message);
+					mmsHttpNotifier.send(mmsMessage);
+				} catch (Exception e) {
+					log.warn("Mms Notification send failed", e);
+				}
+			}
+
 		}
 	}
 

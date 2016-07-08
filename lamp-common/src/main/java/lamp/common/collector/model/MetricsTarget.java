@@ -1,12 +1,14 @@
 package lamp.common.collector.model;
 
-import lamp.common.monitoring.model.Tenant;
-
 import java.util.Map;
 
-public interface MetricsTarget extends Tenant {
+public interface MetricsTarget {
 
+	String getId();
 	String getName();
+
+	String getGroupId();
+	String getArtifactId();
 
 	String getHostname();
 	String getAddress();

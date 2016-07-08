@@ -1,11 +1,20 @@
 package lamp.common.monitoring.model;
 
-public interface Tenant {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-    String getId();
+import java.io.Serializable;
+import java.util.List;
 
-    String getGroupId();
+@Getter
+@Setter
+@ToString
+public class Tenant implements Serializable {
 
-    String getArtifactId();
+    private String id;
+    private String name;
+
+    private List<TenantUser> users;
 
 }

@@ -1,4 +1,4 @@
-package lamp.admin.domain.notification;
+package lamp.admin.domain.alert.model;
 
 import lamp.monitoring.core.alert.model.AlertAction;
 import lombok.Getter;

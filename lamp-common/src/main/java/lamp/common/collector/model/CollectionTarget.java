@@ -1,6 +1,8 @@
 package lamp.common.collector.model;
 
-public interface CollectionTarget {
+import java.io.Serializable;
+
+public interface CollectionTarget extends Serializable {
 
     String getId();
 

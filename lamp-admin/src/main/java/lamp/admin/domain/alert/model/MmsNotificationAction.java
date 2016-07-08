@@ -1,4 +1,4 @@
-package lamp.admin.domain.notification;
+package lamp.admin.domain.alert.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +13,5 @@ public class MmsNotificationAction extends NotificationAction {
 	private String message;
 
 	private String phoneNumbers;
-	private String tenantIds;
-
-
 
 }
