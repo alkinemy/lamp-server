@@ -1,3 +1,4 @@
+/lamp-admin/src/main/resources/db/local/V9_1__Alert_data.sql
 /lamp-admin/src/main/resources/config/application-test.properties
 /lamp-watcher/src/main/resources/config/application-prod.properties
 /h2db

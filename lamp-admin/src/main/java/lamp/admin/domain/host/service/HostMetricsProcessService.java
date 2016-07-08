@@ -13,10 +13,13 @@ import lamp.collector.metrics.exporter.MetricsExporter;
 import lamp.common.collector.model.TargetMetrics;
 import lamp.common.monitoring.model.MonitoringTargetMetrics;
 import lamp.common.utils.CollectionUtils;
-import lamp.monitoring.core.metrics.model.TargetMetricsAlertRule;
-import lamp.monitoring.core.metrics.model.TargetMetricsAlertRuleExpression;
-import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
-import lamp.monitoring.core.metrics.service.TargetMetricsMonitoringProcessor;
+import lamp.monitoring.core.alert.AlertMonitoringProcessor;
+import lamp.monitoring.core.alert.AlertRuleProcessor;
+import lamp.monitoring.core.alert.AlertRuleProvider;
+import lamp.monitoring.core.alert.model.AlertRule;
+import lamp.monitoring.core.metrics.model.SpelTargetMetricsAlertRule;
+import lamp.monitoring.core.metrics.model.SpelTargetMetricsAlertRuleExpression;
+import lamp.monitoring.core.metrics.service.SpelTargetMetricsAlertRuleProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,28 +48,32 @@ public class HostMetricsProcessService {
 	@Autowired
 	private AlertEventService alertEventService;
 
-	private TargetMetricsMonitoringProcessor targetMetricsMonitoringProcessor;
+	private AlertMonitoringProcessor alertMonitoringProcessor;
+
+	private List<AlertRuleProcessor> alertRuleProcessors;
 
 	@PostConstruct
 	public void init() {
-		TargetMetricsAlertRuleProvider targetMetricsAlertRuleProvider = new TargetMetricsAlertRuleProvider() {
-			@Override public List<TargetMetricsAlertRule> getAlertRules() {
-				TargetMetricsAlertRule targetMetricsAlertRule = new TargetMetricsAlertRule();
-				TargetMetricsAlertRuleExpression targetMetricsAlertRuleExpression = new TargetMetricsAlertRuleExpression();
+		AlertRuleProvider alertRuleProvider = new AlertRuleProvider() {
+			@Override public List<AlertRule> getAlertRules() {
+				SpelTargetMetricsAlertRule targetMetricsAlertRule = new SpelTargetMetricsAlertRule();
+				SpelTargetMetricsAlertRuleExpression targetMetricsAlertRuleExpression = new SpelTargetMetricsAlertRuleExpression();
 				targetMetricsAlertRuleExpression.setRuleExpression("#{metrics.threads > 20}");
 				targetMetricsAlertRuleExpression.setValueExpression("#{metrics.threads}");
 				targetMetricsAlertRule.setId("test");
 				targetMetricsAlertRule.setName("Thread Count");
 				targetMetricsAlertRule.setRuleExpression(targetMetricsAlertRuleExpression);
-				targetMetricsAlertRule.setAlertActions(Lists.newArrayList("1"));
-				targetMetricsAlertRule.setUndeterminedActions(Lists.newArrayList("1"));
-				targetMetricsAlertRule.setOkActions(Lists.newArrayList("1"));
-				return Lists.newArrayList(targetMetricsAlertRule);
+				targetMetricsAlertRule.setAlertActions(Lists.newArrayList("10a836e1-a8ac-430f-890f-51490b2785a6"));
+				targetMetricsAlertRule.setUndeterminedActions(Lists.newArrayList("10a836e1-a8ac-430f-890f-51490b2785a6"));
+//				targetMetricsAlertRule.setOkActions(Lists.newArrayList("1"));
+				return Lists.newArrayList(targetMetricsAlertRule);`
 			}
 		};
 
+		alertRuleProcessors = new ArrayList<>();
+		alertRuleProcessors.add(new SpelTargetMetricsAlertRuleProcessor());
 
-		targetMetricsMonitoringProcessor = new TargetMetricsMonitoringProcessor(targetMetricsAlertRuleProvider, alertEventService);
+		alertMonitoringProcessor = new AlertMonitoringProcessor(alertRuleProvider, alertRuleProcessors, alertEventService);
 	}
 
 
@@ -101,7 +108,7 @@ public class HostMetricsProcessService {
 
 	protected void monitoring(MonitoringTargetMetrics targetMetrics) {
 		try {
-			targetMetricsMonitoringProcessor.monitoring(targetMetrics);
+			alertMonitoringProcessor.monitoring(targetMetrics);
 		} catch (Exception e) {
 			log.error("HostAlertRuleCheck failed", e);
 		}

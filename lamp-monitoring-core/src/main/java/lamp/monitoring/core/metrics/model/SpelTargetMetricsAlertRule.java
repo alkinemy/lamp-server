@@ -12,7 +12,8 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 @Getter
 @Setter
-public class TargetMetricsAlertRule extends AbstractAlertRule<MonitoringTargetMetrics, TargetMetricsAlertRuleExpression> {
+public class SpelTargetMetricsAlertRule
+	extends AbstractAlertRule<MonitoringTargetMetrics, SpelTargetMetricsAlertRuleExpression> {
 
 	private static final SpelExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
 

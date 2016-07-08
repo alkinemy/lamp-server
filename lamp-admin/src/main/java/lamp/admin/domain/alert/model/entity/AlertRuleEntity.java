@@ -1,4 +1,4 @@
-package lamp.admin.domain.monitoring.model;
+package lamp.admin.domain.alert.model.entity;
 
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
 import lamp.admin.domain.support.json.JsonUtils;

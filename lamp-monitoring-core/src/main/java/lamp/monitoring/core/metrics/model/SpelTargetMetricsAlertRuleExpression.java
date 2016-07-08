@@ -1,6 +1,7 @@
 package lamp.monitoring.core.metrics.model;
 
 import lamp.common.collector.model.TargetMetrics;
+import lamp.common.utils.StringUtils;
 import lamp.monitoring.core.alert.model.AlertRuleExpression;
 import lamp.monitoring.core.alert.model.AlertState;
 import lamp.monitoring.core.alert.model.AlertStateCode;
@@ -18,7 +19,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 @Getter
 @Setter
 @ToString
-public class TargetMetricsAlertRuleExpression implements AlertRuleExpression<TargetMetrics> {
+public class SpelTargetMetricsAlertRuleExpression implements AlertRuleExpression<TargetMetrics> {
 
 	private static final SpelExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
 	private String ruleExpression;
@@ -30,8 +31,8 @@ public class TargetMetricsAlertRuleExpression implements AlertRuleExpression<Tar
 			String value = getValue(context);
 			return isAlert ? new AlertState(AlertStateCode.ALERT, value) : new AlertState(AlertStateCode.OK, value);
 		} catch (Exception e) {
-			log.error("HostAlertRule evaluate failed", e);
-			return new AlertState(AlertStateCode.UNDETERMINED, AlertStateCode.UNDETERMINED.name());
+			log.warn("SpelTargetMetricsAlertRuleExpression evaluate failed", e);
+			return new AlertState(AlertStateCode.UNDETERMINED, AlertStateCode.UNDETERMINED.name(), e.getMessage());
 		}
 	}
 
@@ -43,11 +44,13 @@ public class TargetMetricsAlertRuleExpression implements AlertRuleExpression<Tar
 	}
 
 	protected String getValue(TargetMetrics context) {
+		if (StringUtils.isBlank(valueExpression)) {
+			return "undefined";
+		}
 		Expression expression = SPEL_EXPRESSION_PARSER.parseExpression(valueExpression, new TemplateParserContext("#{", "}"));
 		StandardEvaluationContext evaluationContext = new StandardEvaluationContext(context);
 		evaluationContext.addPropertyAccessor(new MapAccessor());
 		return expression.getValue(evaluationContext, String.class);
 	}
-
 
 }

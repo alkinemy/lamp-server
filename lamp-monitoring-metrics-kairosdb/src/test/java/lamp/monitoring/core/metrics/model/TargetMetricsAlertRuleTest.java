@@ -12,7 +12,7 @@ public class TargetMetricsAlertRuleTest {
 
 	@Test
 	public void testIsAlertTarget() throws Exception {
-		TargetMetricsAlertRule rule = new TargetMetricsAlertRule();
+		SpelTargetMetricsAlertRule rule = new SpelTargetMetricsAlertRule();
 		rule.setTargetExpression("${id == 'skynet'}");
 
 		MonitoringTargetMetrics target = new MonitoringTargetMetrics();
@@ -23,7 +23,7 @@ public class TargetMetricsAlertRuleTest {
 
 	@Test
 	public void testIsAlertTarget_Tags() throws Exception {
-		TargetMetricsAlertRule rule = new TargetMetricsAlertRule();
+		SpelTargetMetricsAlertRule rule = new SpelTargetMetricsAlertRule();
 		rule.setTargetExpression("${tags[hostName] == 'skynet'}");
 
 		MonitoringTargetMetrics target = new MonitoringTargetMetrics();

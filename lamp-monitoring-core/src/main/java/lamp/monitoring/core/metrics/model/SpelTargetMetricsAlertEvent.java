@@ -9,6 +9,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class TargetMetricsAlertEvent extends AlertEvent<MonitoringTargetMetrics, TargetMetricsAlertRule> {
+public class SpelTargetMetricsAlertEvent extends AlertEvent<MonitoringTargetMetrics, SpelTargetMetricsAlertRule> {
 
 }

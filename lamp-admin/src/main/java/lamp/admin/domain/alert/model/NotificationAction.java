@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public abstract class NotificationAction implements AlertAction {
 
+	private String id;
+	private String name;
 	private long notificationIntervalSeconds = 60;
 
 }

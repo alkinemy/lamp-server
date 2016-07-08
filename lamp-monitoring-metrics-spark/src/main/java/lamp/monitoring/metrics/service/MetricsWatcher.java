@@ -3,14 +3,13 @@ package lamp.alarm.metrics.service;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
-import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
 
 public class MetricsWatcher {
 
-	private TargetMetricsAlertRuleProvider metricsAlertRuleProvider;
+	private SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider;
 	private AlertEventProducer alertEventProducer;
 
-	public MetricsWatcher(TargetMetricsAlertRuleProvider metricsAlertRuleProvider, AlertEventProducer alertEventProducer) {
+	public MetricsWatcher(SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider, AlertEventProducer alertEventProducer) {
 		this.metricsAlertRuleProvider = metricsAlertRuleProvider;
 		this.alertEventProducer = alertEventProducer;
 	}

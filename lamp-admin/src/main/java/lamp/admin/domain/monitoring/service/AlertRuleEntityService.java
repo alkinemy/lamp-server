@@ -1,7 +1,8 @@
 package lamp.admin.domain.monitoring.service;
 
-import lamp.admin.domain.monitoring.model.AlertRuleEntity;
-import lamp.admin.domain.monitoring.repository.AlertRuleEntityRepository;
+
+import lamp.admin.domain.alert.model.entity.AlertRuleEntity;
+import lamp.admin.domain.alert.repository.AlertRuleEntityRepository;
 import lamp.common.utils.assembler.SmartAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

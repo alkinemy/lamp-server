@@ -7,7 +7,6 @@ import lamp.common.utils.ExceptionUtils;
 import lamp.monitoring.core.alert.model.AlertStateCode;
 import lamp.monitoring.core.alert.model.event.AlertEvent;
 import lamp.monitoring.core.alert.service.AlertEventProducer;
-import lamp.monitoring.core.metrics.service.TargetMetricsAlertRuleProvider;
 import lamp.monitoring.core.metrics.service.MetricsMonitoringProcessor;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbAlertRuleExpression;
 import lamp.monitoring.metrics.kairosdb.model.KairosdbMetricsAlertRule;
@@ -24,11 +23,11 @@ import java.util.Map;
 
 public class KairosdbMetricsMonitoringProcessor extends MetricsMonitoringProcessor {
 
-	private TargetMetricsAlertRuleProvider metricsAlertRuleProvider;
+	private SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider;
 	private KairosdbClient kairosdbClient;
 	private AlertEventProducer alertEventProducer;
 
-	public KairosdbMetricsMonitoringProcessor(TargetMetricsAlertRuleProvider metricsAlertRuleProvider,
+	public KairosdbMetricsMonitoringProcessor(SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider,
 											  KairosdbClient kairosdbClient,
 											  AlertEventProducer alertEventProducer) {
 		this.metricsAlertRuleProvider = metricsAlertRuleProvider;
