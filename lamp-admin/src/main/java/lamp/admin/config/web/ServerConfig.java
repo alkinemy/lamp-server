@@ -53,13 +53,13 @@ public class ServerConfig {
 	@Bean
 	@ConditionalOnProperty(name = "lamp.server.mms-notifier.protocol", havingValue = "http")
 	public MmsHttpSender mmsHttpNotifier(ServerProperties serverProperties) {
-		return new MmsHttpSender(serverProperties.getMmsNotifier());
+		return new MmsHttpSender(serverProperties.getMmsSender());
 	}
 
 	@Bean
 	@ConditionalOnProperty(name = "lamp.server.sms-notifier.protocol", havingValue = "http")
 	public SmsHttpSender smsHttpNotifier(ServerProperties serverProperties) {
-		return new SmsHttpSender(serverProperties.getSmsNotifier());
+		return new SmsHttpSender(serverProperties.getSmsSender());
 	}
 
 	@Configuration

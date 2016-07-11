@@ -35,8 +35,8 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 	private long hostMetricsMonitoringInterval = 10 * 1000;
 	private long appInstanceStatusUpdateInterval = 10 * 1000;
 
-	private SmsSenderProperties smsNotifier;
-	private MmsSenderProperties mmsNotifier;
+	private SmsSenderProperties smsSender;
+	private MmsSenderProperties mmsSender;
 
 	@PostConstruct
 	public void init() throws UnknownHostException {
