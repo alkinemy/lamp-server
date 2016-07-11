@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
+<body>
+
+<div layout:fragment="page-level-style">
+	<link th:href="@{/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/assets/global/plugins/jquery-multi-select/css/multi-select.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/assets/global/plugins/select2/css/select2.min.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/assets/global/plugins/select2/css/select2-bootstrap.min.css}" rel="stylesheet" type="text/css" />
+</div>
+
+<div layout:fragment="page-level-plugin">
+	<script th:src="@{/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js}" type="text/javascript"></script>
+	<script th:src="@{/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js}" type="text/javascript"></script>
+	<script th:src="@{/assets/global/plugins/select2/js/select2.full.min.js}" type="text/javascript"></script>
+</div>
+
+<div layout:fragment="page-level-script">
+	<script th:src="@{/assets/global/plugins/jquery-nestable/jquery.nestable.js}" type="text/javascript"></script>
+	<script type="text/javascript">
+		// <![CDATA[
+
+		jQuery(document).ready(function() {
+			$('#alert_action_select').multiSelect();
+			$('#undetermined_action_select').multiSelect();
+			$('#ok_action_select').multiSelect();
+		});
+
+		// ]]>
+	</script>
+</div>
+
+<div class="row" layout:fragment="content-main">
+	<div class="col-md-12">
+		<!-- BEGIN BORDERED TABLE PORTLET-->
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-settings font-dark"></i>
+					<span class="caption-subject font-dark sbold uppercase">Host Alert Rule Form</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form class="form-horizontal" role="form"  th:action="${action} == 'update' ? @{/monitoring/hosts/alert-rules/{id}/update(id=${id})} : @{/monitoring/hosts/alert-rules/create}" th:object="${editForm}" method="post">
+					<div class="form-body">
+						<div class="form-group" th:class="${#fields.hasErrors('name')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{name}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Description</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{description}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<hr />
+						<h4>Rule</h4>
+						<div class="form-group" th:class="${#fields.hasErrors('targetExpression')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">targetExpression</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{targetExpression}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('targetExpression')}" th:errors="*{targetExpression}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('ruleExpression')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">ruleExpression</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{ruleExpression}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('ruleExpression')}" th:errors="*{ruleExpression}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<div class="form-group" th:class="${#fields.hasErrors('valueExpression')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">valueExpression</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{valueExpression}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('valueExpression')}" th:errors="*{valueExpression}"> A block of help text. </span>
+							</div>
+						</div>
+
+						<hr />
+						<h4>Actions</h4>
+						<div class="form-group">
+							<label class="control-label col-md-3">Alert Actions</label>
+							<div class="col-md-9">
+								<select multiple="multiple" class="multi-select" id="alert_action_select" th:field="*{alertActions}">
+									<option th:each="action : ${alertActions}"
+											th:value="${action.id}" th:text="${action.name}">Actions</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Undetermined Actions</label>
+							<div class="col-md-9">
+								<select multiple="multiple" class="multi-select" id="undetermined_action_select" th:field="*{undeterminedActions}">
+									<option th:each="action : ${alertActions}"
+											th:value="${action.id}" th:text="${action.name}">Actions</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Ok Actions</label>
+							<div class="col-md-9">
+								<select multiple="multiple" class="multi-select" id="ok_action_select" th:field="*{okActions}">
+									<option th:each="action : ${alertActions}"
+											th:value="${action.id}" th:text="${action.name}">Actions</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-3 control-label">Alert</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{enabled}" /></span>
+										Enabled </label>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-actions">
+						<div class="row">
+							<div class="col-md-offset-3 col-md-9">
+								<button type="submit" class="btn green">Submit</button>
+								<button type="button" class="btn default">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- END BORDERED TABLE PORTLET-->
+	</div>
+</div>
+
+</body>
+</html>

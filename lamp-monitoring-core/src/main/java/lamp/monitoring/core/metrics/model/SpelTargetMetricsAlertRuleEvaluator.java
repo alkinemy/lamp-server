@@ -1,8 +1,9 @@
 package lamp.monitoring.core.metrics.model;
 
 import lamp.common.collector.model.TargetMetrics;
+import lamp.common.monitoring.model.MonitoringTargetMetrics;
 import lamp.common.utils.StringUtils;
-import lamp.monitoring.core.alert.model.AlertRuleExpression;
+import lamp.monitoring.core.alert.model.AlertRuleEvaluator;
 import lamp.monitoring.core.alert.model.AlertState;
 import lamp.monitoring.core.alert.model.AlertStateCode;
 import lombok.Getter;
@@ -19,16 +20,31 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 @Getter
 @Setter
 @ToString
-public class SpelTargetMetricsAlertRuleExpression implements AlertRuleExpression<TargetMetrics> {
+public class SpelTargetMetricsAlertRuleEvaluator implements AlertRuleEvaluator<SpelTargetMetricsAlertRule, MonitoringTargetMetrics> {
 
 	private static final SpelExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
-	private String ruleExpression;
-	private String valueExpression;
 
-	@Override public AlertState evaluate(TargetMetrics context) {
+	@Override public boolean isAlertTarget(SpelTargetMetricsAlertRule rule, MonitoringTargetMetrics target) {
+		if (!rule.isEnabled()) {
+			return false;
+		}
+
+		String targetExpression = rule.getTargetExpression();
+		if (StringUtils.isBlank(targetExpression)) {
+			return true;
+		}
+
+		Expression expression = SPEL_EXPRESSION_PARSER.parseExpression(targetExpression, new TemplateParserContext("${", "}"));
+		StandardEvaluationContext evaluationContext = new StandardEvaluationContext(target);
+		return expression.getValue(evaluationContext, Boolean.class);
+	}
+
+	@Override public AlertState evaluate(SpelTargetMetricsAlertRule rule, MonitoringTargetMetrics target) {
+		String ruleExpression = rule.getRuleExpression();
+		String valueExpression = rule.getValueExpression();
 		try {
-			boolean isAlert = isAlert(context);
-			String value = getValue(context);
+			boolean isAlert = isAlert(ruleExpression, target);
+			String value = getValue(valueExpression, target);
 			return isAlert ? new AlertState(AlertStateCode.ALERT, value) : new AlertState(AlertStateCode.OK, value);
 		} catch (Exception e) {
 			log.warn("SpelTargetMetricsAlertRuleExpression evaluate failed", e);
@@ -36,14 +52,14 @@ public class SpelTargetMetricsAlertRuleExpression implements AlertRuleExpression
 		}
 	}
 
-	protected boolean isAlert(TargetMetrics context) {
+	protected boolean isAlert(String ruleExpression, TargetMetrics context) {
 		Expression expression = SPEL_EXPRESSION_PARSER.parseExpression(ruleExpression, new TemplateParserContext("#{", "}"));
 		StandardEvaluationContext evaluationContext = new StandardEvaluationContext(context);
 		evaluationContext.addPropertyAccessor(new MapAccessor());
 		return expression.getValue(evaluationContext, Boolean.class);
 	}
 
-	protected String getValue(TargetMetrics context) {
+	protected String getValue(String valueExpression, TargetMetrics context) {
 		if (StringUtils.isBlank(valueExpression)) {
 			return "undefined";
 		}

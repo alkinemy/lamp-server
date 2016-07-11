@@ -2,7 +2,9 @@ package lamp.admin.domain.alert.service;
 
 
 import lamp.admin.domain.alert.MmsNotificationActionExecutor;
+import lamp.admin.domain.alert.SmsNotificationActionExecutor;
 import lamp.admin.domain.alert.model.MmsNotificationAction;
+import lamp.admin.domain.alert.model.SmsNotificationAction;
 import lamp.monitoring.core.alert.AlertActionsExecutor;
 import lamp.monitoring.core.alert.model.AlertAction;
 import lamp.monitoring.core.alert.model.AlertActionContext;
@@ -15,6 +17,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class AlertActionsExecuteService implements AlertActionsExecutor {
+
+	@Autowired(required = false)
+	private SmsNotificationActionExecutor smsNotificationActionExecutor;
 
 	@Autowired(required = false)
 	private MmsNotificationActionExecutor mmsNotificationActionExecutor;
@@ -39,7 +44,9 @@ public class AlertActionsExecuteService implements AlertActionsExecutor {
 
 	public void doAction(AlertActionContext context, AlertAction action) throws Exception {
 		if (action instanceof MmsNotificationAction) {
-			mmsNotificationActionExecutor.execute(context, (MmsNotificationAction) action);
+			mmsNotificationActionExecutor.execute((MmsNotificationAction) action, context);
+		} else if (action instanceof SmsNotificationAction) {
+			smsNotificationActionExecutor.execute((SmsNotificationAction) action, context);
 		} else {
 			log.error("Unsupported AlertAction : {}", action);
 		}

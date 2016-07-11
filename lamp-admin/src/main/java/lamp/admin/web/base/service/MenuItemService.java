@@ -30,6 +30,8 @@ public class MenuItemService {
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
 				subMenuItems.add(MenuItem.of(MONITORING_WATCH_TARGET, "Watch Target", "/monitoring/watch-target", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(MONITORING_HOST_ALERT_RULES, "Host Alert Rules", "/monitoring/hosts/alert-rules", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(MONITORING_ALERT_ACTIONS, "Alert Actions", "/monitoring/alert-actions", "icon-bulb"));
 				menuItems.add(MenuItem.of(MONITORING, "Monitoring", "icon-layers", subMenuItems));
 			}
 

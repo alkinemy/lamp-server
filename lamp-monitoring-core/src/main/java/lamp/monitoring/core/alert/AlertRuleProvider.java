@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface AlertRuleProvider {
 
-	 List<AlertRule> getAlertRules();
+	 List<? extends AlertRule> getAlertRules();
 
 }

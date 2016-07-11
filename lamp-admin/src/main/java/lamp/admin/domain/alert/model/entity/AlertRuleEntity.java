@@ -29,8 +29,9 @@ public class AlertRuleEntity extends AbstractAuditingEntity {
 	private String name;
 	private String description;
 
-	private String type;
+	private boolean enabled;
 
+	private String dataType;
 	private String data;
 
 }

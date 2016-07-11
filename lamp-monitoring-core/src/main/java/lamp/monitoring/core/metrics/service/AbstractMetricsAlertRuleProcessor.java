@@ -10,7 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractMetricsAlertRuleProcessor<R extends AlertRule> implements AlertRuleProcessor<MonitoringTargetMetrics, R> {
 
 	public AlertEvent doProcess(MonitoringTargetMetrics targetMetrics, R alertRule) {
-		if (alertRule.isAlertTarget(targetMetrics)) {
+		AlertRuleEvaluator<R, MonitoringTargetMetrics> alertRuleEvaluator = getAlertRuleEvaluator();
+		if (alertRuleEvaluator.isAlertTarget(alertRule, targetMetrics)) {
 
 			AlertEvent event = newAlertRuleMatchedEvent();
 			event.setTimestamp(targetMetrics.getTimestamp());
@@ -18,10 +19,7 @@ public abstract class AbstractMetricsAlertRuleProcessor<R extends AlertRule> imp
 			event.setRule(alertRule);
 
 			try {
-				AlertRuleExpression expression = alertRule.getRuleExpression();
-				//			event.setTenant(targetHealth);
-
-				AlertState state = expression.evaluate(targetMetrics);
+				AlertState state = alertRuleEvaluator.evaluate(alertRule, targetMetrics);
 				event.setState(state);
 			} catch (Throwable t) {
 				event.setState(new AlertState(AlertStateCode.UNDETERMINED, ExceptionUtils.getStackTrace(t)));
@@ -32,4 +30,6 @@ public abstract class AbstractMetricsAlertRuleProcessor<R extends AlertRule> imp
 	}
 
 	protected abstract AlertEvent newAlertRuleMatchedEvent();
+
+	protected abstract AlertRuleEvaluator<R, MonitoringTargetMetrics> getAlertRuleEvaluator();
 }

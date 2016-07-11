@@ -6,6 +6,6 @@ import lamp.monitoring.core.alert.model.AlertActionContext;
 
 public interface AlertActionExecutor<A extends AlertAction> {
 
-    void execute(AlertActionContext context, A action);
+    void execute(A action, AlertActionContext context);
 
 }

@@ -25,7 +25,7 @@ public class AlertMonitoringProcessor {
 	}
 
 	public void monitoring(MonitoringTargetMetrics targetMetrics) {
-		List<AlertRule> alertRules = alertRuleProvider.getAlertRules();
+		List<? extends AlertRule> alertRules = alertRuleProvider.getAlertRules();
 		for (AlertRule alertRule : alertRules) {
 			for (AlertRuleProcessor alertRuleProcessor : alertRuleProcessors) {
 				try {

@@ -1,5 +1,6 @@
-package lamp.monitoring.core.notify.mms;
+package lamp.monitoring.core.notification.mms;
 
+import lamp.monitoring.core.notification.NotificationSender;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -17,17 +18,17 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import java.io.IOException;
 
 @Slf4j
-public class MmsHttpNotifier {
+public class MmsHttpSender implements NotificationSender<MmsMessage> {
 
 	private static final SpelExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
 
-	private MmsHttpNotifierProperties properties;
+	private MmsSenderProperties properties;
 
-	public MmsHttpNotifier(MmsHttpNotifierProperties properties) {
+	public MmsHttpSender(MmsSenderProperties properties) {
 		this.properties = properties;
 	}
 
-	public boolean send(MmsMessage mmsMessage) throws IOException {
+	public void send(MmsMessage mmsMessage) throws IOException {
 		log.debug("MmsHttpNotifier send : {}", mmsMessage);
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			HttpUriRequest request = null;
@@ -46,7 +47,6 @@ public class MmsHttpNotifier {
 
 			try (CloseableHttpResponse response = httpclient.execute(request)) {
 				int statusCode = response.getStatusLine().getStatusCode();
-				return (statusCode / 100) == 2;
 			}
 		}
 	}

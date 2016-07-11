@@ -20,7 +20,9 @@ public class AlertActionEntity extends AbstractAuditingEntity {
 	private String description;
 
 	private String type;
+	private boolean privated;
 
+	private String dataType;
 	private String data;
 
 }

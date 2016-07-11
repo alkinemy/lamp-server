@@ -1,7 +1,8 @@
 package lamp.admin.config.web;
 
 import lamp.common.utils.StringUtils;
-import lamp.monitoring.core.notify.mms.MmsHttpNotifierProperties;
+import lamp.monitoring.core.notification.mms.MmsSenderProperties;
+import lamp.monitoring.core.notification.mms.SmsSenderProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;
@@ -34,7 +35,8 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 	private long hostMetricsMonitoringInterval = 10 * 1000;
 	private long appInstanceStatusUpdateInterval = 10 * 1000;
 
-	private MmsHttpNotifierProperties mmsNotifier;
+	private SmsSenderProperties smsNotifier;
+	private MmsSenderProperties mmsNotifier;
 
 	@PostConstruct
 	public void init() throws UnknownHostException {

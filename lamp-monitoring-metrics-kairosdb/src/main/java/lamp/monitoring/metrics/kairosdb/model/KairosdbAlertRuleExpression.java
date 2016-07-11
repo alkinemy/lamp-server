@@ -2,7 +2,6 @@ package lamp.monitoring.metrics.kairosdb.model;
 
 import com.google.gson.internal.LazilyParsedNumber;
 import lamp.common.utils.StringUtils;
-import lamp.monitoring.core.alert.model.AlertRuleExpression;
 import lamp.monitoring.core.alert.model.AlertState;
 import lamp.monitoring.core.alert.model.AlertStateCode;
 import lamp.monitoring.core.alert.service.operator.RelationalOperator;

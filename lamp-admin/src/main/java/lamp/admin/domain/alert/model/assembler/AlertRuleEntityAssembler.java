@@ -3,10 +3,13 @@ package lamp.admin.domain.alert.model.assembler;
 import lamp.admin.domain.alert.model.entity.AlertRuleEntity;
 import lamp.admin.domain.base.exception.CannotAssembleException;
 import lamp.admin.domain.support.json.JsonUtils;
+import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import lamp.common.utils.assembler.Populater;
 import lamp.monitoring.core.alert.model.AlertRule;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class AlertRuleEntityAssembler extends AbstractListAssembler<AlertRule, AlertRuleEntity> implements Populater<AlertRule, AlertRuleEntity> {
@@ -14,8 +17,13 @@ public class AlertRuleEntityAssembler extends AbstractListAssembler<AlertRule, A
 	@Override protected AlertRuleEntity doAssemble(AlertRule alertRule) {
 		try {
 			AlertRuleEntity entity = new AlertRuleEntity();
+			if (StringUtils.isEmpty(alertRule.getId())) {
+				alertRule.setId(UUID.randomUUID().toString());
+			}
 			entity.setId(alertRule.getId());
-			entity.setType(alertRule.getClass().getName());
+			entity.setName(alertRule.getName());
+			entity.setDescription(alertRule.getDescription());
+			entity.setDataType(alertRule.getClass().getName());
 			entity.setData(JsonUtils.stringify(alertRule));
 			return entity;
 		} catch (Exception e) {
@@ -24,7 +32,9 @@ public class AlertRuleEntityAssembler extends AbstractListAssembler<AlertRule, A
 	}
 
 	@Override public void populate(AlertRule source, AlertRuleEntity target) {
-		target.setType(source.getClass().getName());
+		target.setName(source.getName());
+		target.setDescription(source.getDescription());
+		target.setDataType(source.getClass().getName());
 		target.setData(JsonUtils.stringify(source));
 	}
 

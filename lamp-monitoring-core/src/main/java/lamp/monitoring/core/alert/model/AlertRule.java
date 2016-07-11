@@ -1,20 +1,26 @@
 package lamp.monitoring.core.alert.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
-public interface AlertRule<T, E extends AlertRuleExpression> {
+@Getter
+@Setter
+@ToString
+public class AlertRule {
 
-    String getId();
-    String getName();
-//    String getType();
+    private String id;
+    private String name;
+    private String description;
 
-    AlertSeverity getSeverity();
+    private AlertSeverity severity = AlertSeverity.WARN;
 
-    List<String> getAlertActions();
-    List<String> getUndeterminedActions();
-    List<String> getOkActions();
+    private List<String> okActions;
+    private List<String> alertActions;
+    private List<String> undeterminedActions;
 
-    boolean isAlertTarget(T target);
-    E getRuleExpression();
+    private boolean enabled;
 
 }

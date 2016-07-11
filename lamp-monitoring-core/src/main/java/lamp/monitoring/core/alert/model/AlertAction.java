@@ -1,7 +1,18 @@
 package lamp.monitoring.core.alert.model;
 
-public interface AlertAction {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-	String getId();
-	String getName();
+@Getter
+@Setter
+@ToString
+public abstract class AlertAction {
+
+	private String id;
+	private String name;
+	private String description;
+
+	private String type;
+
 }

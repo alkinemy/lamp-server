@@ -1,7 +1,6 @@
 package lamp.monitoring.core.health.model;
 
 import lamp.monitoring.core.alert.model.AlertRule;
-import lamp.monitoring.core.alert.model.AlertRuleExpression;
 import lamp.monitoring.core.alert.model.AlertSeverity;
 import lamp.monitoring.core.alert.model.AlertType;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public abstract class HealthAlertRule implements AlertRule {
+public abstract class HealthAlertRule extends AlertRule {
 
 	private String id;
 	private String name;
@@ -23,7 +22,5 @@ public abstract class HealthAlertRule implements AlertRule {
 	private List<String> okActions;
 	private List<String> alertActions;
 	private List<String> undeterminedActions;
-
-	private AlertRuleExpression expression = new HealthAlertRuleExpression();
 
 }

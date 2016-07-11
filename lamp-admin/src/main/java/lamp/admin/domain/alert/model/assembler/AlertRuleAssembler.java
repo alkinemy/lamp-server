@@ -12,7 +12,7 @@ public class AlertRuleAssembler extends AbstractListAssembler<AlertRuleEntity, A
 
 	@Override protected AlertRule doAssemble(AlertRuleEntity entity) {
 		try {
-			String className = entity.getType();
+			String className = entity.getDataType();
 			Class<? extends AlertRule> clazz = (Class<? extends AlertRule>) Class.forName(className);
 			AlertRule alertRule = JsonUtils.parse(entity.getData(), clazz);
 			return alertRule;

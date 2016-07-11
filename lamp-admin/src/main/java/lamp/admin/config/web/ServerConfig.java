@@ -10,7 +10,8 @@ import lamp.admin.web.monitoring.service.AlarmService;
 import lamp.collector.core.config.CollectorCoreConfig;
 import lamp.monitoring.core.health.service.HealthMonitoringProcessor;
 import lamp.monitoring.core.health.service.SimpleHealthMonitoringProcessor;
-import lamp.monitoring.core.notify.mms.MmsHttpNotifier;
+import lamp.monitoring.core.notification.mms.MmsHttpSender;
+import lamp.monitoring.core.notification.mms.SmsHttpSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -50,9 +51,15 @@ public class ServerConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "lamp.server.mms-notifier.enabled", havingValue = "true")
-	public MmsHttpNotifier mmsHttpNotifier(ServerProperties serverProperties) {
-		return new MmsHttpNotifier(serverProperties.getMmsNotifier());
+	@ConditionalOnProperty(name = "lamp.server.mms-notifier.protocol", havingValue = "http")
+	public MmsHttpSender mmsHttpNotifier(ServerProperties serverProperties) {
+		return new MmsHttpSender(serverProperties.getMmsNotifier());
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "lamp.server.sms-notifier.protocol", havingValue = "http")
+	public SmsHttpSender smsHttpNotifier(ServerProperties serverProperties) {
+		return new SmsHttpSender(serverProperties.getSmsNotifier());
 	}
 
 	@Configuration

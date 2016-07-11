@@ -1,6 +1,5 @@
 package lamp.admin.domain.host.service;
 
-import com.google.common.collect.Lists;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.HostStatus;
@@ -9,16 +8,13 @@ import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.host.model.HostStatusCode;
 import lamp.admin.domain.host.model.entity.HostStatusEntity;
 import lamp.admin.domain.monitoring.service.AlertEventService;
+import lamp.admin.web.monitoring.service.HostAlertRuleService;
 import lamp.collector.metrics.exporter.MetricsExporter;
 import lamp.common.collector.model.TargetMetrics;
 import lamp.common.monitoring.model.MonitoringTargetMetrics;
 import lamp.common.utils.CollectionUtils;
 import lamp.monitoring.core.alert.AlertMonitoringProcessor;
 import lamp.monitoring.core.alert.AlertRuleProcessor;
-import lamp.monitoring.core.alert.AlertRuleProvider;
-import lamp.monitoring.core.alert.model.AlertRule;
-import lamp.monitoring.core.metrics.model.SpelTargetMetricsAlertRule;
-import lamp.monitoring.core.metrics.model.SpelTargetMetricsAlertRuleExpression;
 import lamp.monitoring.core.metrics.service.SpelTargetMetricsAlertRuleProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -48,32 +44,18 @@ public class HostMetricsProcessService {
 	@Autowired
 	private AlertEventService alertEventService;
 
-	private AlertMonitoringProcessor alertMonitoringProcessor;
+	@Autowired
+	private HostAlertRuleService hostAlertRuleService;
 
+	private AlertMonitoringProcessor alertMonitoringProcessor;
 	private List<AlertRuleProcessor> alertRuleProcessors;
 
 	@PostConstruct
 	public void init() {
-		AlertRuleProvider alertRuleProvider = new AlertRuleProvider() {
-			@Override public List<AlertRule> getAlertRules() {
-				SpelTargetMetricsAlertRule targetMetricsAlertRule = new SpelTargetMetricsAlertRule();
-				SpelTargetMetricsAlertRuleExpression targetMetricsAlertRuleExpression = new SpelTargetMetricsAlertRuleExpression();
-				targetMetricsAlertRuleExpression.setRuleExpression("#{metrics.threads > 20}");
-				targetMetricsAlertRuleExpression.setValueExpression("#{metrics.threads}");
-				targetMetricsAlertRule.setId("test");
-				targetMetricsAlertRule.setName("Thread Count");
-				targetMetricsAlertRule.setRuleExpression(targetMetricsAlertRuleExpression);
-				targetMetricsAlertRule.setAlertActions(Lists.newArrayList("10a836e1-a8ac-430f-890f-51490b2785a6"));
-				targetMetricsAlertRule.setUndeterminedActions(Lists.newArrayList("10a836e1-a8ac-430f-890f-51490b2785a6"));
-//				targetMetricsAlertRule.setOkActions(Lists.newArrayList("1"));
-				return Lists.newArrayList(targetMetricsAlertRule);
-			}
-		};
-
 		alertRuleProcessors = new ArrayList<>();
 		alertRuleProcessors.add(new SpelTargetMetricsAlertRuleProcessor());
 
-		alertMonitoringProcessor = new AlertMonitoringProcessor(alertRuleProvider, alertRuleProcessors, alertEventService);
+		alertMonitoringProcessor = new AlertMonitoringProcessor(hostAlertRuleService, alertRuleProcessors, alertEventService);
 	}
 
 

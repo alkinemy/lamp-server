@@ -1,4 +1,4 @@
-package lamp.monitoring.core.notify.mms;
+package lamp.monitoring.core.notification.mms;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MmsHttpNotifierProperties {
+public class SmsSenderProperties {
 
 	private String method = "post";
 	private String url;
