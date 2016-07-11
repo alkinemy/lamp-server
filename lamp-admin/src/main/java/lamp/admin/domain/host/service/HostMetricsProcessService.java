@@ -66,7 +66,7 @@ public class HostMetricsProcessService {
 				targetMetricsAlertRule.setAlertActions(Lists.newArrayList("10a836e1-a8ac-430f-890f-51490b2785a6"));
 				targetMetricsAlertRule.setUndeterminedActions(Lists.newArrayList("10a836e1-a8ac-430f-890f-51490b2785a6"));
 //				targetMetricsAlertRule.setOkActions(Lists.newArrayList("1"));
-				return Lists.newArrayList(targetMetricsAlertRule);`
+				return Lists.newArrayList(targetMetricsAlertRule);
 			}
 		};
 
