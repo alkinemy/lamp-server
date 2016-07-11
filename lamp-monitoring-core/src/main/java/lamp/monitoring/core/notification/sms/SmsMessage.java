@@ -1,4 +1,4 @@
-package lamp.monitoring.core.notification.mms;
+package lamp.monitoring.core.notification.sms;
 
 import lamp.monitoring.core.notification.NotificationMessage;
 import lombok.*;

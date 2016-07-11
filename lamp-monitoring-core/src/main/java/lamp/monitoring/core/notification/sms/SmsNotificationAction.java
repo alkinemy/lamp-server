@@ -1,5 +1,6 @@
-package lamp.admin.domain.alert.model;
+package lamp.monitoring.core.notification.sms;
 
+import lamp.monitoring.core.notification.NotificationAction;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

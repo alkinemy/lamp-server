@@ -8,13 +8,11 @@ import lamp.admin.domain.host.service.HostScheduledService;
 import lamp.admin.domain.monitoring.service.AlertEventService;
 import lamp.admin.web.monitoring.service.AlarmService;
 import lamp.collector.core.config.CollectorCoreConfig;
+import lamp.monitoring.core.config.MonitoringCoreConfig;
 import lamp.monitoring.core.health.service.HealthMonitoringProcessor;
 import lamp.monitoring.core.health.service.SimpleHealthMonitoringProcessor;
-import lamp.monitoring.core.notification.mms.MmsHttpSender;
-import lamp.monitoring.core.notification.mms.SmsHttpSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,9 +25,8 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties({ServerProperties.class})
-@Import({ CollectorCoreConfig.class})
+@Import({ CollectorCoreConfig.class, MonitoringCoreConfig.class})
 public class ServerConfig {
-
 
 	@Bean
 	public AgentClient agentClient(ServerProperties serverProperties) {
@@ -48,18 +45,6 @@ public class ServerConfig {
 	@Bean
 	public HealthMonitoringProcessor healthWatcher(AlarmService alarmService, AlertEventService alarmEventService) {
 		return new SimpleHealthMonitoringProcessor(alarmService, alarmEventService);
-	}
-
-	@Bean
-	@ConditionalOnProperty(name = "lamp.server.mms-notifier.protocol", havingValue = "http")
-	public MmsHttpSender mmsHttpNotifier(ServerProperties serverProperties) {
-		return new MmsHttpSender(serverProperties.getMmsSender());
-	}
-
-	@Bean
-	@ConditionalOnProperty(name = "lamp.server.sms-notifier.protocol", havingValue = "http")
-	public SmsHttpSender smsHttpNotifier(ServerProperties serverProperties) {
-		return new SmsHttpSender(serverProperties.getSmsSender());
 	}
 
 	@Configuration

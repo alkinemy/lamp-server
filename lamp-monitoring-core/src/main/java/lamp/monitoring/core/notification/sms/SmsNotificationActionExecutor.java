@@ -1,20 +1,13 @@
-package lamp.admin.domain.alert;
+package lamp.monitoring.core.notification.sms;
 
-import lamp.admin.domain.alert.model.SmsNotificationAction;
 import lamp.monitoring.core.alert.model.AlertActionContext;
 import lamp.monitoring.core.alert.model.AlertEvent;
-import lamp.monitoring.core.notification.mms.SmsHttpSender;
-import lamp.monitoring.core.notification.mms.SmsMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class SmsNotificationActionExecutor extends AbstractSmsNotificationActionExecutor<SmsMessage, SmsNotificationAction> {
 
-	@Autowired(required = false)
 	public SmsNotificationActionExecutor(SmsHttpSender smsHttpSender) {
 		super(smsHttpSender);
 	}

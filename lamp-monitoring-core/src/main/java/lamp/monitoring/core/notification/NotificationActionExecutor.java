@@ -1,6 +1,5 @@
-package lamp.admin.domain.alert;
+package lamp.monitoring.core.notification;
 
-import lamp.admin.domain.alert.model.NotificationAction;
 import lamp.monitoring.core.alert.AlertActionExecutor;
 import lamp.monitoring.core.alert.model.Alert;
 import lamp.monitoring.core.alert.model.AlertActionContext;

@@ -1,4 +1,4 @@
-package lamp.monitoring.core.notification.mms;
+package lamp.monitoring.core.notification.sms;
 
 import lombok.Getter;
 import lombok.Setter;

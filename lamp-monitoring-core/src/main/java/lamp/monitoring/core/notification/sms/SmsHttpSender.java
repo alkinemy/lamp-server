@@ -1,4 +1,4 @@
-package lamp.monitoring.core.notification.mms;
+package lamp.monitoring.core.notification.sms;
 
 import lamp.monitoring.core.notification.NotificationSender;
 import lombok.extern.slf4j.Slf4j;

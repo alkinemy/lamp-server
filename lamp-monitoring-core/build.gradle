@@ -21,6 +21,8 @@ dependencies {
     compile project(':lamp-common-utils')
 
     providedCompile("org.slf4j:slf4j-api:${slf4jVersion}")
-    providedCompile("org.springframework:spring-context:4.2.4.RELEASE")
-    providedCompile("org.springframework:spring-expression:4.2.4.RELEASE")
+
+    compile("org.springframework.boot:spring-boot:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
 }
