@@ -7,11 +7,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class HealthCheck {
+public class MetricsEndpoint {
 
-	private String protocol;
-	private String path;
+	private EndpointProtocol protocol;
+	private String host;
 	private int port;
+
+	private String path;
 
 	private int gracePeriodSeconds;
 	private int intervalSeconds;

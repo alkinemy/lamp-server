@@ -3,7 +3,7 @@ package lamp.admin.domain.agent.service;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.app.base.AppInstanceStatus;
 import lamp.admin.core.app.base.AppInstanceStatusResult;
-import lamp.admin.core.app.base.HealthCheck;
+import lamp.admin.core.app.base.HealthEndpoint;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.app.base.service.AppInstanceService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,14 +55,14 @@ public class AgentAppInstanceHealthCheckService {
 
 	protected void healthCheck(List<AppInstance> appInstances, Map<String, AppInstanceStatusResult> appInstanceStatusMap) {
 		for (AppInstance appInstance : appInstances) {
-			HealthCheck healthCheck = appInstance.getHealthCheck();
-			if (healthCheck == null) {
+			HealthEndpoint healthEndpoint = appInstance.getHealthEndpoint();
+			if (healthEndpoint == null) {
 				AppInstanceStatusResult statusResult =
 					Optional.ofNullable(appInstanceStatusMap.get(appInstance.getId()))
 						.orElse(new AppInstanceStatusResult(AppInstanceStatus.UNKNOWN, "Not managed AppInstance"));
 				appInstanceService.updateStatus(appInstance.getId(), statusResult);
 			} else {
-				AppInstanceStatusResult statusResult = healthChecker.getStatusResult(appInstance, healthCheck);
+				AppInstanceStatusResult statusResult = healthChecker.getStatusResult(appInstance, healthEndpoint);
 				appInstanceService.updateStatus(appInstance.getId(), statusResult);
 			}
 		}

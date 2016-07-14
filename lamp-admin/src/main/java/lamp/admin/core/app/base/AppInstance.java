@@ -22,9 +22,13 @@ public class AppInstance {
 
 	private boolean monitored;
 
+	private HealthEndpoint healthEndpoint;
+	private MetricsEndpoint metricsEndpoint;
+
 	//
 	private App app;
 	private Host host;
-	private HealthCheck healthCheck;
+
+
 
 }

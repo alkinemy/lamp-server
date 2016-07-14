@@ -2,7 +2,7 @@ package lamp.alarm.metrics.service;
 
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
-import lamp.monitoring.core.alert.service.AlertEventProducer;
+import lamp.monitoring.core.alert.AlertEventProducer;
 
 public class MetricsWatcher {
 
