@@ -1,13 +1,13 @@
 package lamp.collector.core.config.export;
 
 import lamp.collector.core.CollectorConstants;
+import lamp.collector.core.metrics.handler.exporter.TargetMetricsExporter;
+import lamp.collector.core.metrics.handler.exporter.kafka.TargetMetricsKafkaExporter;
+import lamp.collector.core.metrics.handler.exporter.kairosdb.TargetMetricsKairosdbExporter;
+import lamp.collector.core.metrics.handler.exporter.slf4j.Slf4jTargetMetricsExporter;
 import lamp.collector.health.exporter.HealthExporter;
 import lamp.collector.health.exporter.kafka.KafkaHealthExporter;
 import lamp.collector.health.exporter.slf4j.Slf4jHealthExporter;
-import lamp.collector.metrics.exporter.TargetMetricsExporter;
-import lamp.collector.metrics.exporter.kafka.KafkaMetricsExporter;
-import lamp.collector.metrics.exporter.kairosdb.KairosdbMetricsExporter;
-import lamp.collector.metrics.exporter.slf4j.Slf4jTargetMetricsExporter;
 import lamp.common.event.EventPublisher;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,22 +46,22 @@ public class ExporterConfig {
 
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_METRICS_KAFKA_PREFIX + ".enabled", havingValue = "true")
-	@EnableConfigurationProperties({ KafkaMetricsExporterProperties.class})
-	public static class KafkaMetricsExportConfig {
+	@EnableConfigurationProperties({ TargetMetricsKafkaExporterProperties.class})
+	public static class TargetMetricsKafkaExportConfig {
 		@Bean
-		public KafkaMetricsExporter kafkaMetricsExporter(EventPublisher eventPublisher, KafkaMetricsExporterProperties properties) {
-			return new KafkaMetricsExporter(eventPublisher, properties);
+		public TargetMetricsKafkaExporter targetMetricsKafkaExporter(TargetMetricsKafkaExporterProperties properties) {
+			return new TargetMetricsKafkaExporter(properties);
 		}
 	}
 
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_METRICS_KAIROSDB_PREFIX + ".enabled", havingValue = "true")
-	@EnableConfigurationProperties({ KairosdbMetricsExporterProperties.class})
-	public static class KairosdbMetricsExportConfig {
+	@EnableConfigurationProperties({ TargetMetricsKairosdbExporterProperties.class})
+	public static class TargetMetricsKairosdbExportConfig {
 
 		@Bean
-		public KairosdbMetricsExporter kairosdbMetricsExporter(EventPublisher eventPublisher, KairosdbMetricsExporterProperties properties) throws Exception {
-			return new KairosdbMetricsExporter(eventPublisher, properties);
+		public TargetMetricsKairosdbExporter targetMetricsKairosdbExporter(TargetMetricsKairosdbExporterProperties properties) throws Exception {
+			return new TargetMetricsKairosdbExporter(properties);
 		}
 	}
 

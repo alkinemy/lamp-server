@@ -1,8 +1,8 @@
 package lamp.admin.web.monitoring.service;
 
 import lamp.admin.domain.agent.service.TargetServerService;
-import lamp.collector.core.service.HealthTargetService;
-import lamp.collector.core.service.MetricsTargetService;
+import lamp.collector.service.HealthTargetService;
+import lamp.collector.service.MetricsTargetService;
 import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.MetricsTarget;
 import lamp.common.utils.BooleanUtils;

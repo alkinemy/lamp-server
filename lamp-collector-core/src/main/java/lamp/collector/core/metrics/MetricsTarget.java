@@ -1,4 +1,4 @@
-package lamp.collector.health;
+package lamp.collector.core.metrics;
 
 import lamp.collector.core.base.Endpoint;
 import lamp.common.collector.model.CollectionTarget;
@@ -11,7 +11,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class HealthTarget implements CollectionTarget {
+public class MetricsTarget implements CollectionTarget {
 
 	private String id;
 

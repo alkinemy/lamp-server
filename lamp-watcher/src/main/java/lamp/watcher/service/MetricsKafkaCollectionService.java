@@ -2,7 +2,7 @@ package lamp.watcher.service;
 
 import lamp.collector.core.config.CollectionMetricsKafkaProperties;
 import lamp.collector.core.model.MetricsAndTags;
-import lamp.collector.core.service.metrics.MetricsProcessorService;
+import lamp.collector.service.metrics.MetricsProcessorService;
 import lamp.common.collector.model.TargetMetrics;
 import lamp.common.utils.StringUtils;
 import lamp.support.kafka.consumer.KafkaConsumer;

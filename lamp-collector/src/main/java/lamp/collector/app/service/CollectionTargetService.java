@@ -1,8 +1,8 @@
 package lamp.collector.app.service;
 
 import lamp.collector.app.repository.CollectionTargetRepository;
-import lamp.collector.core.service.HealthTargetService;
-import lamp.collector.core.service.MetricsTargetService;
+import lamp.collector.service.HealthTargetService;
+import lamp.collector.service.MetricsTargetService;
 import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.MetricsTarget;
 import org.springframework.beans.factory.annotation.Autowired;

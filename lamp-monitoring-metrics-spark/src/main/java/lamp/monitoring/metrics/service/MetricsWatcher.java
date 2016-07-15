@@ -13,7 +13,7 @@ public class MetricsWatcher {
 //	}
 //
 //
-//	public void process(MetricsTarget metricsTarget, TargetMetrics targetMetrics, Throwable t) {
+//	public void handle(MetricsTarget metricsTarget, TargetMetrics targetMetrics, Throwable t) {
 //		if (targetMetrics == null) {
 //			targetMetrics = new TargetMetrics();
 //			targetMetrics.setId(metricsTarget.getId());

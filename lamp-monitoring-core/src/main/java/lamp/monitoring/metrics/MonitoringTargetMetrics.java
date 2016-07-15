@@ -1,7 +1,7 @@
 package lamp.monitoring.metrics;
 
 
-import lamp.collector.metrics.TargetMetrics;
+import lamp.collector.core.metrics.TargetMetrics;
 import lamp.monitoring.core.MonitoringTarget;
 import lombok.*;
 

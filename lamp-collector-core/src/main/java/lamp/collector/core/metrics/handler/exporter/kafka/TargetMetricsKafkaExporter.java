@@ -1,33 +1,25 @@
-package lamp.collector.health.exporter.kafka;
+package lamp.collector.core.metrics.handler.exporter.kafka;
 
-import lamp.collector.core.base.event.EventName;
-import lamp.common.event.Event;
-import lamp.common.event.EventLevel;
-import lamp.common.event.EventPublisher;
+import lamp.collector.core.metrics.TargetMetrics;
+import lamp.collector.core.metrics.handler.exporter.AbstractTargetMetricsExporter;
 import lamp.support.kafka.KafkaProducerProperties;
 import lamp.support.kafka.serialization.JsonSerializer;
-import lamp.collector.health.exporter.HealthExporter;
-import lamp.common.collector.model.TargetHealth;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-import javax.annotation.PreDestroy;
+import java.io.Closeable;
 import java.util.Properties;
 
 @Slf4j
-public class KafkaHealthExporter extends HealthExporter {
+public class TargetMetricsKafkaExporter extends AbstractTargetMetricsExporter implements Closeable {
 
-	private EventPublisher eventPublisher;
-
-	private Producer<String, TargetHealth> producer;
+	private Producer<String, TargetMetrics> producer;
 	private String topic;
 
-	public KafkaHealthExporter(EventPublisher eventPublisher, KafkaProducerProperties kafkaProperties) {
-		this.eventPublisher = eventPublisher;
-
+	public TargetMetricsKafkaExporter(KafkaProducerProperties kafkaProperties) {
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
 		props.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProperties.getClientId());
@@ -44,20 +36,20 @@ public class KafkaHealthExporter extends HealthExporter {
 
 
 	@Override
-	public void export(TargetHealth health) {
-		log.debug("Kafka Health Export : {}", health);
+	public void doHandle(TargetMetrics targetMetrics) {
+		log.debug("Kafka Metrics Export : {}", targetMetrics);
 
-		String key = new StringBuilder().append(health.getId()).append('-').append(health.getTimestamp()).toString();
+		String key = new StringBuilder().append(targetMetrics.getId()).append('-').append(targetMetrics.getTimestamp()).toString();
 
-		ProducerRecord<String, TargetHealth> data = new ProducerRecord(topic, key, health);
+		ProducerRecord<String, TargetMetrics> data = new ProducerRecord(topic, key, targetMetrics);
 		producer.send(data, (metadata, exception) -> {
 			if (exception != null) {
-				eventPublisher.publish(new Event(EventLevel.WARN, EventName.HEALTH_EXPORT_TO_KAFKA_FAILED, exception, health));
+				handleException(targetMetrics, exception, metadata);
 			}
 		});
 	}
 
-	@PreDestroy
+	@Override
 	public void close() {
 		if (producer != null) {
 			producer.close();

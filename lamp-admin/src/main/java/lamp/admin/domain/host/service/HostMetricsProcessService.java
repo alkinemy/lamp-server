@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
-import lamp.collector.core.Endpoint;
-import lamp.collector.metrics.exporter.TargetMetricsExporter;
-import lamp.collector.metrics.processor.TargetMetricsProcessor;
+import lamp.collector.core.base.Endpoint;
+import lamp.collector.core.metrics.handler.TargetMetricsHandler;
+import lamp.collector.core.metrics.handler.exporter.TargetMetricsExporter;
+import lamp.collector.core.metrics.processor.MetricsTargetProcessor;
+import lamp.collector.core.metrics.processor.TargetMetricsProcessor;
 import lamp.common.utils.CollectionUtils;
 import lamp.monitoring.metrics.MonitoringMetricsTarget;
 import lamp.monitoring.metrics.MonitoringTargetMetrics;
@@ -30,26 +32,28 @@ public class HostMetricsProcessService {
 	private AgentService agentService;
 
 	@Autowired
-	private HostMetricsAlertProcessor hostMetricsAlertProcessor;
+	private HostMetricsAlertHandler hostMetricsAlertProcessor;
 
 	@Autowired
-	private HostStatusUpdateProcessor hostStatusUpdateProcessor;
+	private HostStatusUpdateHandler hostStatusUpdateProcessor;
 
 	@Autowired(required = false)
 	private List<TargetMetricsExporter> metricsExporters;
 
-	private MonitoringTargetMetricsHttpLoader monitoringTargetMetricsHttpLoader;
-
-	private List<TargetMetricsProcessor> targetMetricsProcessors;
+	private MetricsTargetProcessor<MonitoringMetricsTarget, MonitoringTargetMetrics> metricsTargetProcessor;
 
 	@PostConstruct
 	public void init() {
-		monitoringTargetMetricsHttpLoader = new MonitoringTargetMetricsHttpLoader();
+		MonitoringTargetMetricsHttpLoader monitoringTargetMetricsHttpLoader = new MonitoringTargetMetricsHttpLoader();
 
-		targetMetricsProcessors = Lists.newArrayList(hostMetricsAlertProcessor, hostStatusUpdateProcessor);
+		List<TargetMetricsHandler> targetMetricsHandlers = Lists.newArrayList(hostMetricsAlertProcessor, hostStatusUpdateProcessor);
 		if (CollectionUtils.isNotEmpty(metricsExporters)) {
-			targetMetricsProcessors.addAll(metricsExporters);
+			targetMetricsHandlers.addAll(metricsExporters);
 		}
+
+		TargetMetricsProcessor targetMetricsProcessor = new TargetMetricsProcessor(targetMetricsHandlers);
+
+		metricsTargetProcessor = new MetricsTargetProcessor<>(monitoringTargetMetricsHttpLoader, targetMetricsProcessor);
 	}
 
 
@@ -57,14 +61,11 @@ public class HostMetricsProcessService {
 	public void processMetrics(Host host) {
 		Optional<Agent> agentOptional = agentService.getAgentOptional(host.getId());
 
-		MonitoringTargetMetrics targetMetrics = getTargetMetrics(host, agentOptional.orElse(null));
-
-		targetMetricsProcessors.stream().forEach(targetMetricsProcessor -> targetMetricsProcessor.process(targetMetrics));
-
+		MonitoringMetricsTarget target = getMetricsTarget(host, agentOptional.orElse(null));
+		metricsTargetProcessor.process(target);
 	}
 
-
-	protected MonitoringTargetMetrics getTargetMetrics(Host host, Agent agent) {
+	protected MonitoringMetricsTarget getMetricsTarget(Host host, Agent agent) {
 		Map<String, String> tags = new LinkedHashMap<>();
 		tags.put("targetType", "host");
 		tags.put("hostId", host.getId());
@@ -89,12 +90,7 @@ public class HostMetricsProcessService {
 		target.setTags(tags);
 		target.setTenantId(host.getTenantId());
 
-		try {
-			return monitoringTargetMetricsHttpLoader.getMetrics(target);
-		} catch (Exception e) {
-			log.error("Host metrics load failed", e);
-			return new MonitoringTargetMetrics(target, e);
-		}
+		return target;
 	}
 
 
