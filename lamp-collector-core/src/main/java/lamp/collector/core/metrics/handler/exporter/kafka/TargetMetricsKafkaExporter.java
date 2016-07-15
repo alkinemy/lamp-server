@@ -37,13 +37,14 @@ public class TargetMetricsKafkaExporter extends AbstractTargetMetricsExporter im
 
 	@Override
 	public void doHandle(TargetMetrics targetMetrics) {
-		log.debug("Kafka Metrics Export : {}", targetMetrics);
+		log.debug("TargetMetrics Kafka Export : {}", targetMetrics);
 
 		String key = new StringBuilder().append(targetMetrics.getId()).append('-').append(targetMetrics.getTimestamp()).toString();
 
 		ProducerRecord<String, TargetMetrics> data = new ProducerRecord(topic, key, targetMetrics);
 		producer.send(data, (metadata, exception) -> {
 			if (exception != null) {
+				log.warn("TargetMetrics Kafka Export Failed", exception);
 				handleException(targetMetrics, exception, metadata);
 			}
 		});

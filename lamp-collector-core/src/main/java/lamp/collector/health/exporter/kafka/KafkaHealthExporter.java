@@ -52,6 +52,7 @@ public class KafkaHealthExporter extends HealthExporter {
 		ProducerRecord<String, TargetHealth> data = new ProducerRecord(topic, key, health);
 		producer.send(data, (metadata, exception) -> {
 			if (exception != null) {
+				log.warn("Kafka Health Export Failed", exception);
 				eventPublisher.publish(new Event(EventLevel.WARN, EventName.HEALTH_EXPORT_TO_KAFKA_FAILED, exception, health));
 			}
 		});
