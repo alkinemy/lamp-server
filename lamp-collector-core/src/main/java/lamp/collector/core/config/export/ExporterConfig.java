@@ -4,10 +4,10 @@ import lamp.collector.core.CollectorConstants;
 import lamp.collector.health.exporter.HealthExporter;
 import lamp.collector.health.exporter.kafka.KafkaHealthExporter;
 import lamp.collector.health.exporter.slf4j.Slf4jHealthExporter;
-import lamp.collector.metrics.exporter.MetricsExporter;
+import lamp.collector.metrics.exporter.TargetMetricsExporter;
 import lamp.collector.metrics.exporter.kafka.KafkaMetricsExporter;
 import lamp.collector.metrics.exporter.kairosdb.KairosdbMetricsExporter;
-import lamp.collector.metrics.exporter.slf4j.Slf4jMetricsExporter;
+import lamp.collector.metrics.exporter.slf4j.Slf4jTargetMetricsExporter;
 import lamp.common.event.EventPublisher;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -66,9 +66,9 @@ public class ExporterConfig {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(MetricsExporter.class)
-	public MetricsExporter metricsExporter() {
-		return new Slf4jMetricsExporter("metrics");
+	@ConditionalOnMissingBean(TargetMetricsExporter.class)
+	public TargetMetricsExporter metricsExporter() {
+		return new Slf4jTargetMetricsExporter("metrics");
 	}
 
 }

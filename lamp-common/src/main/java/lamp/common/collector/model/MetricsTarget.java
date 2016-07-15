@@ -2,6 +2,7 @@ package lamp.common.collector.model;
 
 import java.util.Map;
 
+@Deprecated
 public interface MetricsTarget {
 
 	String getId();

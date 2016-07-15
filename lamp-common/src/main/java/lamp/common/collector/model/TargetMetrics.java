@@ -9,6 +9,7 @@ import java.util.Map;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class TargetMetrics implements CollectionTarget {
 
 	private long timestamp;

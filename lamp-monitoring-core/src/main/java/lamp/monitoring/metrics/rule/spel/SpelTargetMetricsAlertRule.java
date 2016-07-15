@@ -1,4 +1,4 @@
-package lamp.monitoring.core.metrics.model;
+package lamp.monitoring.metrics.rule.spel;
 
 import lamp.monitoring.core.alert.model.AlertRule;
 import lombok.Getter;

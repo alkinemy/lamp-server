@@ -6,6 +6,7 @@ import lamp.common.collector.model.TargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Deprecated
 public abstract class MetricsExporter implements MetricsProcessor {
 
 	@Override

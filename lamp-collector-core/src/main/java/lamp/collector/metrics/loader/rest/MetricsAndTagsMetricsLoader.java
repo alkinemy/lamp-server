@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Deprecated
 public class MetricsAndTagsMetricsLoader implements TargetMetricsListLoader {
 
 	private final RestTemplate restTemplate;

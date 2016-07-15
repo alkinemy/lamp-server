@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @Slf4j
+@Deprecated
 public class SpringBootMetricsLoader extends RestTemplateMetricsLoader {
 
 	private String[] memoryMetricNames = {"mem", "mem.free",

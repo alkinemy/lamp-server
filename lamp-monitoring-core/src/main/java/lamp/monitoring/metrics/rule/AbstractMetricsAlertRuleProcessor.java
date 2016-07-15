@@ -1,4 +1,4 @@
-package lamp.monitoring.core.metrics.service;
+package lamp.monitoring.metrics.rule;
 
 import lamp.common.monitoring.model.MonitoringTargetMetrics;
 import lamp.common.utils.ExceptionUtils;

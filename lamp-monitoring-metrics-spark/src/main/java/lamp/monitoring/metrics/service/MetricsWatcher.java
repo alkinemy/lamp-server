@@ -1,29 +1,27 @@
-package lamp.alarm.metrics.service;
+package lamp.monitoring.metrics.service;
 
-import lamp.common.collector.model.MetricsTarget;
 import lamp.common.collector.model.TargetMetrics;
-import lamp.monitoring.core.alert.AlertEventProducer;
 
 public class MetricsWatcher {
 
-	private SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider;
-	private AlertEventProducer alertEventProducer;
-
-	public MetricsWatcher(SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider, AlertEventProducer alertEventProducer) {
-		this.metricsAlertRuleProvider = metricsAlertRuleProvider;
-		this.alertEventProducer = alertEventProducer;
-	}
-
-
-	public void process(MetricsTarget metricsTarget, TargetMetrics targetMetrics, Throwable t) {
-		if (targetMetrics == null) {
-			targetMetrics = new TargetMetrics();
-			targetMetrics.setId(metricsTarget.getId());
-			targetMetrics.setName(metricsTarget.getName());
-		}
-
-		watch(targetMetrics);
-	}
+//	private SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider;
+//	private AlertEventProducer alertEventProducer;
+//
+//	public MetricsWatcher(SpelTargetMetricsAlertRuleProvider metricsAlertRuleProvider, AlertEventProducer alertEventProducer) {
+//		this.metricsAlertRuleProvider = metricsAlertRuleProvider;
+//		this.alertEventProducer = alertEventProducer;
+//	}
+//
+//
+//	public void process(MetricsTarget metricsTarget, TargetMetrics targetMetrics, Throwable t) {
+//		if (targetMetrics == null) {
+//			targetMetrics = new TargetMetrics();
+//			targetMetrics.setId(metricsTarget.getId());
+//			targetMetrics.setName(metricsTarget.getName());
+//		}
+//
+//		watch(targetMetrics);
+//	}
 
 	protected void watch(TargetMetrics targetMetrics) {
 //		Date stateTime = new Date();

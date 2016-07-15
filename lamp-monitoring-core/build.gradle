@@ -17,8 +17,8 @@ jar {
 }
 
 dependencies {
-    compile project(':lamp-common')
     compile project(':lamp-common-utils')
+    compile project(':lamp-collector-core')
 
     providedCompile("org.slf4j:slf4j-api:${slf4jVersion}")
 

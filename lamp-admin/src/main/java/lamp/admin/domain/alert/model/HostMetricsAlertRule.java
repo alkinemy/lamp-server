@@ -1,6 +1,6 @@
 package lamp.admin.domain.alert.model;
 
-import lamp.monitoring.core.metrics.model.SpelTargetMetricsAlertRule;
+import lamp.monitoring.metrics.rule.spel.SpelTargetMetricsAlertRule;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

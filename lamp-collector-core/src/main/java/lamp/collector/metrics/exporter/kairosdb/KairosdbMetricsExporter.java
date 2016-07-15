@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.util.Map;
 
 @Slf4j
+@Deprecated
 public class KairosdbMetricsExporter extends MetricsExporter {
 
 	private EventPublisher eventPublisher;

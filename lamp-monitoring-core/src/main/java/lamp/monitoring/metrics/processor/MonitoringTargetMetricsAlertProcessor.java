@@ -1,30 +1,32 @@
-package lamp.monitoring.core.alert;
+package lamp.monitoring.metrics.processor;
 
-import lamp.common.monitoring.model.MonitoringTargetMetrics;
+import lamp.monitoring.core.alert.AlertEventProducer;
+import lamp.monitoring.core.alert.AlertRuleProcessor;
+import lamp.monitoring.core.alert.AlertRuleProvider;
 import lamp.monitoring.core.alert.model.AlertEvent;
 import lamp.monitoring.core.alert.model.AlertRule;
+import lamp.monitoring.metrics.MonitoringTargetMetrics;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Slf4j
-public class AlertMonitoringProcessor {
+public class MonitoringTargetMetricsAlertProcessor implements MonitoringTargetMetricsProcessor {
 
 	private final AlertRuleProvider alertRuleProvider;
-
 	private final List<AlertRuleProcessor> alertRuleProcessors;
+	private final AlertEventProducer alertEventProducer;
 
-	private AlertEventProducer alertEventProducer;
-
-	public AlertMonitoringProcessor(AlertRuleProvider alertRuleProvider,
-									List<AlertRuleProcessor> alertRuleProcessors,
-									AlertEventProducer alertEventProducer) {
+	public MonitoringTargetMetricsAlertProcessor(AlertRuleProvider alertRuleProvider,
+												 List<AlertRuleProcessor> alertRuleProcessors,
+												 AlertEventProducer alertEventProducer) {
 		this.alertRuleProvider = alertRuleProvider;
 		this.alertRuleProcessors = alertRuleProcessors;
 		this.alertEventProducer = alertEventProducer;
 	}
 
-	public void monitoring(MonitoringTargetMetrics targetMetrics) {
+	@Override
+	public void process(MonitoringTargetMetrics targetMetrics) {
 		List<? extends AlertRule> alertRules = alertRuleProvider.getAlertRules();
 		for (AlertRule alertRule : alertRules) {
 			for (AlertRuleProcessor alertRuleProcessor : alertRuleProcessors) {
@@ -41,6 +43,6 @@ public class AlertMonitoringProcessor {
 			}
 		}
 
-
 	}
+
 }

@@ -1,6 +1,7 @@
 package lamp.admin.domain.host.service;
 
 
+import lamp.admin.core.host.HostStatus;
 import lamp.admin.domain.host.model.entity.HostStatusEntity;
 import lamp.admin.domain.host.repository.HostStatusEntityRepository;
 import org.springframework.beans.BeanUtils;
@@ -15,9 +16,9 @@ public class HostStatusEntityService {
 	private HostStatusEntityRepository hostStatusEntityRepository;
 
 	@Transactional
-	public void update(HostStatusEntity hostStatusEntity) {
-		HostStatusEntity saved = hostStatusEntityRepository.findOne(hostStatusEntity.getId());
-		BeanUtils.copyProperties(hostStatusEntity, saved, "id");
+	public void update(String id, HostStatus hostStatus) {
+		HostStatusEntity saved = hostStatusEntityRepository.findOne(id);
+		BeanUtils.copyProperties(hostStatus, saved, "id");
 	}
 
 }

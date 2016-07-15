@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class Endpoint {
 
-    private EndpointProtocol protocol;
+    private String protocol;
     private String address;
     private int port;
 
@@ -18,6 +18,7 @@ public class Endpoint {
     private int gracePeriodSeconds;
     private int intervalSeconds;
     private int maxConsecutiveFailures;
+
     private int timeoutSeconds;
 
 }

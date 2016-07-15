@@ -1,4 +1,4 @@
-package lamp.monitoring.core.metrics.model;
+package lamp.monitoring.metrics.rule.spel;
 
 import lamp.common.collector.model.TargetMetrics;
 import lamp.common.monitoring.model.MonitoringTargetMetrics;
