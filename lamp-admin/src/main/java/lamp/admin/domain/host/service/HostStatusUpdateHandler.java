@@ -2,8 +2,8 @@ package lamp.admin.domain.host.service;
 
 import lamp.admin.core.host.HostStatus;
 import lamp.admin.domain.host.model.HostStatusCode;
-import lamp.monitoring.metrics.MonitoringTargetMetrics;
-import lamp.monitoring.metrics.processor.MonitoringTargetMetricsHandler;
+import lamp.monitoring.core.metrics.MonitoringTargetMetrics;
+import lamp.monitoring.core.metrics.handler.MonitoringTargetMetricsHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

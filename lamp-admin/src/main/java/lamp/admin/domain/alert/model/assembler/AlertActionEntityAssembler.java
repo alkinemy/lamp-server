@@ -6,7 +6,7 @@ import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import lamp.common.utils.assembler.Populater;
-import lamp.monitoring.core.alert.model.AlertAction;
+import lamp.monitoring.core.base.alert.model.AlertAction;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

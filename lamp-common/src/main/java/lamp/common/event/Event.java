@@ -1,7 +1,5 @@
 package lamp.common.event;
 
-import lamp.common.collector.model.CollectionTarget;
-import lamp.common.monitoring.model.Tenant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +19,7 @@ public class Event {
 	private String name;
 	private String message;
 
-	private CollectionTarget target;
+	private EventTarget target;
 
 	private Map<String, String> details;
 
@@ -29,7 +27,7 @@ public class Event {
 		this(level, name, e, null);
 	}
 
-	public Event(EventLevel level, String name, Throwable e, CollectionTarget target) {
+	public Event(EventLevel level, String name, Throwable e, EventTarget target) {
 		this.time = LocalDateTime.now();
 		this.level = level;
 		this.name = name;

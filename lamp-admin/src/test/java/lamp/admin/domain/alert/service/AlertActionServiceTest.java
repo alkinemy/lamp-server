@@ -1,7 +1,7 @@
 package lamp.admin.domain.alert.service;
 
 import lamp.admin.LampAdmin;
-import lamp.monitoring.core.notification.mms.MmsNotificationAction;
+import lamp.monitoring.core.base.action.notification.mms.MmsNotificationAction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

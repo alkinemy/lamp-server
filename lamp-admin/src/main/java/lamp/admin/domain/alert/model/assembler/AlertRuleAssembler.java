@@ -4,7 +4,7 @@ import lamp.admin.domain.alert.model.entity.AlertRuleEntity;
 import lamp.admin.domain.base.exception.CannotAssembleException;
 import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.assembler.AbstractListAssembler;
-import lamp.monitoring.core.alert.model.AlertRule;
+import lamp.monitoring.core.base.alert.model.AlertRule;
 import org.springframework.stereotype.Component;
 
 @Component

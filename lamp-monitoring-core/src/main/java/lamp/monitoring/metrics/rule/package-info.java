@@ -1,1 +1,0 @@
-package lamp.monitoring.metrics.rule;

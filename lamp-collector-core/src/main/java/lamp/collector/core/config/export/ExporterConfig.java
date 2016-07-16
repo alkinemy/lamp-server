@@ -1,14 +1,13 @@
 package lamp.collector.core.config.export;
 
 import lamp.collector.core.CollectorConstants;
+import lamp.collector.core.health.handler.exporter.TargetHealthExporter;
+import lamp.collector.core.health.handler.exporter.kafka.TargetHealthKafkaExporter;
+import lamp.collector.core.health.handler.exporter.slf4j.Slf4JTargetHealthExporter;
 import lamp.collector.core.metrics.handler.exporter.TargetMetricsExporter;
 import lamp.collector.core.metrics.handler.exporter.kafka.TargetMetricsKafkaExporter;
 import lamp.collector.core.metrics.handler.exporter.kairosdb.TargetMetricsKairosdbExporter;
 import lamp.collector.core.metrics.handler.exporter.slf4j.Slf4jTargetMetricsExporter;
-import lamp.collector.health.exporter.HealthExporter;
-import lamp.collector.health.exporter.kafka.KafkaHealthExporter;
-import lamp.collector.health.exporter.slf4j.Slf4jHealthExporter;
-import lamp.common.event.EventPublisher;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,25 +22,17 @@ public class ExporterConfig {
 	public static class hKafkaHealtExportConfig {
 
 		@Bean
-		public KafkaHealthExporter kafkaHealthExporter(EventPublisher eventPublisher, KafkaHealthExporterProperties properties) {
-			return new KafkaHealthExporter(eventPublisher, properties);
+		public TargetHealthKafkaExporter kafkaHealthExporter(KafkaHealthExporterProperties properties) {
+			return new TargetHealthKafkaExporter(properties);
 		}
 
 	}
 
-//	@ConditionalOnProperty(name = CollectorConstants.EXPORT_HEALTH_KAIROSDB_PREFIX+ ".enabled", havingValue = "true")
-//	@EnableConfigurationProperties({ ExportHealthKairosdbProperties.class})
-//	public static class ExportHealthKairosdbConfig {
-//		@Bean
-//		public AppHealthExportKairosdbService appHealthExportKairosdbService(ExportHealthKairosdbProperties properties) {
-//			return new AppHealthExportKairosdbService(properties);
-//		}
-//	}
 
 	@Bean
-	@ConditionalOnMissingBean(HealthExporter.class)
-	public HealthExporter slf4jHealthExporter() {
-		return new Slf4jHealthExporter("health");
+	@ConditionalOnMissingBean(TargetHealthExporter.class)
+	public TargetHealthExporter slf4jHealthExporter() {
+		return new Slf4JTargetHealthExporter("health");
 	}
 
 

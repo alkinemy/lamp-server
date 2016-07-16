@@ -2,7 +2,7 @@ package lamp.admin.web.monitoring.service;
 
 import lamp.admin.config.web.AgentProperties;
 import lamp.admin.domain.monitoring.model.HealthStatusCode;
-import lamp.collector.health.exporter.HealthExporter;
+import lamp.collector.core.health.handler.exporter.HealthExporter;
 import lamp.common.collector.model.HealthConstants;
 import lamp.common.collector.model.HealthTarget;
 import lamp.common.collector.model.TargetHealth;

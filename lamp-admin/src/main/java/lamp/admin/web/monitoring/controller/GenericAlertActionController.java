@@ -4,7 +4,7 @@ import lamp.admin.LampAdminConstants;
 import lamp.admin.domain.alert.service.AlertActionService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.support.FlashMessage;
-import lamp.monitoring.core.alert.model.AlertAction;
+import lamp.monitoring.core.base.alert.model.AlertAction;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;

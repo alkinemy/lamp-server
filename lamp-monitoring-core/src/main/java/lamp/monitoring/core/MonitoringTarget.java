@@ -1,6 +1,6 @@
 package lamp.monitoring.core;
 
-import lamp.common.collector.model.CollectionTarget;
+import lamp.collector.core.base.CollectionTarget;
 
 public interface MonitoringTarget extends CollectionTarget {
 

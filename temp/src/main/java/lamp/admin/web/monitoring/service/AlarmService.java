@@ -1,6 +1,6 @@
 package lamp.admin.web.monitoring.service;
 
-import lamp.monitoring.core.alert.model.AlertRule;
+import lamp.monitoring.core.base.alert.model.AlertRule;
 import lamp.monitoring.core.health.model.HealthAlertRule;
 import lamp.monitoring.core.health.service.HealthAlertRuleProvider;
 import org.springframework.stereotype.Service;

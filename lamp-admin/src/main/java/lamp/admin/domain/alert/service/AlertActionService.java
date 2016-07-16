@@ -3,7 +3,7 @@ package lamp.admin.domain.alert.service;
 import lamp.admin.domain.alert.model.entity.AlertActionEntity;
 import lamp.admin.domain.alert.repository.AlertActionEntityRepository;
 import lamp.common.utils.assembler.SmartAssembler;
-import lamp.monitoring.core.alert.model.AlertAction;
+import lamp.monitoring.core.base.alert.model.AlertAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

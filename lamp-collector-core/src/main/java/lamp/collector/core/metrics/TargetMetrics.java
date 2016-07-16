@@ -1,6 +1,6 @@
 package lamp.collector.core.metrics;
 
-import lamp.common.collector.model.CollectionTarget;
+import lamp.collector.core.base.CollectionTarget;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

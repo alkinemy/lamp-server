@@ -1,9 +1,9 @@
 package lamp.monitoring.core.config;
 
-import lamp.monitoring.core.notification.mms.MmsHttpSender;
-import lamp.monitoring.core.notification.mms.MmsNotificationActionExecutor;
-import lamp.monitoring.core.notification.sms.SmsHttpSender;
-import lamp.monitoring.core.notification.sms.SmsNotificationActionExecutor;
+import lamp.monitoring.core.base.action.notification.mms.MmsHttpSender;
+import lamp.monitoring.core.base.action.notification.mms.MmsNotificationActionExecutor;
+import lamp.monitoring.core.base.action.notification.sms.SmsHttpSender;
+import lamp.monitoring.core.base.action.notification.sms.SmsNotificationActionExecutor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

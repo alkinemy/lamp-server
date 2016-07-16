@@ -5,12 +5,8 @@ import lamp.admin.core.agent.AgentHttpRequestInterceptor;
 import lamp.admin.core.agent.AgentResponseErrorHandler;
 import lamp.admin.domain.agent.service.AgentScheduledService;
 import lamp.admin.domain.host.service.HostScheduledService;
-import lamp.admin.domain.monitoring.service.AlertEventService;
-import lamp.admin.web.monitoring.service.AlarmService;
 import lamp.collector.core.config.CollectorCoreConfig;
 import lamp.monitoring.core.config.MonitoringCoreConfig;
-import lamp.monitoring.core.health.service.HealthMonitoringProcessor;
-import lamp.monitoring.core.health.service.SimpleHealthMonitoringProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -42,10 +38,10 @@ public class ServerConfig {
 		return new AgentClient(restTemplate);
 	}
 
-	@Bean
-	public HealthMonitoringProcessor healthWatcher(AlarmService alarmService, AlertEventService alarmEventService) {
-		return new SimpleHealthMonitoringProcessor(alarmService, alarmEventService);
-	}
+//	@Bean
+//	public HealthMonitoringProcessor healthWatcher(AlarmService alarmService, AlertEventService alarmEventService) {
+//		return new SimpleHealthMonitoringProcessor(alarmService, alarmEventService);
+//	}
 
 	@Configuration
 	public static class ServerSchedulingConfig implements SchedulingConfigurer {

@@ -2,8 +2,8 @@ package lamp.admin.web.monitoring.service;
 
 import lamp.admin.domain.alert.model.HostMetricsAlertRule;
 import lamp.admin.domain.alert.service.AlertRuleService;
-import lamp.monitoring.core.alert.AlertRuleProvider;
-import lamp.monitoring.core.alert.model.AlertRule;
+import lamp.monitoring.core.base.alert.AlertRuleProvider;
+import lamp.monitoring.core.base.alert.model.AlertRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

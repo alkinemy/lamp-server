@@ -1,7 +1,7 @@
 package lamp.monitoring.core.metrics.model;
 
 import lamp.common.monitoring.model.MonitoringTargetMetrics;
-import lamp.monitoring.metrics.rule.spel.SpelTargetMetricsAlertRule;
+import lamp.monitoring.core.metrics.rule.spel.SpelTargetMetricsAlertRule;
 import org.junit.Test;
 
 import java.util.HashMap;

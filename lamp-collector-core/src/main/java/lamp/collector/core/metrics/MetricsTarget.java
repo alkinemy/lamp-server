@@ -1,7 +1,7 @@
 package lamp.collector.core.metrics;
 
 import lamp.collector.core.base.Endpoint;
-import lamp.common.collector.model.CollectionTarget;
+import lamp.collector.core.base.CollectionTarget;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

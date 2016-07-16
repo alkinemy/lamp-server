@@ -2,11 +2,8 @@ package lamp.admin.domain.monitoring.model;
 
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
 import lamp.admin.domain.support.json.JsonUtils;
-import lamp.common.collector.model.HealthTarget;
-import lamp.common.collector.model.MetricsTarget;
+
 import lamp.common.utils.StringUtils;
-import lamp.monitoring.core.health.model.MonitoringHealthTarget;
-import lamp.monitoring.core.metrics.model.MonitoringAlertTarget;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +19,7 @@ import java.util.Map;
 @Setter
 @Entity
 @Table(name = "lamp_watch_target")
-public class WatchTarget extends AbstractAuditingEntity implements HealthTarget, MetricsTarget, MonitoringHealthTarget, MonitoringAlertTarget {
+public class WatchTarget extends AbstractAuditingEntity {
 
 	@Id
 	private String id;
@@ -58,7 +55,7 @@ public class WatchTarget extends AbstractAuditingEntity implements HealthTarget,
 	@Column(name = "tags")
 	private String tagsJsonString;
 
-	@Override public Map<String, String> getTags() {
+	public Map<String, String> getTags() {
 		if (StringUtils.isNotBlank(tagsJsonString)) {
 			return JsonUtils.parse(tagsJsonString, LinkedHashMap.class);
 		}

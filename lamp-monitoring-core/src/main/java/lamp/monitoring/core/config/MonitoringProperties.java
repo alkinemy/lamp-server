@@ -1,7 +1,7 @@
 package lamp.monitoring.core.config;
 
-import lamp.monitoring.core.notification.mms.MmsSenderProperties;
-import lamp.monitoring.core.notification.sms.SmsSenderProperties;
+import lamp.monitoring.core.base.action.notification.mms.MmsSenderProperties;
+import lamp.monitoring.core.base.action.notification.sms.SmsSenderProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

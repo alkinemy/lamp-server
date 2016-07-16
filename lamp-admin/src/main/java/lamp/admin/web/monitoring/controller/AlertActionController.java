@@ -7,7 +7,7 @@ import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
 import lamp.admin.web.support.annotation.MenuMapping;
-import lamp.monitoring.core.alert.model.AlertAction;
+import lamp.monitoring.core.base.alert.model.AlertAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
