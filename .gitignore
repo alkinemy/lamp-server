@@ -2,7 +2,6 @@
 /lamp-admin/src/main/resources/config/application-test.properties
 /lamp-watcher/src/main/resources/config/application-prod.properties
 /h2db
-
 /*/generated
 /logs
 *.pid

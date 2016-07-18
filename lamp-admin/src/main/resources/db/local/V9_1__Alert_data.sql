@@ -1,9 +1,0 @@
-
-INSERT INTO `lamp_alert_action` (`id`, `name`, `description`, `type`, `privated`, `data_type`, `data`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`)
-VALUES
-	('10a836e1-a8ac-430f-890f-51490b2785a6', '호스트 모니터링 MMS 알람', '호스트 모니터링 MMS 알람', NULL, 0, 'lamp.monitoring.core.base.action.notification.mms.MmsNotificationAction', '{\"id\":\"10a836e1-a8ac-430f-890f-51490b2785a6\",\"name\":\"호스트 모니터링 MMS 알람\",\"description\":\"호스트 모니터링 MMS 알람\",\"type\":\"mms\",\"notificationIntervalSeconds\":60,\"message\":\"[#{target.tags.clusterId}] #{rule.name} #{target.tags.hostName} #{state.value}\",\"phoneNumbers\":\"0000000000\"}', 'system', '2016-07-08 14:46:47', 'admin', '2016-07-11 15:53:26'),
-	('40eacee3-1340-4c7d-8629-03ff55ee14c0', '호스트 모니터링 SMS 알람', '호스트 모니터링 SMS 알람', NULL, 0, 'lamp.monitoring.core.base.action.notification.sms.SmsNotificationAction', '{\"id\":\"40eacee3-1340-4c7d-8629-03ff55ee14c0\",\"name\":\"호스트 모니터링 SMS 알람\",\"description\":\"호스트 모니터링 SMS 알람\",\"type\":\"sms\",\"notificationIntervalSeconds\":60,\"message\":\"[#{target.tags.clusterId}] #{rule.name} #{target.tags.hostName} #{state.value}\",\"phoneNumbers\":\"0000000000\"}', 'admin', '2016-07-11 15:22:26', 'admin', '2016-07-11 15:51:17');
-
-INSERT INTO `lamp_alert_rule` (`id`, `name`, `description`, `enabled`, `data_type`, `data`, `created_by`, `created_date`, `last_modified_by`, `last_modified_date`)
-VALUES
-	('95007562-3f5f-447b-8b45-2fe083a5e349', NULL, NULL, 1, 'lamp.admin.domain.alert.model.HostMetricsAlertRule', '{\"id\":\"95007562-3f5f-447b-8b45-2fe083a5e349\",\"name\":\"Thread Count\",\"description\":\"\",\"severity\":\"WARN\",\"okActions\":null,\"alertActions\":null,\"undeterminedActions\":null,\"enabled\":true,\"targetExpression\":\"\",\"ruleExpression\":\"#{metrics.threads > 100}\",\"valueExpression\":\"#{metrics.threads}\"}', 'admin', '2016-07-11 14:11:09', 'admin', '2016-07-11 14:18:22');
