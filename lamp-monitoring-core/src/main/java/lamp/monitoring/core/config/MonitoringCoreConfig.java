@@ -15,20 +15,20 @@ import org.springframework.context.annotation.Configuration;
 public class MonitoringCoreConfig {
 
 	@Bean
-	@ConditionalOnProperty(name = "lamp.monitoring.sms-notifier.protocol", havingValue = "http")
+	@ConditionalOnProperty(name = "lamp.monitoring.sms-sender.protocol", havingValue = "http")
 	public SmsHttpSender smsHttpNotifier(MonitoringProperties monitoringProperties) {
 		return new SmsHttpSender(monitoringProperties.getSmsSender());
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "lamp.monitoring.mms-notifier.protocol", havingValue = "http")
+	@ConditionalOnProperty(name = "lamp.monitoring.mms-sender.protocol", havingValue = "http")
 	public MmsHttpSender mmsHttpNotifier(MonitoringProperties monitoringProperties) {
 		return new MmsHttpSender(monitoringProperties.getMmsSender());
 	}
 
 	@Bean
 	@ConditionalOnBean(SmsHttpSender.class)
-	public SmsNotificationActionExecutor mmsNotificationActionExecutor(SmsHttpSender smsHttpSender) {
+	public SmsNotificationActionExecutor smsNotificationActionExecutor(SmsHttpSender smsHttpSender) {
 		return new SmsNotificationActionExecutor(smsHttpSender);
 	}
 

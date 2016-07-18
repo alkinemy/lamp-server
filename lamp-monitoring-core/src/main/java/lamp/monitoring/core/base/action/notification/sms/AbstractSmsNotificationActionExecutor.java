@@ -19,7 +19,7 @@ public abstract class AbstractSmsNotificationActionExecutor<M extends Notificati
 
 	private NotificationSender<M> notificationSender;
 
-	public AbstractSmsNotificationActionExecutor(NotificationSender<M> notificationSender) {
+	protected AbstractSmsNotificationActionExecutor(NotificationSender<M> notificationSender) {
 		this.notificationSender = notificationSender;
 	}
 
