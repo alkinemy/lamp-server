@@ -33,10 +33,9 @@ public class App {
 	private AppContainer container;
 	private Map<String, Object> parameters;
 
-	private HealthEndpoint healthEndpoint;
-	private MetricsEndpoint metricsEndpoint;
-
 	private String version;
+
+	private Map<String, String> tags;
 
 	public App(String id, AppType type, String name, String parentPath) {
 		this.id = id;

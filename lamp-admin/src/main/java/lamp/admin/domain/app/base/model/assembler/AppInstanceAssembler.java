@@ -1,9 +1,12 @@
 package lamp.admin.domain.app.base.model.assembler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
+import lamp.admin.domain.base.exception.CannotAssembleException;
 import lamp.admin.domain.host.service.HostService;
+import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,22 +19,35 @@ public class AppInstanceAssembler extends AbstractListAssembler <AppInstanceEnti
 	@Autowired
 	private HostService hostService;
 
+	private ObjectMapper objectMapper = new ObjectMapper();
+
 	@Override protected AppInstance doAssemble(AppInstanceEntity entity) {
-		AppInstance appInstance = new AppInstance();
-		appInstance.setId(entity.getId());
-		appInstance.setName(entity.getName());
-		appInstance.setDescription(entity.getDescription());
-		appInstance.setAppId(entity.getAppId());
-		appInstance.setAppVersion(entity.getAppVersion());
-		appInstance.setHostId(entity.getHostId());
-		appInstance.setStatus(entity.getStatus());
+		try {
+			AppInstance appInstance;
+			if (StringUtils.isNotBlank(entity.getData())) {
+				appInstance = objectMapper.readValue(entity.getData(), AppInstance.class);
+			} else {
+				appInstance = new AppInstance();
+			}
 
-		appInstance.setMonitored(entity.isMonitored());
+			appInstance.setId(entity.getId());
+			appInstance.setName(entity.getName());
+			appInstance.setDescription(entity.getDescription());
+			appInstance.setAppId(entity.getAppId());
+			appInstance.setAppVersion(entity.getAppVersion());
+			appInstance.setHostId(entity.getHostId());
+			appInstance.setStatus(entity.getStatus());
 
-		Optional<Host> hostOptional = hostService.getHostOptional(entity.getHostId());
-		appInstance.setHost(hostOptional.orElse(null));
+			appInstance.setMonitored(entity.isMonitored());
 
-		return appInstance;
+			Optional<Host> hostOptional = hostService.getHostOptional(entity.getHostId());
+			appInstance.setHost(hostOptional.orElse(null));
+
+			return appInstance;
+		} catch (Exception e) {
+			throw new CannotAssembleException(e);
+		}
+
 	}
 
 }

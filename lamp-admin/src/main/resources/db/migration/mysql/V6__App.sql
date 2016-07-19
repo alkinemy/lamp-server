@@ -70,6 +70,8 @@ CREATE TABLE `lamp_app_instance` (
   `status_message` VARCHAR(4000) DEFAULT NULL,
   `monitored` TINYINT(1) DEFAULT NULL,
 
+  `data` MEDIUMTEXT DEFAULT NULL,
+
   `created_by` VARCHAR(255) NOT NULL,
   `created_date` DATETIME NOT NULL,
   `last_modified_by` VARCHAR(255) DEFAULT NULL,

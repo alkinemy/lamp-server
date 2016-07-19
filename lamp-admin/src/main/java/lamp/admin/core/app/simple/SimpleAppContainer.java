@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lamp.admin.core.app.base.AppContainer;
 import lamp.admin.core.app.base.AppContainerType;
 
+import lamp.admin.core.app.base.HealthEndpoint;
+import lamp.admin.core.app.base.MetricsEndpoint;
 import lamp.admin.core.app.simple.resource.AppResource;
 import lamp.admin.core.script.ScriptCommand;
 import lombok.Getter;
@@ -49,5 +51,10 @@ public class SimpleAppContainer implements AppContainer {
 
 	private List<ScriptCommand> scriptCommands;
 	private Map<String, Object> parameters;
+
+	private boolean healthEndpointEnabled;
+	private HealthEndpoint healthEndpoint;
+	private boolean metricsEndpointEnabled;
+	private MetricsEndpoint metricsEndpoint;
 
 }

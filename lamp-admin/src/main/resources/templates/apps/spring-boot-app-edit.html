@@ -68,6 +68,34 @@
 							</div>
 						</div>
 						<hr />
+						<div class="form-group" th:class="${#fields.hasErrors('serverPort')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Server Port (serverPort)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{serverPort}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('serverPort')}" th:errors="*{serverPort}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('managementPort')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Management Port (managementPort)</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{managementPort}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('managementPort')}" th:errors="*{managementPort}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">Endpoint</label>
+							<div class="col-md-9">
+								<div class="checkbox-list">
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{healthEndpointEnabled}" /></span>
+										Health Endpoint</label>
+									<label class="checkbox-inline">
+										<span class=""><input type="checkbox" th:field="*{metricsEndpointEnabled}" /></span>
+										Metrics Endpoint</label>
+								</div>
+							</div>
+						</div>
+						<hr />
 						<div class="form-group" th:class="${#fields.hasErrors('logDirectory')} ? 'form-group has-error' : 'form-group'">
 							<label class="col-md-3 control-label">Log Directory (logDirectory)</label>
 							<div class="col-md-9">

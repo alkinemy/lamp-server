@@ -2,6 +2,8 @@ package lamp.admin.domain.app.base.service;
 
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.App;
+import lamp.admin.core.app.base.HealthEndpoint;
+import lamp.admin.core.app.base.MetricsEndpoint;
 import lamp.admin.core.app.simple.AppProcessType;
 import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.core.app.simple.resource.AppResource;
@@ -17,6 +19,7 @@ import lamp.admin.domain.app.base.model.form.SpringBootAppUpdateForm;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.support.json.JsonUtils;
+import lamp.collector.core.base.EndpointProtocol;
 import lamp.common.utils.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -51,6 +54,9 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		parameters.put("parametersType", editForm.getParametersType());
 		parameters.put("parameters", editForm.getParameters());
 		parameters.put("properties", editForm.getProperties());
+		parameters.put("serverPort", editForm.getServerPort());
+		parameters.put("managementPort", editForm.getManagementPort());
+
 		app.setParameters(parameters);
 
 		SimpleAppContainer container = new SimpleAppContainer();
@@ -73,6 +79,29 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 		container.setAppResource(getAppResource(editForm));
 		container.setInstallFilename(artifactId + ".jar"); // FIXME 수정과 불일치
+
+		// Health
+		container.setHealthEndpointEnabled(editForm.isHealthEndpointEnabled());
+
+		HealthEndpoint healthEndpoint = new HealthEndpoint();
+		healthEndpoint.setProtocol(StringUtils.defaultIfBlank(editForm.getHealthEndpointProtocol(), EndpointProtocol.HTTP));
+		healthEndpoint.setPort(ObjectUtils.defaultIfNull(editForm.getHealthEndpointPort(),
+														 ObjectUtils.defaultIfNull(editForm.getManagementPort(), editForm.getServerPort())));
+		healthEndpoint.setPath(StringUtils.defaultIfBlank(editForm.getHealthEndpointPath(),"/health"));
+		healthEndpoint.setTimeoutSeconds(editForm.getHealthEndpointTimeoutSeconds());
+		container.setHealthEndpoint(healthEndpoint);
+
+		// Metrics
+		container.setMetricsEndpointEnabled(editForm.isMetricsEndpointEnabled());
+
+		MetricsEndpoint metricsEndpoint = new MetricsEndpoint();
+		metricsEndpoint.setProtocol(StringUtils.defaultIfBlank(editForm.getMetricsEndpointProtocol(), EndpointProtocol.HTTP));
+		metricsEndpoint.setPort(ObjectUtils.defaultIfNull(editForm.getMetricsEndpointPort(),
+														  ObjectUtils.defaultIfNull(editForm.getManagementPort(), editForm.getServerPort())));
+		metricsEndpoint.setPath(StringUtils.defaultIfBlank(editForm.getMetricsEndpointPath(),"/metrics"));
+		metricsEndpoint.setTimeoutSeconds(editForm.getMetricsEndpointTimeoutSeconds());
+		container.setMetricsEndpoint(metricsEndpoint);
+
 
 		container.setParameters(getParameters(editForm, artifactId)); // FIXME 수정과 불일치
 		List<ScriptCommand> scriptCommands = getInstallScriptCommands(artifactId, editForm.getProperties(), editForm.getShellFilePath());
@@ -108,11 +137,17 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 		editForm.setAppFilename(container.getInstallFilename());
 
+		editForm.setHealthEndpointEnabled(container.isHealthEndpointEnabled());
+		editForm.setMetricsEndpointEnabled(container.isMetricsEndpointEnabled());
+
 		Map<String, Object> parameters = app.getParameters();
 		if (parameters != null) {
 			editForm.setParametersType((ParametersType) parameters.get("parametersType"));
 			editForm.setParameters((String) parameters.get("parameters"));
 			editForm.setProperties((String) parameters.get("properties"));
+
+			editForm.setServerPort((Integer) parameters.get("serverPort"));
+			editForm.setManagementPort((Integer) parameters.get("managementPort"));
 		}
 
 		return editForm;
@@ -123,6 +158,9 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		parameters.put("artifactId", artifactId);
 		parameters.put("jvmOpts", editForm.getJvmOpts());
 		parameters.put("springOpts", editForm.getSpringOpts());
+
+		parameters.put("serverPort", editForm.getServerPort());
+		parameters.put("managementPort", editForm.getManagementPort());
 
 		if (StringUtils.isNotBlank(editForm.getParameters())) {
 			if (ParametersType.JSON == editForm.getParametersType()) {

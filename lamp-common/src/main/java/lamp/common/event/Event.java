@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -12,9 +13,9 @@ import java.util.Map;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Event {
+public class Event implements Serializable {
 
-	private LocalDateTime time;
+	private long time;
 	private EventLevel level;
 	private String name;
 	private String message;
@@ -28,7 +29,7 @@ public class Event {
 	}
 
 	public Event(EventLevel level, String name, Throwable e, EventTarget target) {
-		this.time = LocalDateTime.now();
+		this.time = System.currentTimeMillis();
 		this.level = level;
 		this.name = name;
 		this.message = e.getMessage();

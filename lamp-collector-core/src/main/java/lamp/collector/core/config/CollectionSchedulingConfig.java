@@ -1,6 +1,7 @@
 package lamp.collector.core.config;
 
 import lamp.collector.core.CollectorConstants;
+import lamp.collector.core.health.handler.exporter.TargetHealthExporter;
 import lamp.collector.core.metrics.TargetMetrics;
 import lamp.collector.core.metrics.handler.TargetMetricsHandler;
 import lamp.collector.core.metrics.processor.KafkaTargetMetricsProcessor;
@@ -9,6 +10,7 @@ import lamp.collector.core.metrics.processor.TargetMetricsProcessor;
 import lamp.common.event.EventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +54,7 @@ public class CollectionSchedulingConfig {
 		private CollectionMetricsProperties collectionMetricsProperties;
 
 		@Bean
+		@ConditionalOnMissingBean(TargetMetricsProcessor.class)
 		public TargetMetricsProcessor targetMetricsProcessor(List<TargetMetricsHandler<TargetMetrics>> targetMetricsHandlers, EventPublisher eventPublisher) {
 			return new TargetMetricsProcessor(targetMetricsHandlers, eventPublisher);
 		}
@@ -63,6 +66,7 @@ public class CollectionSchedulingConfig {
 		}
 
 		@Bean
+		@ConditionalOnMissingBean(MetricsTargetCollectionProcessor.class)
 		public MetricsTargetCollectionProcessor metricsTargetCollectionProcessor() {
 			return new MetricsTargetCollectionProcessor();
 		}

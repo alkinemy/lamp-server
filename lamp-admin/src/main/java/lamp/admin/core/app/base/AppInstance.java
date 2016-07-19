@@ -4,6 +4,8 @@ import lamp.admin.core.host.Host;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Getter
 @Setter
 public class AppInstance {
@@ -22,13 +24,16 @@ public class AppInstance {
 
 	private boolean monitored;
 
+	private boolean healthEndpointEnabled;
 	private HealthEndpoint healthEndpoint;
+	private boolean metricsEndpointEnabled;
 	private MetricsEndpoint metricsEndpoint;
+
+	private Map<String, String> tags;
 
 	//
 	private App app;
 	private Host host;
-
 
 
 }

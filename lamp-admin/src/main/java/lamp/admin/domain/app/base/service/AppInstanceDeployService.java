@@ -2,9 +2,7 @@ package lamp.admin.domain.app.base.service;
 
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.agent.AgentResponseErrorException;
-import lamp.admin.core.app.base.App;
-import lamp.admin.core.app.base.AppInstance;
-import lamp.admin.core.app.base.AppInstanceStatus;
+import lamp.admin.core.app.base.*;
 import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
@@ -155,7 +153,6 @@ public class AppInstanceDeployService {
 	}
 
 
-
 	protected AppInstance newAppInstance(App app, String instanceId, String hostId) {
 
 		AppInstance appInstance = new AppInstance();
@@ -164,6 +161,16 @@ public class AppInstanceDeployService {
 		appInstance.setAppId(app.getId());
 		appInstance.setAppVersion(app.getVersion());
 		appInstance.setHostId(hostId);
+		appInstance.setTags(app.getTags());
+
+		AppContainer appContainer = app.getContainer();
+		if (appContainer instanceof SimpleAppContainer) {
+			SimpleAppContainer simpleAppContainer = (SimpleAppContainer) appContainer;
+			appInstance.setHealthEndpointEnabled(simpleAppContainer.isHealthEndpointEnabled());
+			appInstance.setHealthEndpoint(simpleAppContainer.getHealthEndpoint());
+			appInstance.setMetricsEndpointEnabled(simpleAppContainer.isMetricsEndpointEnabled());
+			appInstance.setMetricsEndpoint(simpleAppContainer.getMetricsEndpoint());
+		}
 
 		return appInstance;
 	}

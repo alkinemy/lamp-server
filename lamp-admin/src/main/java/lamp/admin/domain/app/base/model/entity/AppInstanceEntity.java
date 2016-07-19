@@ -29,6 +29,7 @@ public class AppInstanceEntity extends AbstractAuditingEntity {
 	private AppInstanceStatus status;
 	private String statusMessage;
 
+	private String data;
 	private boolean monitored;
 
 }

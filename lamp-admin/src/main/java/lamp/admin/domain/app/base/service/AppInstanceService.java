@@ -29,9 +29,12 @@ public class AppInstanceService {
 	@Autowired
 	private AppInstanceEntityService appInstanceEntityService;
 	@Autowired
-	private AgentService agentService;
-	@Autowired
 	private AgentClient agentClient;
+
+	public List<AppInstance> getAppInstances() {
+		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getList();
+		return smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
+	}
 
 	public List<AppInstance> getAppInstancesByAppId(String appId) {
 		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getListByAppId(appId);

@@ -19,7 +19,7 @@ public class ExporterConfig {
 
 	@ConditionalOnProperty(name = CollectorConstants.EXPORT_HEALTH_KAFKA_PREFIX + ".enabled", havingValue = "true")
 	@EnableConfigurationProperties({ KafkaHealthExporterProperties.class})
-	public static class hKafkaHealtExportConfig {
+	public static class KafkaHealtExportConfig {
 
 		@Bean
 		public TargetHealthKafkaExporter kafkaHealthExporter(KafkaHealthExporterProperties properties) {

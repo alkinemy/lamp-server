@@ -1,7 +1,11 @@
 package lamp.admin.domain.app.base.model.assembler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
+import lamp.admin.domain.base.exception.CannotAssembleException;
+import lamp.admin.domain.base.exception.Exceptions;
+import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import lamp.common.utils.assembler.Populater;
 import org.springframework.stereotype.Component;
@@ -10,20 +14,29 @@ import org.springframework.stereotype.Component;
 public class AppInstanceEntityAssembler extends AbstractListAssembler <AppInstance, AppInstanceEntity>
 	implements Populater<AppInstance, AppInstanceEntity> {
 
+	private ObjectMapper objectMapper = new ObjectMapper();
+
 	@Override protected AppInstanceEntity doAssemble(AppInstance appInstance) {
-		AppInstanceEntity entity = new AppInstanceEntity();
-		entity.setId(appInstance.getId());
-		entity.setName(appInstance.getName());
-		entity.setDescription(appInstance.getDescription());
+		try {
+			AppInstanceEntity entity = new AppInstanceEntity();
+			entity.setId(appInstance.getId());
+			entity.setName(appInstance.getName());
+			entity.setDescription(appInstance.getDescription());
 
-		entity.setAppId(appInstance.getAppId());
-		entity.setAppVersion(appInstance.getAppVersion());
-		entity.setHostId(appInstance.getHostId());
-		entity.setStatus(appInstance.getStatus());
+			entity.setAppId(appInstance.getAppId());
+			entity.setAppVersion(appInstance.getAppVersion());
+			entity.setHostId(appInstance.getHostId());
+			entity.setStatus(appInstance.getStatus());
 
-		entity.setMonitored(appInstance.isMonitored());
+			entity.setData(objectMapper.writeValueAsString(appInstance));
 
-		return entity;
+			entity.setMonitored(appInstance.isMonitored());
+
+			return entity;
+		} catch (Exception e) {
+			throw new CannotAssembleException(e);
+		}
+
 	}
 
 	@Override public void populate(AppInstance source, AppInstanceEntity target) {

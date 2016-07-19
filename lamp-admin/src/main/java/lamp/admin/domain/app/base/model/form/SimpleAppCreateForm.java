@@ -45,7 +45,21 @@ public class SimpleAppCreateForm {
 	private String appFilename;
 
 	private boolean monitor;
-
+	
+	private boolean healthEndpointEnabled;
+	private String healthEndpointProtocol;
+	private String healthEndpointAddress;
+	private Integer healthEndpointPort;
+	private String healthEndpointPath;
+	private int healthEndpointTimeoutSeconds;
+	
+	private boolean metricsEndpointEnabled;
+	private String metricsEndpointProtocol;
+	private String metricsEndpointAddress;
+	private Integer metricsEndpointPort;
+	private String metricsEndpointPath;
+	private int metricsEndpointTimeoutSeconds;
+	
 	private String commands;
 
 	private ParametersType parametersType;

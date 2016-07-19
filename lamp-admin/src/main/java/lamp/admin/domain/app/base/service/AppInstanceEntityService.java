@@ -16,10 +16,13 @@ public class AppInstanceEntityService {
 	@Autowired
 	private AppInstanceEntityRepository appInstanceEntityRepository;
 
+	public List<AppInstanceEntity> getList() {
+		return appInstanceEntityRepository.findAll();
+	}
+
 	public List<AppInstanceEntity> getListByAppId(String appId) {
 		return appInstanceEntityRepository.findAllByAppId(appId);
 	}
-
 
 	public List<AppInstanceEntity> getListByHostId(String hostId) {
 		return appInstanceEntityRepository.findAllByHostId(hostId);
