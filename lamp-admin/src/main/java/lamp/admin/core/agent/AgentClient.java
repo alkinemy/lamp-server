@@ -5,6 +5,7 @@ import lamp.admin.core.agent.security.AgentRequestUserHolder;
 import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.domain.agent.model.Agent;
+import lamp.admin.domain.agent.model.AgentInfo;
 import lamp.admin.domain.support.json.JsonUtils;
 import lamp.common.utils.IOUtils;
 import lamp.common.utils.StringUtils;
@@ -34,7 +35,6 @@ public class AgentClient {
 		this.restTemplate = restTemplate;
 	}
 
-
 	public <T> T getForObject(Agent agent, String url, Class<T> responseType, Object... urlVariables) throws RestClientException {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
@@ -42,6 +42,11 @@ public class AgentClient {
 		} finally {
 			AgentRequestUserHolder.clear();
 		}
+	}
+
+	public AgentInfo getAgentInfo(String address, int port) {
+		String url = "http://" + address + ":" + port + "/info";
+		return restTemplate.getForObject(url, AgentInfo.class);
 	}
 
 	public List<AppInstance> getAppInstances(Agent agent) {

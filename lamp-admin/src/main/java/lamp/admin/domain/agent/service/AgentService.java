@@ -54,6 +54,10 @@ public class AgentService {
 		return smartAssembler.assemble(pageable, page, AgentDto.class);
 	}
 
+	public Optional<Agent> getOptionalByAddress(String address) {
+		return agentRepository.findOneByAddress(address);
+	}
+
 	public Collection<Agent> getAgents() {
 		return agentRepository.findAll();
 	}
@@ -63,6 +67,7 @@ public class AgentService {
 //		return agentClient.getVmList(agent);
 		return null;
 	}
+
 
 	@Transactional
 	public Agent register(AgentRegisterForm form) {
@@ -89,7 +94,6 @@ public class AgentService {
 		return agentRepository.save(agent);
 	}
 
-
 	@Transactional
 	public Agent update(AgentRegisterForm form, Agent agent) {
 		BeanUtils.copyProperties(form, agent, "id", "secretKey");
@@ -107,6 +111,4 @@ public class AgentService {
 	public void delete(Agent agent) {
 		agentRepository.delete(agent);
 	}
-
-
 }

@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AgentRepository extends LampJpaRepository<Agent, String> {
 
+	Optional<Agent> findOneByAddress(String address);
+
 }
