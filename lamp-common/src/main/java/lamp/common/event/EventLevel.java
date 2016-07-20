@@ -2,6 +2,6 @@ package lamp.common.event;
 
 public enum EventLevel {
 
-	ERROR, WARN;
+	ERROR, WARN, INFO;
 
 }

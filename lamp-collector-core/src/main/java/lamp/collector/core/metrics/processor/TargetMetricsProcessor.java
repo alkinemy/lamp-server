@@ -35,15 +35,15 @@ public class TargetMetricsProcessor<T extends TargetMetrics> {
 		try {
 			handler.handle(targetMetrics);
 		} catch(Exception e) {
-			doProcessException(targetMetrics, e);
+			doProcessException(targetMetrics, "TargetMetrics Process failed", e);
 		}
 	}
 
-	protected void doProcessException(T targetMetrics, Exception exception) {
-		log.warn("Target Metrics Process failed", exception);
+	protected void doProcessException(T targetMetrics, String message, Exception exception) {
+		log.warn(message, exception);
 
 		if (eventPublisher != null) {
-			Event event = new Event(EventLevel.WARN, EventName.TARGET_METRICS_PROCESS_FAILED, exception);
+			Event event = new Event(EventLevel.WARN, EventName.TARGET_METRICS_PROCESS_FAILED, message, exception);
 			eventPublisher.publish(event);
 		}
 	}

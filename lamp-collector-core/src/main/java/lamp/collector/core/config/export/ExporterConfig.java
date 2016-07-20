@@ -8,6 +8,7 @@ import lamp.collector.core.metrics.handler.exporter.TargetMetricsExporter;
 import lamp.collector.core.metrics.handler.exporter.kafka.TargetMetricsKafkaExporter;
 import lamp.collector.core.metrics.handler.exporter.kairosdb.TargetMetricsKairosdbExporter;
 import lamp.collector.core.metrics.handler.exporter.slf4j.Slf4jTargetMetricsExporter;
+import lamp.common.event.EventPublisher;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -40,8 +41,8 @@ public class ExporterConfig {
 	@EnableConfigurationProperties({ TargetMetricsKafkaExporterProperties.class})
 	public static class TargetMetricsKafkaExportConfig {
 		@Bean
-		public TargetMetricsKafkaExporter targetMetricsKafkaExporter(TargetMetricsKafkaExporterProperties properties) {
-			return new TargetMetricsKafkaExporter(properties);
+		public TargetMetricsKafkaExporter targetMetricsKafkaExporter(TargetMetricsKafkaExporterProperties properties, EventPublisher eventPublisher) {
+			return new TargetMetricsKafkaExporter(properties, eventPublisher);
 		}
 	}
 
@@ -51,14 +52,14 @@ public class ExporterConfig {
 	public static class TargetMetricsKairosdbExportConfig {
 
 		@Bean
-		public TargetMetricsKairosdbExporter targetMetricsKairosdbExporter(TargetMetricsKairosdbExporterProperties properties) throws Exception {
-			return new TargetMetricsKairosdbExporter(properties);
+		public TargetMetricsKairosdbExporter targetMetricsKairosdbExporter(TargetMetricsKairosdbExporterProperties properties, EventPublisher eventPublisher) throws Exception {
+			return new TargetMetricsKairosdbExporter(properties, eventPublisher);
 		}
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(TargetMetricsExporter.class)
-	public TargetMetricsExporter metricsExporter() {
+	public TargetMetricsExporter metricsExporter(EventPublisher eventPublisher) {
 		return new Slf4jTargetMetricsExporter("metrics");
 	}
 

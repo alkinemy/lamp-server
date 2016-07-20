@@ -20,7 +20,7 @@ public class TargetHealthAsyncProcessor<T extends TargetHealth> extends TargetHe
 
 	@Override
 	protected void doProcess(T targetHealth, TargetHealthHandler<T> handler) {
-		targetHealthAsyncExecutor.execute(handler, targetHealth, (target, exception) -> doProcessException(targetHealth, exception));
+		targetHealthAsyncExecutor.execute(handler, targetHealth, (target, exception) -> doProcessException(targetHealth, "TargetHealth Async execute Failed", exception));
 	}
 
 }

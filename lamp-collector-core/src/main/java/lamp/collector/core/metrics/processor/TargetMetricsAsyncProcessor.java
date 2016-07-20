@@ -19,7 +19,7 @@ public class TargetMetricsAsyncProcessor<T extends TargetMetrics> extends Target
 
 	@Override
 	protected void doProcess(T targetMetrics, TargetMetricsHandler<T> handler) {
-		targetMetricsAsyncExecutor.execute(handler, targetMetrics, (target, exception) -> doProcessException(targetMetrics, exception));
+		targetMetricsAsyncExecutor.execute(handler, targetMetrics, (target, exception) -> doProcessException(targetMetrics, "TargetMetricsAsync execute Failed", exception));
 	}
 
 }

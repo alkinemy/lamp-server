@@ -6,8 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -19,20 +17,20 @@ public class Event implements Serializable {
 	private EventLevel level;
 	private String name;
 	private String message;
+	private Exception exception;
 
 	private EventTarget target;
 
-	private Map<String, String> details;
-
-	public Event(EventLevel level, String name, Throwable e) {
-		this(level, name, e, null);
+	public Event(EventLevel level, String name, String message, Exception e) {
+		this(level, name, message, e, null);
 	}
 
-	public Event(EventLevel level, String name, Throwable e, EventTarget target) {
+	public Event(EventLevel level, String name, String message, Exception e, EventTarget target) {
 		this.time = System.currentTimeMillis();
 		this.level = level;
 		this.name = name;
-		this.message = e.getMessage();
+		this.message = message;
+		this.exception = e;
 		this.target = target;
 	}
 

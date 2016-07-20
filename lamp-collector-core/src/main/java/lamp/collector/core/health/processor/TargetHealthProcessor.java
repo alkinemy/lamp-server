@@ -35,15 +35,15 @@ public class TargetHealthProcessor<T extends TargetHealth> {
 		try {
 			handler.handle(targetHealth);
 		} catch(Exception e) {
-			doProcessException(targetHealth, e);
+			doProcessException(targetHealth, "TargetHealth Process failed", e);
 		}
 	}
 
-	protected void doProcessException(T targetHealth, Exception exception) {
-		log.warn("Target Health Process failed", exception);
+	protected void doProcessException(T targetHealth, String message, Exception exception) {
+		log.warn(message, exception);
 
 		if (eventPublisher != null) {
-			Event event = new Event(EventLevel.WARN, EventName.TARGET_HEALTH_PROCESS_FAILED, exception);
+			Event event = new Event(EventLevel.WARN, EventName.TARGET_HEALTH_PROCESS_FAILED, message, exception);
 			eventPublisher.publish(event);
 		}
 	}

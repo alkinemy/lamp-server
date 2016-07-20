@@ -2,6 +2,7 @@ package lamp.collector.core.metrics.handler.exporter.kairosdb;
 
 import lamp.collector.core.metrics.TargetMetrics;
 import lamp.collector.core.metrics.handler.exporter.AbstractTargetMetricsExporter;
+import lamp.common.event.EventPublisher;
 import lamp.common.utils.MapUtils;
 import lamp.support.kairosdb.KairosdbProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,9 @@ public class TargetMetricsKairosdbExporter extends AbstractTargetMetricsExporter
 
 	private Client client;
 
-	public TargetMetricsKairosdbExporter(KairosdbProperties kairosdbProperties) throws MalformedURLException {
+	public TargetMetricsKairosdbExporter(KairosdbProperties kairosdbProperties, EventPublisher eventPublisher) throws MalformedURLException {
+		super(eventPublisher);
+		
 		this.kairosdbProperties = kairosdbProperties;
 
 		log.info("KairosdbProperties : {}", kairosdbProperties);
@@ -47,7 +50,7 @@ public class TargetMetricsKairosdbExporter extends AbstractTargetMetricsExporter
 			}
 			client.pushMetrics(metricBuilder);
 		} catch (Exception e) {
-			handleException(targetMetrics, e);
+			handleException(targetMetrics, "TargetMetrics Kairosdb Export Failed", e);
 		}
 	}
 

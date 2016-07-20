@@ -2,6 +2,7 @@ package lamp.collector.core.metrics.handler.exporter.kafka;
 
 import lamp.collector.core.metrics.TargetMetrics;
 import lamp.collector.core.metrics.handler.exporter.AbstractTargetMetricsExporter;
+import lamp.common.event.EventPublisher;
 import lamp.support.kafka.KafkaProducerProperties;
 import lamp.support.kafka.serialization.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,9 @@ public class TargetMetricsKafkaExporter extends AbstractTargetMetricsExporter im
 	private Producer<String, TargetMetrics> producer;
 	private String topic;
 
-	public TargetMetricsKafkaExporter(KafkaProducerProperties kafkaProperties) {
+	public TargetMetricsKafkaExporter(KafkaProducerProperties kafkaProperties, EventPublisher eventPublisher) {
+		super(eventPublisher);
+
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
 		props.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProperties.getClientId());
@@ -44,8 +47,7 @@ public class TargetMetricsKafkaExporter extends AbstractTargetMetricsExporter im
 		ProducerRecord<String, TargetMetrics> data = new ProducerRecord(topic, key, targetMetrics);
 		producer.send(data, (metadata, exception) -> {
 			if (exception != null) {
-				log.warn("TargetMetrics Kafka Export Failed", exception);
-				handleException(targetMetrics, exception, metadata);
+				handleException(targetMetrics, "TargetMetrics Kafka Export Failed", exception, metadata);
 			}
 		});
 	}

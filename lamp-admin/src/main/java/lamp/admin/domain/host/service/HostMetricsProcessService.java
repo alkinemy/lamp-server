@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
+import lamp.admin.web.base.service.EventService;
 import lamp.collector.core.base.Endpoint;
 import lamp.collector.core.metrics.handler.TargetMetricsHandler;
 import lamp.collector.core.metrics.handler.exporter.TargetMetricsExporter;
@@ -37,6 +38,9 @@ public class HostMetricsProcessService {
 	@Autowired
 	private HostStatusUpdateHandler hostStatusUpdateProcessor;
 
+	@Autowired
+	private EventService eventService;
+
 	@Autowired(required = false)
 	private List<TargetMetricsExporter> metricsExporters;
 
@@ -51,7 +55,7 @@ public class HostMetricsProcessService {
 			targetMetricsHandlers.addAll(metricsExporters);
 		}
 
-		TargetMetricsProcessor targetMetricsProcessor = new TargetMetricsProcessor(targetMetricsHandlers);
+		TargetMetricsProcessor targetMetricsProcessor = new TargetMetricsProcessor(targetMetricsHandlers, eventService);
 
 		metricsTargetProcessor = new MetricsTargetProcessor<>(monitoringTargetMetricsHttpLoader, targetMetricsProcessor);
 	}
