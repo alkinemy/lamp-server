@@ -68,6 +68,21 @@
 							</div>
 						</div>
 						<hr />
+						<div class="form-group" th:class="${#fields.hasErrors('startTimeout')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Start Timeout</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{startTimeout}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('startTimeout')}" th:errors="*{startTimeout}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('stopTimeout')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Stop Timeout</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{stopTimeout}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('stopTimeout')}" th:errors="*{stopTimeout}"> A block of help text. </span>
+							</div>
+						</div>
+						<hr />
 						<div class="form-group" th:class="${#fields.hasErrors('serverPort')} ? 'form-group has-error' : 'form-group'">
 							<label class="col-md-3 control-label">Server Port (serverPort)</label>
 							<div class="col-md-9">

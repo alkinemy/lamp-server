@@ -40,7 +40,9 @@ public class SimpleAppCreateForm {
 
 	private String commandShell;
 	private String startCommandLine;
+	private Long startTimeout = 0L;
 	private String stopCommandLine;
+	private Long stopTimeout = 0L;
 
 	private String appFilename;
 

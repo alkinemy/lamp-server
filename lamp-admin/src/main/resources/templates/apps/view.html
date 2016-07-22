@@ -20,16 +20,10 @@
 								<a class="btn default" th:href="@{/apps/{path}(path=${path},action='update-' + ${app.type.value})}">
 									Edit
 								</a>
-								<a class="btn default">
-									Restart
-								</a>
-								<a class="btn default">
-									Stop
-								</a>
 							</div>
 						</div>
 						<div class="portlet-body">
-							<h3>Running (0 of 0 instances)</h3>
+							<h3>Running (<span th:text="${runningInstancesCount}">0</span> of <span th:text="${totalInstancesCount}">0</span> instances)</h3>
 							<div class="well">
 								<h4 th:text="${app.name}">Default well</h4> <span th:text="${app.description}"></span>
 							</div>
@@ -48,59 +42,73 @@
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="tab_15_1">
-										<div class="row">
-											<div class="table-responsive">
-												<table class="table table-bordered table-hover">
-													<thead>
-													<tr>
-														<th> <input type="checkbox" name="appInstanceIdsAll" value="" /> </th>
-														<th> Instance Id </th>
-														<th> Version </th>
-														<th> Hostname </th>
-														<th> Address </th>
-														<th> Status </th>
-														<th> Error Log </th>
-														<th> Output Log </th>
-														<th> Action </th>
-													</tr>
-													</thead>
-													<tbody>
-													<tr th:each="appInstance : ${appInstances}">
-														<td> <input type="checkbox" name="appInstanceIds" th:value="${appInstance.id}" /> </td>
-														<td th:text="${appInstance.id}"> 해당 없음 </td>
-														<td th:text="${appInstance.appVersion}"> 해당 없음 </td>
-														<td th:text="${appInstance.host?.name}"> 해당 없음 </td>
-														<td th:text="${appInstance.host?.address}"> 해당 없음 </td>
-														<td th:text="${appInstance.status}"> 해당 없음 </td>
-														<td> <a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stdout)}"><i class="fa fa-file-text"></i> stderr </a></td>
-														<td> <a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stderr)}"><i class="fa fa-file-text"></i> stdout </a></td>
-														<td>
-															<div class="btn-group">
-																<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
-																	<i class="fa fa-angle-down"></i>
-																</a>
-																<ul class="dropdown-menu" role="menu">
-																	<li>
-																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=start)}"> Start </a>
-																	</li>
-																	<li>
-																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stop)}"> Stop </a>
-																	</li>
-																	<li class="divider"> </li>
-																	<li>
-																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=redeploy)}"> Redeploy </a>
-																	</li>
-																	<li>
-																		<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=undeploy)}"> Undeploy </a>
-																	</li>
-																</ul>
-															</div>
-														</td>
-													</tr>
-													</tbody>
-												</table>
+										<form class="form-horizontal" role="form"  th:action="@{/apps/{path}(path=${path})}" th:object="${editForm}" method="post">
+											<div class="row">
+												<div class="table-responsive">
+													<table class="table table-bordered table-hover">
+														<thead>
+														<tr>
+															<th> <input type="checkbox" name="instanceIdAll" value="" /> </th>
+															<th> Instance Id </th>
+															<th> Version </th>
+															<th> Hostname </th>
+															<th> Address </th>
+															<th> Status </th>
+															<th> Error Log </th>
+															<th> Output Log </th>
+															<th> Action </th>
+														</tr>
+														</thead>
+														<tbody>
+														<tr th:each="appInstance : ${appInstances}">
+															<td> <input type="checkbox" name="instanceId" th:value="${appInstance.id}" /> </td>
+															<td th:text="${appInstance.id}"> 해당 없음 </td>
+															<td th:text="${appInstance.appVersion}"> 해당 없음 </td>
+															<td th:text="${appInstance.hostName}"> 해당 없음 </td>
+															<td th:text="${appInstance.hostAddress}"> 해당 없음 </td>
+															<td th:text="${appInstance.status}"> 해당 없음 </td>
+															<td> <a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stderr)}"><i class="fa fa-file-text"></i> stderr </a></td>
+															<td> <a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stdout)}"><i class="fa fa-file-text"></i> stdout </a></td>
+															<td>
+																<div class="btn-group">
+																	<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+																		<i class="fa fa-angle-down"></i>
+																	</a>
+																	<ul class="dropdown-menu" role="menu">
+																		<li>
+																			<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=start)}"> Start </a>
+																		</li>
+																		<li>
+																			<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=stop)}"> Stop </a>
+																		</li>
+																		<li class="divider"> </li>
+																		<li>
+																			<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=redeploy)}"> Redeploy </a>
+																		</li>
+																		<li>
+																			<a th:href="@{/apps/{path}(path=${path},instanceId=${appInstance.id},action=undeploy)}"> Undeploy </a>
+																		</li>
+																	</ul>
+																</div>
+															</td>
+														</tr>
+														</tbody>
+													</table>
+												</div>
 											</div>
-										</div>
+											<div class="row">
+												<div class="form-actions">
+													<div class="row">
+														<div class="col-md-offset-3 col-md-9">
+															<button type="submit" name="action" value="start" class="btn default">Start</button>
+															<button type="submit" name="action" value="stop" class="btn default">Stop</button>
+															<button type="submit" name="action" value="undeploy" class="btn default">Undeploy</button>
+															<button type="submit" name="action" value="redeploy" class="btn default">Redeploy</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
 									</div>
 									<div class="tab-pane" id="tab_15_2">
 										<p> Howdy, I'm in Section 2. </p>

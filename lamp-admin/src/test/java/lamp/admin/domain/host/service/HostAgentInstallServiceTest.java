@@ -1,7 +1,7 @@
 package lamp.admin.domain.host.service;
 
 import lamp.admin.core.host.HostCredentials;
-import lamp.admin.domain.host.model.AgentInstall;
+import lamp.admin.domain.host.model.AgentInstallMetadata;
 import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.admin.domain.host.model.HostConfiguration;
 import org.junit.Test;
@@ -38,16 +38,16 @@ public class HostAgentInstallServiceTest {
 		String agentInstallFilename = "lamp-agent.jar";
 		String agentFile = "classpath:agent/lamp-agent.jar";
 
-		AgentInstall agentInstall = new AgentInstall();
-		agentInstall.setAgentId("test");
-		agentInstall.setAddress(address);
-		agentInstall.setHostCredentials(hostCredentials);
-		agentInstall.setHostConfiguration(hostConfiguration);
-		agentInstall.setAgentInstallDirectory(agentInstallDirectory);
-		agentInstall.setAgentInstallFilename(agentInstallFilename);
-		agentInstall.setAgentFile(agentFile);
+		AgentInstallMetadata agentInstallMetadata = new AgentInstallMetadata();
+		agentInstallMetadata.setAgentId("test");
+		agentInstallMetadata.setAddress(address);
+		agentInstallMetadata.setHostCredentials(hostCredentials);
+		agentInstallMetadata.setHostConfiguration(hostConfiguration);
+		agentInstallMetadata.setAgentInstallDirectory(agentInstallDirectory);
+		agentInstallMetadata.setAgentInstallFilename(agentInstallFilename);
+		agentInstallMetadata.setAgentFile(agentFile);
 
 
-		hostAgentInstallService.install(agentInstall, System.out);
+		hostAgentInstallService.install(agentInstallMetadata, System.out);
 	}
 }

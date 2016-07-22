@@ -42,7 +42,7 @@
 								<tbody>
 								<tr th:each="result : ${installResults}">
 									<td th:text="${result.hostname}"> Joke </td>
-									<td th:text="${result.address}"> Joke </td>
+									<td th:text="${result.metadata.address}"> Joke </td>
 									<td> Joke </td>
 									<td th:text="${result.status}"> Joke </td>
 									<td th:text="${result.error}"> Joke </td>

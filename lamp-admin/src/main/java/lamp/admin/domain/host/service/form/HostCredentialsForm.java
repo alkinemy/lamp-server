@@ -11,12 +11,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class HostCredentialsForm {
+public abstract class HostCredentialsForm {
 
 	private String clusterId;
 	private String agentFile;
-
-	private List<String> scannedHostAddress;
 
 	private String username;
 	private boolean usePassword = true;
@@ -29,7 +27,5 @@ public class HostCredentialsForm {
 	private String passphraseConfirm;
 
 	private int sshPort = 22;
-
-	private int parallelInstallCount;
 
 }

@@ -40,8 +40,15 @@ public class AppInstanceEntityAssembler extends AbstractListAssembler <AppInstan
 	}
 
 	@Override public void populate(AppInstance source, AppInstanceEntity target) {
-		target.setStatus(source.getStatus());
+		try {
+			target.setAppVersion(source.getAppVersion());
 
-		target.setMonitored(source.isMonitored());
+			target.setStatus(source.getStatus());
+
+			target.setData(objectMapper.writeValueAsString(source));
+			target.setMonitored(source.isMonitored());
+		} catch (Exception e) {
+			throw new CannotAssembleException(e);
+		}
 	}
 }

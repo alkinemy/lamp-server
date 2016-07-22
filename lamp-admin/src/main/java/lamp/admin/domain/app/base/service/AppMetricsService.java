@@ -1,6 +1,8 @@
 package lamp.admin.domain.app.base.service;
 
 import lamp.admin.core.app.base.AppInstance;
+import lamp.admin.core.host.Host;
+import lamp.admin.domain.host.service.HostService;
 import lamp.collector.core.base.Endpoint;
 import lamp.collector.core.metrics.MetricsTarget;
 import lamp.collector.core.metrics.MetricsTargetProvider;
@@ -36,12 +38,16 @@ public class AppMetricsService implements MetricsTargetProvider, TargetMetricsLo
 		MetricsTarget metricsTarget = new MetricsTarget();
 		metricsTarget.setId(appInstance.getId());
 		Endpoint endpoint = new Endpoint(appInstance.getMetricsEndpoint());
-		endpoint.setAddress(appInstance.getHost().getAddress());
+		endpoint.setAddress(appInstance.getHostAddress());
 		metricsTarget.setEndpoint(endpoint);
+
 		Map<String, String> tags = new HashMap<>();
 		tags.put("appId", appInstance.getAppId());
-		tags.put("appVersion", appInstance.getAppVersion());
+		tags.put("appInstanceId", appInstance.getId());
+//		tags.put("appVersion", appInstance.getAppVersion()); //  value may contain any character except colon ':', and equals '='.
 		tags.put("hostId", appInstance.getHostId());
+		tags.put("hostName", appInstance.getHostName());
+		tags.put("hostAddress", appInstance.getHostAddress());
 
 		if (appInstance.getTags() != null) {
 			tags.putAll(appInstance.getTags());

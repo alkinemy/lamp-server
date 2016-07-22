@@ -21,11 +21,17 @@ public class TargetMetricsProcessor<T extends TargetMetrics> {
 	}
 
 	public TargetMetricsProcessor(List<TargetMetricsHandler<T>> targetMetricsHandlers, EventPublisher eventPublisher) {
+		for (TargetMetricsHandler<T> targetMetricsHandler : targetMetricsHandlers) {
+			log.info("targetMetricsHandler registered : {}", targetMetricsHandler);
+		}
+		log.info("eventPublisher registered {}", eventPublisher);
+
 		this.targetMetricsHandlers = targetMetricsHandlers;
 		this.eventPublisher = eventPublisher;
 	}
 
 	public void process(T targetMetrics) {
+		log.debug("TargetMetrics process : {}", targetMetrics);
 		for (TargetMetricsHandler<T> handler : targetMetricsHandlers) {
 			doProcess(targetMetrics, handler);
 		}

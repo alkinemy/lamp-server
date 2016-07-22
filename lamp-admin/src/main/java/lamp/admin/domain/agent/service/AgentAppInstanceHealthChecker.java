@@ -5,8 +5,10 @@ import lamp.admin.core.app.base.AppInstanceStatus;
 import lamp.admin.core.app.base.AppInstanceStatusResult;
 import lamp.admin.core.app.base.HealthEndpoint;
 import lamp.admin.core.host.Host;
+import lamp.admin.domain.host.service.HostService;
 import lamp.common.utils.ExceptionUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,14 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AgentAppInstanceHealthChecker {
 
+	@Autowired
+	private HostService hostService;
+
 	public AppInstanceStatusResult getStatusResult(AppInstance appInstance, HealthEndpoint healthEndpoint) {
 		// FIXME
 		AppInstanceStatusResult statusResult;
 		try {
-			Host host = appInstance.getHost();
+			Host host = hostService.getHost(appInstance.getHostId());
 			String url = getHealthCheckUrl(healthEndpoint, host.getAddress());
 			log.debug("AppInstance HealthCheckUrl = {}", url);
 

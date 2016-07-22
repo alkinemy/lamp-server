@@ -27,9 +27,13 @@ public class HostEntityService {
 	}
 
 	public HostEntity get(String id) {
-		HostEntity hostEntity = hostEntityRepository.findOne(id);
-		Exceptions.throwsException(hostEntity == null, LampErrorCode.HOST_NOT_FOUND);
-		return hostEntity;
+		Optional<HostEntity> hostEntityOptional = getOptional(id);
+		Exceptions.throwsException(!hostEntityOptional.isPresent(), LampErrorCode.HOST_NOT_FOUND);
+		return hostEntityOptional.get();
+	}
+
+	public Optional<HostEntity> getOptional(String id) {
+		return Optional.ofNullable(hostEntityRepository.findOne(id));
 	}
 
 	public HostEntity create(HostEntity hostEntity) {

@@ -41,14 +41,14 @@ public class AppInstanceService {
 		List<AppInstance> appInstances = smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
 
 		// TODO host null 처리
-		return appInstances.stream().sorted((e1, e2) -> e1.getHost().getName().compareTo(e2.getHost().getName())).collect(Collectors.toList());
+		return appInstances.stream().sorted((e1, e2) -> e1.getHostName().compareTo(e2.getHostName())).collect(Collectors.toList());
 	}
 
 	public List<AppInstance> getAppInstancesByHostId(String hostId) {
 		List<AppInstanceEntity> appInstanceEntityList = appInstanceEntityService.getListByHostId(hostId);
 		List<AppInstance> appInstances = smartAssembler.assemble(appInstanceEntityList, AppInstanceEntity.class, AppInstance.class);
 
-		return appInstances.stream().sorted((e1, e2) -> e1.getHost().getName().compareTo(e2.getHost().getName())).collect(Collectors.toList());
+		return appInstances.stream().sorted((e1, e2) -> e1.getHostName().compareTo(e2.getHostName())).collect(Collectors.toList());
 	}
 
 	public List<AppInstance> getAppInstancesByAgent(Agent agent) {

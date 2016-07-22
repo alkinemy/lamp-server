@@ -46,7 +46,7 @@ case "$1" in
     kill -TERM $PID
     echo -ne "Waiting for process to stop"
     NOT_KILLED=1
-    for i in {1..20}; do
+    for i in {1..60}; do
       if  check_if_process_is_running
       then
         echo -ne "."

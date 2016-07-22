@@ -13,7 +13,7 @@ public class Endpoint {
 
     private String protocol;
     private String address;
-    private int port;
+    private Integer port;
 
     private String path;
 

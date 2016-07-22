@@ -41,7 +41,11 @@ public class AppInstanceAssembler extends AbstractListAssembler <AppInstanceEnti
 			appInstance.setMonitored(entity.isMonitored());
 
 			Optional<Host> hostOptional = hostService.getHostOptional(entity.getHostId());
-			appInstance.setHost(hostOptional.orElse(null));
+			if (hostOptional.isPresent()) {
+				Host host = hostOptional.get();
+				appInstance.setHostName(host.getName());
+				appInstance.setHostAddress(host.getAddress());
+			}
 
 			return appInstance;
 		} catch (Exception e) {

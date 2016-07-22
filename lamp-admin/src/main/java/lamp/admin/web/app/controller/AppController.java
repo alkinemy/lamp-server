@@ -3,6 +3,7 @@ package lamp.admin.web.app.controller;
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
+import lamp.admin.core.app.base.AppInstanceStatus;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.service.AppInstanceService;
 import lamp.admin.domain.app.base.service.AppService;
@@ -50,6 +51,8 @@ public class AppController extends AbstractAppController {
 			model.addAttribute("app", app);
 			List<AppInstance> appInstances = appInstanceService.getAppInstancesByAppId(app.getId());
 			model.addAttribute("appInstances", appInstances);
+			model.addAttribute("totalInstancesCount", appInstances.size());
+			model.addAttribute("runningInstancesCount", appInstances.stream().filter(i -> AppInstanceStatus.RUNNING.equals(i.getStatus())).count());
 			return "apps/view";
 		}
 	}

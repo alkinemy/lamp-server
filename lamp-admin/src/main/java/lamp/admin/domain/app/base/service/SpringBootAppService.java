@@ -75,7 +75,9 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 		container.setCommandShell(editForm.getCommandShell());
 		container.setStartCommandLine(StringUtils.defaultIfBlank(editForm.getStartCommandLine(), "./" + artifactId + ".sh start"));
+		container.setStartTimeout(editForm.getStartTimeout());
 		container.setStopCommandLine(StringUtils.defaultIfBlank(editForm.getStopCommandLine(), "./" + artifactId + ".sh stop"));
+		container.setStopTimeout(editForm.getStopTimeout());
 
 		container.setAppResource(getAppResource(editForm));
 		container.setInstallFilename(artifactId + ".jar"); // FIXME 수정과 불일치
@@ -131,7 +133,9 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 		editForm.setCommandShell(container.getCommandShell());
 		editForm.setStartCommandLine(container.getStartCommandLine());
+		editForm.setStartTimeout(container.getStartTimeout());
 		editForm.setStopCommandLine(container.getStopCommandLine());
+		editForm.setStopTimeout(container.getStopTimeout());
 
 		populateAppResource(editForm, container.getAppResource());
 

@@ -5,7 +5,6 @@ import lamp.admin.LampAdminConstants;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.HostCredentials;
-import lamp.admin.core.host.HostStatus;
 import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
@@ -14,6 +13,8 @@ import lamp.admin.domain.host.model.*;
 import lamp.admin.domain.host.model.entity.HostEntity;
 import lamp.admin.domain.host.service.form.HostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
+import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
+import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
 import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.FileUtils;
 import lamp.common.utils.InetAddressUtils;
@@ -87,13 +88,65 @@ public class HostService {
 	}
 
 	public List<AgentInstallResult> installAgents(HostCredentialsForm editForm) throws IOException {
-		HostCredentials hostCredentials = new HostCredentials();
-		hostCredentials.setUsername(editForm.getUsername());
-		hostCredentials.setUsePassword(editForm.isUsePassword());
+		HostCredentials hostCredentials = getHostCredentials(editForm);
 
 		HostConfiguration hostConfiguration = new HostConfiguration();
 
 		String agentFile = editForm.getAgentFile();
+
+		List<TargetHost> targetHosts = null;
+		if (editForm instanceof ScannedHostCredentialsForm) {
+			targetHosts = getTargetHosts((ScannedHostCredentialsForm) editForm);
+		} else if (editForm instanceof ManagedHostCredentialsForm) {
+			targetHosts = getTargetHosts((ManagedHostCredentialsForm) editForm);
+		}
+
+		return installAgents(targetHosts, hostCredentials, agentFile, hostConfiguration);
+	}
+
+	protected List<TargetHost> getTargetHosts(ScannedHostCredentialsForm editForm) {
+		List<TargetHost> targetHosts = new ArrayList<>();
+		for (String address : editForm.getScannedHostAddress()) {
+			TargetHost targetHost;
+			Optional<HostEntity> hostEntityOptional = hostEntityService.getOptionalByAddress(address);
+			if (hostEntityOptional.isPresent()) {
+				targetHost = newTargetHost(hostEntityOptional.get());
+			} else {
+				targetHost = new TargetHost();
+				targetHost.setId(UUID.randomUUID().toString());
+				targetHost.setClusterId(editForm.getClusterId());
+				targetHost.setName(InetAddressUtils.getHostName(address, address));
+				targetHost.setAddress(address);
+			}
+			targetHosts.add(targetHost);
+		}
+		return targetHosts;
+	}
+
+	protected List<TargetHost> getTargetHosts(ManagedHostCredentialsForm editForm) {
+		List<TargetHost> targetHosts = new ArrayList<>();
+		for (String hostId : editForm.getHostId()) {
+			HostEntity hostEntity = hostEntityService.get(hostId);
+			TargetHost targetHost = newTargetHost(hostEntity);
+
+			targetHosts.add(targetHost);
+		}
+		return targetHosts;
+	}
+
+	protected TargetHost newTargetHost(HostEntity hostEntity) {
+		TargetHost targetHost = new TargetHost();
+		targetHost.setId(hostEntity.getId());
+		targetHost.setClusterId(hostEntity.getClusterId());
+		targetHost.setName(hostEntity.getName());
+		targetHost.setAddress(hostEntity.getAddress());
+		return targetHost;
+	}
+
+	protected HostCredentials getHostCredentials(HostCredentialsForm editForm) throws IOException {
+		HostCredentials hostCredentials = new HostCredentials();
+		hostCredentials.setUsername(editForm.getUsername());
+		hostCredentials.setUsePassword(editForm.isUsePassword());
 
 		if (editForm.isUsePassword()) {
 			hostCredentials.setPassword(editForm.getPassword());
@@ -109,16 +162,15 @@ public class HostService {
 				hostCredentials.setPassphrase(editForm.getPassphrase());
 			}
 		}
+		return hostCredentials;
+	}
 
+	protected List<AgentInstallResult> installAgents(List<TargetHost> targetHosts, HostCredentials hostCredentials, String agentFile, HostConfiguration hostConfiguration) throws IOException {
 		List<AgentInstallResult> results = new ArrayList<>();
-		for (String address : editForm.getScannedHostAddress()) {
-			TargetHost targetHost = new TargetHost();
-			targetHost.setId(UUID.randomUUID().toString());
-			targetHost.setClusterId(editForm.getClusterId());
-			targetHost.setHostname(InetAddressUtils.getHostName(address, address));
-			targetHost.setAddress(address);
-
+		for (TargetHost targetHost : targetHosts) {
 			// TODO Async
+			shutdownAgent(targetHost.getId());
+
 			AgentInstallResult result = hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
 			results.add(result);
 		}
@@ -126,6 +178,12 @@ public class HostService {
 	}
 
 	public void remove(String hostId) {
+		HostEntity hostEntity = shutdownAgent(hostId);
+
+		hostEntityService.delete(hostEntity.getId());
+	}
+
+	protected HostEntity shutdownAgent(String hostId) {
 		HostEntity hostEntity = hostEntityService.get(hostId);
 		HostStatusCode hostStatusCode = hostEntity.getStatus();
 		Optional<Agent> agentOptional = agentService.getAgentOptional(hostEntity.getId());
@@ -135,13 +193,14 @@ public class HostService {
 			Agent agent = agentOptional.get();
 
 			if (hostManaged) {
+				log.info("Agent shutdown : {}", hostId);
 				agentClient.shutdown(agent);
 			}
 			agentService.deregister(agent.getId());
 		}
-
-		hostEntityService.delete(hostEntity.getId());
+		return hostEntity;
 	}
+
 }
 
 

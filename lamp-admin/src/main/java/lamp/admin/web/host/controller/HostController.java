@@ -4,7 +4,8 @@ import lamp.admin.core.host.Host;
 import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.host.model.AgentInstallResult;
 import lamp.admin.domain.host.service.HostService;
-import lamp.admin.domain.host.service.form.HostCredentialsForm;
+import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
+import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
@@ -35,12 +36,12 @@ public class HostController {
 		return "hosts/list";
 	}
 
-	@RequestMapping(path = "/add/scan", method = RequestMethod.GET)
+	@RequestMapping(path = "/scan", method = RequestMethod.GET)
 	public String scan(Model model, @ModelAttribute("editForm") HostScanForm editForm) {
 		return "hosts/scan";
 	}
 
-	@RequestMapping(path = "/add/scan", method = RequestMethod.POST)
+	@RequestMapping(path = "/scan", method = RequestMethod.POST)
 	public String scan(Model model,
 					   @ModelAttribute("editForm") HostScanForm editForm,
 					   BindingResult bindingResult,
@@ -55,20 +56,43 @@ public class HostController {
 		return scan(model, editForm);
 	}
 
-	@RequestMapping(path = "/add/credentials", method = RequestMethod.POST)
+	@RequestMapping(path = "/scanned/credentials", method = RequestMethod.POST)
 	public String credentials(Model model,
-					   @ModelAttribute("editForm") HostCredentialsForm editForm,
+					   @ModelAttribute("editForm") ScannedHostCredentialsForm editForm,
 					   BindingResult bindingResult,
 					   RedirectAttributes redirectAttributes) {
 
+		model.addAttribute("hostType", "scanned");
 		return "hosts/credentials";
 	}
 
-	@RequestMapping(path = "/add", method = RequestMethod.POST)
+	@RequestMapping(path = "/scanned", method = RequestMethod.POST)
 	public String add(Model model,
-							  @ModelAttribute("editForm") HostCredentialsForm editForm,
+							  @ModelAttribute("editForm") ScannedHostCredentialsForm editForm,
 							  BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes) throws Exception {
+
+		List<AgentInstallResult> installResults = hostService.installAgents(editForm);
+		model.addAttribute("installResults", installResults);
+
+		return "hosts/add-result";
+	}
+
+	@RequestMapping(path = "/managed/credentials", method = RequestMethod.POST)
+	public String managedHostCredentials(Model model,
+							  @ModelAttribute("editForm") ManagedHostCredentialsForm editForm,
+							  BindingResult bindingResult,
+							  RedirectAttributes redirectAttributes) {
+
+		model.addAttribute("hostType", "managed");
+		return "hosts/credentials";
+	}
+
+	@RequestMapping(path = "/managed", method = RequestMethod.POST)
+	public String add(Model model,
+					  @ModelAttribute("editForm") ManagedHostCredentialsForm editForm,
+					  BindingResult bindingResult,
+					  RedirectAttributes redirectAttributes) throws Exception {
 
 		List<AgentInstallResult> installResults = hostService.installAgents(editForm);
 		model.addAttribute("installResults", installResults);
@@ -86,6 +110,8 @@ public class HostController {
 
 		return "redirect:/hosts";
 	}
+
+
 //
 //	protected String createForm(DockerApp editForm, Model model) {
 //

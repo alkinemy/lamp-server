@@ -2,7 +2,7 @@ package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.AppInstance;
-import lamp.admin.domain.app.base.service.AppInstanceDeployService;
+import lamp.admin.domain.app.base.service.AppInstanceManagementService;
 import lamp.admin.domain.app.base.service.AppInstanceService;
 import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.base.exception.MessageException;
@@ -34,7 +34,7 @@ public class AppInstanceLogController extends AbstractAppController {
 
 
 	@Autowired
-	private AppInstanceDeployService appInstanceDeployService;
+	private AppInstanceManagementService appInstanceManagementService;
 
 	@Autowired
 	public AppInstanceLogController(AppService appService) {
@@ -56,7 +56,7 @@ public class AppInstanceLogController extends AbstractAppController {
 			response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(filename, "UTF-8")+"\";");
 			response.setHeader("Content-Transfer-Encoding", "binary");
 
-			appInstanceDeployService.transferStdOutStream(appInstance, response.getOutputStream());
+			appInstanceManagementService.transferStdOutStream(appInstance, response.getOutputStream());
 			return "redirect:/apps/" + path;
 		} catch (MessageException e) {
 			log.warn("app start failed", e);
@@ -80,7 +80,7 @@ public class AppInstanceLogController extends AbstractAppController {
 			response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(filename, "UTF-8")+"\";");
 			response.setHeader("Content-Transfer-Encoding", "binary");
 
-			appInstanceDeployService.transferStdErrStream(appInstance, response.getOutputStream());
+			appInstanceManagementService.transferStdErrStream(appInstance, response.getOutputStream());
 			return "redirect:/apps/" + path;
 		} catch (MessageException e) {
 			log.warn("app start failed", e);

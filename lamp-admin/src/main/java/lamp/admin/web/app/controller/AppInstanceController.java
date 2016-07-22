@@ -5,7 +5,7 @@ import lamp.admin.core.app.base.App;
 import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.app.base.model.form.AppCreateForm;
-import lamp.admin.domain.app.base.service.AppInstanceDeployService;
+import lamp.admin.domain.app.base.service.AppInstanceManagementService;
 import lamp.admin.domain.app.base.service.AppInstanceService;
 import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.base.exception.MessageException;
@@ -40,7 +40,7 @@ public class AppInstanceController extends AbstractAppController {
 	private HostService hostService;
 
 	@Autowired
-	private AppInstanceDeployService appInstanceDeployService;
+	private AppInstanceManagementService appInstanceManagementService;
 
 	@Autowired
 	public AppInstanceController(AppService appService) {
@@ -72,7 +72,7 @@ public class AppInstanceController extends AbstractAppController {
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
 		try {
-			appInstanceDeployService.deploy(path, editForm.getHostIds());
+			appInstanceManagementService.deploy(path, editForm.getHostIds(), null);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 			return "redirect:/apps/" + path;
@@ -83,16 +83,14 @@ public class AppInstanceController extends AbstractAppController {
 		}
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=undeploy"})
+	@RequestMapping(path = "/**", method = {RequestMethod.GET, RequestMethod.POST}, params = {"action=undeploy"})
 	public String undeploy(Model model,
 						   @ModelAttribute("path") String path,
-						   @RequestParam("instanceId") String instanceId,
+						   @RequestParam("instanceId") List<String> instanceIds,
 						   @RequestParam(name = "forceStop", defaultValue = "false") boolean forceStop,
 						   RedirectAttributes redirectAttributes) {
 		try {
-			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
-
-			appInstanceDeployService.undeploy(appInstance, forceStop);
+			appInstanceManagementService.undeploy(path, instanceIds);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.DELETE_SUCCESS));
 
 			return "redirect:/apps/" + path;
@@ -104,16 +102,14 @@ public class AppInstanceController extends AbstractAppController {
 		}
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=redeploy"})
+	@RequestMapping(path = "/**", method = {RequestMethod.GET, RequestMethod.POST}, params = {"action=redeploy"})
 	public String redeploy(Model model,
 						   @ModelAttribute("path") String path,
-						   @RequestParam("instanceId") String instanceId,
+						   @RequestParam("instanceId") List<String> instanceIds,
 						   @RequestParam(name = "forceStop", defaultValue = "false") boolean forceStop,
 						   RedirectAttributes redirectAttributes) {
 		try {
-			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
-
-			appInstanceDeployService.redeploy(appInstance.getId(), forceStop);
+			appInstanceManagementService.redeploy(path, instanceIds, null);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.UPDATE_SUCCESS));
 
 			return "redirect:/apps/" + path;
@@ -125,15 +121,13 @@ public class AppInstanceController extends AbstractAppController {
 		}
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=start"})
+	@RequestMapping(path = "/**", method = {RequestMethod.GET, RequestMethod.POST}, params = {"action=start"})
 	public String start(Model model,
 						@ModelAttribute("path") String path,
-						@RequestParam("instanceId") String instanceId,
+						@RequestParam("instanceId") List<String> instanceIds,
 						RedirectAttributes redirectAttributes) {
 		try {
-			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
-
-			appInstanceDeployService.start(appInstance);
+			appInstanceManagementService.start(path, instanceIds);
 			redirectAttributes.addFlashAttribute("path", path);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
@@ -146,15 +140,13 @@ public class AppInstanceController extends AbstractAppController {
 		}
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=stop"})
+	@RequestMapping(path = "/**", method = {RequestMethod.GET, RequestMethod.POST}, params = {"action=stop"})
 	public String stop(Model model,
 					   @ModelAttribute("path") String path,
-					   @RequestParam("instanceId") String instanceId,
+					   @RequestParam("instanceId") List<String> instanceIds,
 					   RedirectAttributes redirectAttributes) {
 		try {
-			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
-
-			appInstanceDeployService.stop(appInstance);
+			appInstanceManagementService.stop(path, instanceIds);
 			redirectAttributes.addFlashAttribute(LampAdminConstants.FLASH_MESSAGE_KEY, FlashMessage.ofSuccess(AdminErrorCode.INSERT_SUCCESS));
 
 			return "redirect:/apps/" + path;

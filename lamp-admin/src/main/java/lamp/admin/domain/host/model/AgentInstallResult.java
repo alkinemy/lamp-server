@@ -9,8 +9,9 @@ import lombok.ToString;
 @ToString
 public class AgentInstallResult {
 
+	private AgentInstallMetadata metadata;
+
 	private String hostname;
-	private String address;
 	private String status;
 
 	private String error;
