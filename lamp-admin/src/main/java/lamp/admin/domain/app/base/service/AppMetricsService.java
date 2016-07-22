@@ -43,8 +43,11 @@ public class AppMetricsService implements MetricsTargetProvider, TargetMetricsLo
 
 		Map<String, String> tags = new HashMap<>();
 		tags.put("appId", appInstance.getAppId());
+		tags.put("appName", appInstance.getAppName());
 		tags.put("appInstanceId", appInstance.getId());
 //		tags.put("appVersion", appInstance.getAppVersion()); //  value may contain any character except colon ':', and equals '='.
+		tags.put("clusterId", appInstance.getClusterId());
+		tags.put("clusterName", appInstance.getClusterName());
 		tags.put("hostId", appInstance.getHostId());
 		tags.put("hostName", appInstance.getHostName());
 		tags.put("hostAddress", appInstance.getHostAddress());

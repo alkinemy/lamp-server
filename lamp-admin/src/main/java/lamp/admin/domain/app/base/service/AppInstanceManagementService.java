@@ -145,8 +145,10 @@ public class AppInstanceManagementService {
 		appInstance.setId(instanceId);
 		appInstance.setName(app.getName());
 		appInstance.setAppId(app.getId());
+		appInstance.setAppName(app.getName());
 		appInstance.setAppVersion(app.getVersion());
 		appInstance.setClusterId(host.getClusterId());
+		appInstance.setClusterName(host.getClusterName());
 		appInstance.setHostId(host.getId());
 		appInstance.setHostName(host.getName());
 		appInstance.setHostAddress(host.getAddress());
@@ -170,11 +172,13 @@ public class AppInstanceManagementService {
 
 	private void populateAppInstance(App app, AppInstance appInstance) {
 		appInstance.setName(app.getName());
+		appInstance.setAppName(app.getName());
 		appInstance.setAppVersion(app.getVersion());
 		appInstance.setTags(app.getTags());
 
 		Host host = hostService.getHost(appInstance.getHostId());
 		appInstance.setClusterId(host.getClusterId());
+		appInstance.setClusterName(host.getClusterName());
 		appInstance.setHostName(host.getName());
 		appInstance.setHostAddress(host.getAddress());
 

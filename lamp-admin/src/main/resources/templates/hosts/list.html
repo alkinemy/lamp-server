@@ -8,6 +8,11 @@
 	<script th:src="@{/assets/pages/scripts/components-knob-dials.min.js}" type="text/javascript"></script>
 	<script type="text/javascript">
 		// <![CDATA[
+
+		$("#hostIdAll").change(function () {
+			$("input[name=hostId]:checkbox").prop('checked', $(this).prop("checked"));
+		});
+
 		// ]]>
 	</script>
 </div>
@@ -46,7 +51,7 @@
 										</colgroup>
 										<thead>
 										<tr>
-											<th> <input type="checkbox" name="hostIdAll" value="" /> </th>
+											<th> <input type="checkbox" name="hostIdAll" id="hostIdAll" value="" /> </th>
 											<th> Name </th>
 											<th> IP </th>
 											<th> Cluster </th>

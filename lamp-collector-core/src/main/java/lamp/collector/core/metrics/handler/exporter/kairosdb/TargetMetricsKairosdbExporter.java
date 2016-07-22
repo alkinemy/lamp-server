@@ -1,14 +1,12 @@
 package lamp.collector.core.metrics.handler.exporter.kairosdb;
 
-import lamp.collector.core.base.event.EventName;
 import lamp.collector.core.base.exception.TargetMetricsExportException;
 import lamp.collector.core.metrics.TargetMetrics;
 import lamp.collector.core.metrics.handler.exporter.AbstractTargetMetricsExporter;
-import lamp.common.event.Event;
-import lamp.common.event.EventLevel;
 import lamp.common.event.EventPublisher;
 import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.MapUtils;
+import lamp.common.utils.StringUtils;
 import lamp.support.kairosdb.KairosdbProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.kairosdb.client.Client;
@@ -19,6 +17,7 @@ import org.kairosdb.client.response.Response;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class TargetMetricsKairosdbExporter extends AbstractTargetMetricsExporter {
@@ -44,7 +43,10 @@ public class TargetMetricsKairosdbExporter extends AbstractTargetMetricsExporter
 			return;
 		}
 
-		Map<String, String> tags = targetMetrics.getTags();
+		Map<String, String> tags = targetMetrics.getTags()
+			.entrySet().stream().filter(e -> StringUtils.isNotBlank(e.getValue()))
+			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
 		long timestamp = targetMetrics.getTimestamp();
 
 		try {

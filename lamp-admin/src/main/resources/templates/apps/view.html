@@ -2,6 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/edit">
 <body>
 
+<div layout:fragment="page-level-script">
+	<script type="text/javascript">
+		// <![CDATA[
+
+		$("#instanceIdAll").change(function () {
+			$("input[name=instanceId]:checkbox").prop('checked', $(this).prop("checked"));
+		});
+
+		// ]]>
+	</script>
+</div>
+
+
+
 		<div class="row" layout:fragment="content-main">
 			<div class="col-md-12">
 				<!-- BEGIN BORDERED TABLE PORTLET-->
@@ -12,6 +26,7 @@
 							<div class="caption">
 								<i class="icon-social-dribbble font-purple"></i>
 								<span class="caption-subject font-purple bold" th:text="${app.name}">Name</span>
+								(<span th:text="${app.id}"></span>)
 							</div>
 							<div class="actions">
 								<a class="btn btn-primary" th:href="@{/apps/{path}(path=${path},action=deploy)}">
@@ -48,7 +63,7 @@
 													<table class="table table-bordered table-hover">
 														<thead>
 														<tr>
-															<th> <input type="checkbox" name="instanceIdAll" value="" /> </th>
+															<th> <input type="checkbox" name="instanceIdAll" id="instanceIdAll" value="" /> </th>
 															<th> Instance Id </th>
 															<th> Version </th>
 															<th> Hostname </th>

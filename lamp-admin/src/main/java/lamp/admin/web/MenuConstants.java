@@ -29,6 +29,7 @@ public abstract class MenuConstants {
 
 	public static final String HOST = "HOST";
 		public static final String HOSTS = "HOSTS";
+		public static final String CLUSTERS = "CLUSTERS";
 
 	public static final String RESOURCE = "RESOURCE";
 		public static final String APP_REPO = "APP_REPO";

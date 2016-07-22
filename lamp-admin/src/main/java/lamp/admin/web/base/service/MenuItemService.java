@@ -35,13 +35,6 @@ public class MenuItemService {
 				menuItems.add(MenuItem.of(MONITORING, "Monitoring", "icon-layers", subMenuItems));
 			}
 
-			// Docker
-			{
-				List<MenuItem> subMenuItems = new ArrayList<>();
-				subMenuItems.add(MenuItem.of(DOCKER_APPS, "Application", "/docker/apps", "icon-bulb"));
-				menuItems.add(MenuItem.of(DOCKER, "Docker", "icon-layers", subMenuItems));
-			}
-
 			// Host
 			{
 				List<MenuItem> subMenuItems = new ArrayList<>();
@@ -54,6 +47,7 @@ public class MenuItemService {
 					subMenuItems.add(agentMenuItem);
 
 				}
+				subMenuItems.add(MenuItem.of(CLUSTERS, "Cluster", "/clusters", "icon-bulb"));
 				menuItems.add(MenuItem.of(HOST, "Host", "icon-layers", subMenuItems));
 			}
 

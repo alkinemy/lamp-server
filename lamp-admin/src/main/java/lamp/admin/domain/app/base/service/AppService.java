@@ -51,7 +51,7 @@ public class AppService {
 		apps.add(currentApp);
 
 		App app = currentApp;
-		while (!rootGroup.getParentPath().equals(app.getParentPath())) {
+		while (StringUtils.isNotBlank(app.getParentPath())) {
 			app = getAppByPath(app.getParentPath());
 			apps.add(0, app);
 		}

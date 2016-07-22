@@ -9,6 +9,8 @@ ext {
 
     kairosdbVersion = "2.1.0"
     kafkaVersion = "0.9.0.1"
+
+    awsJavaSdkVersion = "1.11.20"
 }
 
 

@@ -72,8 +72,8 @@ public class HostService {
 	}
 
 	public Optional<Host> getHostOptional(String id) {
-		HostEntity hostEntity = hostEntityService.get(id);
-		Host host =  smartAssembler.assemble(hostEntity, HostEntity.class, Host.class);
+		Optional<HostEntity> hostEntityOptional = hostEntityService.getOptional(id);
+		Host host =  smartAssembler.assemble(hostEntityOptional.orElse(null), HostEntity.class, Host.class);
 		return Optional.ofNullable(host);
 	}
 
@@ -169,7 +169,11 @@ public class HostService {
 		List<AgentInstallResult> results = new ArrayList<>();
 		for (TargetHost targetHost : targetHosts) {
 			// TODO Async
-			shutdownAgent(targetHost.getId());
+			Optional<HostEntity> hostEntityOptional = hostEntityService.getOptional(targetHost.getId());
+			if (hostEntityOptional.isPresent()) {
+				HostEntity hostEntity = hostEntityOptional.get();
+				shutdownAgent(hostEntity.getId(), hostEntity.getStatus());
+			}
 
 			AgentInstallResult result = hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
 			results.add(result);
@@ -178,15 +182,15 @@ public class HostService {
 	}
 
 	public void remove(String hostId) {
-		HostEntity hostEntity = shutdownAgent(hostId);
+		HostEntity hostEntity = hostEntityService.get(hostId);
+
+		shutdownAgent(hostEntity.getId(), hostEntity.getStatus());
 
 		hostEntityService.delete(hostEntity.getId());
 	}
 
-	protected HostEntity shutdownAgent(String hostId) {
-		HostEntity hostEntity = hostEntityService.get(hostId);
-		HostStatusCode hostStatusCode = hostEntity.getStatus();
-		Optional<Agent> agentOptional = agentService.getAgentOptional(hostEntity.getId());
+	protected void shutdownAgent(String hostId, HostStatusCode hostStatusCode) {
+		Optional<Agent> agentOptional = agentService.getAgentOptional(hostId);
 		boolean hostManaged = HostStatusCode.UP.equals(hostStatusCode)
 			|| HostStatusCode.DOWN.equals(hostStatusCode);
 		if (agentOptional.isPresent()) {
@@ -198,7 +202,6 @@ public class HostService {
 			}
 			agentService.deregister(agent.getId());
 		}
-		return hostEntity;
 	}
 
 }

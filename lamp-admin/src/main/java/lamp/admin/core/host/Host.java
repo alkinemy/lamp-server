@@ -24,6 +24,7 @@ public class Host extends HostStatus {
 	private String agentSecretKey;
 
 	private String clusterId;
+	private String clusterName;
 	private String rack;
 
 	private String tenantId;

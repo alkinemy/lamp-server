@@ -16,9 +16,11 @@ public class AppInstance {
 	private String description;
 
 	private String appId;
+	private String appName;
 	private String appVersion;
 
 	private String clusterId;
+	private String clusterName;
 	private String hostId;
 	private String hostName;
 	private String hostAddress;
