@@ -22,7 +22,7 @@ public class HostScanService {
 	private AgentInstallProperties agentInstallProperties;
 
 	@Autowired
-	private HostEntityService hostEntityService;
+	private HostService hostService;
 
 	@Autowired
 	private AgentService agentService;
@@ -42,18 +42,18 @@ public class HostScanService {
 //		try {
 //			agentInfo = agentClient.getAgentInfo(address, agentInstallProperties.getPort());
 //		} catch (Exception e) { //TODO exception에 따라서 처리
-//			Optional<Agent> agentOptional = agentService.getOptionalByAddress(address);
+//			Optional<Agent> agentOptional = agentService.getHostEntityOptionalByAddress(address);
 //			if (agentOptional.isPresent()) {
-//				Agent agent = agentOptional.get();
-//				agentService.delete(agent);
-//				hostEntityService.delete(agent.getId());
+//				Agent agent = agentOptional.getHostEntity();
+//				agentService.removeHostEntity(agent);
+//				hostEntityService.removeHostEntity(agent.getId());
 //				return false;
 //			}
 //
-//			Optional<HostEntity> hostEntityOptional = hostEntityService.getOptionalByAddress(address);
+//			Optional<HostEntity> hostEntityOptional = hostEntityService.getHostEntityOptionalByAddress(address);
 //			if (hostEntityOptional.isPresent()) {
-//				String id = hostEntityOptional.get().getId();
-//				hostEntityService.delete(id);
+//				String id = hostEntityOptional.getHostEntity().getId();
+//				hostEntityService.removeHostEntity(id);
 //			}
 //
 //			return false;
@@ -65,17 +65,17 @@ public class HostScanService {
 //				agentService.register(null); //TODO agent 등록
 //			}
 //
-//			Optional<HostEntity> host = hostEntityService.getOptionalByAddress(address);
+//			Optional<HostEntity> host = hostEntityService.getHostEntityOptionalByAddress(address);
 //			if (!host.isPresent()) {
-//				hostEntityService.create(null); //TODO host 등록
+//				hostEntityService.addHostEntity(null); //TODO host 등록
 //			}
 //			return true;
 //		} else {
 //			agentService.deregister(agentInfo.getId());
-//			hostEntityService.delete(agentInfo.getId());
+//			hostEntityService.removeHostEntity(agentInfo.getId());
 //			return false;
 //		}
-		Optional<HostEntity> hostEntityOptional = hostEntityService.getOptionalByAddress(address);
+		Optional<HostEntity> hostEntityOptional = hostService.getHostEntityOptionalByAddress(address);
 		if (hostEntityOptional.isPresent()) {
 			// FIXME 제대로 구현 바람
 			return true;

@@ -48,7 +48,7 @@ public class LocalAppFileController {
 		return "resource/file/local/list";
 	}
 
-	@RequestMapping(path = "/create", method = RequestMethod.GET)
+	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
 	public String create(@ModelAttribute("editForm") LocalAppFileUploadForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 		if (editForm.getRefId() != null) {
@@ -66,7 +66,7 @@ public class LocalAppFileController {
 		return "resource/file/local/edit";
 	}
 
-	@RequestMapping(path = "/create", method = RequestMethod.POST)
+	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
 	public String create(@Valid @ModelAttribute("editForm") LocalAppFileUploadForm editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {

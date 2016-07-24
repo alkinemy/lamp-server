@@ -5,7 +5,7 @@ import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
 import lamp.admin.domain.base.exception.CannotAssembleException;
-import lamp.admin.domain.host.service.HostService;
+import lamp.admin.domain.host.service.HostFacadeService;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.AbstractListAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class AppInstanceAssembler extends AbstractListAssembler <AppInstanceEntity, AppInstance> {
 
 	@Autowired
-	private HostService hostService;
+	private HostFacadeService hostFacadeService;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -40,7 +40,7 @@ public class AppInstanceAssembler extends AbstractListAssembler <AppInstanceEnti
 
 			appInstance.setMonitored(entity.isMonitored());
 
-			Optional<Host> hostOptional = hostService.getHostOptional(entity.getHostId());
+			Optional<Host> hostOptional = hostFacadeService.getHostOptional(entity.getHostId());
 			if (hostOptional.isPresent()) {
 				Host host = hostOptional.get();
 				appInstance.setHostName(host.getName());

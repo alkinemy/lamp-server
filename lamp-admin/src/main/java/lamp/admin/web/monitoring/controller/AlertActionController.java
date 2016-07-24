@@ -35,7 +35,7 @@ public class AlertActionController {
 		return "monitoring/alert-actions/list";
 	}
 
-	@RequestMapping(path = "/{id}/delete", method = RequestMethod.GET)
+	@RequestMapping(path = "/{id}/removeHostEntity", method = RequestMethod.GET)
 	public String delete(@PathVariable("id") String id
 			, RedirectAttributes redirectAttributes) {
 

@@ -2,14 +2,13 @@ package lamp.admin.web.app.controller;
 
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.App;
-import lamp.admin.core.app.base.AppInstance;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.app.base.model.form.AppCreateForm;
 import lamp.admin.domain.app.base.service.AppInstanceManagementService;
 import lamp.admin.domain.app.base.service.AppInstanceService;
 import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.base.exception.MessageException;
-import lamp.admin.domain.host.service.HostService;
+import lamp.admin.domain.host.service.HostFacadeService;
 import lamp.admin.web.AdminErrorCode;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.FlashMessage;
@@ -37,7 +36,7 @@ public class AppInstanceController extends AbstractAppController {
 	private AppInstanceService appInstanceService;
 
 	@Autowired
-	private HostService hostService;
+	private HostFacadeService hostFacadeService;
 
 	@Autowired
 	private AppInstanceManagementService appInstanceManagementService;
@@ -59,7 +58,7 @@ public class AppInstanceController extends AbstractAppController {
 	protected String deployForm(Model model, String path, AppCreateForm editForm) {
 		App app = appService.getAppByPath(path);
 		model.addAttribute("app", app);
-		List<Host> hosts = hostService.getHostsByClusterId(app.getClusterId());
+		List<Host> hosts = hostFacadeService.getHostsByClusterId(app.getClusterId());
 		model.addAttribute("hosts", hosts);
 
 		return "apps/deploy";

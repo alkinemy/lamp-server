@@ -3,7 +3,7 @@ package lamp.admin.domain.host.service;
 import lamp.common.utils.InetAddressUtils;
 import org.junit.Test;
 
-public class HostServiceTest {
+public class HostFacadeServiceTest {
 
 
 	@Test
@@ -13,7 +13,7 @@ public class HostServiceTest {
 
 	@Test
 	public void testScanHost() throws Exception {
-		HostService hostService = new HostService();
+		HostFacadeService hostFacadeService = new HostFacadeService();
 //		ScannedHost scannedHost = hostService.scanHost("127.0.0.1", 22);
 	}
 

@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Slf4j
 @MenuMapping(MenuConstants.APP)
 @Controller
-@RequestMapping(path = "/apps", params = {"action=create-docker-app"})
+@RequestMapping(path = "/apps", params = {"action=addHostEntity-docker-app"})
 public class DockerAppCreateController extends AbstractAppController {
 
 	@Autowired

@@ -113,7 +113,7 @@ public class LocalAppFileService {
 	public void deleteLocalAppFile(LocalAppFileEntity localAppFile) {
 		File file = new File(localAppFile.getPathname());
 		if (!file.delete()) {
-			log.warn("{} file delete failed", file.getAbsolutePath());
+			log.warn("{} file removeHostEntity failed", file.getAbsolutePath());
 		}
 		localAppFileEntityRepository.delete(localAppFile);
 	}

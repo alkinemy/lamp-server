@@ -3,7 +3,7 @@ package lamp.admin.web.host.controller;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.host.model.AgentInstallResult;
-import lamp.admin.domain.host.service.HostService;
+import lamp.admin.domain.host.service.HostFacadeService;
 import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
 import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
@@ -26,12 +26,12 @@ import java.util.List;
 public class HostController {
 
 	@Autowired
-	private HostService hostService;
+	private HostFacadeService hostFacadeService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model,
 					   @RequestParam(name = "clusterId", required = false) String clusterId) {
-		List<Host> hosts = hostService.getHostsByClusterId(clusterId);
+		List<Host> hosts = hostFacadeService.getHostsByClusterId(clusterId);
 		model.addAttribute("hosts", hosts);
 		return "hosts/list";
 	}
@@ -51,7 +51,7 @@ public class HostController {
 			return scan(model, editForm);
 		}
 
-		List<ScannedHost> scannedHosts = hostService.scanHost(editForm);
+		List<ScannedHost> scannedHosts = hostFacadeService.scanHost(editForm);
 		model.addAttribute("scannedHosts", scannedHosts);
 		return scan(model, editForm);
 	}
@@ -72,7 +72,7 @@ public class HostController {
 							  BindingResult bindingResult,
 							  RedirectAttributes redirectAttributes) throws Exception {
 
-		List<AgentInstallResult> installResults = hostService.installAgents(editForm);
+		List<AgentInstallResult> installResults = hostFacadeService.installAgents(editForm);
 		model.addAttribute("installResults", installResults);
 
 		return "hosts/add-result";
@@ -94,7 +94,7 @@ public class HostController {
 					  BindingResult bindingResult,
 					  RedirectAttributes redirectAttributes) throws Exception {
 
-		List<AgentInstallResult> installResults = hostService.installAgents(editForm);
+		List<AgentInstallResult> installResults = hostFacadeService.installAgents(editForm);
 		model.addAttribute("installResults", installResults);
 
 		return "hosts/add-result";
@@ -106,7 +106,7 @@ public class HostController {
 					  	RedirectAttributes redirectAttributes) throws Exception {
 
 
-		hostService.remove(hostId);
+		hostFacadeService.remove(hostId);
 
 		return "redirect:/hosts";
 	}
@@ -124,8 +124,8 @@ public class HostController {
 //		return "docker/app/edit";
 //	}
 //
-//	@RequestMapping(path = "/create", method = RequestMethod.POST)
-//	public String create(@ModelAttribute("editForm") DockerApp editForm,
+//	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
+//	public String addHostEntity(@ModelAttribute("editForm") DockerApp editForm,
 //						 Model model,
 //						 BindingResult bindingResult,
 //						 RedirectAttributes redirectAttributes) {

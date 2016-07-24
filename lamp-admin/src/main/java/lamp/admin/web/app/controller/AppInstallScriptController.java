@@ -37,8 +37,8 @@ public class AppInstallScriptController {
 //		return "app/template/script/view";
 //	}
 //
-//	@RequestMapping(path = "/create", method = RequestMethod.GET)
-//	public String create(@PathVariable("templateId") String templateId, @ModelAttribute("editForm") AppInstallScriptCreateForm editForm, Model model) {
+//	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
+//	public String addHostEntity(@PathVariable("templateId") String templateId, @ModelAttribute("editForm") AppInstallScriptCreateForm editForm, Model model) {
 //
 //
 //		return createForm(templateId, editForm, model);
@@ -52,8 +52,8 @@ public class AppInstallScriptController {
 //		return "app/template/script/edit";
 //	}
 //
-//	@RequestMapping(path = "/create", method = RequestMethod.POST)
-//	public String create(@PathVariable("templateId") String templateId, @Valid @ModelAttribute("editForm") AppInstallScriptCreateForm editForm,
+//	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
+//	public String addHostEntity(@PathVariable("templateId") String templateId, @Valid @ModelAttribute("editForm") AppInstallScriptCreateForm editForm,
 //			BindingResult bindingResult, Model model,
 //			RedirectAttributes redirectAttributes) {
 //		if (bindingResult.hasErrors()) {
@@ -108,8 +108,8 @@ public class AppInstallScriptController {
 //		return "redirect:/app/template/{templateId}";
 //	}
 //
-//	@RequestMapping(path = "/{scriptId}/delete", method = RequestMethod.GET)
-//	public String delete(@PathVariable("templateId") String templateId,
+//	@RequestMapping(path = "/{scriptId}/removeHostEntity", method = RequestMethod.GET)
+//	public String removeHostEntity(@PathVariable("templateId") String templateId,
 //			@PathVariable("scriptId") Long scriptId,
 //			RedirectAttributes redirectAttributes) {
 //

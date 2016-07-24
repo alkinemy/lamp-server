@@ -39,7 +39,7 @@ public class SimpleAppController {
 //
 
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=create-simple-app"})
+	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=addHostEntity-simple-app"})
 	public String create(HttpServletRequest request, Model model,
 						@ModelAttribute("editForm") SimpleAppCreateForm editForm) {
 		String path = HttpServletRequestUtils.getRestPath(request);
@@ -54,7 +54,7 @@ public class SimpleAppController {
 		return "apps/simple-app-edit";
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.POST, params = {"action=create-simple-app"})
+	@RequestMapping(path = "/**", method = RequestMethod.POST, params = {"action=addHostEntity-simple-app"})
 	public String create(HttpServletRequest request, Model model,
 						 @ModelAttribute("editForm") SimpleAppCreateForm editForm,
 						 BindingResult bindingResult,
@@ -69,8 +69,8 @@ public class SimpleAppController {
 		}
 	}
 //
-//	@RequestMapping(path = "/{id}/delete", method = RequestMethod.GET)
-//	public String delete(@PathVariable("id") String id,
+//	@RequestMapping(path = "/{id}/removeHostEntity", method = RequestMethod.GET)
+//	public String removeHostEntity(@PathVariable("id") String id,
 //						 @ModelAttribute("editForm") AppUndeployForm editForm,
 //						 Model model) {
 //
@@ -90,11 +90,11 @@ public class SimpleAppController {
 //		List<AppManagementListener> appManagementListeners = appManagementListenerService.getAppManagementListenerList();
 //		model.addAttribute("appManagementListeners", appManagementListeners);
 //
-//		return "app/delete";
+//		return "app/removeHostEntity";
 //	}
 //
-//	@RequestMapping(path = "/{id}/delete", method = RequestMethod.POST)
-//	public String delete(@PathVariable("id") String id,
+//	@RequestMapping(path = "/{id}/removeHostEntity", method = RequestMethod.POST)
+//	public String removeHostEntity(@PathVariable("id") String id,
 //						 @ModelAttribute("editForm") AppUndeployForm editForm,
 //						 Model model,
 //						 BindingResult bindingResult,

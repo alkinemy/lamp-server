@@ -1,23 +1,17 @@
 package lamp.admin.domain.app.base.service;
 
 import lamp.admin.core.agent.AgentClient;
-import lamp.admin.core.agent.AgentResponseErrorException;
 import lamp.admin.core.app.base.*;
 import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.app.base.model.AppInstanceDeployPolicy;
-import lamp.admin.domain.host.service.HostService;
-import lamp.admin.domain.resource.repo.service.AppResourceLoader;
-import lamp.common.utils.ExceptionUtils;
+import lamp.admin.domain.host.service.HostFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.ServletOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +31,7 @@ public class AppInstanceManagementService {
 	private AgentClient agentClient;
 
 	@Autowired
-	private HostService hostService;
+	private HostFacadeService hostFacadeService;
 
 	@Autowired
 	private AppInstanceDeployService appInstanceDeployService;
@@ -139,7 +133,7 @@ public class AppInstanceManagementService {
 
 
 	protected AppInstance newAppInstance(App app, String instanceId, String hostId) {
-		Host host = hostService.getHost(hostId);
+		Host host = hostFacadeService.getHost(hostId);
 
 		AppInstance appInstance = new AppInstance();
 		appInstance.setId(instanceId);
@@ -176,7 +170,7 @@ public class AppInstanceManagementService {
 		appInstance.setAppVersion(app.getVersion());
 		appInstance.setTags(app.getTags());
 
-		Host host = hostService.getHost(appInstance.getHostId());
+		Host host = hostFacadeService.getHost(appInstance.getHostId());
 		appInstance.setClusterId(host.getClusterId());
 		appInstance.setClusterName(host.getClusterName());
 		appInstance.setHostName(host.getName());

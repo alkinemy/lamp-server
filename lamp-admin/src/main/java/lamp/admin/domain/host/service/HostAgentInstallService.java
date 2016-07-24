@@ -1,5 +1,6 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.core.host.Host;
 import lamp.admin.core.host.HostCredentials;
 import lamp.admin.core.script.ScriptCommand;
 import lamp.admin.core.script.ScriptExecuteCommand;
@@ -8,8 +9,6 @@ import lamp.admin.core.script.ScriptFileRemoveCommand;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.host.model.*;
-import lamp.admin.domain.host.model.entity.HostEntity;
-
 import lamp.admin.domain.support.el.ExpressionParser;
 import lamp.common.utils.*;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +32,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static net.sf.expectit.matcher.Matchers.regexp;
-
 @Slf4j
 @Service
 public class HostAgentInstallService {
@@ -48,7 +45,7 @@ public class HostAgentInstallService {
 	private AgentInstallProperties agentInstallProperties;
 
 	@Autowired
-	private HostEntityService hostEntityService;
+	private HostService hostService;
 
 	@Transactional
 	public AgentInstallResult installAgent(TargetHost targetHost,
@@ -60,29 +57,37 @@ public class HostAgentInstallService {
 		AgentInstallResult result = installAgent(targetHost, hostCredentials, agentFilePath, hostConfiguration, printStream);
 		AgentInstallMetadata metadata = result.getMetadata();
 
-		Optional<HostEntity> hostEntityOptional = hostEntityService.getOptionalByAddress(targetHost.getId());
-		if (hostEntityOptional.isPresent()) {
-			HostEntity hostEntity = hostEntityOptional.get();
-			hostEntity.setClusterId(targetHost.getClusterId());
-			hostEntity.setName(targetHost.getName());
-			hostEntity.setAddress(targetHost.getAddress());
-			hostEntity.setName(result.getHostname());
-			hostEntity.setAgentInstallDirectory(metadata.getAgentInstallDirectory());
-			hostEntity.setAgentInstallFilename(metadata.getAgentInstallFilename());
-			hostEntity.setAgentFile(metadata.getAgentFile());
+		Map<String, Object> parameters = result.getParameters();
 
+		Optional<Host> hostOptional = hostService.getHostOptional(targetHost.getId());
+
+		if (hostOptional.isPresent()) {
+			Host host = hostOptional.get();
+			host.setClusterId(targetHost.getClusterId());
+			host.setName(targetHost.getName());
+			host.setAddress(targetHost.getAddress());
+			host.setName(result.getHostname());
+			host.setAgentInstallDirectory(metadata.getAgentInstallDirectory());
+			host.setAgentInstallFilename(metadata.getAgentInstallFilename());
+			host.setAgentFile(metadata.getAgentFile());
+
+			host.setParameters(parameters);
+
+			hostService.updateHost(host);
 		} else {
-			HostEntity hostEntity = new HostEntity();
-			hostEntity.setId(targetHost.getId());
-			hostEntity.setClusterId(targetHost.getClusterId());
-			hostEntity.setName(targetHost.getName());
-			hostEntity.setAddress(targetHost.getAddress());
-			hostEntity.setName(result.getHostname());
-			hostEntity.setAgentInstallDirectory(metadata.getAgentInstallDirectory());
-			hostEntity.setAgentInstallFilename(metadata.getAgentInstallFilename());
-			hostEntity.setAgentFile(metadata.getAgentFile());
+			Host host = new Host();
+			host.setId(targetHost.getId());
+			host.setClusterId(targetHost.getClusterId());
+			host.setName(targetHost.getName());
+			host.setAddress(targetHost.getAddress());
+			host.setName(result.getHostname());
+			host.setAgentInstallDirectory(metadata.getAgentInstallDirectory());
+			host.setAgentInstallFilename(metadata.getAgentInstallFilename());
+			host.setAgentFile(metadata.getAgentFile());
 
-			hostEntityService.create(hostEntity);
+			host.setParameters(parameters);
+
+			hostService.addHost(host);
 		}
 
 		return result;
@@ -128,6 +133,7 @@ public class HostAgentInstallService {
 		result.setMetadata(agentInstallMetadata);
 
 		Map<String, Object> parameters = agentInstallProperties.getParameters();
+		result.setParameters(parameters);
 		parameters.put("agentId", agentInstallMetadata.getAgentId());
 		parameters.put("agentPort", agentInstallProperties.getPort());
 
@@ -215,6 +221,7 @@ public class HostAgentInstallService {
 //				printStream.println(response);
 //				log.error("response = {}", response);
 //			}
+;
 		} catch (Exception e) {
 			log.error("Agent install failed", e);
 			result.setError(ExceptionUtils.getStackTrace(e));

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class ClusterAssembler extends AbstractListAssembler <ClusterEntity, Cluster> {
 
 	@Override protected Cluster doAssemble(ClusterEntity entity) {
-		Cluster app = JsonUtils.parse(entity.getData(), Cluster.class);
-		return app;
+		Cluster cluster = JsonUtils.parse(entity.getData(), Cluster.class);
+		return cluster;
 	}
 
 }

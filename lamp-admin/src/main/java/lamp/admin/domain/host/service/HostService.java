@@ -1,69 +1,49 @@
 package lamp.admin.domain.host.service;
 
 
-import lamp.admin.LampAdminConstants;
-import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.Host;
-import lamp.admin.core.host.HostCredentials;
-import lamp.admin.core.host.ScannedHost;
-import lamp.admin.domain.agent.model.Agent;
-import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.base.exception.Exceptions;
-import lamp.admin.domain.host.model.*;
+import lamp.admin.domain.base.exception.LampErrorCode;
 import lamp.admin.domain.host.model.entity.HostEntity;
-import lamp.admin.domain.host.service.form.HostCredentialsForm;
-import lamp.admin.domain.host.service.form.HostScanForm;
-import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
-import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
+import lamp.admin.domain.host.repository.HostEntityRepository;
 import lamp.admin.web.AdminErrorCode;
-import lamp.common.utils.FileUtils;
-import lamp.common.utils.InetAddressUtils;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-@Slf4j
 @Service
 public class HostService {
-
+	
 	@Autowired
-	private HostEntityService hostEntityService;
-
-	@Autowired
-	private HostScanService hostScanService;
-
-	@Autowired
-	private HostAgentInstallService hostAgentInstallService;
-
-	@Autowired
-	private AgentService agentService;
-
-	@Autowired
-	private AgentClient agentClient;
+	private HostEntityRepository hostEntityRepository;
 
 	@Autowired
 	private SmartAssembler smartAssembler;
 
-
-	public List<Host> getHosts() {
-		return smartAssembler.assemble(hostEntityService.getList(), HostEntity.class, Host.class);
+	public List<Host> getHostList() {
+		return smartAssembler.assemble(getHostEntityList(), HostEntity.class, Host.class);
 	}
 
-	public List<Host> getHostsByClusterId(String clusterId) {
+	public List<Host> getHostListByClusterId(String clusterId) {
 		if (StringUtils.isBlank(clusterId)) {
-			return getHosts();
+			return getHostList();
 		}
-		return smartAssembler.assemble(hostEntityService.getList(clusterId), HostEntity.class, Host.class);
+		return smartAssembler.assemble(getHostEntityList(clusterId), HostEntity.class, Host.class);
 	}
+
+	public List<HostEntity> getHostEntityList() {
+		return hostEntityRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+	}
+
+	public List<HostEntity> getHostEntityList(String clusterId) {
+		return hostEntityRepository.findAllByClusterId(new Sort(Sort.Direction.ASC, "name"));
+	}
+
 
 	public Host getHost(String id) {
 		Optional<Host> hostOptional = getHostOptional(id);
@@ -72,137 +52,46 @@ public class HostService {
 	}
 
 	public Optional<Host> getHostOptional(String id) {
-		Optional<HostEntity> hostEntityOptional = hostEntityService.getOptional(id);
+		Optional<HostEntity> hostEntityOptional = getHostEntityOptional(id);
 		Host host =  smartAssembler.assemble(hostEntityOptional.orElse(null), HostEntity.class, Host.class);
 		return Optional.ofNullable(host);
 	}
 
-	public List<ScannedHost> scanHost(HostScanForm form) {
-		List<ScannedHost> scannedHosts = new ArrayList<>();
-		List<String> hostnames = InetAddressUtils.getRangeIP4Address(form.getHostnames());
-		for (String host : hostnames) {
-			ScannedHost scannedHost = hostScanService.scanHost(host, form.getSshPort());
-			scannedHosts.add(scannedHost);
-		}
-		return scannedHosts;
+	public HostEntity getHostEntity(String id) {
+		Optional<HostEntity> hostEntityOptional = getHostEntityOptional(id);
+		Exceptions.throwsException(!hostEntityOptional.isPresent(), LampErrorCode.HOST_NOT_FOUND);
+		return hostEntityOptional.get();
 	}
 
-	public List<AgentInstallResult> installAgents(HostCredentialsForm editForm) throws IOException {
-		HostCredentials hostCredentials = getHostCredentials(editForm);
-
-		HostConfiguration hostConfiguration = new HostConfiguration();
-
-		String agentFile = editForm.getAgentFile();
-
-		List<TargetHost> targetHosts = null;
-		if (editForm instanceof ScannedHostCredentialsForm) {
-			targetHosts = getTargetHosts((ScannedHostCredentialsForm) editForm);
-		} else if (editForm instanceof ManagedHostCredentialsForm) {
-			targetHosts = getTargetHosts((ManagedHostCredentialsForm) editForm);
-		}
-
-		return installAgents(targetHosts, hostCredentials, agentFile, hostConfiguration);
+	public Optional<HostEntity> getHostEntityOptional(String id) {
+		return Optional.ofNullable(hostEntityRepository.findOne(id));
 	}
 
-	protected List<TargetHost> getTargetHosts(ScannedHostCredentialsForm editForm) {
-		List<TargetHost> targetHosts = new ArrayList<>();
-		for (String address : editForm.getScannedHostAddress()) {
-			TargetHost targetHost;
-			Optional<HostEntity> hostEntityOptional = hostEntityService.getOptionalByAddress(address);
-			if (hostEntityOptional.isPresent()) {
-				targetHost = newTargetHost(hostEntityOptional.get());
-			} else {
-				targetHost = new TargetHost();
-				targetHost.setId(UUID.randomUUID().toString());
-				targetHost.setClusterId(editForm.getClusterId());
-				targetHost.setName(InetAddressUtils.getHostName(address, address));
-				targetHost.setAddress(address);
-			}
-			targetHosts.add(targetHost);
-		}
-		return targetHosts;
+	public Optional<HostEntity> getHostEntityOptionalByAddress(String address) {
+		return hostEntityRepository.findOneByAddress(address);
 	}
 
-	protected List<TargetHost> getTargetHosts(ManagedHostCredentialsForm editForm) {
-		List<TargetHost> targetHosts = new ArrayList<>();
-		for (String hostId : editForm.getHostId()) {
-			HostEntity hostEntity = hostEntityService.get(hostId);
-			TargetHost targetHost = newTargetHost(hostEntity);
 
-			targetHosts.add(targetHost);
-		}
-		return targetHosts;
+	public Host addHost(Host host) {
+		HostEntity hostEntity = smartAssembler.assemble(host, Host.class, HostEntity.class);
+		HostEntity saved = addHostEntity(hostEntity);
+		return smartAssembler.assemble(saved, HostEntity.class, Host.class);
 	}
 
-	protected TargetHost newTargetHost(HostEntity hostEntity) {
-		TargetHost targetHost = new TargetHost();
-		targetHost.setId(hostEntity.getId());
-		targetHost.setClusterId(hostEntity.getClusterId());
-		targetHost.setName(hostEntity.getName());
-		targetHost.setAddress(hostEntity.getAddress());
-		return targetHost;
+	public HostEntity addHostEntity(HostEntity hostEntity) {
+		return hostEntityRepository.save(hostEntity);
 	}
 
-	protected HostCredentials getHostCredentials(HostCredentialsForm editForm) throws IOException {
-		HostCredentials hostCredentials = new HostCredentials();
-		hostCredentials.setUsername(editForm.getUsername());
-		hostCredentials.setUsePassword(editForm.isUsePassword());
-
-		if (editForm.isUsePassword()) {
-			hostCredentials.setPassword(editForm.getPassword());
-		} else {
-			// TODO file size check
-			if (editForm.getPrivateKey() != null && !editForm.getPrivateKey().isEmpty()) {
-				hostCredentials.setPrivateKey(new String(editForm.getPrivateKey().getBytes(), LampAdminConstants.DEFAULT_CHARSET));
-				hostCredentials.setPassphrase(editForm.getPassphrase());
-			} else {
-				String userHome = System.getProperty("user.home");
-				File file = new File(userHome, ".ssh/id_rsa");
-				hostCredentials.setPrivateKey(FileUtils.readFileToString(file, LampAdminConstants.DEFAULT_CHARSET));
-				hostCredentials.setPassphrase(editForm.getPassphrase());
-			}
-		}
-		return hostCredentials;
+	public Host updateHost(Host host) {
+		HostEntity hostEntity = getHostEntity(host.getId());
+		smartAssembler.populate(host, hostEntity);
+		return smartAssembler.assemble(hostEntity, HostEntity.class, Host.class);
 	}
 
-	protected List<AgentInstallResult> installAgents(List<TargetHost> targetHosts, HostCredentials hostCredentials, String agentFile, HostConfiguration hostConfiguration) throws IOException {
-		List<AgentInstallResult> results = new ArrayList<>();
-		for (TargetHost targetHost : targetHosts) {
-			// TODO Async
-			Optional<HostEntity> hostEntityOptional = hostEntityService.getOptional(targetHost.getId());
-			if (hostEntityOptional.isPresent()) {
-				HostEntity hostEntity = hostEntityOptional.get();
-				shutdownAgent(hostEntity.getId(), hostEntity.getStatus());
-			}
-
-			AgentInstallResult result = hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
-			results.add(result);
-		}
-		return results;
+	public void removeHostEntity(String id) {
+		hostEntityRepository.delete(id);
 	}
 
-	public void remove(String hostId) {
-		HostEntity hostEntity = hostEntityService.get(hostId);
-
-		shutdownAgent(hostEntity.getId(), hostEntity.getStatus());
-
-		hostEntityService.delete(hostEntity.getId());
-	}
-
-	protected void shutdownAgent(String hostId, HostStatusCode hostStatusCode) {
-		Optional<Agent> agentOptional = agentService.getAgentOptional(hostId);
-		boolean hostManaged = HostStatusCode.UP.equals(hostStatusCode)
-			|| HostStatusCode.DOWN.equals(hostStatusCode);
-		if (agentOptional.isPresent()) {
-			Agent agent = agentOptional.get();
-
-			if (hostManaged) {
-				log.info("Agent shutdown : {}", hostId);
-				agentClient.shutdown(agent);
-			}
-			agentService.deregister(agent.getId());
-		}
-	}
 
 }
 

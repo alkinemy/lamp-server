@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @ToString
@@ -15,5 +17,7 @@ public class AgentInstallResult {
 	private String status;
 
 	private String error;
+
+	private Map<String, Object> parameters;
 
 }

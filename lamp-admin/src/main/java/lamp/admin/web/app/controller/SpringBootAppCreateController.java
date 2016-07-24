@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @MenuMapping(MenuConstants.APP)
 @Controller
-@RequestMapping(path = "/apps", params = {"action=create-spring-boot-app"})
+@RequestMapping(path = "/apps", params = {"action=addHostEntity-spring-boot-app"})
 public class SpringBootAppCreateController extends AbstractAppController {
 
 	@Autowired

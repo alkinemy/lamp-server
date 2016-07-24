@@ -40,14 +40,14 @@ public class WatchTargetController {
 		return "monitoring/watch-target/list";
 	}
 
-	@RequestMapping(path = "/create", method = RequestMethod.GET)
+	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute("editForm") WatchTargetCreateForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 
 		return "monitoring/watch-target/edit";
 	}
 
-	@RequestMapping(path = "/create", method = RequestMethod.POST)
+	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
 	public String create(@Valid @ModelAttribute("editForm") WatchTargetCreateForm editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {
@@ -90,7 +90,7 @@ public class WatchTargetController {
 		return "redirect:/monitoring/watch-target";
 	}
 
-	@RequestMapping(path = "/delete", method = RequestMethod.GET)
+	@RequestMapping(path = "/removeHostEntity", method = RequestMethod.GET)
 	public String delete(@RequestParam("id") String id
 			, RedirectAttributes redirectAttributes) {
 

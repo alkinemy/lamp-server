@@ -190,7 +190,7 @@ public class SshClient {
 			channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
 
-			// get I/O streams for remote scp
+			// getHostEntity I/O streams for remote scp
 			OutputStream out = channel.getOutputStream();
 			InputStream in = channel.getInputStream();
 

@@ -1,8 +1,6 @@
 package lamp.admin.domain.app.base.service;
 
 import lamp.admin.core.app.base.AppInstance;
-import lamp.admin.core.host.Host;
-import lamp.admin.domain.host.service.HostService;
 import lamp.collector.core.base.Endpoint;
 import lamp.collector.core.metrics.MetricsTarget;
 import lamp.collector.core.metrics.MetricsTargetProvider;

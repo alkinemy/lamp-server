@@ -13,10 +13,10 @@ public class HostScheduledService {
 	private HostMetricsProcessService hostMetricsProcessService;
 
 	@Autowired
-	private HostService hostService;
+	private HostFacadeService hostFacadeService;
 
 	public void hostMetricsMonitoring() {
-		List<Host> hosts = hostService.getHosts();
+		List<Host> hosts = hostFacadeService.getHosts();
 		hosts.stream().forEach(hostMetricsProcessService::processMetrics);
 	}
 
