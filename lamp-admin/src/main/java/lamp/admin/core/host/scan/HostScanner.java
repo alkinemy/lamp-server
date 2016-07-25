@@ -27,8 +27,6 @@ public class HostScanner {
 			scannedHost.setResponseTime(System.currentTimeMillis() - startTimeMillis);
 		}
 
-		boolean managed = scanHostManaged(host);
-		scannedHost.setManaged(managed);
 		return scannedHost;
 	}
 
@@ -46,10 +44,6 @@ public class HostScanner {
 		}
 
 		return connected;
-	}
-
-	protected boolean scanHostManaged(String host) {
-		return false;
 	}
 
 }

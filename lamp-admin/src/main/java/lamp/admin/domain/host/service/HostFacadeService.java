@@ -197,6 +197,18 @@ public class HostFacadeService {
 		}
 	}
 
+
+	protected void shutdownAgent(Agent agent, HostStatusCode hostStatusCode) {
+		boolean hostManaged = HostStatusCode.UP.equals(hostStatusCode)
+			|| HostStatusCode.DOWN.equals(hostStatusCode);
+		if (agent != null) {
+			if (hostManaged) {
+				agentClient.shutdown(agent);
+			}
+			agentService.deregister(agent.getId());
+		}
+	}
+
 }
 
 

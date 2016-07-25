@@ -8,6 +8,7 @@ import lombok.Setter;
 public class AgentInfo {
 
 	private String id;
+	private String groupId;
 	private String artifactId;
 	//TODO 정보들 추가하기
 
