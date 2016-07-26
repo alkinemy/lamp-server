@@ -23,14 +23,14 @@ public abstract class GenericAlertActionController<A extends AlertAction> {
 	private AlertActionService alertActionService;
 
 
-	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
+	@RequestMapping(path = "/create", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute("editForm") A editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 
 		return "monitoring/alert-actions/" + getType() + "/edit";
 	}
 
-	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
+	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public String create(@Valid @ModelAttribute("editForm") A editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {

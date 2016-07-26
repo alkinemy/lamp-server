@@ -31,7 +31,6 @@ public enum AdminErrorCode implements ErrorCode {
 	AGENT_PID_FILE_READ_FAILED("에이전트 PID 정보를 가져오는 중 에러가 발생하였습니다."),
 	SERVICE_PROPERTIES_WRITE_FAILED("서비스 프로퍼티즈 파일을 생성하는 중 에러가 발생하였습니다."),
 	AGENT_SYSTEM_LOG_FILE_NOT_FOUND("에이전트 시스템 로그 파일을 찾을 수 없습니다.")
-	, SECRET_KEY_GENERATION_FAILED("비밀키 생성을 실패하였습니다.")
 	, APP_DEPLOY_FAILED("애클리케이션을 디플로이 하는 중 문제가 발생하였습니다.")
 	, INVALID_APP_REPOSITORY_TYPE("잘못된 AppRepositoryType입니다.")
 	, INVALID_APP_TEMPLATE_TYPE("잘못된 AppTemplateType입니다.")
@@ -43,7 +42,15 @@ public enum AdminErrorCode implements ErrorCode {
 	, USER_DUPLICATED_LOGIN("중복된 아이디입니다.")
 	, USER_DUPLICATED_EMAIL("중복된 이메일주소입니다.")
 	, USER_NOT_EXIST("존재하지 않는 유저입니다.")
-	, AGENT_INSTALL_FAILED("에이전트를 설치하는 중 에러가 발생하였습니다."), HOST_NOT_FOUND("호스트를 찾을 수 없습니다.");
+	, AGENT_INSTALL_FAILED("에이전트를 설치하는 중 에러가 발생하였습니다.")
+	, HOST_NOT_FOUND("호스트를 찾을 수 없습니다.")
+	, CLUSTER_NOT_FOUND("클러스터를 찾을 수 없습니다.")
+	, PRIVATE_KEY_UPLOAD_FAILED("개인키를 업로드 할 수 없습니다.")
+	, SECRET_KEY_GENERATION_FAILED("비밀키 생성을 실패하였습니다.")
+	, SECRET_KEY_LOAD_FAILED("비밀키 로딩을 실패하였습니다.")
+	, ENCRYPT_FAILED("암호화 하는 중 오류가 발생하였습니다.")
+	, DECRYPT_FAILED("복호화 하는 중 오류가 발생하였습니다.")
+	, UNSUPPORTED_HOST_AUTH_TYPE("지원하지 않는 인증 타입입니다."), SSH_KEY_NOT_FOUND("SshKey를 찾을 수 없습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

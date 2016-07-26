@@ -17,6 +17,6 @@ public class SpringBootAppCreateForm extends SimpleAppCreateForm {
 	private Integer managementPort;
 
 	private String properties;
-	private String shellFilePath = "classpath:app/spring-boot/spring-boot.sh";
+	private String shellScriptLocation;
 
 }

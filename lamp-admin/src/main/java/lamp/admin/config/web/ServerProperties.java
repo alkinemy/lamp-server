@@ -35,6 +35,9 @@ public class ServerProperties implements ApplicationListener<ApplicationEvent> {
 	private long hostMetricsMonitoringInterval = 10 * 1000;
 	private long appInstanceStatusUpdateInterval = 10 * 1000;
 
+	private String keyStorePassphrase;
+	private String keyStoreLocation;
+
 	@PostConstruct
 	public void init() throws UnknownHostException {
 		try {

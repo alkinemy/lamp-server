@@ -1,15 +1,33 @@
 USE `lamp`;
 
+DROP TABLE IF EXISTS `lamp_ssh_key`;
+
 DROP TABLE IF EXISTS `lamp_cluster`;
 
 DROP TABLE IF EXISTS `lamp_host`;
-DROP TABLE IF EXISTS `lamp_host_auth`;
 DROP TABLE IF EXISTS `lamp_host_status`;
 
+DROP TABLE IF EXISTS `lamp_task`;
 
 DROP TABLE IF EXISTS `lamp_watch_target`;
 DROP TABLE IF EXISTS `lamp_target_server_status`;
 DROP TABLE IF EXISTS `lamp_agent`;
+
+CREATE TABLE `lamp_ssh_key` (
+  `id` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(200) DEFAULT NULL,
+  `description` VARCHAR(255) DEFAULT NULL,
+
+  `username` VARCHAR(255) NOT NULL,
+  `private_key` MEDIUMTEXT DEFAULT NULL,
+  `passphrase` VARCHAR(255) DEFAULT NULL,
+
+  `created_by` VARCHAR(255) NOT NULL,
+  `created_date` DATETIME NOT NULL,
+  `last_modified_by` VARCHAR(255) DEFAULT NULL,
+  `last_modified_date` DATETIME,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lamp_cluster` (
   `id` VARCHAR(100) NOT NULL,
@@ -36,6 +54,7 @@ CREATE TABLE `lamp_host` (
   `cluster_id` VARCHAR(100) DEFAULT NULL,
   `rack` VARCHAR(255) DEFAULT NULL,
 
+  `data_type` VARCHAR(255) DEFAULT NULL,
   `data` MEDIUMTEXT DEFAULT NULL,
 
   `health_monitoring_enabled` TINYINT(1) DEFAULT NULL,
@@ -99,26 +118,25 @@ CREATE TABLE `lamp_host_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-CREATE TABLE `lamp_host_auth` (
+CREATE TABLE `lamp_task` (
   `id` VARCHAR(100) NOT NULL,
   `name` VARCHAR(200) DEFAULT NULL,
   `description` VARCHAR(255) DEFAULT NULL,
+  `version` BIGINT DEFAULT NULL,
 
-  `ssh_username` VARCHAR(100) DEFAULT NULL,
-  `ssh_use_password` TINYINT(1) DEFAULT NULL,
-  `ssh_password` VARCHAR(255) DEFAULT NULL,
-  `ssh_private_key` VARCHAR(2000) DEFAULT NULL,
-  `ssh_passphrase` VARCHAR(255) DEFAULT NULL,
-  `ssh_port` INT NOT NULL,
+  `data_type` VARCHAR(255) DEFAULT NULL,
+  `data` MEDIUMTEXT DEFAULT NULL,
 
+  `status` VARCHAR(100) DEFAULT NULL,
 
   `created_by` VARCHAR(255) NOT NULL,
   `created_date` DATETIME NOT NULL,
   `last_modified_by` VARCHAR(255) DEFAULT NULL,
   `last_modified_date` DATETIME,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `lamp_task_idx01` (`data_type`, `status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 CREATE TABLE `lamp_agent` (

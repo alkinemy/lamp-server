@@ -67,7 +67,7 @@ public class HostScanService {
 //
 //			Optional<HostEntity> host = hostEntityService.getHostEntityOptionalByAddress(address);
 //			if (!host.isPresent()) {
-//				hostEntityService.addHostEntity(null); //TODO host 등록
+//				hostEntityService.create(null); //TODO host 등록
 //			}
 //			return true;
 //		} else {
@@ -75,13 +75,13 @@ public class HostScanService {
 //			hostEntityService.removeHostEntity(agentInfo.getId());
 //			return false;
 //		}
-		Optional<HostEntity> hostEntityOptional = hostService.getHostEntityOptionalByAddress(address);
-		if (hostEntityOptional.isPresent()) {
-			// FIXME 제대로 구현 바람
-			return true;
-		} else {
-
-		}
+//		Optional<HostEntity> hostEntityOptional = hostService.getHostEntityOptionalByAddress(address);
+//		if (hostEntityOptional.isPresent()) {
+//			// FIXME 제대로 구현 바람
+//			return true;
+//		} else {
+//
+//		}
 		//
 		agentInstallProperties.getPort();
 		return false;

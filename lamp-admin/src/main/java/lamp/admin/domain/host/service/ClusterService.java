@@ -1,13 +1,17 @@
 package lamp.admin.domain.host.service;
 
+import lamp.admin.LampAdminConstants;
 import lamp.admin.core.host.AwsCluster;
 import lamp.admin.core.host.Cluster;
 import lamp.admin.core.host.ClusterType;
+import lamp.admin.core.host.HostCredentials;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.host.model.entity.ClusterEntity;
 import lamp.admin.domain.host.repository.ClusterEntityRepository;
 import lamp.admin.domain.host.service.form.ClusterForm;
+import lamp.admin.domain.host.service.form.HostCredentialsForm;
 import lamp.admin.web.AdminErrorCode;
+import lamp.common.utils.FileUtils;
 import lamp.common.utils.StringUtils;
 import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,9 +46,16 @@ public class ClusterService {
 		return smartAssembler.assemble(clusterEntity, ClusterEntity.class, Cluster.class);
 	}
 
+	public AwsCluster getAwsCluster(String id) {
+		Cluster cluster = getCluster(id);
+		boolean isAwsCluster = (cluster instanceof AwsCluster);
+		Exceptions.throwsException(!isAwsCluster, AdminErrorCode.CLUSTER_NOT_FOUND, id);
+		return (AwsCluster) cluster;
+	}
+
 	public ClusterEntity getClusterEntity(String id) {
 		Optional<ClusterEntity> clusterOptional = getClusterEntityOptional(id);
-		Exceptions.throwsException(!clusterOptional.isPresent(), AdminErrorCode.HOST_NOT_FOUND, id);
+		Exceptions.throwsException(!clusterOptional.isPresent(), AdminErrorCode.CLUSTER_NOT_FOUND, id);
 		return clusterOptional.get();
 	}
 
@@ -59,20 +72,20 @@ public class ClusterService {
 
 	@Transactional
 	public Cluster addCluster(ClusterForm editForm) {
-		if (StringUtils.isBlank(editForm.getId())) {
-			editForm.setId(UUID.randomUUID().toString());
-		}
+		Cluster cluster = createCluster(UUID.randomUUID().toString(), editForm);
+		return addCluster(cluster);
+	}
+
+	protected Cluster createCluster(String id, ClusterForm editForm) {
+		Cluster cluster;
 		if (ClusterType.AWS.equals(editForm.getType())) {
-			AwsCluster cluster = new AwsCluster();
-			BeanUtils.copyProperties(editForm, cluster);
-
-			return addCluster(cluster);
+			cluster = new AwsCluster();
 		} else {
-			Cluster cluster = new Cluster();
-			BeanUtils.copyProperties(editForm, cluster);
-
-			return addCluster(cluster);
+			cluster = new Cluster();
 		}
+		BeanUtils.copyProperties(editForm, cluster);
+		cluster.setId(id);
+		return cluster;
 	}
 
 	@Transactional
@@ -89,6 +102,27 @@ public class ClusterService {
 	public ClusterEntity addClusterEntity(ClusterEntity clusterEntity) {
 		return clusterEntityRepository.save(clusterEntity);
 	}
+
+	public ClusterForm getClusterForm(String id) {
+		Cluster cluster = getCluster(id);
+		ClusterForm clusterForm = new ClusterForm();
+		BeanUtils.copyProperties(cluster, clusterForm);
+		return clusterForm;
+	}
+
+	@Transactional
+	public Cluster updateCluster(String id, ClusterForm editForm) {
+		Cluster cluster = createCluster(id, editForm);
+		return updateCluster(id, cluster);
+	}
+
+	@Transactional
+	public Cluster updateCluster(String id, Cluster cluster) {
+		ClusterEntity clusterEntity = getClusterEntity(id);
+		smartAssembler.populate(cluster, clusterEntity, Cluster.class, ClusterEntity.class);
+		return smartAssembler.assemble(clusterEntity, ClusterEntity.class, Cluster.class);
+	}
+
 
 }
 

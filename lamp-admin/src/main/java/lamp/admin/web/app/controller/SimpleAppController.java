@@ -39,7 +39,7 @@ public class SimpleAppController {
 //
 
 
-	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=addHostEntity-simple-app"})
+	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=create-simple-app"})
 	public String create(HttpServletRequest request, Model model,
 						@ModelAttribute("editForm") SimpleAppCreateForm editForm) {
 		String path = HttpServletRequestUtils.getRestPath(request);
@@ -54,7 +54,7 @@ public class SimpleAppController {
 		return "apps/simple-app-edit";
 	}
 
-	@RequestMapping(path = "/**", method = RequestMethod.POST, params = {"action=addHostEntity-simple-app"})
+	@RequestMapping(path = "/**", method = RequestMethod.POST, params = {"action=create-simple-app"})
 	public String create(HttpServletRequest request, Model model,
 						 @ModelAttribute("editForm") SimpleAppCreateForm editForm,
 						 BindingResult bindingResult,

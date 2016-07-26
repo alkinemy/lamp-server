@@ -1,5 +1,6 @@
 package lamp.admin.domain.host.service.form;
 
+import lamp.admin.domain.host.model.HostAuthType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,7 +18,9 @@ public abstract class HostCredentialsForm {
 	private String agentFile;
 
 	private String username;
-	private boolean usePassword = true;
+	private HostAuthType authType = HostAuthType.PASSWORD;
+	@Deprecated
+	private boolean usePassword;
 
 	private String password;
 	private String passwordConfirm;
@@ -25,6 +28,8 @@ public abstract class HostCredentialsForm {
 	private MultipartFile privateKey;
 	private String passphrase;
 	private String passphraseConfirm;
+
+	private String sshKeyId;
 
 	private int sshPort = 22;
 

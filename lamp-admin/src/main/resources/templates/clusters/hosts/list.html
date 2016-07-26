@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/list">
+
+<div layout:fragment="page-level-plugin">
+	<script th:src="@{/assets/global/plugins/jquery-knob/js/jquery.knob.js}" type="text/javascript"></script>
+</div>
+<div layout:fragment="page-level-script">
+	<script th:src="@{/assets/pages/scripts/components-knob-dials.min.js}" type="text/javascript"></script>
+	<script type="text/javascript">
+		// <![CDATA[
+
+		// ]]>
+	</script>
+</div>
+
+<body>
+		<div class="row" layout:fragment="content-main">
+			<div class="col-md-12">
+				<!-- BEGIN BORDERED TABLE PORTLET-->
+				<div class="portlet light portlet-fit bordered">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-bubble font-dark"></i>
+							<span class="caption-subject font-dark bold uppercase">Hosts</span>
+						</div>
+						<div class="actions">
+							<div class="btn-group btn-group-devided">
+								<a th:href="@{/clusters/{clusterId}/hosts/add(clusterId=${clusterId})}" class="btn btn-sm default">Launch EC2 Instances</a>
+							</div>
+						</div>
+					</div>
+					<div class="portlet-body">
+						<form class="form-horizontal" role="form"  th:action="@{/hosts/managed/credentials}" th:object="${editForm}" method="post">
+							<div class="row">
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover">
+										<colgroup>
+											<col width="10" />
+											<col width="100" />
+											<col width="100" />
+											<col width="100" />
+											<col width="50" />
+											<col width="100" />
+											<col width="100" />
+											<col width="100" />
+											<col width="50" />
+										</colgroup>
+										<thead>
+										<tr>
+											<th> <input type="checkbox" name="hostIdAll" id="hostIdAll" value="" /> </th>
+											<th> Name </th>
+											<th> IP </th>
+											<th> Cluster </th>
+											<th> Status </th>
+											<th> CPU Load </th>
+											<th> Disk </th>
+											<th> Memory </th>
+											<th> Action </th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="host : ${hosts}">
+											<td> <input type="checkbox" name="hostId" th:value="${host.id}" /> </td>
+											<td th:text="${host.name}"> name </td>
+											<td th:text="${host.address}"> address </td>
+											<td th:text="${host.clusterName}"> cluster </td>
+											<td><span th:text="${host.status}"
+													  th:class="${host.status}? 'label label-sm'
+                                              + (${host.status.name() == 'UNKNOWN'}? ' label-danger' : '')
+                                              + (${host.status.name() == 'UP'}? ' label-success' : '')
+                                              + (${host.status.name() == 'OUT_OF_SERVICE'}? ' label-danger' : '')
+                                              + (${host.status.name() == 'DOWN'}? ' label-warning' : '')">Suspended </span>
+											</td>
+											<td>
+												<span th:text="${#numbers.formatDecimal(host.cpuUser, 1, 2) + '%us'}"></span>
+												<span th:text="${#numbers.formatDecimal(host.cpuSys,  1, 2) + '%sy'}"></span>
+												<span th:text="${#numbers.formatDecimal(host.cpuNice, 1, 2) + '%ni'}"></span>
+											</td>
+											<td>
+												<div class="progress-info">
+													<div class="progress">
+														<div th:style="'width: ' + ${host.diskUsedPercentage} + '%;'" th:class="'progress-bar progress-bar-' + ${host.diskUsedPercentageLevel}">
+															<span th:text="${host.readableDiskUsed} + '/' + ${host.readableDiskTotal}">1/1</span>
+														</div>
+														<!--<span th:text="${host.readableDiskUsed} + '/' + ${host.readableDiskTotal}">1/1</span>-->
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class="progress-info">
+													<div class="progress">
+														<div th:style="'width: ' + ${host.memUsedPercentage} + '%;'" th:class="'progress-bar progress-bar-' + ${host.memUsedPercentageLevel}">
+															<span th:text="${host.readableMemUsed} + '/' + ${host.readableMemTotal}">1/1</span>
+															<!--<span th:text="${host.memUsedPercentage} + '% used'">76% used</span>-->
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class="btn-group">
+													<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false"> Action
+														<i class="fa fa-angle-down"></i>
+													</a>
+													<ul class="dropdown-menu" role="menu">
+														<li>
+															<a th:href="@{/hosts/{hostId}/remove(hostId=${host.id})}"> Remove </a>
+														</li>
+													</ul>
+												</div>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- END BORDERED TABLE PORTLET-->
+			</div>
+		</div>
+
+
+</body>
+</html>

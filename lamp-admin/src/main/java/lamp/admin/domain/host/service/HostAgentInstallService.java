@@ -141,7 +141,7 @@ public class HostAgentInstallService {
 			client.addHostKeyVerifier(new PromiscuousVerifier());
 			client.connect(address, hostCredentials.getSshPort());
 
-			if (hostCredentials.isUsePassword()) {
+			if (HostAuthType.PASSWORD.equals(hostCredentials.getAuthType())) {
 				client.authPassword(hostCredentials.getUsername(), hostCredentials.getPassword());
 			} else {
 				PKCS8KeyFile keyFile = new PKCS8KeyFile();

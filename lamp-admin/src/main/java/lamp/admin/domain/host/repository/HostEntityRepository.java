@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface HostEntityRepository extends LampJpaRepository<HostEntity, String> {
 
-	List<HostEntity> findAllByClusterId(Sort name);
+	List<HostEntity> findAllByClusterId(String clusterId, Sort sort);
 
 	Optional<HostEntity> findOneByAddress(String address);
 

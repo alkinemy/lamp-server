@@ -37,7 +37,7 @@ public abstract class Exceptions {
 		try {
 			return newExceptionInstance(errorCode, t, args);
 		} catch (Exception e) {
-			log.error("Exception addHostEntity failed.", e);
+			log.error("Exception create failed.", e);
 			return new MessageException(DEFAULT_ERROR_MSG, t, DEFAULT_ERROR_CODE, null);
 		}
 	}
@@ -61,7 +61,7 @@ public abstract class Exceptions {
 		try {
 			return newExceptionInstance(errorCode, args);
 		} catch (Exception e) {
-			log.error("Exception addHostEntity failed.", e);
+			log.error("Exception create failed.", e);
 			return new MessageException(DEFAULT_ERROR_MSG, DEFAULT_ERROR_CODE, null);
 		}
 	}

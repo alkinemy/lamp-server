@@ -21,10 +21,6 @@ public enum AppContainerType {
 		this.typeValue = typeValue;
 	}
 
-	public String getTypeName() {
-		return typeName;
-	}
-
 	public static final class Names {
 		public static final String SIMPLE = "simple";
 		public static final String JAR = "jar";

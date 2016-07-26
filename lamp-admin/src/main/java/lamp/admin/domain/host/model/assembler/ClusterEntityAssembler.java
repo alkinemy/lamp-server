@@ -11,24 +11,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClusterEntityAssembler extends AbstractListAssembler<Cluster, ClusterEntity> implements Populater<Cluster, ClusterEntity> {
 
-	@Override protected ClusterEntity doAssemble(Cluster app) {
+	@Override protected ClusterEntity doAssemble(Cluster cluster) {
 
 		ClusterEntity entity = new ClusterEntity();
-		entity.setId(app.getId());
-		entity.setName(app.getName());
-		entity.setDescription(app.getDescription());
-		entity.setType(app.getType());
+		entity.setId(cluster.getId());
+		entity.setName(cluster.getName());
+		entity.setDescription(cluster.getDescription());
+		entity.setType(cluster.getType());
 
-		entity.setDataType(app.getClass().getName());
-		entity.setData(JsonUtils.stringify(app));
+		entity.setDataType(cluster.getClass().getName());
+		entity.setData(JsonUtils.stringify(cluster));
 		return entity;
 	}
 
-	@Override public void populate(Cluster app, ClusterEntity entity) {
-		entity.setName(app.getName());
-		entity.setDescription(app.getDescription());
+	@Override public void populate(Cluster cluster, ClusterEntity entity) {
+		entity.setName(cluster.getName());
+		entity.setDescription(cluster.getDescription());
 
-		entity.setDataType(app.getClass().getName());
-		entity.setData(JsonUtils.stringify(app));
+		entity.setDataType(cluster.getClass().getName());
+		entity.setData(JsonUtils.stringify(cluster));
 	}
 }

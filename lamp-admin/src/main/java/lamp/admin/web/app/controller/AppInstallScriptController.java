@@ -37,8 +37,8 @@ public class AppInstallScriptController {
 //		return "app/template/script/view";
 //	}
 //
-//	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
-//	public String addHostEntity(@PathVariable("templateId") String templateId, @ModelAttribute("editForm") AppInstallScriptCreateForm editForm, Model model) {
+//	@RequestMapping(path = "/create", method = RequestMethod.GET)
+//	public String create(@PathVariable("templateId") String templateId, @ModelAttribute("editForm") AppInstallScriptCreateForm editForm, Model model) {
 //
 //
 //		return createForm(templateId, editForm, model);
@@ -52,8 +52,8 @@ public class AppInstallScriptController {
 //		return "app/template/script/edit";
 //	}
 //
-//	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
-//	public String addHostEntity(@PathVariable("templateId") String templateId, @Valid @ModelAttribute("editForm") AppInstallScriptCreateForm editForm,
+//	@RequestMapping(path = "/create", method = RequestMethod.POST)
+//	public String create(@PathVariable("templateId") String templateId, @Valid @ModelAttribute("editForm") AppInstallScriptCreateForm editForm,
 //			BindingResult bindingResult, Model model,
 //			RedirectAttributes redirectAttributes) {
 //		if (bindingResult.hasErrors()) {

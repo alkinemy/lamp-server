@@ -44,14 +44,14 @@ public class HostAlertRuleController {
 		return "monitoring/hosts/alert-rules/list";
 	}
 
-	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
+	@RequestMapping(path = "/create", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute("editForm") HostMetricsAlertRule editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 
 		return "monitoring/hosts/alert-rules/edit";
 	}
 
-	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
+	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public String create(@Valid @ModelAttribute("editForm") HostMetricsAlertRule editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {

@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @MenuMapping(MenuConstants.APP)
 @Controller
-@RequestMapping(path = "/apps", params = {"action=addHostEntity-group"})
+@RequestMapping(path = "/apps", params = {"action=create-group"})
 public class AppGroupController extends AbstractAppController {
 
 	@Autowired

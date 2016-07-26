@@ -12,7 +12,9 @@ import lamp.common.utils.assembler.SmartAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +43,7 @@ public class HostService {
 	}
 
 	public List<HostEntity> getHostEntityList(String clusterId) {
-		return hostEntityRepository.findAllByClusterId(new Sort(Sort.Direction.ASC, "name"));
+		return hostEntityRepository.findAllByClusterId(clusterId, new Sort(Sort.Direction.ASC, "name"));
 	}
 
 
@@ -72,10 +74,20 @@ public class HostService {
 	}
 
 
-	public Host addHost(Host host) {
+	@Transactional
+	public <T extends Host> T addHost(T host) {
 		HostEntity hostEntity = smartAssembler.assemble(host, Host.class, HostEntity.class);
 		HostEntity saved = addHostEntity(hostEntity);
-		return smartAssembler.assemble(saved, HostEntity.class, Host.class);
+		return smartAssembler.assemble(saved, HostEntity.class, (Class<T>) Host.class);
+	}
+
+	@Transactional
+	public <T extends Host> List<T> addHosts(List<T> hosts) {
+		List<T> result = new ArrayList<>();
+		for (T host : hosts) {
+			result.add(addHost(host));
+		}
+		return result;
 	}
 
 	public HostEntity addHostEntity(HostEntity hostEntity) {

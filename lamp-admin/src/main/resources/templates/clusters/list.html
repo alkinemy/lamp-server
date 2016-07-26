@@ -39,6 +39,7 @@
 									<table class="table table-bordered table-hover">
 										<colgroup>
 											<col width="10" />
+											<col width="50" />
 											<col width="100" />
 											<col width="100" />
 											<col width="100" />
@@ -46,6 +47,7 @@
 										<thead>
 										<tr>
 											<th> <input type="checkbox" name="clusterIdAll" id="clusterIdAll" value="" /> </th>
+											<th> Type </th>
 											<th> Name </th>
 											<th> Description </th>
 											<th> Action </th>
@@ -54,7 +56,8 @@
 										<tbody>
 										<tr th:each="cluster : ${clusters}">
 											<td> <input type="checkbox" name="clusterId" th:value="${cluster.id}" /> </td>
-											<td th:text="${cluster.name}"> name </td>
+											<td th:text="${cluster.type}"> type </td>
+											<td> <a th:href="@{/clusters/{clusterId}/hosts(clusterId=${cluster.id})}" th:text="${cluster.name}">name</a> </td>
 											<td th:text="${cluster.description}"> description </td>
 											<td>
 												<div class="btn-group">
@@ -63,6 +66,7 @@
 													</a>
 													<ul class="dropdown-menu" role="menu">
 														<li>
+															<a th:href="@{/clusters/{clusterId}/update(clusterId=${cluster.id})}"> Edit </a>
 															<a th:href="@{/clusters/{clusterId}/remove(clusterId=${cluster.id})}"> Remove </a>
 														</li>
 													</ul>

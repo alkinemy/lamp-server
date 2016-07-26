@@ -3,6 +3,7 @@ package lamp.admin.domain.host.service;
 import lamp.admin.core.host.HostCredentials;
 import lamp.admin.domain.host.model.AgentInstallMetadata;
 import lamp.admin.domain.host.model.AgentInstallProperties;
+import lamp.admin.domain.host.model.HostAuthType;
 import lamp.admin.domain.host.model.HostConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class HostAgentInstallServiceTest {
 		agentInstallProperties.setResourceLoader(resourceLoader);
 
 		HostCredentials hostCredentials = new HostCredentials();
-		hostCredentials.setUsePassword(true);
+		hostCredentials.setAuthType(HostAuthType.PASSWORD);
 		hostCredentials.setUsername(username);
 		hostCredentials.setPassword(password);
 

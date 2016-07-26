@@ -144,7 +144,8 @@ public class AppService {
 
 	@Transactional
 	public App updateApp(String path, SpringBootAppUpdateForm editForm) {
-		return updateApp(springBootAppService.newApp(path, null, editForm));
+		App app = getAppByPath(path);
+		return updateApp(springBootAppService.newApp(app, editForm));
 	}
 
 	@Transactional

@@ -63,6 +63,7 @@ public class HostMetricsProcessService {
 
 	@Async
 	public void processMetrics(Host host) {
+		log.debug("HostMetricsProcessService process : {}", host);
 		Optional<Agent> agentOptional = agentService.getAgentOptional(host.getId());
 
 		MonitoringMetricsTarget target = getMetricsTarget(host, agentOptional.orElse(null));

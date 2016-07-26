@@ -28,21 +28,21 @@ public class AppInstanceEntityService {
 		return appInstanceEntityRepository.findAllByHostId(hostId);
 	}
 
-	public AppInstanceEntity get(String id) {
-		Optional<AppInstanceEntity> optional = getOptional(id);
+	public AppInstanceEntity getAppInstanceEntity(String id) {
+		Optional<AppInstanceEntity> optional = getOptionalAppInstanceEntity(id);
 		Exceptions.throwsException(!optional.isPresent(), LampErrorCode.APP_INSTANCE_NOT_FOUND, id);
 		return optional.get();
 	}
 
-	public Optional<AppInstanceEntity> getOptional(String id) {
+	public Optional<AppInstanceEntity> getOptionalAppInstanceEntity(String id) {
 		return Optional.ofNullable(appInstanceEntityRepository.findOne(id));
 	}
 
-	public AppInstanceEntity create(AppInstanceEntity appInstanceEntity) {
+	public AppInstanceEntity addAppInstanceEntity(AppInstanceEntity appInstanceEntity) {
 		return appInstanceEntityRepository.save(appInstanceEntity);
 	}
 
-	public void delete(String id) {
+	public void deleteAppInstanceEntity(String id) {
 		appInstanceEntityRepository.delete(id);
 	}
 

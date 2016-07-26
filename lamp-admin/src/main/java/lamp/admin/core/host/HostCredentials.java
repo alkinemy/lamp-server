@@ -1,5 +1,6 @@
 package lamp.admin.core.host;
 
+import lamp.admin.domain.host.model.HostAuthType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,15 +12,15 @@ public class HostCredentials {
 
 	private String username;
 
-	private boolean usePassword = true;
+	private HostAuthType authType;
 
 	private String password;
 
 	private String privateKey;
 	private String passphrase;
 
-	private int sshPort = 22;
+	private String sshKeyId;
 
-	private int parallelInstallCount;
+	private int sshPort = 22;
 
 }

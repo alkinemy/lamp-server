@@ -9,7 +9,6 @@ public abstract class MenuConstants {
 			public static final String AGENT_STOP= "AGENT_STOP";
 		public static final String AGENT = "AGENT";
 			public static final String AGENT_APP = "AGENT_APP";
-		public static final String SSH_KEY = "SSH_KEY";
 		public static final String AGENT_EVENT = "AGENT_EVENT";
 
 
@@ -30,6 +29,7 @@ public abstract class MenuConstants {
 	public static final String HOST = "HOST";
 		public static final String HOSTS = "HOSTS";
 		public static final String CLUSTERS = "CLUSTERS";
+		public static final String SSH_KEYS = "SSH_KEYS";
 
 	public static final String RESOURCE = "RESOURCE";
 		public static final String APP_REPO = "APP_REPO";

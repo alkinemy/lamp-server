@@ -3,6 +3,7 @@ package lamp.admin.core.host;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -17,4 +18,6 @@ public class Cluster {
 
 	private String tenantId;
 
+	private String sshKeyId;
+	private int sshPort = 22;
 }

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+JAVA="java"
 JARFile="${artifactId}.jar"
 PIDFile="${artifactId}.pid"
 JVM_OPTS="${jvmOpts}"
@@ -69,7 +70,7 @@ case "$1" in
       echo "Process $PID already running"
       exit 1
     fi
-    nohup java $JVM_OPTS -jar $JARFile $SPRING_OPTS 1>stdout.log 2>stderr.log &
+    nohup $JAVA $JVM_OPTS -jar $JARFile $SPRING_OPTS 1>stdout.log 2>stderr.log &
     echo "Process started"
     ;;
   restart)

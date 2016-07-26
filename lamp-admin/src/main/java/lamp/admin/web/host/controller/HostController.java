@@ -3,7 +3,9 @@ package lamp.admin.web.host.controller;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.host.model.AgentInstallResult;
+import lamp.admin.domain.host.model.SshKey;
 import lamp.admin.domain.host.service.HostFacadeService;
+import lamp.admin.domain.host.service.SshKeyService;
 import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
 import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
@@ -27,6 +29,9 @@ public class HostController {
 
 	@Autowired
 	private HostFacadeService hostFacadeService;
+
+	@Autowired
+	private SshKeyService sshKeyService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model,
@@ -63,6 +68,9 @@ public class HostController {
 					   RedirectAttributes redirectAttributes) {
 
 		model.addAttribute("hostType", "scanned");
+
+		List<SshKey> sshKeys = sshKeyService.getSshKeyList();
+		model.addAttribute("sshKeys", sshKeys);
 		return "hosts/credentials";
 	}
 
@@ -124,8 +132,8 @@ public class HostController {
 //		return "docker/app/edit";
 //	}
 //
-//	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
-//	public String addHostEntity(@ModelAttribute("editForm") DockerApp editForm,
+//	@RequestMapping(path = "/create", method = RequestMethod.POST)
+//	public String create(@ModelAttribute("editForm") DockerApp editForm,
 //						 Model model,
 //						 BindingResult bindingResult,
 //						 RedirectAttributes redirectAttributes) {

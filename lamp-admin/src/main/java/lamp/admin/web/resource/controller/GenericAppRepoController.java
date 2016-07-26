@@ -28,13 +28,13 @@ public abstract class GenericAppRepoController<CF extends AppRepoCreateForm, UF 
 
 	protected abstract String getCreateViewName();
 
-	@RequestMapping(path = "/addHostEntity", method = RequestMethod.GET)
+	@RequestMapping(path = "/create", method = RequestMethod.GET)
 	public String createForm(@ModelAttribute("editForm") CF editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 		return getCreateViewName();
 	}
 
-	@RequestMapping(path = "/addHostEntity", method = RequestMethod.POST)
+	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public String create(@Valid @ModelAttribute("editForm") CF editForm,
 			BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {

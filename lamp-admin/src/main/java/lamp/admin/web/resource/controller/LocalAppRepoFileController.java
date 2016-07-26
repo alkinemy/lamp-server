@@ -45,14 +45,14 @@ public class LocalAppRepoFileController {
 		return "resource/repository/local/file/list";
 	}
 
-	@RequestMapping(path = "/file/addHostEntity", method = RequestMethod.GET)
+	@RequestMapping(path = "/file/create", method = RequestMethod.GET)
 	public String create(@PathVariable("id") String id,
 						 @ModelAttribute("editForm") LocalAppFileUploadForm editForm, Model model) {
 		model.addAttribute(LampAdminConstants.ACTION_KEY, LampAdminConstants.ACTION_CREATE);
 		return "resource/repository/local/file/edit";
 	}
 
-	@RequestMapping(path = "/file/addHostEntity", method = RequestMethod.POST)
+	@RequestMapping(path = "/file/create", method = RequestMethod.POST)
 	public String create(@PathVariable("id") String id,
 						 @Valid @ModelAttribute("editForm") LocalAppFileUploadForm editForm,
 			BindingResult bindingResult, Model model,

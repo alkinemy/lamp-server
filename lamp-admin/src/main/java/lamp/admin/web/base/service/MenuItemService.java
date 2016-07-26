@@ -48,6 +48,7 @@ public class MenuItemService {
 
 				}
 				subMenuItems.add(MenuItem.of(CLUSTERS, "Cluster", "/clusters", "icon-bulb"));
+				subMenuItems.add(MenuItem.of(SSH_KEYS, "SSH Key", "/ssh-keys", "icon-bulb"));
 				menuItems.add(MenuItem.of(HOST, "Host", "icon-layers", subMenuItems));
 			}
 

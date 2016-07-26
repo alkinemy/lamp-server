@@ -12,6 +12,7 @@ import lamp.admin.core.app.simple.resource.ArtifactAppResource;
 import lamp.admin.core.app.simple.resource.UrlAppResource;
 import lamp.admin.core.script.ScriptCommand;
 import lamp.admin.core.script.ScriptFileCreateCommand;
+import lamp.admin.domain.app.base.model.SpringBootAppProperties;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.model.form.ParametersType;
 import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
@@ -23,6 +24,7 @@ import lamp.collector.core.base.EndpointProtocol;
 import lamp.common.utils.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -40,6 +42,9 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 	private ResourceLoader resourceLoader;
 
+	@Autowired
+	private SpringBootAppProperties springBootAppProperties;
+
 	public App newApp(String path, String parentPath, SpringBootAppCreateForm editForm) {
 		App app = new App();
 
@@ -47,6 +52,11 @@ public class SpringBootAppService implements ResourceLoaderAware {
 		app.setType(AppType.SPRING_BOOT_APP);
 		app.setPath(path);
 		app.setParentPath(parentPath);
+
+		return newApp(app, editForm);
+	}
+
+	public App newApp(App app, SpringBootAppCreateForm editForm) {
 		app.setName(editForm.getName());
 		app.setDescription(editForm.getDescription());
 
@@ -106,12 +116,28 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 
 		container.setParameters(getParameters(editForm, artifactId)); // FIXME 수정과 불일치
-		List<ScriptCommand> scriptCommands = getInstallScriptCommands(artifactId, editForm.getProperties(), editForm.getShellFilePath());
+
+		String shellContent = getShellContent(editForm);
+
+		List<ScriptCommand> scriptCommands = getInstallScriptCommands(artifactId, editForm.getProperties(), shellContent);
 		container.setScriptCommands(scriptCommands);
 
 		app.setContainer(container);
 
 		return app;
+	}
+
+	protected String getShellContent(SpringBootAppCreateForm editForm) {
+		// FIXME Host의 JAVA_HOME 변수를 가져와서 JAVA 경로를 결정하게 변경 필요
+		String shellContent;
+		try {
+			String location = StringUtils.defaultIfBlank(editForm.getShellScriptLocation(), springBootAppProperties.getShellScriptLocation());
+			Resource resource = resourceLoader.getResource(location);
+			shellContent = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
+		} catch (IOException e) {
+			throw Exceptions.newException(LampErrorCode.SHELL_FILE_NOT_FOUND, e);
+		}
+		return shellContent;
 	}
 
 	public SpringBootAppUpdateForm getSpringBootAppUpdateForm(App app) {
@@ -120,7 +146,6 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 		editForm.setName(app.getName());
 		editForm.setDescription(app.getDescription());
-
 
 		editForm.setProcessType(container.getProcessType());
 		editForm.setAppDirectory(container.getAppDirectory());
@@ -218,11 +243,11 @@ public class SpringBootAppService implements ResourceLoaderAware {
 	}
 
 	protected List<ScriptCommand> getInstallScriptCommands(String artifactId,
-														   String properties,
-														   String shellFilePath) {
+														   String propertiesContent,
+														   String shellContent) {
 		List<ScriptCommand> scriptCommandEntities = new ArrayList<>();
-		if (StringUtils.isNotBlank(properties)){
-			String content = properties;
+		if (StringUtils.isNotBlank(propertiesContent)){
+			String content = propertiesContent;
 
 			ScriptFileCreateCommand fileCreateCommandDto = new ScriptFileCreateCommand();
 			fileCreateCommandDto.setFilename(artifactId + ".properties");
@@ -230,9 +255,8 @@ public class SpringBootAppService implements ResourceLoaderAware {
 
 			scriptCommandEntities.add(fileCreateCommandDto);
 		}
-		try {
-			Resource resource = resourceLoader.getResource(shellFilePath);
-			String content = IOUtils.toString(resource.getInputStream(), LampAdminConstants.DEFAULT_CHARSET);
+		if (StringUtils.isNotBlank(shellContent)) {
+			String content = shellContent;
 
 			ScriptFileCreateCommand fileCreateCommandDto = new ScriptFileCreateCommand();
 			fileCreateCommandDto.setFilename(artifactId + ".sh");
@@ -240,8 +264,6 @@ public class SpringBootAppService implements ResourceLoaderAware {
 			fileCreateCommandDto.setExecutable(true);
 
 			scriptCommandEntities.add(fileCreateCommandDto);
-		} catch (IOException e) {
-			throw Exceptions.newException(LampErrorCode.SHELL_FILE_NOT_FOUND, e);
 		}
 		return scriptCommandEntities;
 	}

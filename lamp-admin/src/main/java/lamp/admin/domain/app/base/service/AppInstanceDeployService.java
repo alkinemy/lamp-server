@@ -1,5 +1,6 @@
 package lamp.admin.domain.app.base.service;
 
+import com.google.common.collect.Lists;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.agent.AgentResponseErrorException;
 import lamp.admin.core.app.base.App;
@@ -33,6 +34,10 @@ public class AppInstanceDeployService {
 	@Autowired
 	private AppResourceLoader appResourceLoader;
 
+	public void deploy(App app, AppInstance appInstance, AppInstanceDeployPolicy deployPolicy) {
+		deploy(app, Lists.newArrayList(appInstance), deployPolicy);
+	}
+
 	public void deploy(App app, List<AppInstance> appInstances, AppInstanceDeployPolicy deployPolicy) {
 		Resource resource = null;
 		if (app.getContainer() instanceof SimpleAppContainer) {
@@ -41,6 +46,8 @@ public class AppInstanceDeployService {
 
 		for (AppInstance appInstance : appInstances) {
 			try {
+				appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.PENDING);
+
 				Agent agent = agentService.getAgent(appInstance.getHostId());
 
 				agentClient.deployApp(agent, app, appInstance, resource);
@@ -59,15 +66,10 @@ public class AppInstanceDeployService {
 				appInstance.setStatusMessage(ExceptionUtils.getStackTrace(e));
 			}
 
-			appInstanceService.update(appInstance);
+			appInstanceService.updateAppInstance(appInstance);
 		}
 
 	}
-
-
-
-
-
 
 
 	public void redeploy(App app, List<AppInstance> appInstances, AppInstanceDeployPolicy deployPolicy) {
@@ -97,7 +99,7 @@ public class AppInstanceDeployService {
 				appInstance.setStatusMessage(ExceptionUtils.getStackTrace(e));
 			}
 
-			appInstanceService.update(appInstance);
+			appInstanceService.updateAppInstance(appInstance);
 		}
 
 	}

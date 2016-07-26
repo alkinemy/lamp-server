@@ -1,6 +1,7 @@
 package lamp.admin.config.web;
 
 
+import lamp.admin.domain.app.base.model.SpringBootAppProperties;
 import lamp.admin.domain.host.model.AgentInstallProperties;
 import lamp.admin.web.support.LampMessageInterpolator;
 import lamp.admin.web.support.MenuItemInterceptor;
@@ -23,7 +24,7 @@ import org.thymeleaf.dialect.IDialect;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 @Configuration
-@EnableConfigurationProperties({AgentInstallProperties.class})
+@EnableConfigurationProperties({AgentInstallProperties.class, SpringBootAppProperties.class})
 public class AdminWebConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired

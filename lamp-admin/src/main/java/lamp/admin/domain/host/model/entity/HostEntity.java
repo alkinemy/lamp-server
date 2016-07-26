@@ -27,6 +27,7 @@ public class HostEntity extends AbstractAuditingEntity {
 	private String clusterId;
 	private String rack;
 
+	private String dataType;
 	private String data;
 
 	@Column(columnDefinition = "TINYINT")

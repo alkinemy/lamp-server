@@ -13,11 +13,10 @@ import org.springframework.stereotype.Component;
 public class HostEntityAssembler extends AbstractListAssembler<Host, HostEntity> implements Populater<Host, HostEntity> {
 
 	@Override protected HostEntity doAssemble(Host host) {
-
 		HostEntity entity = new HostEntity();
 		BeanUtils.copyProperties(host, entity);
 
-//		entity.setDataType(host.getClass().getName());
+		entity.setDataType(host.getClass().getName());
 		entity.setData(JsonUtils.stringify(host));
 		return entity;
 	}
@@ -26,7 +25,7 @@ public class HostEntityAssembler extends AbstractListAssembler<Host, HostEntity>
 		entity.setName(host.getName());
 		entity.setDescription(host.getDescription());
 
-//		entity.setDataType(host.getClass().getName());
+		entity.setDataType(host.getClass().getName());
 		entity.setData(JsonUtils.stringify(host));
 	}
 }
