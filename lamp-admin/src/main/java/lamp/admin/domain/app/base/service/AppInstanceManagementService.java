@@ -42,7 +42,7 @@ public class AppInstanceManagementService {
 
 		List<AppInstance> appInstances = createAppInstancesByHostIds(hostsIds, app);
 
-		appInstanceDeployService.deploy(app, appInstances, deployPolicy);
+		appInstanceDeployService.deploy(appInstances, deployPolicy);
 
 		return appInstances;
 	}

@@ -73,7 +73,7 @@ public class AgentClient {
 		}
 	}
 
-	public void deployApp(Agent agent, App app, AppInstance appInstance, Resource resource)  {
+	public void deployApp(Agent agent, AppInstance appInstance, Resource resource)  {
 		AgentRequestUserHolder.setRequestUser(AgentRequestUser.of(agent.getId(), agent.getSecretKey()));
 		try {
 			String baseUrl = getBaseUrl(agent);
@@ -81,8 +81,8 @@ public class AgentClient {
 			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
 
 			parts.add("id", appInstance.getId());
-			parts.add("appId", app.getId());
-			parts.add("appContainer", StringUtils.utf8ToIso88591(JsonUtils.stringify(app.getContainer())));
+			parts.add("appId", appInstance.getAppId());
+			parts.add("appContainer", StringUtils.utf8ToIso88591(JsonUtils.stringify(appInstance.getAppContainer())));
 
 			if (resource != null) {
 				parts.add("resource", resource);

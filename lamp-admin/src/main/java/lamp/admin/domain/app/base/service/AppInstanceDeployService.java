@@ -34,23 +34,22 @@ public class AppInstanceDeployService {
 	@Autowired
 	private AppResourceLoader appResourceLoader;
 
-	public void deploy(App app, AppInstance appInstance, AppInstanceDeployPolicy deployPolicy) {
-		deploy(app, Lists.newArrayList(appInstance), deployPolicy);
+	public void deploy(AppInstance appInstance, AppInstanceDeployPolicy deployPolicy) {
+		deploy(Lists.newArrayList(appInstance), deployPolicy);
 	}
 
-	public void deploy(App app, List<AppInstance> appInstances, AppInstanceDeployPolicy deployPolicy) {
-		Resource resource = null;
-		if (app.getContainer() instanceof SimpleAppContainer) {
-			resource = appResourceLoader.getResource(((SimpleAppContainer) app.getContainer()).getAppResource());
-		}
-
+	public void deploy(List<AppInstance> appInstances, AppInstanceDeployPolicy deployPolicy) {
 		for (AppInstance appInstance : appInstances) {
 			try {
-				appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.PENDING);
+				appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.DEPLOYING);
 
 				Agent agent = agentService.getAgent(appInstance.getHostId());
 
-				agentClient.deployApp(agent, app, appInstance, resource);
+				Resource resource = null;
+				if (appInstance.getAppContainer() instanceof SimpleAppContainer) {
+					resource = appResourceLoader.getResource(((SimpleAppContainer) appInstance.getAppContainer()).getAppResource());
+				}
+				agentClient.deployApp(agent, appInstance, resource);
 
 				appInstance.setStatus(AppInstanceStatus.STARTING);
 				try {

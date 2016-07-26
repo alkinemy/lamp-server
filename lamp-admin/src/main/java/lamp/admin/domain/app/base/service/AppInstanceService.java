@@ -135,6 +135,7 @@ public class AppInstanceService {
 		appInstance.setAppId(app.getId());
 		appInstance.setAppName(app.getName());
 		appInstance.setAppVersion(app.getVersion());
+		appInstance.setAppContainer(app.getContainer());
 		appInstance.setClusterId(host.getClusterId());
 		appInstance.setClusterName(host.getClusterName());
 		appInstance.setHostId(host.getId());

@@ -27,7 +27,7 @@ public class AwsEc2AppInstanceDeployTaskExecuteService {
 		AppInstance appInstance = appInstanceService.getAppInstance(task.getAppInstanceId());
 		AppInstanceDeployPolicy deployPolicy = null;
 
-		appInstanceDeployService.deploy(null, appInstance, deployPolicy);
+		appInstanceDeployService.deploy(appInstance, deployPolicy);
 
 	}
 

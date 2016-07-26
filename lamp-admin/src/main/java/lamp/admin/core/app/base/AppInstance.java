@@ -19,6 +19,8 @@ public class AppInstance {
 	private String appName;
 	private String appVersion;
 
+	private AppContainer appContainer;
+
 	private String clusterId;
 	private String clusterName;
 	private String hostId;
