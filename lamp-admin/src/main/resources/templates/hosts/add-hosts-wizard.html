@@ -76,7 +76,7 @@
 										<td th:text="${host.query}"> 해당 없음 </td>
 										<td th:text="${host.name}"> 해당 없음 </td>
 										<td th:text="${host.address}"> 해당 없음 </td>
-										<td th:text="${host.managed}"> 아니요 </td>
+										<td th:text="${host.managed.message}"> 아니요 </td>
 										<td th:text="${host.connected} ? '호스트 준비: 응답 시간 ' + ${host.responseTime} + 'ms' : '호스트에 연결하지 못했습니다.'"> 호스트에 연결하지 못했습니다. </td>
 									</tr>
 									</tbody>

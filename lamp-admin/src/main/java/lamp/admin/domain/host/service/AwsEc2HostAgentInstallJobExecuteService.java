@@ -10,6 +10,7 @@ import lamp.admin.domain.base.model.TaskStatus;
 import lamp.admin.domain.base.service.TaskService;
 import lamp.admin.domain.host.model.AgentInstallResult;
 import lamp.admin.domain.host.model.HostAuthType;
+import lamp.admin.domain.host.model.HostManagedStatus;
 import lamp.admin.domain.host.model.task.AwsEc2HostAgentInstallTask;
 import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
 import lamp.common.utils.StringUtils;
@@ -49,7 +50,7 @@ public class AwsEc2HostAgentInstallJobExecuteService {
 			ScannedHost scannedHost = hostScanService.scanHost(instance.getPrivateIpAddress(), cluster.getSshPort());
 			log.debug("ScannedHost : {}", scannedHost);
 			if (scannedHost.isConnected()) {
-				if (scannedHost.isManaged()) {
+				if (HostManagedStatus.MANAGED.equals(scannedHost.getManaged())) {
 					jobService.updateJobStatus(task.getId(), TaskStatus.COMPLETED);
 				} else {
 					try {

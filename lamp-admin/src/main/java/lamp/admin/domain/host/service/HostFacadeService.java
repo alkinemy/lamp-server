@@ -1,10 +1,14 @@
 package lamp.admin.domain.host.service;
 
 
+import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.host.*;
+import lamp.admin.domain.agent.model.Agent;
+import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.base.service.TaskService;
-import lamp.admin.domain.host.task.AwsEc2HostAgentInstallTask;
 import lamp.admin.domain.host.model.AgentInstallResult;
+import lamp.admin.domain.host.model.HostStatusCode;
+import lamp.admin.domain.host.model.task.AwsEc2HostAgentInstallTask;
 import lamp.admin.domain.host.service.form.AwsEc2HostsForm;
 import lamp.admin.domain.host.service.form.HostCredentialsForm;
 import lamp.admin.domain.host.service.form.HostScanForm;
@@ -36,6 +40,12 @@ public class HostFacadeService {
 
 	@Autowired
 	private TaskService jobService;
+
+	@Autowired
+	private AgentService agentService;
+
+	@Autowired
+	private AgentClient agentClient;
 
 
 	public List<Host> getHosts() {
@@ -73,7 +83,6 @@ public class HostFacadeService {
 			job.setId(UUID.randomUUID().toString());
 			job.setHostId(awsEc2Host.getId());
 			job.setInstanceId(awsEc2Host.getInstanceId());
-			job.setSshKeyId(cluster.getSshKeyId());
 
 			jobService.addTask(job);
 		}
@@ -104,6 +113,17 @@ public class HostFacadeService {
 			hostManagementService.delete(host);
 		} else {
 			hostManagementService.shutdownAndDelete(host);
+		}
+	}
+
+	protected void shutdownAgent(Agent agent, HostStatusCode hostStatusCode) {
+		boolean hostManaged = HostStatusCode.UP.equals(hostStatusCode)
+			|| HostStatusCode.DOWN.equals(hostStatusCode);
+		if (agent != null) {
+			if (hostManaged) {
+				agentClient.shutdown(agent);
+			}
+			agentService.deregister(agent.getId());
 		}
 	}
 
