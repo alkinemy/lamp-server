@@ -28,6 +28,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,6 +63,11 @@ public class SshKeyService implements ResourceLoaderAware {
 				&& StringUtils.isNotBlank(keyStorePassphrase)) {
 
 					File file = resource.getFile();
+
+					Path parentDirectory = Paths.get(file.getAbsolutePath()).getParent();
+					if (Files.notExists(parentDirectory)) {
+						Files.createDirectories(parentDirectory);
+					}
 
 					KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 					keyGen.init(128);
