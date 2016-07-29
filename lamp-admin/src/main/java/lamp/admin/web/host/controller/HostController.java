@@ -1,9 +1,11 @@
 package lamp.admin.web.host.controller;
 
+import lamp.admin.core.host.Cluster;
 import lamp.admin.core.host.Host;
 import lamp.admin.core.host.ScannedHost;
 import lamp.admin.domain.host.model.AgentInstallResult;
 import lamp.admin.domain.host.model.SshKey;
+import lamp.admin.domain.host.service.ClusterService;
 import lamp.admin.domain.host.service.HostFacadeService;
 import lamp.admin.domain.host.service.SshKeyService;
 import lamp.admin.domain.host.model.form.ManagedHostCredentialsForm;
@@ -33,6 +35,9 @@ public class HostController {
 	@Autowired
 	private SshKeyService sshKeyService;
 
+	@Autowired
+	private ClusterService clusterService;
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model,
 					   @RequestParam(name = "clusterId", required = false) String clusterId) {
@@ -43,6 +48,8 @@ public class HostController {
 
 	@RequestMapping(path = "/scan", method = RequestMethod.GET)
 	public String scan(Model model, @ModelAttribute("editForm") HostScanForm editForm) {
+		List<Cluster> clusters = clusterService.getClusterList();
+		model.addAttribute("clusters", clusters);
 		return "hosts/scan";
 	}
 

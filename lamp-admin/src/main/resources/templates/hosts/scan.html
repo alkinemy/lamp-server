@@ -19,13 +19,17 @@
 								The daily cronjob has failed.
 							</div>
 							<div class="form-body">
-								<div class="form-group" th:class="${#fields.hasErrors('clusterId')} ? 'form-group has-error' : 'form-group'">
-									<label class="col-md-3 control-label">Cluster Id</label>
-									<div class="col-md-9">
-										<input type="text" class="form-control" th:field="*{clusterId}" placeholder="Enter text" />
-										<span class="help-block" th:if="${#fields.hasErrors('clusterId')}" th:errors="*{clusterId}"> A block of help text. </span>
-									</div>
-								</div>
+                                <div class="form-group" th:class="${#fields.hasErrors('clusterId')} ? 'form-group has-error' : 'form-group'">
+                                    <label class="col-md-3 control-label">Cluster</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" th:field="*{clusterId}">
+                                            <option value="">NONE</option>
+                                            <option th:each="cluster : ${clusters}"
+                                                    th:value="${cluster.id}" th:text="${cluster.name}">Option 1</option>
+                                        </select>
+                                        <span class="help-block" th:if="${#fields.hasErrors('clusterId')}" th:errors="*{clusterId}"> A block of help text. </span>
+                                    </div>
+                                </div>
 								<hr />
 								<div class="form-group" th:class="${#fields.hasErrors('hostnames')} ? 'form-group has-error' : 'form-group'">
 									<label class="col-md-3 control-label">Hostnames</label>
