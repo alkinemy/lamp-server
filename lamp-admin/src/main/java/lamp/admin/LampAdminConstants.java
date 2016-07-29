@@ -4,7 +4,8 @@ import java.nio.charset.Charset;
 
 public abstract class LampAdminConstants {
 
-	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+	public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+	public static final Charset DEFAULT_CHARSET = Charset.forName(DEFAULT_CHARSET_NAME);
 
 	public static final String SYSTEM_ACCOUNT = "system";
 

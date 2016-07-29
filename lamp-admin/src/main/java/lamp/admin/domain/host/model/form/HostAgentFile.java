@@ -1,4 +1,4 @@
-package lamp.admin.domain.host.service.form;
+package lamp.admin.domain.host.model.form;
 
 import org.springframework.core.io.Resource;
 

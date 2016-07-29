@@ -6,8 +6,12 @@ import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.app.base.model.entity.AppInstanceEntity;
+import lamp.admin.domain.base.exception.Exceptions;
+import lamp.admin.web.AdminErrorCode;
+import lamp.collector.core.health.HealthStatus;
 import lamp.common.utils.assembler.SmartAssembler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,6 +126,13 @@ public class AppInstanceService {
 	}
 
 	@Transactional
+	public void updateHealth(String id, HealthStatus healthStatus) {
+		AppInstanceEntity appInstanceEntity = appInstanceEntityService.getAppInstanceEntity(id);
+		appInstanceEntity.setHealth(healthStatus.getCode());
+		appInstanceEntity.setHealthMessage(healthStatus.getMessage());
+	}
+
+	@Transactional
 	public void delete(AppInstance appInstance) {
 		appInstanceEntityService.deleteAppInstanceEntity(appInstance.getId());
 	}
@@ -135,7 +146,6 @@ public class AppInstanceService {
 		appInstance.setAppId(app.getId());
 		appInstance.setAppName(app.getName());
 		appInstance.setAppVersion(app.getVersion());
-		appInstance.setAppContainer(app.getContainer());
 		appInstance.setClusterId(host.getClusterId());
 		appInstance.setClusterName(host.getClusterName());
 		appInstance.setHostId(host.getId());
@@ -143,10 +153,33 @@ public class AppInstanceService {
 		appInstance.setHostAddress(host.getAddress());
 		appInstance.setTags(app.getTags());
 
-		AppContainer appContainer = app.getContainer();
+		AppContainer appContainer = createAppContainer(app, host);
+		appInstance.setAppContainer(appContainer);
 		populateAppContainer(appContainer, appInstance);
 
 		return appInstance;
+	}
+
+	protected AppContainer createAppContainer(App app, Host host) {
+		try {
+			AppContainer appContainer = app.getContainer();
+			AppContainer instanceAppContainer = appContainer.getClass().newInstance();
+			BeanUtils.copyProperties(appContainer, instanceAppContainer);
+			if (instanceAppContainer instanceof SimpleAppContainer) {
+				HealthEndpoint healthEndpoint = ((SimpleAppContainer) instanceAppContainer).getHealthEndpoint();
+				if (healthEndpoint != null) {
+					healthEndpoint.setAddress(host.getAddress());
+				}
+
+				MetricsEndpoint metricsEndpoint = ((SimpleAppContainer) instanceAppContainer).getMetricsEndpoint();
+				if (metricsEndpoint != null) {
+					metricsEndpoint.setAddress(host.getAddress());
+				}
+			}
+			return instanceAppContainer;
+		} catch (Exception e) {
+			throw Exceptions.newException(AdminErrorCode.APP_INSTANCE_APP_CONTAINER_CREATE_FAILED);
+		}
 	}
 
 	protected void populateAppContainer(AppContainer appContainer, AppInstance appInstance) {
@@ -158,7 +191,6 @@ public class AppInstanceService {
 			appInstance.setMetricsEndpoint(simpleAppContainer.getMetricsEndpoint());
 		}
 	}
-
 
 
 }

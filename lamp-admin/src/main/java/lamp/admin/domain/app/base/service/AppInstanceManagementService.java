@@ -2,7 +2,6 @@ package lamp.admin.domain.app.base.service;
 
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.app.base.*;
-import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.core.host.Host;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
@@ -11,12 +10,10 @@ import lamp.admin.domain.host.service.HostFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -42,7 +39,7 @@ public class AppInstanceManagementService {
 
 		List<AppInstance> appInstances = createAppInstancesByHostIds(hostsIds, app);
 
-		appInstanceDeployService.deploy(appInstances, deployPolicy);
+		appInstanceDeployService.deployAndStart(appInstances, deployPolicy);
 
 		return appInstances;
 	}
@@ -87,7 +84,7 @@ public class AppInstanceManagementService {
 		appInstance.setHostName(host.getName());
 		appInstance.setHostAddress(host.getAddress());
 
-		AppContainer appContainer = app.getContainer();
+		AppContainer appContainer = appInstanceService.createAppContainer(app, host);
 		appInstanceService.populateAppContainer(appContainer, appInstance);
 	}
 

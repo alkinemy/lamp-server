@@ -2,6 +2,7 @@ package lamp.admin.domain.app.base.model.entity;
 
 import lamp.admin.core.app.base.AppInstanceStatus;
 import lamp.admin.domain.base.model.AbstractAuditingEntity;
+import lamp.collector.core.health.HealthStatusCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,6 +29,10 @@ public class AppInstanceEntity extends AbstractAuditingEntity {
 	@Enumerated(EnumType.STRING)
 	private AppInstanceStatus status;
 	private String statusMessage;
+
+	@Enumerated(EnumType.STRING)
+	private HealthStatusCode health;
+	private String healthMessage;
 
 	private String data;
 	private boolean monitored;

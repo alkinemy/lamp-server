@@ -8,8 +8,8 @@ import lamp.admin.core.host.HostCredentials;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.host.model.entity.ClusterEntity;
 import lamp.admin.domain.host.repository.ClusterEntityRepository;
-import lamp.admin.domain.host.service.form.ClusterForm;
-import lamp.admin.domain.host.service.form.HostCredentialsForm;
+import lamp.admin.domain.host.model.form.ClusterForm;
+import lamp.admin.domain.host.model.form.HostCredentialsForm;
 import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.FileUtils;
 import lamp.common.utils.StringUtils;
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,10 +36,17 @@ public class ClusterService {
 
 	@Autowired
 	private SmartAssembler smartAssembler;
+	private List<AwsCluster> awsClusterList;
 
 	public List<Cluster> getClusterList() {
 		List<ClusterEntity> clusterEntities = clusterEntityRepository.findAll();
 		return smartAssembler.assemble(clusterEntities, ClusterEntity.class, Cluster.class);
+	}
+
+	public List<AwsCluster> getAwsClusterList() {
+		List<ClusterEntity> clusterEntities = clusterEntityRepository.findAllByType(ClusterType.AWS);
+		List<Cluster> clusters = smartAssembler.assemble(clusterEntities, ClusterEntity.class, Cluster.class);
+		return clusters.stream().filter(c -> c instanceof AwsCluster).map(c -> (AwsCluster)c).collect(Collectors.toList());
 	}
 
 	public Cluster getCluster(String id) {

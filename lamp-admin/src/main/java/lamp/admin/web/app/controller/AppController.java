@@ -53,6 +53,9 @@ public class AppController extends AbstractAppController {
 			model.addAttribute("appInstances", appInstances);
 			model.addAttribute("totalInstancesCount", appInstances.size());
 			model.addAttribute("runningInstancesCount", appInstances.stream().filter(i -> AppInstanceStatus.RUNNING.equals(i.getStatus())).count());
+
+			List<App> appHistories = appService.getApHistories(app);
+			model.addAttribute("appHistories", appHistories);
 			return "apps/view";
 		}
 	}

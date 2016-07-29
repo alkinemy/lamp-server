@@ -1,5 +1,7 @@
 package lamp.admin.web.host.controller;
 
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.RegionUtils;
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.host.Cluster;
 
@@ -7,7 +9,7 @@ import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.host.model.SshKey;
 import lamp.admin.domain.host.service.ClusterService;
 import lamp.admin.domain.host.service.SshKeyService;
-import lamp.admin.domain.host.service.form.ClusterForm;
+import lamp.admin.domain.host.model.form.ClusterForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +53,8 @@ public class ClusterController {
 
 		List<SshKey> sshKeys = sshKeyService.getSshKeyList();
 		model.addAttribute("sshKeys", sshKeys);
+
+		List<Region> regions = RegionUtils.getRegions();
 
 		return "clusters/edit";
 	}

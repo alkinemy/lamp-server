@@ -7,11 +7,12 @@ import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.base.service.TaskService;
 import lamp.admin.domain.host.model.AgentInstallResult;
+import lamp.admin.domain.host.model.HostStateCode;
 import lamp.admin.domain.host.model.HostStatusCode;
 import lamp.admin.domain.host.model.task.AwsEc2HostAgentInstallTask;
-import lamp.admin.domain.host.service.form.AwsEc2HostsForm;
-import lamp.admin.domain.host.service.form.HostCredentialsForm;
-import lamp.admin.domain.host.service.form.HostScanForm;
+import lamp.admin.domain.host.model.form.AwsEc2HostsForm;
+import lamp.admin.domain.host.model.form.HostCredentialsForm;
+import lamp.admin.domain.host.model.form.HostScanForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,11 @@ public class HostFacadeService {
 	@Transactional
 	public List<AwsEc2Host> addHosts(String clusterId, AwsEc2HostsForm editForm) {
 		AwsCluster cluster = getAwsCluster(clusterId);
+		return addHosts(cluster, editForm);
+	}
+
+	@Transactional
+	public List<AwsEc2Host> addHosts(AwsCluster cluster, AwsEc2HostsForm editForm) {
 		List<AwsEc2Host> hosts = awsEc2HostService.runInstances(cluster, editForm);
 
 		List<AwsEc2Host> awsEc2Hosts = addHosts(hosts);
@@ -102,7 +108,13 @@ public class HostFacadeService {
 	}
 
 	@Transactional
-	public void remove(String hostId) {
+	public void updateHostState(Host host, HostStateCode state) {
+		host.setState(state);
+		hostService.updateHost(host);
+	}
+
+	@Transactional
+	public void deleteHost(String hostId) {
 		Host host = getHost(hostId);
 		if (host instanceof AwsEc2Host) {
 			hostManagementService.shutdownAgent(host.getId(), host.getStatus());
@@ -126,6 +138,7 @@ public class HostFacadeService {
 			agentService.deregister(agent.getId());
 		}
 	}
+
 
 }
 

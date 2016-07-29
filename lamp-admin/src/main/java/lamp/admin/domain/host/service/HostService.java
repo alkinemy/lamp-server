@@ -94,9 +94,10 @@ public class HostService {
 		return hostEntityRepository.save(hostEntity);
 	}
 
+	@Transactional
 	public Host updateHost(Host host) {
 		HostEntity hostEntity = getHostEntity(host.getId());
-		smartAssembler.populate(host, hostEntity);
+		smartAssembler.populate(host, hostEntity, Host.class, HostEntity.class);
 		return smartAssembler.assemble(hostEntity, HostEntity.class, Host.class);
 	}
 

@@ -1,6 +1,5 @@
 package lamp.admin.domain.app.base.service;
 
-import com.google.common.collect.Lists;
 import lamp.admin.core.agent.AgentClient;
 import lamp.admin.core.agent.AgentResponseErrorException;
 import lamp.admin.core.app.base.App;
@@ -9,6 +8,7 @@ import lamp.admin.core.app.base.AppInstanceStatus;
 import lamp.admin.core.app.simple.SimpleAppContainer;
 import lamp.admin.domain.agent.model.Agent;
 import lamp.admin.domain.agent.service.AgentService;
+import lamp.admin.domain.app.base.exception.AppInstanceException;
 import lamp.admin.domain.app.base.model.AppInstanceDeployPolicy;
 import lamp.admin.domain.resource.repo.service.AppResourceLoader;
 import lamp.common.utils.ExceptionUtils;
@@ -34,40 +34,52 @@ public class AppInstanceDeployService {
 	@Autowired
 	private AppResourceLoader appResourceLoader;
 
-	public void deploy(AppInstance appInstance, AppInstanceDeployPolicy deployPolicy) {
-		deploy(Lists.newArrayList(appInstance), deployPolicy);
-	}
 
-	public void deploy(List<AppInstance> appInstances, AppInstanceDeployPolicy deployPolicy) {
+	public void deployAndStart(List<AppInstance> appInstances, AppInstanceDeployPolicy deployPolicy) {
 		for (AppInstance appInstance : appInstances) {
 			try {
-				appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.DEPLOYING);
-
-				Agent agent = agentService.getAgent(appInstance.getHostId());
-
-				Resource resource = null;
-				if (appInstance.getAppContainer() instanceof SimpleAppContainer) {
-					resource = appResourceLoader.getResource(((SimpleAppContainer) appInstance.getAppContainer()).getAppResource());
-				}
-				agentClient.deployApp(agent, appInstance, resource);
-
-				appInstance.setStatus(AppInstanceStatus.STARTING);
-				try {
-					agentClient.start(agent, appInstance.getId());
-				} catch (Exception e) {
-					log.warn("App start failed", e);
-					appInstance.setStatus(AppInstanceStatus.START_FAILED);
-					appInstance.setStatusMessage(ExceptionUtils.getStackTrace(e));
-				}
+				deployAndStart(appInstance);
 			} catch (Exception e) {
 				log.warn("App deploy failed", e);
-				appInstance.setStatus(AppInstanceStatus.DEPLOY_FAILED);
-				appInstance.setStatusMessage(ExceptionUtils.getStackTrace(e));
 			}
-
-			appInstanceService.updateAppInstance(appInstance);
 		}
+	}
 
+	public void deployAndStart(AppInstance appInstance) {
+		Agent agent = agentService.getAgent(appInstance.getHostId());
+
+		deployAndStart(agent, appInstance);
+
+		start(agent, appInstance);
+	}
+
+	public void deployAndStart(Agent agent, AppInstance appInstance) {
+		appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.DEPLOYING);
+
+		try {
+			Resource resource = null;
+			if (appInstance.getAppContainer() instanceof SimpleAppContainer) {
+				resource = appResourceLoader.getResource(((SimpleAppContainer) appInstance.getAppContainer()).getAppResource());
+			}
+			agentClient.deployApp(agent, appInstance, resource);
+			appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.DEPLOYED);
+		} catch (Exception e) {
+			log.error("App Deploy failed", e);
+			appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.DEPLOY_FAILED, e.getMessage());
+			throw new AppInstanceException(AppInstanceStatus.DEPLOY_FAILED, e);
+		}
+	}
+
+	public void start(Agent agent, AppInstance appInstance) {
+		appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.STARTING);
+
+		try {
+			agentClient.start(agent, appInstance.getId());
+		} catch (Exception e) {
+			log.error("App Start failed", e);
+			appInstanceService.updateAppInstanceStatus(appInstance, AppInstanceStatus.START_FAILED, ExceptionUtils.getStackTrace(e, 1000));
+			throw new AppInstanceException(AppInstanceStatus.START_FAILED, e);
+		}
 	}
 
 

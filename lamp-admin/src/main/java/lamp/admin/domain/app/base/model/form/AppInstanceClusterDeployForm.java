@@ -1,5 +1,6 @@
 package lamp.admin.domain.app.base.model.form;
 
+import lamp.admin.domain.host.model.form.AwsEc2HostsForm;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,8 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class AppCreateForm {
+public class AppInstanceClusterDeployForm extends AwsEc2HostsForm {
 
-	private List<String> hostIds;
+	private String clusterId;
 
 }

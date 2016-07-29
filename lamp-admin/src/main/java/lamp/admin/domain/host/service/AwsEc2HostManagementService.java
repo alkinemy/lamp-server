@@ -8,7 +8,9 @@ import com.amazonaws.util.Base64;
 import lamp.admin.core.host.AwsCluster;
 import lamp.admin.core.host.AwsEc2Host;
 import lamp.admin.core.host.Host;
-import lamp.admin.domain.host.service.form.AwsEc2HostsForm;
+import lamp.admin.domain.host.model.HostStateCode;
+import lamp.admin.domain.host.model.HostStatusCode;
+import lamp.admin.domain.host.model.form.AwsEc2HostsForm;
 import lamp.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -40,7 +43,6 @@ public class AwsEc2HostManagementService {
 		if (StringUtils.isNotBlank(hostsForm.getUserData())) {
 			runInstancesRequest.withUserData(Base64.encodeAsString(hostsForm.getUserData().getBytes()));
 		}
-
 
 		RunInstancesResult runInstancesResult = amazonEC2Client.runInstances(runInstancesRequest);
 		Reservation reservation = runInstancesResult.getReservation();
@@ -65,6 +67,7 @@ public class AwsEc2HostManagementService {
 			host.setPublicDnsName(ec2Instance.getPublicDnsName());
 			host.setPublicIpAddress(ec2Instance.getPublicIpAddress());
 
+			host.setState(HostStateCode.of(ec2Instance.getState()));
 			host.setInstanceId(ec2Instance.getInstanceId());
 			hosts.add(host);
 		}
@@ -74,10 +77,16 @@ public class AwsEc2HostManagementService {
 		//		DescribeInstancesResult describeInstancesResult = amazonEC2Client.describeInstances(describeInstancesRequest);
 		//		describeInstancesResult.getReservations().get(0).getInstances();
 
-//		CreateTagsRequest createTagsRequest = new CreateTagsRequest();
-//		createTagsRequest.withResources();
+		CreateTagsRequest createTagsRequest = new CreateTagsRequest();
+		createTagsRequest.withResources(hosts.stream().map(h -> h.getInstanceId()).collect(Collectors.toList()));
+		createTagsRequest.withTags(new Tag("Name", cluster.getName()));
+
+		amazonEC2Client.createTags(createTagsRequest);
+
 		return hosts;
 	}
+
+
 
 	public Instance getEC2Instance(AwsCluster cluster, String instanceId) {
 		AmazonEC2Client amazonEC2Client = createAmazonEC2Client(cluster);

@@ -43,4 +43,5 @@ public class Host extends HostStatus {
 	private String agentInstallFilename;
 	private String agentFile;
 
+	private String installLogFile;
 }

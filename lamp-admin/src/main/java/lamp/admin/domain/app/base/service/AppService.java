@@ -59,6 +59,17 @@ public class AppService {
 		return apps;
 	}
 
+	public List<App> getApHistories(App app) {
+		List<AppHistoryEntity> appHistoryEntityList =  appHistoryEntityService.getAppHistoryEntityList(app.getId());
+		List<App> appHistories = new ArrayList<>();
+		for (AppHistoryEntity appHistoryEntity : appHistoryEntityList) {
+			AppEntity appEntity = new AppEntity();
+			BeanUtils.copyProperties(appHistoryEntity, appEntity);
+			appHistories.add(smartAssembler.assemble(appEntity, AppEntity.class, App.class));
+		}
+		return appHistories;
+	}
+
 	public App getApp(String path) {
 		if (StringUtils.isBlank(path)) {
 			return rootGroup;
@@ -73,8 +84,6 @@ public class AppService {
 		App app = smartAssembler.assemble(appEntity, AppEntity.class, App.class);
 		return Optional.ofNullable(app);
 	}
-
-
 
 	public App getAppByPath(String path) {
 		if (StringUtils.isBlank(path)) {

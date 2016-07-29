@@ -1,5 +1,6 @@
 package lamp.admin.core.host;
 
+import lamp.admin.domain.host.model.HostStateCode;
 import lamp.admin.domain.host.model.HostStatusCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.Date;
 @ToString
 public class HostStatus {
 
+	private HostStateCode state;
 	private HostStatusCode status;
 	private Date lastStatusTime;
 

@@ -14,10 +14,6 @@ public enum AppContainerType {
 		this.typeName = typeName;
 	}
 
-	public String getTypeName() {
-		return typeName;
-	}
-
 	public static final class Names {
 		public static final String SIMPLE = "simple";
 		public static final String DOCKER = "docker";

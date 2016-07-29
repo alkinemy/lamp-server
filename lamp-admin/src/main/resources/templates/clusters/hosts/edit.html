@@ -25,9 +25,9 @@
 			<div class="portlet-body form">
 				<form class="form-horizontal" role="form"  th:action="${action == 'update'} ? @{/clusters/{clusterId}/hosts/{hostId}/update(clusterId=${clusterId},hostId=${hostId})} : @{/clusters/{clusterId}/hosts/add(clusterId=${clusterId})}" th:object="${editForm}" method="post">
 					<div class="form-body">
-						<ul th:if="${#fields.hasErrors('global')}">
-							<li th:each="err : ${#fields.errors('global')}" th:text="${err}">Input is incorrect</li>
-						</ul>
+						<div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+							The daily cronjob has failed.
+						</div>
 
 						<hr />
 						<div class="form-group" th:class="${#fields.hasErrors('imageId')} ? 'form-group has-error' : 'form-group'">

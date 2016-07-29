@@ -3,9 +3,8 @@ package lamp.admin.web.app.controller;
 import lamp.admin.LampAdminConstants;
 import lamp.admin.core.app.base.App;
 import lamp.admin.core.host.Host;
-import lamp.admin.domain.app.base.model.form.AppCreateForm;
+import lamp.admin.domain.app.base.model.form.AppInstanceDeployForm;
 import lamp.admin.domain.app.base.service.AppInstanceManagementService;
-import lamp.admin.domain.app.base.service.AppInstanceService;
 import lamp.admin.domain.app.base.service.AppService;
 import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.host.service.HostFacadeService;
@@ -33,9 +32,6 @@ import java.util.List;
 public class AppInstanceController extends AbstractAppController {
 
 	@Autowired
-	private AppInstanceService appInstanceService;
-
-	@Autowired
 	private HostFacadeService hostFacadeService;
 
 	@Autowired
@@ -49,13 +45,13 @@ public class AppInstanceController extends AbstractAppController {
 	@RequestMapping(path = "/**", method = RequestMethod.GET, params = {"action=deploy"})
 	public String deploy(Model model,
 						 @ModelAttribute("path") String path,
-						 @ModelAttribute("editForm") AppCreateForm editForm) {
+						 @ModelAttribute("editForm") AppInstanceDeployForm editForm) {
 
 
 		return deployForm(model, path, editForm);
 	}
 
-	protected String deployForm(Model model, String path, AppCreateForm editForm) {
+	protected String deployForm(Model model, String path, AppInstanceDeployForm editForm) {
 		App app = appService.getAppByPath(path);
 		model.addAttribute("app", app);
 		List<Host> hosts = hostFacadeService.getHostsByClusterId(app.getClusterId());
@@ -67,7 +63,7 @@ public class AppInstanceController extends AbstractAppController {
 	@RequestMapping(path = "/**", method = RequestMethod.POST, params = {"action=deploy"})
 	public String deploy(Model model,
 						 @ModelAttribute("path") String path,
-						 @ModelAttribute("editForm") AppCreateForm editForm,
+						 @ModelAttribute("editForm") AppInstanceDeployForm editForm,
 						 BindingResult bindingResult,
 						 RedirectAttributes redirectAttributes) {
 		try {

@@ -6,7 +6,7 @@ import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.host.model.SshKey;
 import lamp.admin.domain.host.model.entity.SshKeyEntity;
 import lamp.admin.domain.host.repository.SshKeyEntityRepository;
-import lamp.admin.domain.host.service.form.SshKeyForm;
+import lamp.admin.domain.host.model.form.SshKeyForm;
 import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.FileUtils;
 import lamp.common.utils.IOUtils;

@@ -4,7 +4,7 @@ import lamp.admin.LampAdminConstants;
 import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.host.model.SshKey;
 import lamp.admin.domain.host.service.SshKeyService;
-import lamp.admin.domain.host.service.form.SshKeyForm;
+import lamp.admin.domain.host.model.form.SshKeyForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;

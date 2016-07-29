@@ -7,12 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class AppHistoryEntityService {
 
 	@Autowired
 	private AppHistoryEntityRepository appHistoryEntityRepository;
+
+	public List<AppHistoryEntity> getAppHistoryEntityList(String appId) {
+		return appHistoryEntityRepository.findAllByIdOrderByVersion(appId);
+	}
+
 
 	@Transactional
 	public AppHistoryEntity create(AppHistoryEntity entity) {

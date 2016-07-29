@@ -50,7 +50,9 @@ public enum AdminErrorCode implements ErrorCode {
 	, SECRET_KEY_LOAD_FAILED("비밀키 로딩을 실패하였습니다.")
 	, ENCRYPT_FAILED("암호화 하는 중 오류가 발생하였습니다.")
 	, DECRYPT_FAILED("복호화 하는 중 오류가 발생하였습니다.")
-	, UNSUPPORTED_HOST_AUTH_TYPE("지원하지 않는 인증 타입입니다."), SSH_KEY_NOT_FOUND("SshKey를 찾을 수 없습니다.");
+	, UNSUPPORTED_HOST_AUTH_TYPE("지원하지 않는 인증 타입입니다.")
+	, SSH_KEY_NOT_FOUND("SshKey를 찾을 수 없습니다.")
+	, APP_INSTANCE_APP_CONTAINER_CREATE_FAILED("앱 컨테이너를 생성할 수 없습니다.");
 
 	private String defaultMessage;
 	private Class<? extends MessageException> exceptionClass;

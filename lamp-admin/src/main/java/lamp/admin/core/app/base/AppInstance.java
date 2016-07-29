@@ -1,6 +1,7 @@
 package lamp.admin.core.app.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lamp.collector.core.health.HealthStatusCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,8 @@ public class AppInstance {
 	private String pid;
 	private AppInstanceStatus status;
 	private String statusMessage;
+	private HealthStatusCode health;
+	private String healthMessage;
 
 	private boolean monitored;
 

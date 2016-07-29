@@ -37,6 +37,9 @@ public class AppInstanceAssembler extends AbstractListAssembler <AppInstanceEnti
 			appInstance.setAppVersion(entity.getAppVersion());
 			appInstance.setHostId(entity.getHostId());
 			appInstance.setStatus(entity.getStatus());
+			appInstance.setStatusMessage(entity.getStatusMessage());
+			appInstance.setHealth(entity.getHealth());
+			appInstance.setHealthMessage(entity.getHealthMessage());
 
 			appInstance.setMonitored(entity.isMonitored());
 

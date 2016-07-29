@@ -26,15 +26,20 @@ public class TaskService {
 	}
 
 	@Transactional
-	public void addTask(Task job) {
-		TaskEntity taskEntity = smartAssembler.assemble(job, Task.class, TaskEntity.class);
+	public void addTask(Task task) {
+		addTask(task, TaskStatus.READY);
+	}
+
+	@Transactional
+	public void addTask(Task task, TaskStatus status) {
+		TaskEntity taskEntity = smartAssembler.assemble(task, Task.class, TaskEntity.class);
 		taskEntity.setStatus(TaskStatus.READY);
 		TaskEntity saved =  jobEntityRepository.save(taskEntity);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void updateJobStatus(String jobId, TaskStatus jobStatus) {
-		TaskEntity taskEntity = jobEntityRepository.findOne(jobId);
+	public void updateTaskStatus(String taskId, TaskStatus jobStatus) {
+		TaskEntity taskEntity = jobEntityRepository.findOne(taskId);
 		taskEntity.setStatus(jobStatus);
 	}
 

@@ -40,6 +40,7 @@
 											<col width="100" />
 											<col width="100" />
 											<col width="100" />
+											<col width="100" />
 											<col width="50" />
 											<col width="100" />
 											<col width="100" />
@@ -53,6 +54,7 @@
 											<th> InstanceId </th>
 											<th> IP </th>
 											<th> Cluster </th>
+											<th> State </th>
 											<th> Status </th>
 											<th> CPU Load </th>
 											<th> Disk </th>
@@ -67,6 +69,7 @@
 											<td> <a th:href="${managementUrls['__${host.instanceId}__']}" th:text="${host.instanceId}" target="_blank">instanceId</a> </td>
 											<td th:text="${host.address}"> address </td>
 											<td th:text="${host.clusterName}"> cluster </td>
+											<td th:text="${host.state}"> state </td>
 											<td><span th:text="${host.status}"
 													  th:class="${host.status}? 'label label-sm'
                                               + (${host.status.name() == 'UNKNOWN'}? ' label-danger' : '')
@@ -106,7 +109,7 @@
 													</a>
 													<ul class="dropdown-menu" role="menu">
 														<li>
-															<a th:href="@{/hosts/{hostId}/remove(hostId=${host.id})}"> Remove </a>
+															<a th:href="@{/clusters/{clusterId}/hosts/{hostId}/delete(clusterId=${host.clusterId},hostId=${host.id})}"> Delete </a>
 														</li>
 													</ul>
 												</div>

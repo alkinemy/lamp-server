@@ -4,8 +4,9 @@ import lamp.admin.LampAdminConstants;
 import lamp.admin.core.host.*;
 import lamp.admin.domain.base.exception.MessageException;
 import lamp.admin.domain.host.service.HostFacadeService;
-import lamp.admin.domain.host.service.form.AwsEc2HostsForm;
+import lamp.admin.domain.host.model.form.AwsEc2HostsForm;
 import lamp.admin.web.MenuConstants;
+import lamp.admin.web.account.model.MenuItem;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lamp.common.utils.VariableReplaceUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,15 @@ public class ClusterHostController {
 			model.addAttribute("managementUrls", managementUrls);
 		}
 
+		model.addAttribute("breadcrumb", getBreadcrumb(cluster));
+
 		return isAws ? "clusters/hosts/aws-list" : "clusters/hosts/list";
+	}
+
+	protected List<MenuItem> getBreadcrumb(Cluster cluster) {
+		List<MenuItem> breadcrumb = new ArrayList<>();
+		breadcrumb.add(MenuItem.of(MenuConstants.CLUSTERS, cluster.getName(), "/clusters/" + cluster.getId() + "/hosts"));
+		return breadcrumb;
 	}
 
 	@RequestMapping(path = "/add", method = RequestMethod.GET)
@@ -84,6 +94,13 @@ public class ClusterHostController {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
 			return addForm(model, clusterId, editForm);
 		}
+	}
+
+	@RequestMapping(path = "/{hostId}/delete", method = RequestMethod.GET)
+	public String delete(Model model,
+					  @PathVariable("hostId") String hostId) {
+		hostFacadeService.deleteHost(hostId);
+		return "redirect:/clusters/{clusterId}/hosts";
 	}
 
 }

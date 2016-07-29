@@ -1,10 +1,7 @@
 package lamp.admin.domain.host.service;
 
 import lamp.admin.core.host.HostCredentials;
-import lamp.admin.domain.host.model.AgentInstallMetadata;
-import lamp.admin.domain.host.model.AgentInstallProperties;
-import lamp.admin.domain.host.model.HostAuthType;
-import lamp.admin.domain.host.model.HostConfiguration;
+import lamp.admin.domain.host.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,7 +45,7 @@ public class HostAgentInstallServiceTest {
 		agentInstallMetadata.setAgentInstallFilename(agentInstallFilename);
 		agentInstallMetadata.setAgentFile(agentFile);
 
-
-		hostAgentInstallService.install(agentInstallMetadata, System.out);
+		AgentInstallResult agentInstallResult = new AgentInstallResult();
+		hostAgentInstallService.install(agentInstallResult, agentInstallMetadata, System.out);
 	}
 }

@@ -18,17 +18,17 @@ public class AwsEc2HostAgentInstallTaskScheduledService {
 	private TaskService jobService;
 
 	@Autowired
-	private AwsEc2HostAgentInstallJobExecuteService awsEc2HostAgentInstallJobExecuteService;
+	private AwsEc2HostAgentInstallTaskExecuteService awsEc2HostAgentInstallTaskExecuteService;
 
 	@Scheduled(cron="*/10 * * * * *")
 	public void process() {
-		log.debug("AwsEc2HostAgentInstallJob process");
-		List<AwsEc2HostAgentInstallTask> jobList = jobService.getJobList(AwsEc2HostAgentInstallTask.class, TaskStatus.READY);
-		for (AwsEc2HostAgentInstallTask job : jobList) {
+		log.debug("AwsEc2HostAgentInstallTask process");
+		List<AwsEc2HostAgentInstallTask> tasks = jobService.getJobList(AwsEc2HostAgentInstallTask.class, TaskStatus.READY);
+		for (AwsEc2HostAgentInstallTask task : tasks) {
 			try {
-				awsEc2HostAgentInstallJobExecuteService.execute(job);
+				awsEc2HostAgentInstallTaskExecuteService.execute(task);
 			} catch (Exception e) {
-				log.error("AwsEc2HostAgentInstallJob execute failed", e);
+				log.error("AwsEc2HostAgentInstallTask execute failed", e);
 			}
 		}
 	}

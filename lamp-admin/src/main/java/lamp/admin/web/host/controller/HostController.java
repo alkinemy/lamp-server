@@ -6,9 +6,9 @@ import lamp.admin.domain.host.model.AgentInstallResult;
 import lamp.admin.domain.host.model.SshKey;
 import lamp.admin.domain.host.service.HostFacadeService;
 import lamp.admin.domain.host.service.SshKeyService;
-import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
-import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
-import lamp.admin.domain.host.service.form.HostScanForm;
+import lamp.admin.domain.host.model.form.ManagedHostCredentialsForm;
+import lamp.admin.domain.host.model.form.ScannedHostCredentialsForm;
+import lamp.admin.domain.host.model.form.HostScanForm;
 import lamp.admin.web.MenuConstants;
 import lamp.admin.web.support.annotation.MenuMapping;
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +114,7 @@ public class HostController {
 					  	RedirectAttributes redirectAttributes) throws Exception {
 
 
-		hostFacadeService.remove(hostId);
+		hostFacadeService.deleteHost(hostId);
 
 		return "redirect:/hosts";
 	}

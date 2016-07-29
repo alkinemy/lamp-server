@@ -11,10 +11,10 @@ import lamp.admin.domain.agent.service.AgentService;
 import lamp.admin.domain.base.exception.Exceptions;
 import lamp.admin.domain.host.model.*;
 import lamp.admin.domain.host.model.entity.HostEntity;
-import lamp.admin.domain.host.service.form.HostCredentialsForm;
-import lamp.admin.domain.host.service.form.HostScanForm;
-import lamp.admin.domain.host.service.form.ManagedHostCredentialsForm;
-import lamp.admin.domain.host.service.form.ScannedHostCredentialsForm;
+import lamp.admin.domain.host.model.form.HostCredentialsForm;
+import lamp.admin.domain.host.model.form.HostScanForm;
+import lamp.admin.domain.host.model.form.ManagedHostCredentialsForm;
+import lamp.admin.domain.host.model.form.ScannedHostCredentialsForm;
 import lamp.admin.web.AdminErrorCode;
 import lamp.common.utils.FileUtils;
 import lamp.common.utils.InetAddressUtils;
@@ -159,16 +159,21 @@ public class HostManagementService {
 		List<AgentInstallResult> results = new ArrayList<>();
 		for (TargetHost targetHost : targetHosts) {
 			// TODO Async
-			Optional<HostEntity> hostEntityOptional = hostService.getHostEntityOptional(targetHost.getId());
-			if (hostEntityOptional.isPresent()) {
-				HostEntity hostEntity = hostEntityOptional.get();
-				shutdownAgent(hostEntity.getId(), hostEntity.getStatus());
-			}
-
-			AgentInstallResult result = hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
+			AgentInstallResult result = installAgent(hostCredentials, agentFile, hostConfiguration, targetHost);
 			results.add(result);
 		}
 		return results;
+	}
+
+	protected AgentInstallResult installAgent(HostCredentials hostCredentials, String agentFile, HostConfiguration hostConfiguration,
+											TargetHost targetHost) {
+		Optional<HostEntity> hostEntityOptional = hostService.getHostEntityOptional(targetHost.getId());
+		if (hostEntityOptional.isPresent()) {
+			HostEntity hostEntity = hostEntityOptional.get();
+			shutdownAgent(hostEntity.getId(), hostEntity.getStatus());
+		}
+
+		return hostAgentInstallService.installAgent(targetHost, hostCredentials, agentFile, hostConfiguration);
 	}
 
 	@Transactional

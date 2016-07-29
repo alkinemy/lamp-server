@@ -68,6 +68,8 @@ CREATE TABLE `lamp_app_instance` (
   `pid` VARCHAR(100) DEFAULT NULL,
   `status` VARCHAR(100)  DEFAULT NULL,
   `status_message` VARCHAR(4000) DEFAULT NULL,
+  `health` VARCHAR(100)  DEFAULT NULL,
+  `health_message` VARCHAR(4000) DEFAULT NULL,
   `monitored` TINYINT(1) DEFAULT NULL,
 
   `data` MEDIUMTEXT DEFAULT NULL,
