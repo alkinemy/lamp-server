@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties({ServerProperties.class})
-@Import({ CollectorCoreConfig.class, MonitoringCoreConfig.class})
+@Import({ EventBusConfig.class, CollectorCoreConfig.class, MonitoringCoreConfig.class})
 public class ServerConfig {
 
 	@Bean

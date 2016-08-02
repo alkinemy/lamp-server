@@ -46,6 +46,13 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-devtools")
 
+
+    compile("io.projectreactor:reactor-core:${reactorVersion}")
+    compile("io.projectreactor:reactor-bus:${reactorVersion}")
+    compile("io.projectreactor:reactor-stream:${reactorVersion}")
+    compile("io.projectreactor.spring:reactor-spring-core:${reactorSpringVersion}")
+    compile("io.projectreactor.spring:reactor-spring-context:${reactorSpringVersion}")
+
     compile('org.jadira.usertype:usertype.extended:4.0.0.GA')
     compile("com.mysema.querydsl:querydsl-jpa:3.6.3")
     compile("com.mysema.querydsl:querydsl-apt:3.6.3:jpa")
@@ -61,15 +68,13 @@ dependencies {
     compile("org.apache.maven:maven-aether-provider:3.3.3")
 
     compile("com.jcraft:jsch:0.1.53")
-    compile("com.hierynomus:sshj:0.15.0")
+    compile("com.hierynomus:sshj:0.17.2")
     compile("net.sf.expectit:expectit-core:0.8.1")
-
 
     compile('org.apache.httpcomponents:httpclient:4.5.1')
 
     compile("org.kairosdb:client:${kairosdbVersion}")
     compile("org.apache.kafka:kafka-clients:${kafkaVersion}")
-
 
     compile("com.amazonaws:aws-java-sdk-core:${awsJavaSdkVersion}")
     compile("com.amazonaws:aws-java-sdk-ec2:${awsJavaSdkVersion}")

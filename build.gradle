@@ -7,6 +7,9 @@ ext {
     jacksonVersion = "2.4.4"
     igniteVersion = "1.5.0.final"
 
+    reactorVersion = "2.0.8.RELEASE"
+    reactorSpringVersion = "2.0.7.RELEASE"
+
     kairosdbVersion = "2.1.0"
     kafkaVersion = "0.9.0.1"
 
