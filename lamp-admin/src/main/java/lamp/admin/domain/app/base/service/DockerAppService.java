@@ -45,6 +45,9 @@ public class DockerAppService {
 		container.setVolumes(split(editForm.getVolumes()));
 		container.setEnv(split(editForm.getEnv()));
 
+		container.setEntrypoint(split(editForm.getEntrypoint()));
+		container.setCmd(split(editForm.getCmd()));
+
 		app.setContainer(container);
 
 		return app;
@@ -84,6 +87,9 @@ public class DockerAppService {
 		editForm.setPortMappings(join(container.getPortMappings()));
 		editForm.setVolumes(join(container.getVolumes()));
 		editForm.setEnv(join(container.getEnv()));
+
+		editForm.setEntrypoint(join(container.getEntrypoint()));
+		editForm.setCmd(join(container.getCmd()));
 
 		return editForm;
 	}

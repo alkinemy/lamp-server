@@ -125,7 +125,7 @@ public class AppInstanceManagementService {
 
 		for (String instanceId : instanceIds) {
 			AppInstance appInstance = appInstanceService.getAppInstance(instanceId);
-			appInstance.setStatus(AppInstanceStatus.STARTING);
+			appInstance.setStatus(AppInstanceStatus.STOPPING);
 			appInstanceService.updateAppInstance(appInstance);
 
 			Agent agent = agentService.getAgent(appInstance.getHostId());

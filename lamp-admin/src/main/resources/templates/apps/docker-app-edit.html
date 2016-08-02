@@ -99,6 +99,20 @@
 								<span class="help-block" th:if="${#fields.hasErrors('env')}" th:errors="*{env}"> A block of help text. </span>
 							</div>
 						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('entrypoint')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Entrypoint</label>
+							<div class="col-md-9">
+								<textarea class="form-control" th:field="*{entrypoint}" rows="3"></textarea>
+								<span class="help-block" th:if="${#fields.hasErrors('entrypoint')}" th:errors="*{entrypoint}"> A block of help text. </span>
+							</div>
+						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('cmd')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">Command</label>
+							<div class="col-md-9">
+								<textarea class="form-control" th:field="*{cmd}" rows="3"></textarea>
+								<span class="help-block" th:if="${#fields.hasErrors('cmd')}" th:errors="*{cmd}"> A block of help text. </span>
+							</div>
+						</div>
 
 					</div>
 					<div class="form-actions">

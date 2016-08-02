@@ -33,6 +33,9 @@ public class DockerAppContainer implements AppContainer {
 
 	private List<String> env;
 
+	private List<String> entrypoint;
+
+	private List<String> cmd;
 
 //	private List<Parameter> parameters = new ArrayList<>();
 

@@ -37,6 +37,9 @@ public class DockerAppCreateForm {
 	private String volumes;
 	private String env;
 
+	private String entrypoint;
+	private String cmd;
+
 	private List<Parameter> parameters = new ArrayList<>();
 
 }
