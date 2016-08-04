@@ -21,7 +21,6 @@ import net.schmizz.sshj.xfer.FileSystemFile;
 import net.sf.expectit.Expect;
 import net.sf.expectit.ExpectBuilder;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.impl.cookie.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -67,6 +66,8 @@ public class HostAgentInstallService {
 																	   printStream);
 
 			install(result, metadata, printStream);
+
+			result.setMetadata(metadata);
 
 			Map<String, Object> parameters = result.getParameters();
 

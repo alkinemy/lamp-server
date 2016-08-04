@@ -36,7 +36,7 @@
 									<th> IP </th>
 									<th> Progress </th>
 									<th> Status </th>
-									<th> &nbsp; </th>
+									<th> error </th>
 								</tr>
 								</thead>
 								<tbody>
@@ -45,7 +45,7 @@
 									<td th:text="${result.metadata.address}"> Joke </td>
 									<td> Joke </td>
 									<td th:text="${result.status}"> Joke </td>
-									<td th:text="${result.error}"> Joke </td>
+									<td th:text="${result.exception}"> Joke </td>
 								</tr>
 								</tbody>
 							</table>
