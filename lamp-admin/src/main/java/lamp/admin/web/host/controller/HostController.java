@@ -100,6 +100,9 @@ public class HostController {
 							  RedirectAttributes redirectAttributes) {
 
 		model.addAttribute("hostType", "managed");
+
+		List<SshKey> sshKeys = sshKeyService.getSshKeyList();
+		model.addAttribute("sshKeys", sshKeys);
 		return "hosts/credentials";
 	}
 

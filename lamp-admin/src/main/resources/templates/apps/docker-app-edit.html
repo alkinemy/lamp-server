@@ -70,6 +70,13 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group" th:class="${#fields.hasErrors('hostName')} ? 'form-group has-error' : 'form-group'">
+							<label class="col-md-3 control-label">HostName</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" th:field="*{hostName}" placeholder="Enter text" />
+								<span class="help-block" th:if="${#fields.hasErrors('hostName')}" th:errors="*{hostName}"> A block of help text. </span>
+							</div>
+						</div>
 						<div class="form-group" th:class="${#fields.hasErrors('network')} ? 'form-group has-error' : 'form-group'">
 							<label class="col-md-3 control-label">Network</label>
 							<div class="col-md-9">

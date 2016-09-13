@@ -39,6 +39,7 @@ public class DockerAppService {
 		DockerAppContainer container = new DockerAppContainer();
 		container.setName(app.getName());
 		container.setImage(editForm.getImage());
+		container.setHostName(editForm.getHostName());
 		container.setForcePullImage(editForm.isForcePullImage());
 //		container.setPortDefinitions(editForm.getPortDefinitions());
 		container.setPortMappings(split(editForm.getPortMappings()));
@@ -82,6 +83,7 @@ public class DockerAppService {
 
 
 		editForm.setImage(container.getImage());
+		editForm.setHostName(container.getHostName());
 		editForm.setForcePullImage(container.isForcePullImage());
 //		editForm.setPortDefinitions(container.getPortDefinitions());
 		editForm.setPortMappings(join(container.getPortMappings()));

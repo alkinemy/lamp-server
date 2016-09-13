@@ -22,6 +22,7 @@ public class DockerAppCreateForm {
 	private String description;
 
 	private String image;
+	private String hostName;
 	private String network;
 
 	private boolean forcePullImage;

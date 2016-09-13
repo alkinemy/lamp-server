@@ -22,6 +22,8 @@ public class DockerAppContainer implements AppContainer {
 	private String name;
 
 	private String image;
+
+	private String hostName;
 	private String network;
 
 	private boolean forcePullImage;
