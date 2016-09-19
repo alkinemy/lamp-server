@@ -159,7 +159,8 @@ public class AppService {
 
 	@Transactional
 	public App updateApp(String path, DockerAppUpdateForm editForm) {
-		return updateApp(dockerAppService.newApp(path, null, editForm));
+		App app = getAppByPath(path);
+		return updateApp(dockerAppService.newApp(app, editForm));
 	}
 
 

@@ -45,8 +45,7 @@ public class DockerAppCreateController extends AbstractAppController {
 						 RedirectAttributes redirectAttributes) {
 		try {
 			appService.createApp(path, editForm);
-			redirectAttributes.addAttribute("path", path);
-			return "redirect:/apps/{path}";
+			return "redirect:/apps/" + path;
 		} catch (MessageException e) {
 			bindingResult.reject(e.getCode(), e.getArgs(), e.getMessage());
 			return createForm(model, editForm);

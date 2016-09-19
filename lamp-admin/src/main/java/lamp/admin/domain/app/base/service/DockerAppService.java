@@ -5,6 +5,7 @@ import lamp.admin.core.app.docker.DockerAppContainer;
 import lamp.admin.domain.app.base.model.entity.AppType;
 import lamp.admin.domain.app.base.model.form.DockerAppCreateForm;
 import lamp.admin.domain.app.base.model.form.DockerAppUpdateForm;
+import lamp.admin.domain.app.base.model.form.SpringBootAppCreateForm;
 import lamp.common.utils.ArrayUtils;
 import lamp.common.utils.CollectionUtils;
 import lamp.common.utils.StringUtils;
@@ -27,6 +28,11 @@ public class DockerAppService {
 		app.setType(AppType.DOCKER_APP);
 		app.setPath(path);
 		app.setParentPath(parentPath);
+
+		return newApp(app, editForm);
+	}
+
+	public App newApp(App app, DockerAppCreateForm editForm) {
 		app.setName(editForm.getName());
 		app.setDescription(editForm.getDescription());
 

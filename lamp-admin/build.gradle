@@ -78,7 +78,6 @@ dependencies {
 
     compile("com.amazonaws:aws-java-sdk-core:${awsJavaSdkVersion}")
     compile("com.amazonaws:aws-java-sdk-ec2:${awsJavaSdkVersion}")
-
 }
 
 uploadArchives.dependsOn bootRepackage

@@ -42,6 +42,7 @@ public class AppController extends AbstractAppController {
 	public String list(Model model,
 					   @ModelAttribute("path") String path) {
 		App app = appService.getAppByPath(path);
+
 		model.addAttribute("breadcrumb", getBreadcrumb(app));
 		if (AppType.GROUP.equals(app.getType())) {
 			List<App> apps = appService.getAppsByParentPath(path);
